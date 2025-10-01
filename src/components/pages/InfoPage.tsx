@@ -1,54 +1,84 @@
 import React, { useState } from 'react';
-import Header from '../shared/Header';
-import DecryptedText from '../shared/DecryptedText';
+import PageLayout from '../shared/PageLayout';
+import Modal from '../shared/Modal';
+import { offerContent } from '../../data/offerContent';
 
-// Accordion item component
-interface AccordionItemProps {
+// Info card component
+interface InfoCardProps {
   title: string;
-  content: string;
-  isOpen: boolean;
-  onToggle: () => void;
+  onClick: () => void;
+  icon: React.ReactNode;
 }
 
-const AccordionItem: React.FC<AccordionItemProps> = ({ title, content, isOpen, onToggle }) => (
-  <div className="bg-black/40 backdrop-blur rounded-xl border border-white/8 overflow-hidden">
-    <button
-      onClick={onToggle}
-      className="w-full flex items-center justify-between p-8 text-left hover:bg-white/5 transition-colors"
-    >
-      <h3 className="text-white font-manrope font-semibold text-2xl">{title}</h3>
-      <div className={`transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}>
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-white">
-          <path d="M6 9l6 6 6-6"/>
-        </svg>
-      </div>
-    </button>
-    <div
-      className={`overflow-hidden transition-all duration-300 ease-in-out ${
-        isOpen ? 'max-h-[1000px] opacity-100' : 'max-h-0 opacity-0'
-      }`}
-    >
-      <div className="px-8 pb-8 pt-0">
-        <div className="w-full h-px bg-white/20 mb-6"></div>
-        <div className="text-white font-manrope font-medium text-lg leading-relaxed whitespace-pre-line">
-          {content}
+const InfoCard: React.FC<InfoCardProps> = ({ title, onClick, icon }) => (
+  <div 
+    className="relative overflow-hidden rounded-2xl cursor-pointer group"
+    onClick={onClick}
+  >
+    {/* Animated gradient background */}
+    <div className="absolute inset-0 bg-gradient-to-br from-zinc-800/40 via-zinc-900/60 to-black/80 backdrop-blur-sm border border-white/10 transition-all duration-300 group-hover:border-white/30" />
+    
+    {/* Shine effect on hover */}
+    <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
+    </div>
+    
+    {/* Content */}
+    <div className="relative p-8 flex items-center gap-6">
+      {/* Icon container */}
+      <div className="flex-shrink-0 w-14 h-14 rounded-xl bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-sm flex items-center justify-center border border-white/10 group-hover:scale-110 group-hover:border-white/20 transition-all duration-300">
+        <div className="text-white/90 group-hover:text-white transition-colors">
+          {icon}
         </div>
+      </div>
+      
+      {/* Text */}
+      <div className="flex-1">
+        <h3 className="text-white font-manrope font-semibold text-xl group-hover:text-white/90 transition-colors drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
+          {title}
+        </h3>
+        <p className="text-white/40 text-sm mt-1 group-hover:text-white/60 transition-colors">
+          Нажмите для просмотра
+        </p>
+      </div>
+      
+      {/* Arrow */}
+      <div className="flex-shrink-0 transform group-hover:translate-x-1 transition-transform duration-300">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="text-white/40 group-hover:text-white/80">
+          <path d="M9 6l6 6-6 6"/>
+        </svg>
       </div>
     </div>
   </div>
 );
 
-const InfoPage: React.FC<{ onNavigate: (page: string) => void }> = ({ onNavigate }) => {
-  const [openSection, setOpenSection] = useState<string | null>(null);
+/**
+ * Info Page Component
+ * FAQ and information sections in modal cards
+ */
+const InfoPage: React.FC = () => {
+  const [modalContent, setModalContent] = useState<{ title: string; content: string } | null>(null);
 
-  const toggleSection = (section: string) => {
-    setOpenSection(openSection === section ? null : section);
+  const openModal = (title: string, content: string) => {
+    setModalContent({ title, content });
   };
 
-  const accordionItems = [
+  const closeModal = () => {
+    setModalContent(null);
+  };
+
+  const infoItems = [
     {
       id: 'sizes',
       title: 'Размеры',
+      icon: (
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+          <polyline points="7.5 4.21 12 6.81 16.5 4.21"/>
+          <polyline points="7.5 19.79 7.5 14.6 3 12"/>
+          <polyline points="21 12 16.5 14.6 16.5 19.79"/>
+        </svg>
+      ),
       content: `Размер нашей одежды может отличаться от одежды классических размеров. Перед заказом рекомендуем внимательно ознакомиться с размерной сеткой выбранной одежды в карточке товара (после фото товара, в форме таблицы).
 
 Сравните по таблице параметры ABC с параметрами своей аналогичной одежды и выберите ближайший для вас размер!`
@@ -56,6 +86,14 @@ const InfoPage: React.FC<{ onNavigate: (page: string) => void }> = ({ onNavigate
     {
       id: 'delivery',
       title: 'Доставка',
+      icon: (
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <rect x="1" y="3" width="15" height="13"/>
+          <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/>
+          <circle cx="5.5" cy="18.5" r="2.5"/>
+          <circle cx="18.5" cy="18.5" r="2.5"/>
+        </svg>
+      ),
       content: `Отправка заказов осуществляется "Почтой России" и "СДЭК"
 
 «Почта России» осуществляет доставку по всему миру.
@@ -72,45 +110,26 @@ const InfoPage: React.FC<{ onNavigate: (page: string) => void }> = ({ onNavigate
     {
       id: 'offer',
       title: 'Оферта',
-      content: `Договор публичной оферты о продаже товаров в интернет-магазине «recrentshop»
-
-1. Общие положения
-
-1.1. «recrentshop», далее «Продавец», публикует Публичную оферту о продаже товаров по образцам, представленным на официальном интернет-сайте Продавца https://recrentshop.ru.
-
-1.2. В соответствии со статьей 437 Гражданского Кодекса Российской Федерации (ГК РФ) данный документ является публичной офертой, и в случае принятия изложенных ниже условий физическое лицо, производящее акцепт этой оферты, осуществляет оплату Товара Продавца в соответствии с условиями настоящего Договора.
-
-В соответствии с пунктом 3 статьи 438 ГК РФ, оплата Товара Покупателем является акцептом оферты, что считается равносильным заключению Договора на условиях, изложенных в оферте.
-
-1.3. На основании вышеизложенного, внимательно ознакомьтесь с текстом публичной оферты, и если вы не согласны с каким-либо пунктом оферты, Вам предлагается отказаться от покупки Товаров или использования Услуг, предоставляемых Продавцом.
-
-1.4. В настоящей оферте, если контекст не требует иного, нижеприведенные термины имеют следующие значения:
-• «Оферта» – публичное предложение Продавца, адресованное любому физическому лицу (гражданину), заключить с ним договор купли-продажи (далее – «Договор») на существующих условиях, содержащихся в Договоре, включая все его приложения.
-• «Покупатель» – физическое лицо, заключившее с Продавцом Договор на условиях, содержащихся в Договоре.
-• «Акцепт» – полное и безоговорочное принятие Покупателем условий Договора.
-• «Товар» – перечень наименований ассортимента, представленный на официальном интернет-сайте.
-• «Заказ» – отдельные позиции из ассортиментного перечня Товара, указанные Покупателем при оформлении заявки на интернет-сайте или через Оператора.
-• «Доставка» – курьерские услуги по доставке Заказа.
-
-2. Предмет договора
-
-2.1. Продавец продает Товар в соответствии с действующим прейскурантом, опубликованным на интернет-сайте Продавца https://recrentshop.ru, а Покупатель производит оплату и принимает Товар в соответствии с условиями настоящего Договора.
-
-2.2. Настоящий Договор и приложения к нему являются официальными документами Продавца и неотъемлемой частью оферты.
-
-3. Оформление Заказа
-
-3.1. Заказ Товара осуществляется Покупателем через Интернет-сайт https://recrentshop.ru
-
-3.2. При регистрации на интернет-сайте Продавца Покупатель обязуется предоставить следующую регистрационную информацию о себе: фамилия, имя, отчество, фактический адрес доставки, индекс, адрес электронной почты, контактный телефон.
-
-3.3. При оформлении Заказа через Оператора Покупатель обязуется предоставить информацию, указанную в п. 3.2. настоящего Договора.
-
-[Полный текст оферты сокращен для удобства отображения]`
+      icon: (
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+          <line x1="16" y1="13" x2="8" y2="13"/>
+          <line x1="16" y1="17" x2="8" y2="17"/>
+          <polyline points="10 9 9 9 8 9"/>
+        </svg>
+      ),
+      content: offerContent
     },
     {
       id: 'track',
       title: 'Где мой заказ',
+      icon: (
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <circle cx="12" cy="12" r="10"/>
+          <polyline points="12 6 12 12 16 14"/>
+        </svg>
+      ),
       content: `Отследить заказ можно после получения номера накладной от СДЭК или трек-номера от Почты России!
 
 Все заказы в обработке 3-5 дней, после поступит уведомление:
@@ -120,55 +139,42 @@ const InfoPage: React.FC<{ onNavigate: (page: string) => void }> = ({ onNavigate
   ];
 
   return (
-    <div className="relative min-h-screen w-full overflow-hidden">
-      {/* Background with PC_black.png */}
-      <div
-        className="absolute inset-0"
-        style={{
-          backgroundImage: `url('/images/backgrounds/main-background.png'), linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7))`,
-          backgroundSize: 'auto',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'repeat',
-          backgroundBlendMode: 'overlay'
-        }}
-      />
-
-      {/* Main layout container */}
-      <div className="relative z-10 min-h-screen flex flex-col">
-        {/* Header */}
-        <div className="flex justify-center px-12 py-4 sticky top-0 z-50">
-          <div className="max-w-[900px] w-full">
-            <Header onNavigate={onNavigate} />
-          </div>
+    <PageLayout>
+      <div className="max-w-4xl mx-auto">
+        {/* Page title */}
+        <div className="text-center mb-16">
+          <h1 className="text-white font-manrope font-bold text-5xl lg:text-6xl mb-4 drop-shadow-[0_4px_12px_rgba(0,0,0,0.9)]">
+            Информация
+          </h1>
+          <div className="w-32 h-1 bg-white/40 mx-auto"></div>
         </div>
 
-        {/* Main content */}
-        <main className="flex-1 px-20 py-12">
-          <div className="max-w-4xl mx-auto">
-            {/* Page title */}
-            <div className="text-center mb-16">
-              <h1 className="text-white font-manrope font-bold text-5xl lg:text-6xl mb-4">
-                Информация
-              </h1>
-              <div className="w-32 h-1 bg-white/40 mx-auto"></div>
-            </div>
-
-            {/* Accordion menu */}
-            <div className="space-y-4">
-              {accordionItems.map((item) => (
-                <AccordionItem
-                  key={item.id}
-                  title={item.title}
-                  content={item.content}
-                  isOpen={openSection === item.id}
-                  onToggle={() => toggleSection(item.id)}
-                />
-              ))}
-            </div>
-          </div>
-        </main>
+        {/* Info cards grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {infoItems.map((item) => (
+            <InfoCard
+              key={item.id}
+              title={item.title}
+              icon={item.icon}
+              onClick={() => openModal(item.title, item.content)}
+            />
+          ))}
+        </div>
       </div>
-    </div>
+
+      {/* Modal */}
+      {modalContent && (
+        <Modal
+          isOpen={!!modalContent}
+          onClose={closeModal}
+          title={modalContent.title}
+        >
+          <div className="whitespace-pre-line">
+            {modalContent.content}
+          </div>
+        </Modal>
+      )}
+    </PageLayout>
   );
 };
 

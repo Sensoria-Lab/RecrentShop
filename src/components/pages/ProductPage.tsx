@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import SelectorGroup from '../ui/SelectorGroup';
 import Header from '../shared/Header';
 import DecryptedText from '../shared/DecryptedText';
@@ -49,10 +50,11 @@ const QuantitySelector: React.FC = () => {
   );
 };
 
-const ProductPage: React.FC<{
-  onNavigate: (page: string) => void;
-  productData?: any;
-}> = ({ onNavigate, productData }) => {
+const ProductPage: React.FC = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const productData = location.state?.productData;
+  
   // Use product data if provided, otherwise use default values
   const defaultImages = [
     '/013_l_black_02.webp',
@@ -87,24 +89,12 @@ const ProductPage: React.FC<{
 
   return (
     <div className="relative min-h-screen w-full overflow-hidden">
-      {/* Background with PC_black.png */}
-      <div
-        className="absolute inset-0"
-        style={{
-          backgroundImage: `url('/images/backgrounds/main-background.png'), linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7))`,
-          backgroundSize: 'auto',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'repeat',
-          backgroundBlendMode: 'overlay'
-        }}
-      />
-
       {/* Main layout container */}
       <div className="relative z-10 min-h-screen flex flex-col">
         {/* Header */}
         <div className="flex justify-center px-12 py-4 sticky top-0 z-50">
           <div className="max-w-[900px] w-full">
-            <Header onNavigate={onNavigate} />
+            <Header />
           </div>
         </div>
 
@@ -117,7 +107,7 @@ const ProductPage: React.FC<{
               <div className="flex-1 max-w-3xl">
                 {/* Title and rating */}
                 <div className="mb-12">
-                  <h1 className="text-white font-manrope font-bold text-5xl lg:text-6xl mb-6 leading-tight">
+                  <h1 className="text-white font-manrope font-bold text-5xl lg:text-6xl mb-6 leading-tight drop-shadow-[0_4px_12px_rgba(0,0,0,0.9)]">
                     <DecryptedText
                       text={`${productData?.title || 'Коврик для мыши'} ${productData?.subtitle || '"geoid-white"'}`}
                       duration={900}
@@ -174,7 +164,7 @@ const ProductPage: React.FC<{
 
                 {/* Price and actions */}
                 <div className="space-y-6">
-                  <div className="text-white font-manrope font-bold text-5xl">
+                  <div className="text-white font-manrope font-bold text-5xl drop-shadow-[0_3px_10px_rgba(0,0,0,0.8)]">
                     {productData?.price || '3000 р.'}
                   </div>
                   <div className="flex gap-10 items-center">

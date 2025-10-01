@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import ProductCard from '../ui/ProductCard';
 import Header from '../shared/Header';
 import DecryptedText from '../shared/DecryptedText';
@@ -9,7 +10,7 @@ import ProductCarousel from '../ui/ProductCarousel';
 const SectionHeader: React.FC<{ title: string }> = ({ title }) => (
   <div className="flex items-center justify-between p-8 border-b border-white/10">
     <div className="min-w-[400px]">
-      <h2 className="text-white font-manrope font-extrabold text-3xl text-left tracking-wide">
+      <h2 className="text-white font-manrope font-extrabold text-3xl text-left tracking-wide drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]">
         <DecryptedText
           text={title}
           duration={700}
@@ -30,11 +31,11 @@ const SectionHeader: React.FC<{ title: string }> = ({ title }) => (
   </div>
 );
 
-const CatalogPage: React.FC<{
-  onNavigate: (page: string, productData?: any) => void
-}> = ({ onNavigate }) => {
+const CatalogPage: React.FC = () => {
+  const navigate = useNavigate();
+  
   const handleProductClick = (productData: any) => {
-    onNavigate('product', productData);
+    navigate('/product', { state: { productData } });
   };
   // Sample product data - в реальном приложении это будет приходить из API
   const xlMousepads = [
@@ -168,35 +169,12 @@ const CatalogPage: React.FC<{
 
   return (
     <div className="relative min-h-screen w-full overflow-hidden">
-      {/* Background with PC_black.png */}
-      <div
-        className="absolute inset-0"
-        style={{
-          backgroundImage: `url('/images/backgrounds/main-background.png'), linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7))`,
-          backgroundSize: 'auto',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'repeat',
-          backgroundBlendMode: 'overlay'
-        }}
-      />
-
-      {/* Decorative flowing lines overlay */}
-      <div
-        className="absolute inset-0 opacity-10"
-        style={{
-          backgroundImage: `url('/images/backgrounds/pattern.svg')`,
-          backgroundSize: 'auto',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'repeat'
-        }}
-      />
-
       {/* Main layout container */}
       <div className="relative z-10 min-h-screen flex flex-col">
         {/* Header */}
         <div className="flex justify-center px-12 py-4 sticky top-0 z-50">
           <div className="max-w-[900px] w-full">
-            <Header onNavigate={onNavigate} />
+            <Header />
           </div>
         </div>
 

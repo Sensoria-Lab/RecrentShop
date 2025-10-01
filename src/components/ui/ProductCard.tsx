@@ -1,26 +1,6 @@
 import React from 'react';
-
-// Star rating component для карточек товаров
-const StarRating: React.FC<{ rating?: number; reviewCount?: number }> = ({ rating = 5, reviewCount }) => (
-  <div className="flex items-center gap-1">
-    {[...Array(5)].map((_, i) => (
-      <svg
-        key={i}
-        width="16"
-        height="16"
-        viewBox="0 0 24 24"
-        fill={i < rating ? "#8B5CF6" : "none"}
-        stroke={i < rating ? "#8B5CF6" : "rgba(255, 255, 255, 0.4)"}
-        strokeWidth="1.5"
-      >
-        <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/>
-      </svg>
-    ))}
-    {reviewCount && (
-      <span className="text-white font-manrope font-medium text-sm ml-1">({reviewCount})</span>
-    )}
-  </div>
-);
+import StarRating from '../shared/StarRating';
+import { useCart } from '../../context/CartContext';
 
 export interface ProductCardProps {
   id?: number;
@@ -51,6 +31,8 @@ const ProductCard: React.FC<ProductCardProps> = ({
   onAddToCart,
   onProductClick
 }) => {
+  const { addItem } = useCart();
+  
   const sizeClasses = {
     small: {
       container: 'w-[330px]',
@@ -88,8 +70,14 @@ const ProductCard: React.FC<ProductCardProps> = ({
 
   const classes = sizeClasses[size];
 
-  const handleCardClick = () => {
+  const handleCardClick = (e: React.MouseEvent) => {
+    // Prevent card click if clicking add to cart button
+    if ((e.target as HTMLElement).closest('.add-to-cart-button')) {
+      return;
+    }
+    
     if (onProductClick) {
+      // Pass only serializable data (no functions)
       onProductClick({
         id,
         image,
@@ -100,45 +88,69 @@ const ProductCard: React.FC<ProductCardProps> = ({
         price,
         rating,
         reviewCount,
-        size,
-        onAddToCart,
-        onProductClick
+        size
       });
     }
   };
 
+  const handleAddToCart = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    
+    if (onAddToCart) {
+      onAddToCart();
+    }
+    
+    // Add to cart context
+    addItem({
+      id: id?.toString() || `${title}-${Date.now()}`,
+      image,
+      title: subtitle ? `${title} ${subtitle}` : title,
+      subtitle: subtitle || '',
+      price,
+      selectedSize: productSize,
+      selectedColor: productColor
+    });
+  };
+
   // Различные стили для каталога и других страниц
   const cardStyles = size === 'small-catalog'
-    ? `relative backdrop-blur-md rounded-2xl p-6 ${classes.container} flex flex-col transition-all duration-300 cursor-pointer group border border-white/10 hover:border-blue-400 hover:-translate-y-2 hover:shadow-2xl hover:shadow-blue-500/30`
+    ? `relative overflow-hidden rounded-2xl p-6 ${classes.container} flex flex-col cursor-pointer group`
     : `bg-black/90 backdrop-blur-sm rounded-xl p-6 ${classes.container} flex flex-col border border-white/20 shadow-2xl hover:shadow-white/10 hover:border-white/30 transition-all duration-300 hover:transform hover:scale-105 ${onProductClick ? 'cursor-pointer' : ''}`;
-
-  const catalogBackgroundStyle = size === 'small-catalog' ? {
-    background: 'linear-gradient(145deg, rgba(25, 25, 25, 0.92) 0%, rgba(15, 15, 15, 0.96) 100%)',
-    backdropFilter: 'blur(24px)',
-    boxShadow: '0 20px 40px rgba(0, 0, 0, 0.6), 0 8px 16px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)',
-    transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-  } : {};
 
 
   return (
-    <div className={cardStyles} style={catalogBackgroundStyle} onClick={handleCardClick}>
-      {/* Product Image */}
-      <div className={`${classes.image} relative rounded-xl mx-auto ${classes.imageContainer} ${size === 'small-catalog' ? 'bg-white/5 p-4 transition-all duration-500' : 'rounded-lg overflow-hidden'}`}>
-        <img
-          src={image}
-          alt={title}
-          className="w-full h-full object-contain"
-        />
-      </div>
+    <div className={cardStyles} onClick={handleCardClick}>
+      {/* Animated gradient background - only for catalog */}
+      {size === 'small-catalog' && (
+        <>
+          <div className="absolute inset-0 bg-gradient-to-br from-zinc-800/40 via-zinc-900/60 to-black/80 backdrop-blur-sm border border-white/10 transition-all duration-300 group-hover:border-white/30 pointer-events-none" />
+          
+          {/* Shine effect on hover */}
+          <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
+          </div>
+        </>
+      )}
+      
+      {/* Content wrapper with relative positioning */}
+      <div className="relative z-10">
+        {/* Product Image */}
+        <div className={`${classes.image} relative rounded-xl mx-auto ${classes.imageContainer} ${size === 'small-catalog' ? 'bg-white/5 p-4 transition-all duration-500' : 'rounded-lg overflow-hidden'}`}>
+          <img
+            src={image}
+            alt={title}
+            className="w-full h-full object-contain"
+          />
+        </div>
 
-      {/* Product Title */}
-      <div className="h-[90px] flex flex-col justify-between mt-4">
+        {/* Product Title */}
+        <div className="h-[90px] flex flex-col justify-between mt-4">
         <div className="flex-1 flex flex-col justify-start">
-          <h3 className={`text-white font-manrope font-extrabold ${classes.title} leading-tight tracking-wide`}>
+          <h3 className={`text-white font-manrope font-extrabold ${classes.title} leading-tight tracking-wide drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]`}>
             {title}
           </h3>
           {subtitle && (
-            <p className={`text-white/90 font-manrope font-bold ${classes.title} leading-tight mt-1`}>
+            <p className={`text-white/90 font-manrope font-bold ${classes.title} leading-tight mt-1 drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]`}>
               {subtitle}
             </p>
           )}
@@ -157,19 +169,26 @@ const ProductCard: React.FC<ProductCardProps> = ({
         </div>
       </div>
 
-      {/* Rating */}
-      <div className="mt-3">
-        <StarRating rating={rating} reviewCount={reviewCount} />
-      </div>
+        {/* Rating */}
+        <div className="mt-3">
+          <StarRating rating={rating} reviewCount={reviewCount} size="sm" />
+        </div>
 
-      {/* Divider */}
-      <div className="w-full h-px bg-gradient-to-r from-transparent via-white/25 to-transparent my-4"></div>
+        {/* Divider */}
+        <div className="w-full h-px bg-gradient-to-r from-transparent via-white/25 to-transparent my-4"></div>
 
-      {/* Price */}
-      <div className="mt-auto">
-        <span className={`text-white font-manrope font-extrabold ${classes.price} tracking-wide`}>
-          {price}
-        </span>
+        {/* Price and Add to Cart */}
+        <div className="mt-auto flex items-center justify-between">
+          <span className={`text-white font-manrope font-extrabold ${classes.price} tracking-wide drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]`}>
+            {price}
+          </span>
+          <button
+            onClick={handleAddToCart}
+            className="add-to-cart-button px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold rounded-lg transition-all duration-200 shadow-lg hover:shadow-blue-500/50 hover:scale-105 active:scale-95"
+          >
+            В корзину
+          </button>
+        </div>
       </div>
     </div>
   );

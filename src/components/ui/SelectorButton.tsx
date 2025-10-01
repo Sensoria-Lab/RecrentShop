@@ -33,11 +33,11 @@ const SelectorButton: React.FC<SelectorButtonProps> = ({
   };
 
   const borderClasses = selected
-    ? 'border-[#2b7fff] border-[3px]'
-    : 'border-[#9c9c9c] border-[3px]';
+    ? 'border-[var(--color-accent)] border-[3px] shadow-[0_0_0_1px_rgba(255,255,255,0.15)]'
+    : 'border-white/20 border-[2px]';
 
   const hoverClasses = !selected && !disabled
-    ? 'hover:border-[#2b7fff] hover:border-opacity-70 transition-colors duration-200'
+    ? 'hover:border-[var(--color-accent)] hover:border-opacity-80 transition-all duration-200'
     : '';
 
   const disabledClasses = disabled
@@ -74,6 +74,7 @@ const SelectorButton: React.FC<SelectorButtonProps> = ({
           rounded-xl
           ${borderClasses}
           ${hoverClasses}
+          ${selected ? 'bg-[var(--color-accent-rgba,rgba(250,204,21,0.08))]' : 'bg-white/5'}
         `.trim()}
       />
       <div className="flex flex-col font-manrope font-semibold justify-center leading-none relative shrink-0 text-nowrap text-white">

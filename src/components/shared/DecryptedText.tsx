@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 
 interface DecryptedTextProps {
   text: string;
@@ -24,7 +24,7 @@ const DecryptedText: React.FC<DecryptedTextProps> = ({
   // Characters to use for the scrambled effect
   const scrambleChars = '!@#$%^&*()_+-=[]{}|;:,.<>?~`0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
 
-  const runAnimation = (isHover = false) => {
+  const runAnimation = useCallback((isHover = false) => {
     if ((!isHover && !isDecrypting) || !showAnimation) return;
 
     let animationId: number;
@@ -75,18 +75,14 @@ const DecryptedText: React.FC<DecryptedTextProps> = ({
         cancelAnimationFrame(animationId);
       }
     };
-  };
+  }, [isDecrypting, showAnimation, scrambleChars, text, duration]);
 
   useEffect(() => {
-    // Initial animation
     const timeoutId = setTimeout(() => {
       runAnimation();
     }, delay + 100);
-
-    return () => {
-      clearTimeout(timeoutId);
-    };
-  }, [text, duration]);
+    return () => clearTimeout(timeoutId);
+  }, [text, duration, delay, runAnimation]);
 
   const handleMouseEnter = () => {
     if (enableHover && !isDecrypting) {

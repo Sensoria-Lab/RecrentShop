@@ -1,31 +1,56 @@
-import React, { useState } from 'react';
-import MainPage from './components/pages/MainPage';
-import ProductPage from './components/pages/ProductPage';
-import ContactsPage from './components/pages/ContactsPage';
-import CatalogPage from './components/pages/CatalogPage';
-import InfoPage from './components/pages/InfoPage';
+import React, { useEffect, Suspense, lazy } from 'react';
+import { useLocation, Routes, Route } from 'react-router-dom';
 import './index.css';
+import LoadingSkeleton from './components/shared/LoadingSkeleton';
+import { CartProvider } from './context/CartContext';
+import BackgroundBeams from './components/shared/BackgroundBeams';
 
+// Lazy load all pages for better performance
+const MainPage = lazy(() => import('./components/pages/MainPage'));
+const ProductPage = lazy(() => import('./components/pages/ProductPage'));
+const ContactsPage = lazy(() => import('./components/pages/ContactsPage'));
+const CatalogPage = lazy(() => import('./components/pages/CatalogPage'));
+const InfoPage = lazy(() => import('./components/pages/InfoPage'));
+const CartPage = lazy(() => import('./components/pages/CartPage'));
+const NotFoundPage = lazy(() => import('./components/pages/NotFoundPage'));
+
+/**
+ * Main App Component
+ * Handles routing, lazy loading, and global background effects
+ */
 function App() {
-  const [currentPage, setCurrentPage] = useState<'main' | 'product' | 'contacts' | 'catalog' | 'info'>('main');
-  const [currentProductData, setCurrentProductData] = useState<any>(null);
+  const location = useLocation();
 
-  const handleNavigate = (page: string, productData?: any) => {
-    setCurrentPage(page as 'main' | 'product' | 'contacts' | 'catalog' | 'info');
-    if (productData) {
-      setCurrentProductData(productData);
-    }
-  };
+  // Smooth scroll to top on route change
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [location.pathname]);
 
   return (
-    <div className="min-h-screen">
-      {/* Page Content */}
-      {currentPage === 'main' && <MainPage onNavigate={handleNavigate} />}
-      {currentPage === 'product' && <ProductPage onNavigate={handleNavigate} productData={currentProductData} />}
-      {currentPage === 'contacts' && <ContactsPage onNavigate={handleNavigate} />}
-      {currentPage === 'catalog' && <CatalogPage onNavigate={handleNavigate} />}
-      {currentPage === 'info' && <InfoPage onNavigate={handleNavigate} />}
+    <CartProvider>
+    <div className="relative min-h-screen overflow-hidden bg-black">
+      {/* Pixel Blast Background Effect */}
+      <BackgroundBeams />
+
+      {/* Routes container */}
+      <div className="min-h-screen relative z-20">
+        <Suspense fallback={<LoadingSkeleton />}>
+          <Routes location={location}>
+            <Route path="/" element={<MainPage />} />
+            <Route path="/catalog" element={<CatalogPage />} />
+            <Route path="/contacts" element={<ContactsPage />} />
+            <Route path="/info" element={<InfoPage />} />
+            <Route path="/product" element={<ProductPage />} />
+            <Route path="/cart" element={<CartPage />} />
+            <Route path="*" element={<NotFoundPage />} />
+          </Routes>
+        </Suspense>
+      </div>
+
+      {/* Subtle noise texture */}
+      <div className="noise-overlay" />
     </div>
+    </CartProvider>
   );
 }
 

@@ -53,6 +53,32 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
     setCurrentIndex((prev) => prev + 1);
   };
 
+  // Touch / pointer swipe support
+  const startXRef = useRef<number | null>(null);
+  const deltaXRef = useRef(0);
+
+  const onPointerDown = (e: React.PointerEvent) => {
+    startXRef.current = e.clientX;
+    deltaXRef.current = 0;
+  };
+
+  const onPointerMove = (e: React.PointerEvent) => {
+    if (startXRef.current == null) return;
+    deltaXRef.current = e.clientX - startXRef.current;
+  };
+
+  const onPointerUp = () => {
+    if (startXRef.current == null) return;
+    const threshold = 48; // swipe threshold
+    if (deltaXRef.current > threshold) {
+      handlePrev();
+    } else if (deltaXRef.current < -threshold) {
+      handleNext();
+    }
+    startXRef.current = null;
+    deltaXRef.current = 0;
+  };
+
   useEffect(() => {
     if (!isTransitioning) return;
 
@@ -65,7 +91,7 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
       } else if (currentIndex < 0) {
         setCurrentIndex(totalItems - 1);
       }
-    }, 500); // Match transition duration
+  }, 280); // Match accelerated transition duration
 
     return () => clearTimeout(timer);
   }, [currentIndex, isTransitioning, totalItems]);
@@ -86,13 +112,18 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
       </button>
 
       {/* Carousel Container */}
-      <div className="overflow-hidden flex-1 py-3">
+      <div className="overflow-hidden flex-1 py-3 touch-pan-y"
+        onPointerDown={onPointerDown}
+        onPointerMove={onPointerMove}
+        onPointerUp={onPointerUp}
+        onPointerLeave={onPointerUp}
+      >
         <div
           ref={carouselRef}
           className="flex gap-8"
           style={{
             transform: `translateX(${translateX}px)`,
-            transition: isTransitioning ? 'transform 0.5s ease-in-out' : 'none',
+            transition: isTransitioning ? 'transform 0.28s cubic-bezier(0.4, 0.1, 0.2, 1)' : 'none',
           }}
         >
           {extendedChildren.map((child, index) => (
