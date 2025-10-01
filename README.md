@@ -1,8 +1,6 @@
 # 🛍️ RecrentShop
 
 
-## 🚀 Быстрый старт
-
 ### Установка
 
 ```bash
@@ -46,8 +44,6 @@ src/
 ├── App.tsx         # Главный компонент
 └── index.tsx       # Точка входа
 ```
-
-Подробнее: [PROJECT_STRUCTURE.md](PROJECT_STRUCTURE.md)
 
 ## 🎨 Технологии
 
