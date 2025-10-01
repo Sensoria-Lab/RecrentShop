@@ -20,29 +20,32 @@ const CartPage: React.FC = () => {
     <PageLayout>
       <div className="min-h-screen px-8">
         <div className="max-w-7xl mx-auto">
-          {/* Page Title */}
-          <div className="text-center mb-16">
-            <h1 className="text-white font-manrope font-bold text-5xl lg:text-6xl mb-4 drop-shadow-[0_4px_12px_rgba(0,0,0,0.9)]">
-              Корзина
-            </h1>
-            <div className="w-32 h-1 bg-white/40 mx-auto"></div>
-            <p className="text-xl text-white/70 font-manrope mt-6">
-              {items.length === 0
-                ? 'Ваша корзина пуста'
-                : `Товаров в корзине: ${items.reduce((sum, item) => sum + item.quantity, 0)}`}
-            </p>
-          </div>
+          {/* Background container */}
+          <div className="bg-black/40 backdrop-blur rounded-xl p-12 lg:p-16">
+            {/* Page Title */}
+            <div className="text-center mb-16">
+              <h1 className="text-white font-manrope font-bold text-5xl lg:text-6xl mb-4 drop-shadow-[0_4px_12px_rgba(0,0,0,0.9)]">
+                Корзина
+              </h1>
+              <div className="w-32 h-1 bg-white/40 mx-auto"></div>
+              <p className="text-xl text-white/70 font-manrope mt-6">
+                {items.length === 0
+                  ? 'Ваша корзина пуста'
+                  : `Товаров в корзине: ${items.reduce((sum, item) => sum + item.quantity, 0)}`}
+              </p>
+            </div>
 
           {items.length === 0 ? (
             /* Empty Cart State */
             <div className="flex flex-col items-center justify-center py-20">
-              <div className="relative bg-gradient-to-br from-zinc-800/40 via-zinc-900/60 to-black/80 backdrop-blur-xl border border-white/10 rounded-3xl p-16 shadow-2xl max-w-2xl text-center overflow-hidden">
-                {/* Shine effect overlay */}
-                <div className="absolute inset-0 rounded-3xl overflow-hidden pointer-events-none">
-                  <div className="absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-transparent" />
-                </div>
+              <div className="relative overflow-hidden rounded-2xl max-w-2xl text-center">
+                {/* Animated gradient background */}
+                <div className="absolute inset-0 bg-gradient-to-br from-zinc-800/40 via-zinc-900/60 to-black/80 backdrop-blur-sm border border-white/10" />
+                
+                {/* Shine effect */}
+                <div className="absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-transparent" />
 
-                <div className="relative z-10">
+                <div className="relative z-10 p-16">
                   <div className="mb-8">
                     <svg
                       className="w-32 h-32 mx-auto text-white/20"
@@ -81,14 +84,17 @@ const CartPage: React.FC = () => {
                 {items.map((item) => (
                   <div
                     key={item.id}
-                    className="relative bg-gradient-to-br from-zinc-800/40 via-zinc-900/60 to-black/80 backdrop-blur-xl border border-white/10 rounded-3xl p-6 shadow-2xl hover:border-white/20 transition-all overflow-hidden"
+                    className="relative overflow-hidden rounded-2xl"
                   >
-                    {/* Shine effect overlay */}
-                    <div className="absolute inset-0 rounded-3xl overflow-hidden pointer-events-none">
-                      <div className="absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-transparent" />
+                    {/* Animated gradient background */}
+                    <div className="absolute inset-0 bg-gradient-to-br from-zinc-800/40 via-zinc-900/60 to-black/80 backdrop-blur-sm border border-white/10 transition-all duration-300" />
+                    
+                    {/* Shine effect on hover */}
+                    <div className="absolute inset-0 opacity-0 hover:opacity-100 transition-opacity duration-500">
+                      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent translate-x-[-100%] hover:translate-x-[100%] transition-transform duration-1000" />
                     </div>
 
-                    <div className="relative z-10 flex gap-6">
+                    <div className="relative z-10 p-6 flex gap-6">
                       {/* Product Image */}
                       <div className="flex-shrink-0 w-32 h-32 bg-white/5 rounded-xl p-2">
                         <img
@@ -109,12 +115,15 @@ const CartPage: React.FC = () => {
                               {item.subtitle}
                             </p>
                           )}
-                          <div className="flex gap-4 text-sm text-white/60">
+                          <div className="flex flex-wrap gap-4 text-sm text-white/60">
                             {item.selectedSize && (
                               <span>Размер: {item.selectedSize}</span>
                             )}
                             {item.selectedColor && (
                               <span>Цвет: {item.selectedColor}</span>
+                            )}
+                            {item.selectedType && (
+                              <span>Тип: {item.selectedType}</span>
                             )}
                           </div>
                         </div>
@@ -179,13 +188,14 @@ const CartPage: React.FC = () => {
 
               {/* Order Summary - Right Column */}
               <div className="lg:col-span-1">
-                <div className="bg-gradient-to-br from-zinc-800/40 via-zinc-900/60 to-black/80 backdrop-blur-xl border border-white/10 rounded-3xl p-8 shadow-2xl sticky top-24">
-                  {/* Shine effect overlay */}
-                  <div className="absolute inset-0 rounded-3xl overflow-hidden pointer-events-none">
-                    <div className="absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-transparent" />
-                  </div>
+                <div className="relative overflow-hidden rounded-2xl sticky top-24">
+                  {/* Animated gradient background */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-zinc-800/40 via-zinc-900/60 to-black/80 backdrop-blur-sm border border-white/10" />
+                  
+                  {/* Shine effect */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-transparent" />
 
-                  <div className="relative z-10">
+                  <div className="relative z-10 p-8">
                     <h2 className="text-3xl font-manrope font-bold text-white mb-8">
                       Итого
                     </h2>
@@ -233,6 +243,7 @@ const CartPage: React.FC = () => {
               </div>
             </div>
           )}
+          </div>
         </div>
       </div>
     </PageLayout>

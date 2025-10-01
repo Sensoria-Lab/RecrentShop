@@ -129,6 +129,7 @@ const Header: React.FC<HeaderProps> = ({ className = '', onNavigate }) => {
         {/* Right: Shopping cart */}
         <div className="flex justify-end">
           <button 
+            id="cart-button"
             onClick={() => navigate('/cart')}
             className="relative w-10 h-10 flex items-center justify-center cursor-pointer hover:scale-110 transition-all focus:outline-none focus:ring-2 focus:ring-white/40 rounded-lg group"
           >

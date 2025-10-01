@@ -117,6 +117,22 @@ html { scrollbar-gutter: stable both-edge; }
 
 .animate-fade-in-up { animation: fadeInUp 0.55s cubic-bezier(0.4,0.1,0.2,1) both; }
 
+/* Flying to cart animation */
+@keyframes flyToCart {
+  0% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(0.7) rotate(10deg);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(0.3) rotate(20deg);
+    opacity: 0;
+  }
+}
+
 /* Utility for deep readable text shadow */
 .text-strong-contrast { text-shadow: 0 4px 18px rgba(0,0,0,0.85), 0 0 6px rgba(0,0,0,0.65); }
 
@@ -177,3 +193,38 @@ html { scrollbar-gutter: stable both-edge; }
   stroke-dasharray: 2200;
   animation: beam-slide-2 9s ease-in-out infinite;
 }
+
+/* Custom Cursor Styles - Minimal Dot */
+* {
+  cursor: none !important;
+}
+
+.custom-cursor-dot {
+  position: fixed;
+  width: 16px;
+  height: 16px;
+  background: white;
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  transition: transform 0.15s ease-out;
+  box-shadow: 
+    0 0 0 2px rgba(0, 0, 0, 0.2),
+    0 0 15px rgba(255, 255, 255, 0.3),
+    inset 0 0 5px rgba(255, 255, 255, 0.8);
+}
+
+.custom-cursor-glow {
+  position: fixed;
+  width: 60px;
+  height: 60px;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.4) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9998;
+  transform: translate(-50%, -50%);
+  transition: opacity 0.2s ease-out;
+  filter: blur(12px);
+}
+

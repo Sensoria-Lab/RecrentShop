@@ -10,6 +10,7 @@ export interface CartItem {
   quantity: number;
   selectedSize?: string;
   selectedColor?: string;
+  selectedType?: string;
 }
 
 interface CartContextType {
@@ -44,7 +45,8 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       const existingIndex = prevItems.findIndex((i) => 
         i.id === item.id && 
         i.selectedSize === item.selectedSize && 
-        i.selectedColor === item.selectedColor
+        i.selectedColor === item.selectedColor &&
+        i.selectedType === item.selectedType
       );
 
       if (existingIndex > -1) {

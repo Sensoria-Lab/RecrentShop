@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import SelectorGroup from '../ui/SelectorGroup';
 import Header from '../shared/Header';
 import DecryptedText from '../shared/DecryptedText';
+import { useCart } from '../../context/CartContext';
 
 
 // Star rating component
@@ -14,8 +15,8 @@ const StarRating: React.FC<{ rating?: number }> = ({ rating = 5 }) => (
         width="24"
         height="24"
         viewBox="0 0 24 24"
-        fill={i < rating ? "#8B5CF6" : "none"}
-        stroke={i < rating ? "#8B5CF6" : "rgba(255, 255, 255, 0.4)"}
+        fill={i < rating ? "#FACC15" : "none"}
+        stroke={i < rating ? "#FACC15" : "rgba(255, 255, 255, 0.4)"}
         strokeWidth="1.5"
       >
         <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/>
@@ -26,13 +27,16 @@ const StarRating: React.FC<{ rating?: number }> = ({ rating = 5 }) => (
 
 
 // Quantity selector component
-const QuantitySelector: React.FC = () => {
-  const [quantity, setQuantity] = useState(1);
+interface QuantitySelectorProps {
+  quantity: number;
+  onChange: (quantity: number) => void;
+}
 
+const QuantitySelector: React.FC<QuantitySelectorProps> = ({ quantity, onChange }) => {
   return (
     <div className="flex items-center gap-10 bg-gray-800 rounded-xl px-5 py-4">
       <button
-        onClick={() => setQuantity(Math.max(1, quantity - 1))}
+        onClick={() => onChange(Math.max(1, quantity - 1))}
         className="text-white font-manrope font-semibold text-2xl hover:text-gray-300 transition-colors"
       >
         -
@@ -41,7 +45,7 @@ const QuantitySelector: React.FC = () => {
         {quantity}
       </span>
       <button
-        onClick={() => setQuantity(quantity + 1)}
+        onClick={() => onChange(quantity + 1)}
         className="text-white font-manrope font-semibold text-2xl hover:text-gray-300 transition-colors"
       >
         +
@@ -55,20 +59,36 @@ const ProductPage: React.FC = () => {
   const location = useLocation();
   const productData = location.state?.productData;
   
-  // Use product data if provided, otherwise use default values
-  const defaultImages = [
-    '/013_l_black_02.webp',
-    '/013_l_black_04.webp',
-    '/013_l_black_05.webp',
-    '/61.webp'
-  ];
-
-  const productImages = productData?.image ? [productData.image] : defaultImages;
-
+  const { addItem } = useCart();
+  
   const [selectedImage, setSelectedImage] = useState(0);
   const [selectedColor, setSelectedColor] = useState('black');
   const [selectedSize, setSelectedSize] = useState('xl');
   const [selectedType, setSelectedType] = useState('speed');
+  const [quantity, setQuantity] = useState(1);
+  const [flyingToCart, setFlyingToCart] = useState(false);
+
+  // Динамические изображения в зависимости от размера и цвета
+  const productImages = useMemo(() => {
+    const colorMap: { [key: string]: string } = {
+      'black': 'black',
+      'gray': 'white',
+      'red': 'red'
+    };
+    
+    const colorName = colorMap[selectedColor] || 'black';
+    const sizePath = selectedSize === 'xl' ? 'xl' : 'l';
+    
+    // Создаем массив из трех одинаковых изображений для листания
+    const imagePath = `/images/products/mousepads/${sizePath}/mousepad-geoid-${colorName}.webp`;
+    
+    return [imagePath, imagePath, imagePath];
+  }, [selectedSize, selectedColor]);
+
+  // Сбрасываем индекс изображения при смене размера или цвета
+  useEffect(() => {
+    setSelectedImage(0);
+  }, [selectedSize, selectedColor]);
 
   // Опции для селекторов
   const colorOptions = [
@@ -86,6 +106,106 @@ const ProductPage: React.FC = () => {
     { id: 'speed', label: 'Speed' },
     { id: 'balance', label: 'Balance' }
   ];
+
+  // Динамическое описание в зависимости от выбранного типа
+  const descriptions = useMemo(() => ({
+    speed: {
+      main: 'Гладкая и равномерная текстура обеспечивает стабильное скольжение и плавные точные движения',
+      details: [
+        'Коврик ложится ровно сразу из коробки',
+        'Прорезиненное основание обеспечивает плотное прилегание к любой поверхности',
+        'Коврик имеет прошитые края, что заметно увеличивает срок службы',
+        'Материал жаккард обеспечивает быстрое скольжение и устойчивость к износу. Новое покрытие более скоростное, чем полиэстер, но, несмотря на высокую скорость начальных движений, имеет хорошую останавливающую способность.'
+      ],
+      material: 'Жаккард (Speed)'
+    },
+    balance: {
+      main: 'Сбалансированная текстура для идеального сочетания скорости и контроля',
+      details: [
+        'Коврик ложится ровно сразу из коробки',
+        'Прорезиненное основание обеспечивает плотное прилегание к любой поверхности',
+        'Коврик имеет прошитые края, что заметно увеличивает срок службы',
+        'Материал полиэстер обеспечивает оптимальный баланс между скоростью и точностью. Идеально подходит для игр, требующих точного прицеливания и быстрых реакций.'
+      ],
+      material: 'Полиэстер (Balance)'
+    }
+  }), []);
+
+  // Динамические размеры
+  const dimensions = useMemo(() => ({
+    xl: { length: '930 мм', width: '430 мм' },
+    l: { length: '500 мм', width: '430 мм' }
+  }), []);
+
+  // Динамический цвет
+  const colorNames = useMemo(() => ({
+    black: 'Черный',
+    gray: 'Серый',
+    red: 'Красный'
+  }), []);
+
+  // Обработчик добавления в корзину с анимацией
+  const handleAddToCart = () => {
+    // Запуск анимации
+    setFlyingToCart(true);
+    
+    // Создаем летящую копию изображения
+    const productImageElement = document.getElementById('product-main-image');
+    const cartIcon = document.getElementById('cart-button');
+    
+    if (productImageElement && cartIcon) {
+      const imageRect = productImageElement.getBoundingClientRect();
+      const cartRect = cartIcon.getBoundingClientRect();
+      
+      // Создаем клон изображения
+      const flyingImage = document.createElement('img');
+      flyingImage.src = productImages[selectedImage];
+      flyingImage.style.cssText = `
+        position: fixed;
+        left: ${imageRect.left}px;
+        top: ${imageRect.top}px;
+        width: ${imageRect.width}px;
+        height: ${imageRect.height}px;
+        z-index: 10000;
+        pointer-events: none;
+        transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        object-fit: contain;
+      `;
+      
+      document.body.appendChild(flyingImage);
+      
+      // Запускаем анимацию
+      setTimeout(() => {
+        flyingImage.style.left = `${cartRect.left}px`;
+        flyingImage.style.top = `${cartRect.top}px`;
+        flyingImage.style.width = '50px';
+        flyingImage.style.height = '50px';
+        flyingImage.style.opacity = '0';
+      }, 10);
+      
+      // Удаляем элемент после анимации
+      setTimeout(() => {
+        document.body.removeChild(flyingImage);
+        setFlyingToCart(false);
+      }, 850);
+    }
+    
+    // Добавляем товары в корзину
+    for (let i = 0; i < quantity; i++) {
+      addItem({
+        id: `${productData?.id || 'product'}-${selectedSize}-${selectedColor}-${selectedType}-${Date.now()}-${i}`,
+        image: productImages[selectedImage],
+        title: productData?.title || 'Коврик для мыши',
+        subtitle: productData?.subtitle || '"geoid-white"',
+        price: productData?.price || '3000 р.',
+        selectedSize: sizeOptions.find(opt => opt.id === selectedSize)?.label,
+        selectedColor: colorNames[selectedColor as keyof typeof colorNames],
+        selectedType: typeOptions.find(opt => opt.id === selectedType)?.label
+      });
+    }
+    
+    setQuantity(1); // Сбросить количество
+  };
 
   return (
     <div className="relative min-h-screen w-full overflow-hidden">
@@ -168,10 +288,16 @@ const ProductPage: React.FC = () => {
                     {productData?.price || '3000 р.'}
                   </div>
                   <div className="flex gap-10 items-center">
-                    <button className="bg-blue-600 hover:bg-blue-700 text-white font-manrope font-semibold text-2xl px-10 py-4 rounded-xl transition-colors">
-                      В корзину
+                    <button 
+                      onClick={handleAddToCart}
+                      disabled={flyingToCart}
+                      className={`bg-blue-600 hover:bg-blue-700 text-white font-manrope font-semibold text-2xl px-10 py-4 rounded-xl transition-all duration-200 ${
+                        flyingToCart ? 'scale-95 opacity-50 cursor-not-allowed' : 'hover:scale-105 active:scale-95'
+                      }`}
+                    >
+                      {flyingToCart ? 'Добавление...' : 'В корзину'}
                     </button>
-                    <QuantitySelector />
+                    <QuantitySelector quantity={quantity} onChange={setQuantity} />
                   </div>
                 </div>
               </div>
@@ -185,6 +311,7 @@ const ProductPage: React.FC = () => {
                     <button
                       onClick={() => setSelectedImage(selectedImage === 0 ? productImages.length - 1 : selectedImage - 1)}
                       className="bg-black/50 hover:bg-black/70 text-white p-3 rounded-full transition-colors mr-4 flex-shrink-0"
+                      aria-label="Previous image"
                     >
                       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                         <path d="M15 18l-6-6 6-6"/>
@@ -194,9 +321,11 @@ const ProductPage: React.FC = () => {
                     {/* Image container */}
                     <div className="flex-1">
                       <img
+                        id="product-main-image"
+                        key={`${selectedSize}-${selectedColor}-${selectedImage}`}
                         src={productImages[selectedImage]}
                         alt="Product"
-                        className="w-full h-96 object-contain rounded-xl"
+                        className="w-full h-96 object-contain rounded-xl transition-all duration-300"
                       />
                     </div>
 
@@ -204,6 +333,7 @@ const ProductPage: React.FC = () => {
                     <button
                       onClick={() => setSelectedImage(selectedImage === productImages.length - 1 ? 0 : selectedImage + 1)}
                       className="bg-black/50 hover:bg-black/70 text-white p-3 rounded-full transition-colors ml-4 flex-shrink-0"
+                      aria-label="Next image"
                     >
                       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                         <path d="M9 18l6-6-6-6"/>
@@ -222,13 +352,14 @@ const ProductPage: React.FC = () => {
                         onClick={() => setSelectedImage(index)}
                         className={`w-24 h-20 rounded-xl overflow-hidden border-2 transition-all ${
                           selectedImage === index
-                            ? 'border-white'
-                            : 'border-transparent opacity-70 hover:opacity-100'
+                            ? 'border-white shadow-lg shadow-white/20'
+                            : 'border-transparent opacity-70 hover:opacity-100 hover:border-white/30'
                         }`}
+                        aria-label={`View image ${index + 1}`}
                       >
                         <img
                           src={image}
-                          alt={`Product ${index + 1}`}
+                          alt={`Product view ${index + 1}`}
                           className="w-full h-full object-cover"
                         />
                       </button>
@@ -246,11 +377,10 @@ const ProductPage: React.FC = () => {
               <h3 className="text-white font-manrope font-semibold text-4xl mb-4">Описание</h3>
               <div className="w-48 h-px bg-white/40 mb-6"></div>
               <div className="text-white font-manrope font-medium text-lg leading-relaxed space-y-4">
-                <p>Гладкая и равномерная текстура обеспечивает стабильное скольжение и плавные точные движения</p>
-                <p>Коврик ложится ровно сразу из коробки</p>
-                <p>Прорезиненное основание обеспечивает плотное прилегание к любой поверхности</p>
-                <p>Коврик имеет прошитые края, что заметно увеличивает срок службы</p>
-                <p>Материал жаккард обеспечивает быстрое скольжение и устойчивость к износу. Новое покрытие более скоростное, чем полиэстер, но, несмотря на высокую скорость начальных движений, имеет хорошую останавливающую способность.</p>
+                <p>{descriptions[selectedType as keyof typeof descriptions].main}</p>
+                {descriptions[selectedType as keyof typeof descriptions].details.map((detail, index) => (
+                  <p key={index}>{detail}</p>
+                ))}
               </div>
             </div>
 
@@ -263,7 +393,7 @@ const ProductPage: React.FC = () => {
                 <div className="space-y-4">
                   <div className="flex justify-between">
                     <span className="text-white font-manrope font-medium text-xl">Материал покрытия</span>
-                    <span className="text-white font-manrope font-medium text-xl">Полиэстер</span>
+                    <span className="text-white font-manrope font-medium text-xl">{descriptions[selectedType as keyof typeof descriptions].material}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-white font-manrope font-medium text-xl">Материал основания</span>
@@ -271,7 +401,7 @@ const ProductPage: React.FC = () => {
                   </div>
                   <div className="flex justify-between">
                     <span className="text-white font-manrope font-medium text-xl">Цвет</span>
-                    <span className="text-white font-manrope font-medium text-xl">Белый</span>
+                    <span className="text-white font-manrope font-medium text-xl">{colorNames[selectedColor as keyof typeof colorNames]}</span>
                   </div>
                 </div>
               </div>
@@ -287,11 +417,11 @@ const ProductPage: React.FC = () => {
                   </div>
                   <div className="flex justify-between">
                     <span className="text-white font-manrope font-medium text-xl">Длина</span>
-                    <span className="text-white font-manrope font-medium text-xl">930 мм</span>
+                    <span className="text-white font-manrope font-medium text-xl">{dimensions[selectedSize as keyof typeof dimensions].length}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-white font-manrope font-medium text-xl">Ширина</span>
-                    <span className="text-white font-manrope font-medium text-xl">430 мм</span>
+                    <span className="text-white font-manrope font-medium text-xl">{dimensions[selectedSize as keyof typeof dimensions].width}</span>
                   </div>
                 </div>
               </div>
