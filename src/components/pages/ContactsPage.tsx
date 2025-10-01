@@ -243,26 +243,29 @@ const ContactsPage: React.FC = () => {
 
   return (
     <PageLayout>
-      <div className="max-w-4xl mx-auto">
-        {/* Page title */}
-        <div className="text-center mb-16">
-          <h1 className="text-white font-manrope font-bold text-5xl lg:text-6xl mb-4 drop-shadow-[0_4px_12px_rgba(0,0,0,0.9)]">
-            Контакты
-          </h1>
-          <div className="w-32 h-1 bg-white/40 mx-auto"></div>
-        </div>
+      <div className="max-w-5xl mx-auto">
+        {/* Background container for title and cards */}
+        <div className="bg-black/40 backdrop-blur rounded-xl p-12 lg:p-16">
+          {/* Page title */}
+          <div className="text-center mb-20">
+            <h1 className="text-white font-manrope font-bold text-5xl lg:text-6xl mb-6 drop-shadow-[0_4px_12px_rgba(0,0,0,0.9)]">
+              Контакты
+            </h1>
+            <div className="w-32 h-1 bg-white/40 mx-auto"></div>
+          </div>
 
-        {/* Contact cards grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {contactItems.map((item) => (
-            <ContactCard
-              key={item.id}
-              title={item.title}
-              icon={item.icon}
-              preview={item.preview}
-              onClick={() => openModal(item.title, item.content)}
-            />
-          ))}
+          {/* Contact cards grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {contactItems.map((item) => (
+              <ContactCard
+                key={item.id}
+                title={item.title}
+                icon={item.icon}
+                preview={item.preview}
+                onClick={() => openModal(item.title, item.content)}
+              />
+            ))}
+          </div>
         </div>
       </div>
 
