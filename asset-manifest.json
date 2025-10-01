@@ -1,8 +1,8 @@
 {
   "files": {
-    "main.css": "/RecrentShop/static/css/main.2cc1bf6e.css",
-    "main.js": "/RecrentShop/static/js/main.f10a8f35.js",
-    "static/js/868.f8a264a1.chunk.js": "/RecrentShop/static/js/868.f8a264a1.chunk.js",
+    "main.css": "/RecrentShop/static/css/main.25addc6c.css",
+    "main.js": "/RecrentShop/static/js/main.2c9caff0.js",
+    "static/js/868.2bac1ad4.chunk.js": "/RecrentShop/static/js/868.2bac1ad4.chunk.js",
     "static/js/249.22136da1.chunk.js": "/RecrentShop/static/js/249.22136da1.chunk.js",
     "static/js/104.f81008d4.chunk.js": "/RecrentShop/static/js/104.f81008d4.chunk.js",
     "static/js/604.b04e22dc.chunk.js": "/RecrentShop/static/js/604.b04e22dc.chunk.js",
@@ -10,9 +10,9 @@
     "static/js/85.2eca92c2.chunk.js": "/RecrentShop/static/js/85.2eca92c2.chunk.js",
     "static/js/286.6095d05e.chunk.js": "/RecrentShop/static/js/286.6095d05e.chunk.js",
     "index.html": "/RecrentShop/index.html",
-    "main.2cc1bf6e.css.map": "/RecrentShop/static/css/main.2cc1bf6e.css.map",
-    "main.f10a8f35.js.map": "/RecrentShop/static/js/main.f10a8f35.js.map",
-    "868.f8a264a1.chunk.js.map": "/RecrentShop/static/js/868.f8a264a1.chunk.js.map",
+    "main.25addc6c.css.map": "/RecrentShop/static/css/main.25addc6c.css.map",
+    "main.2c9caff0.js.map": "/RecrentShop/static/js/main.2c9caff0.js.map",
+    "868.2bac1ad4.chunk.js.map": "/RecrentShop/static/js/868.2bac1ad4.chunk.js.map",
     "249.22136da1.chunk.js.map": "/RecrentShop/static/js/249.22136da1.chunk.js.map",
     "104.f81008d4.chunk.js.map": "/RecrentShop/static/js/104.f81008d4.chunk.js.map",
     "604.b04e22dc.chunk.js.map": "/RecrentShop/static/js/604.b04e22dc.chunk.js.map",
@@ -21,7 +21,7 @@
     "286.6095d05e.chunk.js.map": "/RecrentShop/static/js/286.6095d05e.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.2cc1bf6e.css",
-    "static/js/main.f10a8f35.js"
+    "static/css/main.25addc6c.css",
+    "static/js/main.2c9caff0.js"
   ]
 }
