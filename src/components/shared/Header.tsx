@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useCart } from '../../context/CartContext';
+import Img from './Img';
 
 interface HeaderProps {
   className?: string;
@@ -74,7 +75,7 @@ const Header: React.FC<HeaderProps> = ({ className = '', onNavigate }) => {
             className="relative w-10 h-10 cursor-pointer transition-all hover:rotate-[-5deg] hover:scale-110 focus:outline-none focus:ring-2 focus:ring-white/40 rounded-lg group"
           >
             <div className="absolute inset-0 bg-white/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity blur-md" />
-            <img
+            <Img
               src="/images/ui/logo.svg"
               alt="Logo"
               className="relative w-full h-full object-contain drop-shadow-[0_0_8px_rgba(255,255,255,0.3)]"
@@ -137,7 +138,7 @@ const Header: React.FC<HeaderProps> = ({ className = '', onNavigate }) => {
             <div className="absolute inset-0 bg-white/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity" />
             
             {/* Cart icon */}
-            <img
+            <Img
               src="/images/ui/shopping-cart.svg"
               alt="Shopping Cart"
               className="relative w-6 h-6 object-contain filter invert drop-shadow-[0_0_6px_rgba(255,255,255,0.2)]"

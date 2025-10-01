@@ -1,61 +1,14 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import SelectorGroup from '../ui/SelectorGroup';
 import Header from '../shared/Header';
 import DecryptedText from '../shared/DecryptedText';
 import { useCart } from '../../context/CartContext';
-
-
-// Star rating component
-const StarRating: React.FC<{ rating?: number }> = ({ rating = 5 }) => (
-  <div className="flex items-center gap-1">
-    {[...Array(5)].map((_, i) => (
-      <svg
-        key={i}
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-        fill={i < rating ? "#FACC15" : "none"}
-        stroke={i < rating ? "#FACC15" : "rgba(255, 255, 255, 0.4)"}
-        strokeWidth="1.5"
-      >
-        <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/>
-      </svg>
-    ))}
-  </div>
-);
-
-
-// Quantity selector component
-interface QuantitySelectorProps {
-  quantity: number;
-  onChange: (quantity: number) => void;
-}
-
-const QuantitySelector: React.FC<QuantitySelectorProps> = ({ quantity, onChange }) => {
-  return (
-    <div className="flex items-center gap-10 bg-gray-800 rounded-xl px-5 py-4">
-      <button
-        onClick={() => onChange(Math.max(1, quantity - 1))}
-        className="text-white font-manrope font-semibold text-2xl hover:text-gray-300 transition-colors"
-      >
-        -
-      </button>
-      <span className="text-white font-manrope font-semibold text-2xl min-w-[2rem] text-center">
-        {quantity}
-      </span>
-      <button
-        onClick={() => onChange(quantity + 1)}
-        className="text-white font-manrope font-semibold text-2xl hover:text-gray-300 transition-colors"
-      >
-        +
-      </button>
-    </div>
-  );
-};
+import Img from '../shared/Img';
+import StarRating from '../shared/StarRating';
+import QuantitySelector from '../ui/QuantitySelector';
 
 const ProductPage: React.FC = () => {
-  const navigate = useNavigate();
   const location = useLocation();
   const productData = location.state?.productData;
   
@@ -320,7 +273,7 @@ const ProductPage: React.FC = () => {
 
                     {/* Image container */}
                     <div className="flex-1">
-                      <img
+                      <Img
                         id="product-main-image"
                         key={`${selectedSize}-${selectedColor}-${selectedImage}`}
                         src={productImages[selectedImage]}
@@ -357,7 +310,7 @@ const ProductPage: React.FC = () => {
                         }`}
                         aria-label={`View image ${index + 1}`}
                       >
-                        <img
+                        <Img
                           src={image}
                           alt={`Product view ${index + 1}`}
                           className="w-full h-full object-cover"

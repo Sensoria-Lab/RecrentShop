@@ -151,9 +151,9 @@ const ContactsPage: React.FC = () => {
           </p>
           
           <div className="grid grid-cols-1 gap-4">
-            <a
-              href="#"
-              className="flex items-center gap-4 p-4 bg-white/5 hover:bg-white/10 rounded-xl border border-white/10 hover:border-white/20 transition-all group"
+            <button
+              onClick={() => window.open('https://instagram.com/recrentshop', '_blank')}
+              className="flex items-center gap-4 p-4 bg-white/5 hover:bg-white/10 rounded-xl border border-white/10 hover:border-white/20 transition-all group cursor-pointer"
             >
               <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl flex items-center justify-center">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
@@ -169,11 +169,11 @@ const ContactsPage: React.FC = () => {
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-white/40 group-hover:text-white/80 group-hover:translate-x-1 transition-all">
                 <path d="M5 12h14M12 5l7 7-7 7"/>
               </svg>
-            </a>
+            </button>
             
-            <a
-              href="#"
-              className="flex items-center gap-4 p-4 bg-white/5 hover:bg-white/10 rounded-xl border border-white/10 hover:border-white/20 transition-all group"
+            <button
+              onClick={() => window.open('https://vk.com/recrentshop', '_blank')}
+              className="flex items-center gap-4 p-4 bg-white/5 hover:bg-white/10 rounded-xl border border-white/10 hover:border-white/20 transition-all group cursor-pointer"
             >
               <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
@@ -187,7 +187,7 @@ const ContactsPage: React.FC = () => {
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-white/40 group-hover:text-white/80 group-hover:translate-x-1 transition-all">
                 <path d="M5 12h14M12 5l7 7-7 7"/>
               </svg>
-            </a>
+            </button>
           </div>
         </div>
       )

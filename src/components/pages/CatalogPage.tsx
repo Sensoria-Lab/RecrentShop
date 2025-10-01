@@ -1,175 +1,88 @@
-import React from 'react';
+import React, { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ProductCard from '../ui/ProductCard';
 import Header from '../shared/Header';
-import DecryptedText from '../shared/DecryptedText';
-import ProductCarousel from '../ui/ProductCarousel';
-
-
-// Section Header Component
-const SectionHeader: React.FC<{ title: string }> = ({ title }) => (
-  <div className="flex items-center justify-between p-8 border-b border-white/10">
-    <div className="min-w-[400px]">
-      <h2 className="text-white font-manrope font-extrabold text-3xl text-left tracking-wide drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]">
-        <DecryptedText
-          text={title}
-          duration={700}
-          delay={100}
-          className="text-white font-manrope font-extrabold"
-          showAnimation={false}
-        />
-      </h2>
-    </div>
-    <div className="flex items-center gap-3 group cursor-pointer hover:translate-x-1 transition-transform duration-300">
-      <span className="text-white/80 font-manrope font-bold text-lg group-hover:text-white transition-colors">Показать все</span>
-      <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center group-hover:bg-white/20 transition-colors">
-        <svg width="16" height="12" viewBox="0 0 21 14" fill="none" stroke="currentColor" strokeWidth="2" className="text-white/70 group-hover:text-white">
-          <path d="M14 1l6 6-6 6M1 7h18"/>
-        </svg>
-      </div>
-    </div>
-  </div>
-);
+import { ALL_PRODUCTS } from '../../data/products';
+import type { 
+  SortOption, 
+  CategoryFilter, 
+  ColorFilter, 
+  SizeFilter, 
+  ClothingTypeFilter 
+} from '../../types/product';
 
 const CatalogPage: React.FC = () => {
   const navigate = useNavigate();
   
+  // Filter states
+  const [sortBy, setSortBy] = useState<SortOption>('popularity');
+  const [categoryFilter, setCategoryFilter] = useState<CategoryFilter>('all');
+  const [colorFilter, setColorFilter] = useState<ColorFilter>('all');
+  const [sizeFilter, setSizeFilter] = useState<SizeFilter>('all');
+  const [clothingTypeFilter, setClothingTypeFilter] = useState<ClothingTypeFilter>('all');
+  const [priceRange, setPriceRange] = useState<[number, number]>([0, 10000]);
+  const [minRating, setMinRating] = useState<number>(0);
+
   const handleProductClick = (productData: any) => {
     navigate('/product', { state: { productData } });
   };
-  // Sample product data - в реальном приложении это будет приходить из API
-  const xlMousepads = [
-    {
-      id: 1,
-      image: '/images/products/mousepads/xl/mousepad-geoid-black.webp',
-      title: 'Коврик для мыши',
-      subtitle: '"geoid-black"',
-      productSize: 'XL',
-      price: '3 000 р.',
-      rating: 4,
-      reviewCount: 29
-    },
-    {
-      id: 2,
-      image: '/images/products/mousepads/xl/mousepad-geoid-white.webp',
-      title: 'Коврик для мыши',
-      subtitle: '"geoid-white"',
-      productSize: 'XL',
-      price: '3 000 р.',
-      rating: 5,
-      reviewCount: 15
-    },
-    {
-      id: 3,
-      image: '/images/products/mousepads/xl/mousepad-geoid-red.webp',
-      title: 'Коврик для мыши',
-      subtitle: '"geoid-red"',
-      productSize: 'XL',
-      price: '3 000 р.',
-      rating: 4,
-      reviewCount: 8
-    },
-    {
-      id: 10,
-      image: '/images/products/mousepads/xl/mousepad-geoid-black.webp',
-      title: 'Коврик для мыши',
-      subtitle: '"geoid-black"',
-      productSize: 'XL',
-      price: '3 000 р.',
-      rating: 5,
-      reviewCount: 22
-    }
-  ];
 
-  const lMousepads = [
-    {
-      id: 4,
-      image: '/images/products/mousepads/l/mousepad-geoid-black.webp',
-      title: 'Коврик для мыши',
-      subtitle: '"geoid-black"',
-      productSize: 'L',
-      price: '3 000 р.',
-      rating: 5,
-      reviewCount: 29
-    },
-    {
-      id: 5,
-      image: '/images/products/mousepads/l/mousepad-geoid-white.webp',
-      title: 'Коврик для мыши',
-      subtitle: '"geoid-white"',
-      productSize: 'L',
-      price: '3 000 р.',
-      rating: 4,
-      reviewCount: 12
-    },
-    {
-      id: 6,
-      image: '/images/products/mousepads/l/mousepad-geoid-red.webp',
-      title: 'Коврик для мыши',
-      subtitle: '"geoid-red"',
-      productSize: 'L',
-      price: '3 000 р.',
-      rating: 5,
-      reviewCount: 18
-    },
-    {
-      id: 11,
-      image: '/images/products/mousepads/l/mousepad-geoid-white.webp',
-      title: 'Коврик для мыши',
-      subtitle: '"geoid-white"',
-      productSize: 'L',
-      price: '3 000 р.',
-      rating: 5,
-      reviewCount: 25
-    }
-  ];
+  // Filter and sort products
+  const filteredProducts = useMemo(() => {
+    let filtered = [...ALL_PRODUCTS];
 
-  const clothing = [
-    {
-      id: 7,
-      image: '/images/products/clothing/hoodies/hoodie-serpents-black.webp',
-      title: 'Худи-оверсайз',
-      subtitle: '"Seprents"',
-      productColor: 'Черный',
-      price: '6 000 р.',
-      rating: 5,
-      reviewCount: 24
-    },
-    {
-      id: 8,
-      image: '/images/products/clothing/hoodies/hoodie-serpents-white.webp',
-      title: 'Худи-оверсайз',
-      subtitle: '"Seprents"',
-      productColor: 'Белый',
-      price: '6 000 р.',
-      rating: 4,
-      reviewCount: 19
-    },
-    {
-      id: 9,
-      image: '/images/products/clothing/tshirts/tshirt-serpents-black.webp',
-      title: 'Футболка-оверсайз',
-      subtitle: '"Seprents"',
-      productColor: 'Черный',
-      price: '6 000 р.',
-      rating: 5,
-      reviewCount: 31
-    },
-    {
-      id: 12,
-      image: '/images/products/clothing/hoodies/hoodie-serpents-black.webp',
-      title: 'Худи-оверсайз',
-      subtitle: '"Seprents"',
-      productColor: 'Черный',
-      price: '6 000 р.',
-      rating: 4,
-      reviewCount: 28
+    // Apply category filter
+    if (categoryFilter !== 'all') {
+      filtered = filtered.filter(p => p.category === categoryFilter);
     }
-  ];
+
+    // Apply color filter
+    if (colorFilter !== 'all') {
+      filtered = filtered.filter(p => p.color === colorFilter);
+    }
+
+    // Apply size filter
+    if (sizeFilter !== 'all') {
+      filtered = filtered.filter(p => p.productSize === sizeFilter);
+    }
+
+    // Apply clothing type filter
+    if (clothingTypeFilter !== 'all') {
+      filtered = filtered.filter(p => p.clothingType === clothingTypeFilter);
+    }
+
+    // Apply price range filter
+    filtered = filtered.filter(p => 
+      p.priceNumeric >= priceRange[0] && p.priceNumeric <= priceRange[1]
+    );
+
+    // Apply rating filter
+    filtered = filtered.filter(p => p.rating >= minRating);
+
+    // Apply sorting
+    switch (sortBy) {
+      case 'popularity':
+        filtered.sort((a, b) => b.reviewCount - a.reviewCount);
+        break;
+      case 'price-asc':
+        filtered.sort((a, b) => a.priceNumeric - b.priceNumeric);
+        break;
+      case 'price-desc':
+        filtered.sort((a, b) => b.priceNumeric - a.priceNumeric);
+        break;
+      case 'rating':
+        filtered.sort((a, b) => {
+          if (b.rating === a.rating) return b.reviewCount - a.reviewCount;
+          return b.rating - a.rating;
+        });
+        break;
+    }
+
+    return filtered;
+  }, [sortBy, categoryFilter, colorFilter, sizeFilter, clothingTypeFilter, priceRange, minRating]);
 
   return (
     <div className="relative min-h-screen w-full overflow-hidden">
-      {/* Main layout container */}
       <div className="relative z-10 min-h-screen flex flex-col">
         {/* Header */}
         <div className="flex justify-center px-12 py-4 sticky top-0 z-50">
@@ -180,82 +93,237 @@ const CatalogPage: React.FC = () => {
 
         {/* Main content */}
         <main className="flex-1 px-20 py-12">
-          {/* Page Title - removed */}
-
-          {/* Content sections */}
-          <div className="space-y-16 max-w-[1400px] mx-auto">
-            {/* XL Mousepads Section */}
-            <div className="bg-black/40 backdrop-blur rounded-xl p-8">
-              <SectionHeader title="Ковры для мыши размера XL" />
-              <div className="pb-12 px-8 pt-8">
-                <ProductCarousel itemsPerView={3}>
-                  {xlMousepads.map((product) => (
-                    <ProductCard
-                      key={product.id}
-                      id={product.id}
-                      image={product.image}
-                      title={product.title}
-                      subtitle={product.subtitle}
-                      productSize={product.productSize}
-                      price={product.price}
-                      rating={product.rating}
-                      reviewCount={product.reviewCount}
-                      size="small-catalog"
-                      onAddToCart={() => console.log(`Add ${product.title} to cart`)}
-                      onProductClick={handleProductClick}
-                    />
-                  ))}
-                </ProductCarousel>
-              </div>
+          <div className="max-w-[1600px] mx-auto">
+            {/* Page Title */}
+            <div className="text-center mb-12">
+              <h1 className="text-white font-manrope font-bold text-5xl lg:text-6xl mb-6 drop-shadow-[0_4px_12px_rgba(0,0,0,0.9)]">
+                Каталог товаров
+              </h1>
+              <div className="w-32 h-1 bg-white/40 mx-auto"></div>
             </div>
 
-            {/* L Mousepads Section */}
-            <div className="bg-black/40 backdrop-blur rounded-xl p-8">
-              <SectionHeader title="Ковры для мыши размера L" />
-              <div className="pb-12 px-8 pt-8">
-                <ProductCarousel itemsPerView={3}>
-                  {lMousepads.map((product) => (
-                    <ProductCard
-                      key={product.id}
-                      id={product.id}
-                      image={product.image}
-                      title={product.title}
-                      subtitle={product.subtitle}
-                      productSize={product.productSize}
-                      price={product.price}
-                      rating={product.rating}
-                      reviewCount={product.reviewCount}
-                      size="small-catalog"
-                      onAddToCart={() => console.log(`Add ${product.title} to cart`)}
-                      onProductClick={handleProductClick}
-                    />
-                  ))}
-                </ProductCarousel>
-              </div>
-            </div>
+            <div className="flex gap-8">
+              {/* Filters Sidebar */}
+              <aside className="w-80 flex-shrink-0">
+                <div className="bg-black/40 backdrop-blur rounded-xl p-6 sticky top-28">
+                  <h2 className="text-white font-manrope font-bold text-xl mb-6">Фильтры</h2>
+                  
+                  {/* Sort By */}
+                  <div className="mb-6">
+                    <label className="text-white/80 font-manrope text-sm mb-2 block">Сортировка</label>
+                    <select
+                      value={sortBy}
+                      onChange={(e) => setSortBy(e.target.value as SortOption)}
+                      className="w-full bg-white/10 text-white border border-white/20 rounded-lg px-4 py-2 font-manrope focus:outline-none focus:border-white/40 transition-colors"
+                    >
+                      <option value="popularity">По популярности</option>
+                      <option value="rating">По рейтингу</option>
+                      <option value="price-asc">Цена: по возрастанию</option>
+                      <option value="price-desc">Цена: по убыванию</option>
+                    </select>
+                  </div>
 
-            {/* Clothing Section */}
-            <div className="bg-black/40 backdrop-blur rounded-xl p-8">
-              <SectionHeader title="Одежда" />
-              <div className="pb-12 px-8 pt-8">
-                <ProductCarousel itemsPerView={3}>
-                  {clothing.map((product) => (
-                    <ProductCard
-                      key={product.id}
-                      id={product.id}
-                      image={product.image}
-                      title={product.title}
-                      subtitle={product.subtitle}
-                      productColor={product.productColor}
-                      price={product.price}
-                      rating={product.rating}
-                      reviewCount={product.reviewCount}
-                      size="small-catalog"
-                      onAddToCart={() => console.log(`Add ${product.title} to cart`)}
-                      onProductClick={handleProductClick}
+                  {/* Category Filter */}
+                  <div className="mb-6">
+                    <label className="text-white/80 font-manrope text-sm mb-2 block">Категория</label>
+                    <div className="space-y-2">
+                      {[
+                        { value: 'all', label: 'Все товары' },
+                        { value: 'mousepads', label: 'Коврики для мыши' },
+                        { value: 'clothing', label: 'Одежда' }
+                      ].map(option => (
+                        <label key={option.value} className="flex items-center gap-2 cursor-pointer group">
+                          <input
+                            type="radio"
+                            name="category"
+                            value={option.value}
+                            checked={categoryFilter === option.value}
+                            onChange={(e) => setCategoryFilter(e.target.value as CategoryFilter)}
+                            className="w-4 h-4 accent-white"
+                          />
+                          <span className="text-white/70 font-manrope group-hover:text-white transition-colors">
+                            {option.label}
+                          </span>
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Clothing Type Filter */}
+                  {(categoryFilter === 'clothing' || categoryFilter === 'all') && (
+                    <div className="mb-6">
+                      <label className="text-white/80 font-manrope text-sm mb-2 block">Тип одежды</label>
+                      <div className="space-y-2">
+                        {[
+                          { value: 'all', label: 'Вся одежда' },
+                          { value: 'hoodie', label: 'Худи' },
+                          { value: 'tshirt', label: 'Футболки' }
+                        ].map(option => (
+                          <label key={option.value} className="flex items-center gap-2 cursor-pointer group">
+                            <input
+                              type="radio"
+                              name="clothingType"
+                              value={option.value}
+                              checked={clothingTypeFilter === option.value}
+                              onChange={(e) => setClothingTypeFilter(e.target.value as ClothingTypeFilter)}
+                              className="w-4 h-4 accent-white"
+                            />
+                            <span className="text-white/70 font-manrope group-hover:text-white transition-colors">
+                              {option.label}
+                            </span>
+                          </label>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Color Filter */}
+                  <div className="mb-6">
+                    <label className="text-white/80 font-manrope text-sm mb-2 block">Цвет</label>
+                    <div className="space-y-2">
+                      {[
+                        { value: 'all', label: 'Все цвета' },
+                        { value: 'black', label: 'Черный' },
+                        { value: 'white', label: 'Белый' },
+                        { value: 'red', label: 'Красный' }
+                      ].map(option => (
+                        <label key={option.value} className="flex items-center gap-2 cursor-pointer group">
+                          <input
+                            type="radio"
+                            name="color"
+                            value={option.value}
+                            checked={colorFilter === option.value}
+                            onChange={(e) => setColorFilter(e.target.value as ColorFilter)}
+                            className="w-4 h-4 accent-white"
+                          />
+                          <span className="text-white/70 font-manrope group-hover:text-white transition-colors">
+                            {option.label}
+                          </span>
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Size Filter */}
+                  <div className="mb-6">
+                    <label className="text-white/80 font-manrope text-sm mb-2 block">Размер</label>
+                    <div className="space-y-2">
+                      {[
+                        { value: 'all', label: 'Все размеры' },
+                        ...(categoryFilter !== 'clothing' ? [
+                          { value: 'L', label: 'L (коврики)' },
+                          { value: 'XL', label: 'XL (коврики)' }
+                        ] : []),
+                        ...(categoryFilter !== 'mousepads' ? [
+                          { value: 'S', label: 'S (одежда)' },
+                          { value: 'M', label: 'M (одежда)' },
+                          { value: 'XS', label: 'XS (одежда)' }
+                        ] : [])
+                      ].map(option => (
+                        <label key={option.value} className="flex items-center gap-2 cursor-pointer group">
+                          <input
+                            type="radio"
+                            name="size"
+                            value={option.value}
+                            checked={sizeFilter === option.value}
+                            onChange={(e) => setSizeFilter(e.target.value as SizeFilter)}
+                            className="w-4 h-4 accent-white"
+                          />
+                          <span className="text-white/70 font-manrope group-hover:text-white transition-colors">
+                            {option.label}
+                          </span>
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Price Range */}
+                  <div className="mb-6">
+                    <label className="text-white/80 font-manrope text-sm mb-2 block">
+                      Цена: {priceRange[0]} - {priceRange[1]} р.
+                    </label>
+                    <input
+                      type="range"
+                      min="0"
+                      max="10000"
+                      step="100"
+                      value={priceRange[1]}
+                      onChange={(e) => setPriceRange([0, parseInt(e.target.value)])}
+                      className="w-full accent-white"
                     />
-                  ))}
-                </ProductCarousel>
+                  </div>
+
+                  {/* Rating Filter */}
+                  <div className="mb-6">
+                    <label className="text-white/80 font-manrope text-sm mb-2 block">Минимальный рейтинг</label>
+                    <div className="space-y-2">
+                      {[0, 3, 4, 5].map(rating => (
+                        <label key={rating} className="flex items-center gap-2 cursor-pointer group">
+                          <input
+                            type="radio"
+                            name="rating"
+                            value={rating}
+                            checked={minRating === rating}
+                            onChange={() => setMinRating(rating)}
+                            className="w-4 h-4 accent-white"
+                          />
+                          <span className="text-white/70 font-manrope group-hover:text-white transition-colors">
+                            {rating === 0 ? 'Любой' : `${rating}+ ⭐`}
+                          </span>
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Reset Filters */}
+                  <button
+                    onClick={() => {
+                      setSortBy('popularity');
+                      setCategoryFilter('all');
+                      setColorFilter('all');
+                      setSizeFilter('all');
+                      setClothingTypeFilter('all');
+                      setPriceRange([0, 10000]);
+                      setMinRating(0);
+                    }}
+                    className="w-full bg-white/10 hover:bg-white/20 text-white font-manrope py-2 rounded-lg transition-colors"
+                  >
+                    Сбросить фильтры
+                  </button>
+                </div>
+              </aside>
+
+              {/* Products Grid */}
+              <div className="flex-1">
+                
+                
+                {filteredProducts.length === 0 ? (
+                  <div className="bg-black/40 backdrop-blur rounded-xl p-12 text-center">
+                    <p className="text-white/60 font-manrope text-lg">
+                      Товары не найдены. Попробуйте изменить фильтры.
+                    </p>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {filteredProducts.map((product) => (
+                      <ProductCard
+                        key={product.id}
+                        id={product.id}
+                        image={product.image}
+                        title={product.title}
+                        subtitle={product.subtitle}
+                        productSize={product.productSize}
+                        productColor={product.productColor}
+                        price={product.price}
+                        rating={product.rating}
+                        reviewCount={product.reviewCount}
+                        size="medium"
+                        onAddToCart={() => {}}
+                        onProductClick={handleProductClick}
+                      />
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
           </div>

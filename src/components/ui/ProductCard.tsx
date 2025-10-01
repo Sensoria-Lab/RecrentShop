@@ -1,6 +1,7 @@
 import React from 'react';
 import StarRating from '../shared/StarRating';
 import { useCart } from '../../context/CartContext';
+import Img from '../shared/Img';
 
 export interface ProductCardProps {
   id?: number;
@@ -136,7 +137,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
       <div className="relative z-10">
         {/* Product Image */}
         <div className={`${classes.image} relative rounded-xl mx-auto ${classes.imageContainer} ${size === 'small-catalog' ? 'bg-white/5 p-4 transition-all duration-500' : 'rounded-lg overflow-hidden'}`}>
-          <img
+          <Img
             src={image}
             alt={title}
             className="w-full h-full object-contain"

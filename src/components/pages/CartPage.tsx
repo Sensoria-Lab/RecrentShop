@@ -2,13 +2,13 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import PageLayout from '../shared/PageLayout';
 import { useCart } from '../../context/CartContext';
+import Img from '../shared/Img';
 
 const CartPage: React.FC = () => {
   const navigate = useNavigate();
   const { items, removeItem, updateQuantity, clearCart, getTotalPrice } = useCart();
 
   const handleCheckout = () => {
-    // TODO: Implement checkout logic
     alert('Оформление заказа будет реализовано позже');
   };
 
@@ -97,7 +97,7 @@ const CartPage: React.FC = () => {
                     <div className="relative z-10 p-6 flex gap-6">
                       {/* Product Image */}
                       <div className="flex-shrink-0 w-32 h-32 bg-white/5 rounded-xl p-2">
-                        <img
+                        <Img
                           src={item.image}
                           alt={item.title}
                           className="w-full h-full object-contain"
