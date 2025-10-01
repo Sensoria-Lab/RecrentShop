@@ -1,0 +1,27 @@
+{
+  "files": {
+    "main.css": "https://sensoria-lab.github.io/RecrentShop/static/css/main.609a1356.css",
+    "main.js": "https://sensoria-lab.github.io/RecrentShop/static/js/main.8a56965c.js",
+    "static/js/480.b369e7e1.chunk.js": "https://sensoria-lab.github.io/RecrentShop/static/js/480.b369e7e1.chunk.js",
+    "static/js/249.04e66940.chunk.js": "https://sensoria-lab.github.io/RecrentShop/static/js/249.04e66940.chunk.js",
+    "static/js/104.ba9485f8.chunk.js": "https://sensoria-lab.github.io/RecrentShop/static/js/104.ba9485f8.chunk.js",
+    "static/js/446.67e90852.chunk.js": "https://sensoria-lab.github.io/RecrentShop/static/js/446.67e90852.chunk.js",
+    "static/js/561.916de6b7.chunk.js": "https://sensoria-lab.github.io/RecrentShop/static/js/561.916de6b7.chunk.js",
+    "static/js/85.d66e917b.chunk.js": "https://sensoria-lab.github.io/RecrentShop/static/js/85.d66e917b.chunk.js",
+    "static/js/286.45811fef.chunk.js": "https://sensoria-lab.github.io/RecrentShop/static/js/286.45811fef.chunk.js",
+    "index.html": "https://sensoria-lab.github.io/RecrentShop/index.html",
+    "main.609a1356.css.map": "https://sensoria-lab.github.io/RecrentShop/static/css/main.609a1356.css.map",
+    "main.8a56965c.js.map": "https://sensoria-lab.github.io/RecrentShop/static/js/main.8a56965c.js.map",
+    "480.b369e7e1.chunk.js.map": "https://sensoria-lab.github.io/RecrentShop/static/js/480.b369e7e1.chunk.js.map",
+    "249.04e66940.chunk.js.map": "https://sensoria-lab.github.io/RecrentShop/static/js/249.04e66940.chunk.js.map",
+    "104.ba9485f8.chunk.js.map": "https://sensoria-lab.github.io/RecrentShop/static/js/104.ba9485f8.chunk.js.map",
+    "446.67e90852.chunk.js.map": "https://sensoria-lab.github.io/RecrentShop/static/js/446.67e90852.chunk.js.map",
+    "561.916de6b7.chunk.js.map": "https://sensoria-lab.github.io/RecrentShop/static/js/561.916de6b7.chunk.js.map",
+    "85.d66e917b.chunk.js.map": "https://sensoria-lab.github.io/RecrentShop/static/js/85.d66e917b.chunk.js.map",
+    "286.45811fef.chunk.js.map": "https://sensoria-lab.github.io/RecrentShop/static/js/286.45811fef.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.609a1356.css",
+    "static/js/main.8a56965c.js"
+  ]
+}
