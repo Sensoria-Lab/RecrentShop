@@ -4,7 +4,6 @@ import './index.css';
 import LoadingSkeleton from './components/shared/LoadingSkeleton';
 import { CartProvider } from './context/CartContext';
 import BackgroundBeams from './components/shared/BackgroundBeams';
-import CustomCursor from './components/shared/CustomCursor';
 
 // Lazy load all pages for better performance
 const MainPage = lazy(() => import('./components/pages/MainPage'));
@@ -31,9 +30,6 @@ function App() {
   return (
     <CartProvider>
     <div className="relative min-h-screen overflow-hidden bg-black">
-      {/* Custom Cursor */}
-      <CustomCursor />
-
       {/* Pixel Blast Background Effect */}
       <BackgroundBeams />
 

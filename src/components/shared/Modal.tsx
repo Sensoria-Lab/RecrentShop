@@ -36,15 +36,15 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4">
+    <div className="fixed inset-0 z-[10000] flex items-center justify-center p-4 sm:p-6 md:p-8 pt-24 sm:pt-28 md:pt-32">
       {/* Backdrop */}
-      <div 
+      <div
         className="absolute inset-0 bg-black/80 backdrop-blur-sm"
         onClick={onClose}
       />
-      
+
       {/* Modal */}
-      <div className="relative w-full max-w-3xl max-h-[90vh] sm:max-h-[85vh] bg-gradient-to-br from-zinc-900/95 to-zinc-950/95 rounded-lg sm:rounded-xl md:rounded-2xl shadow-2xl border border-white/10 flex flex-col overflow-hidden">
+      <div className="relative w-full max-w-4xl max-h-[75vh] bg-gradient-to-br from-zinc-900/95 to-zinc-950/95 rounded-lg sm:rounded-xl md:rounded-2xl shadow-2xl border border-white/10 flex flex-col overflow-hidden">
         {/* Header with close button */}
         {title ? (
           <div className="flex items-center justify-between p-3 sm:p-4 md:p-6 border-b border-white/10">

@@ -11,18 +11,15 @@ interface ContactCardProps {
 }
 
 const ContactCard: React.FC<ContactCardProps> = ({ title, onClick, icon, preview }) => (
-  <div 
-    className="relative overflow-hidden rounded-lg sm:rounded-xl md:rounded-2xl cursor-pointer group"
+  <div
+    className="relative rounded-lg sm:rounded-xl md:rounded-2xl cursor-pointer group bg-gradient-to-br from-zinc-800/40 via-zinc-900/60 to-black/80 backdrop-blur-sm border border-white/10 hover:border-white/30 transition-all duration-300"
     onClick={onClick}
   >
-    {/* Animated gradient background */}
-    <div className="absolute inset-0 bg-gradient-to-br from-zinc-800/40 via-zinc-900/60 to-black/80 backdrop-blur-sm border border-white/10 transition-all duration-300 group-hover:border-white/30" />
-    
     {/* Shine effect on hover */}
-    <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+    <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 overflow-hidden rounded-lg sm:rounded-xl md:rounded-2xl pointer-events-none">
       <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
     </div>
-    
+
     {/* Content */}
     <div className="relative p-3 sm:p-4 md:p-6 lg:p-7 flex items-center gap-2 sm:gap-3 md:gap-5 lg:gap-6">
       {/* Icon container */}
@@ -247,7 +244,7 @@ const ContactsPage: React.FC = () => {
         {/* Background container for title and cards */}
         <div className="bg-black/40 backdrop-blur rounded-lg sm:rounded-xl p-4 sm:p-6 md:p-10 lg:p-14">
           {/* Page title */}
-          <div className="text-center mb-6 sm:mb-10 md:mb-16 lg:mb-20">
+          <div className="text-center mb-6 sm:mb-10 md:mb-16 lg:mb-20 scroll-fade-in">
             <h1 className="text-white font-manrope font-bold text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl mb-3 sm:mb-4 md:mb-6 drop-shadow-[0_4px_12px_rgba(0,0,0,0.9)]">
               Контакты
             </h1>
@@ -256,14 +253,15 @@ const ContactsPage: React.FC = () => {
 
           {/* Contact cards grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-5 md:gap-7 lg:gap-8">
-            {contactItems.map((item) => (
-              <ContactCard
-                key={item.id}
-                title={item.title}
-                icon={item.icon}
-                preview={item.preview}
-                onClick={() => openModal(item.title, item.content)}
-              />
+            {contactItems.map((item, index) => (
+              <div key={item.id} className={`scroll-fade-in scroll-fade-in-delay-${Math.min(index % 4 + 1, 4)}`}>
+                <ContactCard
+                  title={item.title}
+                  icon={item.icon}
+                  preview={item.preview}
+                  onClick={() => openModal(item.title, item.content)}
+                />
+              </div>
             ))}
           </div>
         </div>

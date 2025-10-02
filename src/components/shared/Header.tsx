@@ -54,8 +54,8 @@ const Header: React.FC<HeaderProps> = ({ className = '', onNavigate }) => {
                 onClick={() => go(targetPath.slice(1))}
                 aria-current={active ? 'page' : undefined}
                 className={`relative font-manrope font-semibold text-sm lg:text-base px-3 lg:px-5 py-2.5 rounded-xl transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-white/30 whitespace-nowrap ${
-                  active 
-                    ? 'text-white bg-white/10 shadow-lg shadow-white/5' 
+                  active
+                    ? 'text-white bg-white/10 shadow-lg shadow-white/5'
                     : 'text-white/60 hover:text-white hover:bg-white/5'
                 }`}
               >
@@ -63,10 +63,10 @@ const Header: React.FC<HeaderProps> = ({ className = '', onNavigate }) => {
                 {active && (
                   <span className="absolute bottom-1 left-1/2 -translate-x-1/2 w-8 h-0.5 bg-gradient-to-r from-white/0 via-white/80 to-white/0 rounded-full animate-pulse" />
                 )}
-                
+
                 {/* Hover glow */}
                 <span className="absolute inset-0 rounded-xl bg-white/0 group-hover:bg-white/5 transition-colors" />
-                
+
                 <span className="relative">{label}</span>
               </button>
             );

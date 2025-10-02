@@ -8,7 +8,7 @@ const Footer: React.FC = () => {
   return (
     <footer className="relative z-10 mt-auto py-6 px-4 sm:px-8 md:px-12">
       <div className="max-w-[1400px] mx-auto">
-        <div className="bg-black/40 backdrop-blur rounded-lg sm:rounded-xl p-4 sm:p-6 border border-white/10">
+        <div className="bg-black/40 backdrop-blur rounded-lg sm:rounded-xl p-4 sm:p-6">
           <div className="flex flex-col lg:flex-row items-center justify-between gap-4 lg:gap-6">
             {/* Copyright */}
             <div className="text-white/70 font-manrope font-medium text-sm sm:text-base">

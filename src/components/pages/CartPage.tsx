@@ -38,12 +38,9 @@ const CartPage: React.FC = () => {
           {items.length === 0 ? (
             /* Empty Cart State */
             <div className="flex flex-col items-center justify-center py-10 sm:py-16 md:py-20">
-              <div className="relative overflow-hidden rounded-xl sm:rounded-2xl max-w-2xl text-center w-full">
-                {/* Animated gradient background */}
-                <div className="absolute inset-0 bg-gradient-to-br from-zinc-800/40 via-zinc-900/60 to-black/80 backdrop-blur-sm border border-white/10" />
-                
+              <div className="relative rounded-xl sm:rounded-2xl max-w-2xl text-center w-full bg-gradient-to-br from-zinc-800/40 via-zinc-900/60 to-black/80 backdrop-blur-sm border border-white/10">
                 {/* Shine effect */}
-                <div className="absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-transparent pointer-events-none" />
 
                 <div className="relative z-10 p-6 sm:p-10 md:p-16">
                   <div className="mb-6 sm:mb-8">
@@ -84,13 +81,10 @@ const CartPage: React.FC = () => {
                 {items.map((item) => (
                   <div
                     key={item.id}
-                    className="relative overflow-hidden rounded-2xl"
+                    className="relative rounded-2xl bg-gradient-to-br from-zinc-800/40 via-zinc-900/60 to-black/80 backdrop-blur-sm border border-white/10 transition-all duration-300"
                   >
-                    {/* Animated gradient background */}
-                    <div className="absolute inset-0 bg-gradient-to-br from-zinc-800/40 via-zinc-900/60 to-black/80 backdrop-blur-sm border border-white/10 transition-all duration-300" />
-                    
                     {/* Shine effect on hover */}
-                    <div className="absolute inset-0 opacity-0 hover:opacity-100 transition-opacity duration-500">
+                    <div className="absolute inset-0 opacity-0 hover:opacity-100 transition-opacity duration-500 overflow-hidden rounded-2xl pointer-events-none">
                       <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent translate-x-[-100%] hover:translate-x-[100%] transition-transform duration-1000" />
                     </div>
 
@@ -188,12 +182,9 @@ const CartPage: React.FC = () => {
 
               {/* Order Summary - Right Column */}
               <div className="lg:col-span-1">
-                <div className="relative overflow-hidden rounded-2xl sticky top-24">
-                  {/* Animated gradient background */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-zinc-800/40 via-zinc-900/60 to-black/80 backdrop-blur-sm border border-white/10" />
-                  
+                <div className="relative rounded-2xl sticky top-24 bg-gradient-to-br from-zinc-800/40 via-zinc-900/60 to-black/80 backdrop-blur-sm border border-white/10">
                   {/* Shine effect */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-transparent pointer-events-none" />
 
                   <div className="relative z-10 p-8">
                     <h2 className="text-3xl font-manrope font-bold text-white mb-8">

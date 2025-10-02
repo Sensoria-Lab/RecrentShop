@@ -1,18 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import ProductCard from '../ui/ProductCard';
 import PageContainer from '../shared/PageContainer';
 import { ALL_PRODUCTS } from '../../data/products';
 import { useProductFilters, useProductNavigation } from '../../hooks';
-import type { 
-  SortOption, 
-  CategoryFilter, 
-  ColorFilter, 
-  SizeFilter, 
-  ClothingTypeFilter 
+import type {
+  SortOption,
+  CategoryFilter,
+  ColorFilter,
+  SizeFilter,
+  ClothingTypeFilter
 } from '../../types/product';
 
 const CatalogPage: React.FC = () => {
   const [filtersOpen, setFiltersOpen] = useState(false);
+  const [visibleItems, setVisibleItems] = useState<Set<number>>(new Set());
+  const observerRef = useRef<IntersectionObserver | null>(null);
+  const categoryButtonRefs = useRef<{ [key: string]: HTMLButtonElement | null }>({});
   
   // Filter states
   const [sortBy, setSortBy] = useState<SortOption>('popularity');
@@ -44,11 +47,42 @@ const CatalogPage: React.FC = () => {
     }
   };
 
+  // Setup Intersection Observer for scroll animations
+  useEffect(() => {
+    observerRef.current = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const index = parseInt(entry.target.getAttribute('data-index') || '0');
+            setVisibleItems((prev) => new Set(prev).add(index));
+          }
+        });
+      },
+      {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+      }
+    );
+
+    return () => {
+      if (observerRef.current) {
+        observerRef.current.disconnect();
+      }
+    };
+  }, []);
+
+  // Reset visible items when filters change (except category to preserve background)
+  useEffect(() => {
+    setVisibleItems(new Set());
+  }, [sortBy, colorFilter, sizeFilter, clothingTypeFilter, priceRange, minRating]);
+
   return (
     <PageContainer>
           <div className="max-w-[1600px] mx-auto">
+            {/* Background container */}
+            <div className="bg-black/40 backdrop-blur rounded-xl p-4 sm:p-6 md:p-8 lg:p-10">
             {/* Page Title */}
-            <div className="text-center mb-4 sm:mb-6 md:mb-8">
+            <div className="text-center mb-4 sm:mb-6 md:mb-8 scroll-fade-in">
               <h1 className="text-white font-manrope font-bold text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl mb-3 sm:mb-4 md:mb-6 drop-shadow-[0_4px_12px_rgba(0,0,0,0.9)]">
                 Каталог товаров
               </h1>
@@ -56,8 +90,19 @@ const CatalogPage: React.FC = () => {
             </div>
 
             {/* Category Filter - moved here */}
-            <div className="mb-6 sm:mb-8 flex justify-center">
-              <div className="inline-flex gap-2 sm:gap-3 bg-black/40 backdrop-blur rounded-xl p-2 border border-white/20">
+            <div className="mb-6 sm:mb-8 flex justify-center scroll-fade-in scroll-fade-in-delay-1">
+              <div className="relative inline-flex gap-2 sm:gap-3 bg-black/40 backdrop-blur rounded-xl p-2 border border-white/20">
+                {/* Animated background indicator */}
+                <div
+                  className="absolute bg-white rounded-lg shadow-lg transition-all duration-300 ease-out"
+                  style={{
+                    left: categoryButtonRefs.current[categoryFilter]?.offsetLeft ?? 0,
+                    top: '8px',
+                    width: categoryButtonRefs.current[categoryFilter]?.offsetWidth ?? 0,
+                    height: categoryButtonRefs.current[categoryFilter]?.offsetHeight ?? 0,
+                  }}
+                />
+
                 {[
                   { value: 'all', label: 'Все товары' },
                   { value: 'mousepads', label: 'Коврики' },
@@ -65,11 +110,12 @@ const CatalogPage: React.FC = () => {
                 ].map(option => (
                   <button
                     key={option.value}
+                    ref={(el) => (categoryButtonRefs.current[option.value] = el)}
                     onClick={() => setCategoryFilter(option.value as CategoryFilter)}
-                    className={`px-4 sm:px-6 py-2 sm:py-2.5 rounded-lg font-manrope font-semibold text-sm sm:text-base transition-all ${
+                    className={`relative z-10 px-4 sm:px-6 py-2 sm:py-2.5 rounded-lg font-manrope font-semibold text-sm sm:text-base transition-colors duration-300 ${
                       categoryFilter === option.value
-                        ? 'bg-white text-black shadow-lg'
-                        : 'text-white/70 hover:text-white hover:bg-white/10'
+                        ? 'text-black'
+                        : 'text-white/70 hover:text-white'
                     }`}
                   >
                     {option.label}
@@ -323,32 +369,48 @@ const CatalogPage: React.FC = () => {
                     </p>
                   </div>
                 ) : (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3 sm:gap-4 md:gap-5 lg:gap-6 justify-items-center">
-                    {filteredProducts.map((product) => (
-                      <ProductCard
-                        key={product.id}
-                        id={product.id}
-                        image={product.image}
-                        images={product.images}
-                        title={product.title}
-                        subtitle={product.subtitle}
-                        productSize={product.productSize}
-                        productColor={product.productColor}
-                        price={product.price}
-                        priceNumeric={product.priceNumeric}
-                        rating={product.rating}
-                        reviewCount={product.reviewCount}
-                        color={product.color}
-                        category={product.category}
-                        clothingType={product.clothingType}
-                        size="medium"
-                        onAddToCart={() => {}}
-                        onProductClick={handleProductClick}
-                      />
-                    ))}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3 sm:gap-3 md:gap-4 lg:gap-4">
+                    {filteredProducts.map((product, index) => {
+                      const delayClass = `scroll-fade-in-delay-${Math.min(index % 4, 4)}`;
+                      const isVisible = visibleItems.has(index);
+
+                      return (
+                        <div
+                          key={product.id}
+                          data-index={index}
+                          ref={(el) => {
+                            if (el && observerRef.current && !isVisible) {
+                              observerRef.current.observe(el);
+                            }
+                          }}
+                          className={`w-full flex justify-center ${isVisible ? `scroll-fade-in ${delayClass}` : ''}`}
+                        >
+                          <ProductCard
+                            id={product.id}
+                            image={product.image}
+                            images={product.images}
+                            title={product.title}
+                            subtitle={product.subtitle}
+                            productSize={product.productSize}
+                            productColor={product.productColor}
+                            price={product.price}
+                            priceNumeric={product.priceNumeric}
+                            rating={product.rating}
+                            reviewCount={product.reviewCount}
+                            color={product.color}
+                            category={product.category}
+                            clothingType={product.clothingType}
+                            size="small-catalog"
+                            onAddToCart={() => {}}
+                            onProductClick={handleProductClick}
+                          />
+                        </div>
+                      );
+                    })}
                   </div>
                 )}
               </div>
+            </div>
             </div>
           </div>
     </PageContainer>

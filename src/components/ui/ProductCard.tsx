@@ -130,22 +130,17 @@ const ProductCard: React.FC<ProductCardProps> = ({
 
   // Различные стили для каталога и других страниц
   const cardStyles = size === 'small-catalog'
-    ? `relative overflow-hidden rounded-lg sm:rounded-xl md:rounded-2xl p-2 sm:p-3 md:p-4 lg:p-5 xl:p-6 ${classes.container} flex flex-col cursor-pointer group`
+    ? `relative rounded-lg sm:rounded-xl md:rounded-2xl p-2 sm:p-3 md:p-4 lg:p-5 xl:p-6 ${classes.container} flex flex-col cursor-pointer group bg-gradient-to-br from-zinc-800/40 via-zinc-900/60 to-black/80 backdrop-blur-sm border border-white/10 hover:border-white/30 transition-all duration-300`
     : `bg-black/90 backdrop-blur-sm rounded-lg sm:rounded-xl p-2 sm:p-3 md:p-4 lg:p-5 xl:p-6 ${classes.container} flex flex-col border border-white/20 shadow-2xl hover:shadow-white/10 hover:border-white/30 transition-all duration-300 hover:transform hover:scale-105 ${onProductClick ? 'cursor-pointer' : ''}`;
 
 
   return (
     <div className={cardStyles} onClick={handleCardClick}>
-      {/* Animated gradient background - only for catalog */}
+      {/* Shine effect on hover - only for catalog */}
       {size === 'small-catalog' && (
-        <>
-          <div className="absolute inset-0 bg-gradient-to-br from-zinc-800/40 via-zinc-900/60 to-black/80 backdrop-blur-sm border border-white/10 transition-all duration-300 group-hover:border-white/30 pointer-events-none" />
-          
-          {/* Shine effect on hover */}
-          <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
-          </div>
-        </>
+        <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none overflow-hidden rounded-lg sm:rounded-xl md:rounded-2xl">
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
+        </div>
       )}
       
       {/* Content wrapper with relative positioning */}
