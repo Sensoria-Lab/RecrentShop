@@ -12,7 +12,7 @@ interface ContactCardProps {
 
 const ContactCard: React.FC<ContactCardProps> = ({ title, onClick, icon, preview }) => (
   <div 
-    className="relative overflow-hidden rounded-xl sm:rounded-2xl cursor-pointer group"
+    className="relative overflow-hidden rounded-lg sm:rounded-xl md:rounded-2xl cursor-pointer group"
     onClick={onClick}
   >
     {/* Animated gradient background */}
@@ -24,21 +24,21 @@ const ContactCard: React.FC<ContactCardProps> = ({ title, onClick, icon, preview
     </div>
     
     {/* Content */}
-    <div className="relative p-4 sm:p-6 md:p-8 flex items-center gap-3 sm:gap-4 md:gap-6">
+    <div className="relative p-3 sm:p-4 md:p-6 lg:p-7 flex items-center gap-2 sm:gap-3 md:gap-5 lg:gap-6">
       {/* Icon container */}
-      <div className="flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-lg sm:rounded-xl bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-sm flex items-center justify-center border border-white/10 group-hover:scale-110 group-hover:border-white/20 transition-all duration-300">
-        <div className="text-white/90 group-hover:text-white transition-colors">
+      <div className="flex-shrink-0 w-9 h-9 sm:w-10 sm:h-10 md:w-12 md:h-12 lg:w-14 lg:h-14 rounded-md sm:rounded-lg md:rounded-xl bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-sm flex items-center justify-center border border-white/10 group-hover:scale-110 group-hover:border-white/20 transition-all duration-300">
+        <div className="text-white/90 group-hover:text-white transition-colors scale-75 sm:scale-90 md:scale-100">
           {icon}
         </div>
       </div>
       
       {/* Text */}
       <div className="flex-1 min-w-0">
-        <h3 className="text-white font-manrope font-semibold text-base sm:text-lg md:text-xl group-hover:text-white/90 transition-colors drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)] truncate">
+        <h3 className="text-white font-manrope font-semibold text-sm sm:text-base md:text-lg lg:text-xl group-hover:text-white/90 transition-colors drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)] truncate">
           {title}
         </h3>
         {preview && (
-          <p className="text-white/60 text-xs sm:text-sm mt-1 group-hover:text-white/70 transition-colors truncate">
+          <p className="text-white/60 text-[10px] sm:text-xs md:text-sm mt-0.5 sm:mt-1 group-hover:text-white/70 transition-colors truncate">
             {preview}
           </p>
         )}
@@ -46,7 +46,7 @@ const ContactCard: React.FC<ContactCardProps> = ({ title, onClick, icon, preview
       
       {/* Arrow */}
       <div className="flex-shrink-0 transform group-hover:translate-x-1 transition-transform duration-300">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="text-white/40 group-hover:text-white/80 sm:w-5 sm:h-5">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="text-white/40 group-hover:text-white/80 sm:w-4 sm:h-4 md:w-5 md:h-5">
           <path d="M9 6l6 6-6 6"/>
         </svg>
       </div>
@@ -81,17 +81,17 @@ const ContactsPage: React.FC = () => {
         </svg>
       ),
       content: (
-        <div className="space-y-6">
-          <p className="text-lg">
+        <div className="space-y-4 sm:space-y-5 md:space-y-6">
+          <p className="text-sm sm:text-base md:text-lg">
             По всем вопросам пишите на нашу электронную почту:
           </p>
           <a
             href="mailto:info@recrentshop.ru"
-            className="inline-block text-3xl font-bold text-white hover:text-white/80 transition-colors underline decoration-white/30 hover:decoration-white/60"
+            className="inline-block text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-white hover:text-white/80 transition-colors underline decoration-white/30 hover:decoration-white/60 break-all"
           >
             info@recrentshop.ru
           </a>
-          <p className="text-white/70 text-base">
+          <p className="text-white/70 text-xs sm:text-sm md:text-base">
             Мы отвечаем на все письма в течение 24 часов в рабочие дни.
           </p>
         </div>
@@ -108,24 +108,24 @@ const ContactsPage: React.FC = () => {
         </svg>
       ),
       content: (
-        <div className="space-y-6 text-left">
-          <div className="p-6 bg-white/5 rounded-xl border border-white/10">
-            <p className="text-2xl font-bold mb-6">ИП Осинцев Юрий Витальевич</p>
+        <div className="space-y-4 sm:space-y-5 md:space-y-6 text-left">
+          <div className="p-3 sm:p-4 md:p-5 lg:p-6 bg-white/5 rounded-lg sm:rounded-xl border border-white/10">
+            <p className="text-base sm:text-lg md:text-xl lg:text-2xl font-bold mb-3 sm:mb-4 md:mb-5 lg:mb-6">ИП Осинцев Юрий Витальевич</p>
             
-            <div className="space-y-4 text-lg">
-              <div className="flex items-start gap-3">
-                <span className="text-white/60 min-w-[120px]">ИНН:</span>
-                <span className="font-semibold">450100470595</span>
+            <div className="space-y-2 sm:space-y-3 md:space-y-4 text-xs sm:text-sm md:text-base lg:text-lg">
+              <div className="flex flex-col sm:flex-row sm:items-start gap-1 sm:gap-3">
+                <span className="text-white/60 sm:min-w-[80px] md:min-w-[100px] lg:min-w-[120px]">ИНН:</span>
+                <span className="font-semibold break-all">450100470595</span>
               </div>
               
-              <div className="flex items-start gap-3">
-                <span className="text-white/60 min-w-[120px]">ОГРНИП:</span>
-                <span className="font-semibold">321774600455545</span>
+              <div className="flex flex-col sm:flex-row sm:items-start gap-1 sm:gap-3">
+                <span className="text-white/60 sm:min-w-[80px] md:min-w-[100px] lg:min-w-[120px]">ОГРНИП:</span>
+                <span className="font-semibold break-all">321774600455545</span>
               </div>
             </div>
           </div>
           
-          <p className="text-white/70 text-sm">
+          <p className="text-white/70 text-[10px] sm:text-xs md:text-sm">
             Индивидуальный предприниматель, зарегистрированный в Российской Федерации
           </p>
         </div>
@@ -145,46 +145,46 @@ const ContactsPage: React.FC = () => {
         </svg>
       ),
       content: (
-        <div className="space-y-6">
-          <p className="text-lg">
+        <div className="space-y-4 sm:space-y-5 md:space-y-6">
+          <p className="text-sm sm:text-base md:text-lg">
             Следите за новостями и обновлениями в наших социальных сетях:
           </p>
           
-          <div className="grid grid-cols-1 gap-4">
+          <div className="grid grid-cols-1 gap-3 sm:gap-4">
             <button
               onClick={() => window.open('https://instagram.com/recrentshop', '_blank')}
-              className="flex items-center gap-4 p-4 bg-white/5 hover:bg-white/10 rounded-xl border border-white/10 hover:border-white/20 transition-all group cursor-pointer"
+              className="flex items-center gap-2 sm:gap-3 md:gap-4 p-3 sm:p-4 bg-white/5 hover:bg-white/10 rounded-lg sm:rounded-xl border border-white/10 hover:border-white/20 transition-all group cursor-pointer"
             >
-              <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl flex items-center justify-center">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-lg sm:rounded-xl flex items-center justify-center flex-shrink-0">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="white" className="sm:w-6 sm:h-6">
                   <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
                   <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" fill="none" stroke="currentColor" strokeWidth="2"/>
                   <circle cx="17.5" cy="6.5" r="1.5" fill="currentColor"/>
                 </svg>
               </div>
-              <div className="flex-1 text-left">
-                <p className="font-semibold">Instagram</p>
-                <p className="text-white/60 text-sm">@recrentshop</p>
+              <div className="flex-1 text-left min-w-0">
+                <p className="font-semibold text-sm sm:text-base truncate">Instagram</p>
+                <p className="text-white/60 text-xs sm:text-sm truncate">@recrentshop</p>
               </div>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-white/40 group-hover:text-white/80 group-hover:translate-x-1 transition-all">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-white/40 group-hover:text-white/80 group-hover:translate-x-1 transition-all sm:w-5 sm:h-5 flex-shrink-0">
                 <path d="M5 12h14M12 5l7 7-7 7"/>
               </svg>
             </button>
             
             <button
               onClick={() => window.open('https://vk.com/recrentshop', '_blank')}
-              className="flex items-center gap-4 p-4 bg-white/5 hover:bg-white/10 rounded-xl border border-white/10 hover:border-white/20 transition-all group cursor-pointer"
+              className="flex items-center gap-2 sm:gap-3 md:gap-4 p-3 sm:p-4 bg-white/5 hover:bg-white/10 rounded-lg sm:rounded-xl border border-white/10 hover:border-white/20 transition-all group cursor-pointer"
             >
-              <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg sm:rounded-xl flex items-center justify-center flex-shrink-0">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="white" className="sm:w-6 sm:h-6">
                   <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
                 </svg>
               </div>
-              <div className="flex-1 text-left">
-                <p className="font-semibold">VKontakte</p>
-                <p className="text-white/60 text-sm">vk.com/recrentshop</p>
+              <div className="flex-1 text-left min-w-0">
+                <p className="font-semibold text-sm sm:text-base truncate">VKontakte</p>
+                <p className="text-white/60 text-xs sm:text-sm truncate">vk.com/recrentshop</p>
               </div>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-white/40 group-hover:text-white/80 group-hover:translate-x-1 transition-all">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-white/40 group-hover:text-white/80 group-hover:translate-x-1 transition-all sm:w-5 sm:h-5 flex-shrink-0">
                 <path d="M5 12h14M12 5l7 7-7 7"/>
               </svg>
             </button>
@@ -204,36 +204,36 @@ const ContactsPage: React.FC = () => {
         </svg>
       ),
       content: (
-        <div className="space-y-6 text-left">
-          <div className="p-6 bg-white/5 rounded-xl border border-white/10">
-            <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+        <div className="space-y-4 sm:space-y-5 md:space-y-6 text-left">
+          <div className="p-3 sm:p-4 md:p-5 lg:p-6 bg-white/5 rounded-lg sm:rounded-xl border border-white/10">
+            <h3 className="text-sm sm:text-base md:text-lg lg:text-xl font-semibold mb-3 sm:mb-4 flex items-center gap-2">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="sm:w-5 sm:h-5">
                 <circle cx="12" cy="12" r="10"/>
                 <polyline points="12 6 12 12 16 14"/>
               </svg>
               Часы работы службы поддержки
             </h3>
-            <p className="text-lg">
+            <p className="text-xs sm:text-sm md:text-base lg:text-lg">
               <span className="text-white/60">Пн-Пт:</span> <span className="font-semibold">10:00 - 19:00 МСК</span>
             </p>
-            <p className="text-lg">
+            <p className="text-xs sm:text-sm md:text-base lg:text-lg">
               <span className="text-white/60">Сб-Вс:</span> <span className="font-semibold">Выходной</span>
             </p>
           </div>
           
-          <div className="p-6 bg-white/5 rounded-xl border border-white/10">
-            <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <div className="p-3 sm:p-4 md:p-5 lg:p-6 bg-white/5 rounded-lg sm:rounded-xl border border-white/10">
+            <h3 className="text-sm sm:text-base md:text-lg lg:text-xl font-semibold mb-3 sm:mb-4 flex items-center gap-2">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="sm:w-5 sm:h-5">
                 <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
               </svg>
               Среднее время ответа
             </h3>
-            <p className="text-lg text-white/80">
+            <p className="text-xs sm:text-sm md:text-base lg:text-lg text-white/80">
               Мы стараемся отвечать на все обращения в течение <span className="font-bold text-white">24 часов</span> в рабочие дни
             </p>
           </div>
           
-          <p className="text-white/70 text-sm">
+          <p className="text-white/70 text-[10px] sm:text-xs md:text-sm">
             Для срочных вопросов используйте email или социальные сети
           </p>
         </div>
@@ -245,17 +245,17 @@ const ContactsPage: React.FC = () => {
     <PageLayout>
       <div className="max-w-5xl mx-auto">
         {/* Background container for title and cards */}
-        <div className="bg-black/40 backdrop-blur rounded-xl p-12 lg:p-16">
+        <div className="bg-black/40 backdrop-blur rounded-lg sm:rounded-xl p-4 sm:p-6 md:p-10 lg:p-14">
           {/* Page title */}
-          <div className="text-center mb-20">
-            <h1 className="text-white font-manrope font-bold text-5xl lg:text-6xl mb-6 drop-shadow-[0_4px_12px_rgba(0,0,0,0.9)]">
+          <div className="text-center mb-6 sm:mb-10 md:mb-16 lg:mb-20">
+            <h1 className="text-white font-manrope font-bold text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl mb-3 sm:mb-4 md:mb-6 drop-shadow-[0_4px_12px_rgba(0,0,0,0.9)]">
               Контакты
             </h1>
-            <div className="w-32 h-1 bg-white/40 mx-auto"></div>
+            <div className="w-20 sm:w-24 md:w-32 h-0.5 sm:h-1 bg-white/40 mx-auto"></div>
           </div>
 
           {/* Contact cards grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-5 md:gap-7 lg:gap-8">
             {contactItems.map((item) => (
               <ContactCard
                 key={item.id}
