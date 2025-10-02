@@ -1,10 +1,9 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import PageContainer from '../shared/PageContainer';
 import ProductCard from '../ui/ProductCard';
 import ProductCarousel from '../ui/ProductCarousel';
 import SectionHeader from '../ui/SectionHeader';
-import Header from '../shared/Header';
-import Footer from '../shared/Footer';
 import { getSortedMousepads, CLOTHING, ALL_PRODUCTS } from '../../data/products';
 import { useProductNavigation } from '../../hooks';
 import { ROUTES } from '../../constants/routes';
@@ -15,7 +14,6 @@ const MainPage: React.FC = () => {
   const [currentSection, setCurrentSection] = React.useState(0);
   const [isScrolling, setIsScrolling] = React.useState(false);
   const containerRef = React.useRef<HTMLDivElement>(null);
-  const SCROLL_DURATION = 600; // Animation duration in ms
 
   const handleProductClick = (productData: any) => {
     // Find full product data by id
@@ -49,13 +47,13 @@ const MainPage: React.FC = () => {
   };
 
   const scrollToNextSection = () => {
-    const nextIndex = Math.min(currentSection + 1, 3);
+    const nextIndex = Math.min(currentSection + 1, 2);
     if (nextIndex !== currentSection) {
       scrollToSection(nextIndex);
     }
   };
 
-  // Wheel handler for controlled section scrolling
+  // Handle wheel scroll for section snapping
   React.useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
@@ -66,39 +64,34 @@ const MainPage: React.FC = () => {
         return;
       }
 
-      e.preventDefault();
-      setIsScrolling(true);
+      const delta = e.deltaY;
 
-      const direction = e.deltaY > 0 ? 1 : -1;
-      const nextIndex = Math.max(0, Math.min(3, currentSection + direction));
-
-      if (nextIndex !== currentSection) {
-        scrollToSection(nextIndex);
+      // Determine scroll direction
+      if (delta > 30 && currentSection < 2) {
+        // Scroll down to next section
+        e.preventDefault();
+        setIsScrolling(true);
+        scrollToSection(currentSection + 1);
+        setTimeout(() => setIsScrolling(false), 1000);
+      } else if (delta < -30 && currentSection > 0) {
+        // Scroll up to previous section
+        e.preventDefault();
+        setIsScrolling(true);
+        scrollToSection(currentSection - 1);
+        setTimeout(() => setIsScrolling(false), 1000);
       }
-
-      setTimeout(() => {
-        setIsScrolling(false);
-      }, SCROLL_DURATION);
     };
 
     container.addEventListener('wheel', handleWheel, { passive: false });
-    return () => container.removeEventListener('wheel', handleWheel);
+
+    return () => {
+      container.removeEventListener('wheel', handleWheel);
+    };
   }, [currentSection, isScrolling]);
 
   return (
-    <div className="relative min-h-screen w-full">
+    <PageContainer>
       <div ref={containerRef} className="h-screen overflow-y-auto snap-y snap-mandatory">
-        {/* Header section */}
-        <section className="snap-start">
-          <div className="flex justify-center px-4 sm:px-8 md:px-12 py-4 relative">
-            {/* Animated glow effect behind header */}
-            <div className="absolute inset-0 bg-gradient-to-b from-white/10 via-purple-500/5 to-transparent blur-3xl" />
-
-            <div className="max-w-[900px] w-full relative">
-              <Header />
-            </div>
-          </div>
-        </section>
         {/* Hero section - centered with full viewport height */}
         <section id="hero" className="h-screen snap-start snap-always flex flex-col items-center justify-center px-4 sm:px-6 md:px-8 py-8 sm:py-12 md:py-16">
           <div className="max-w-4xl w-full text-center space-y-8 sm:space-y-12">
@@ -114,29 +107,19 @@ const MainPage: React.FC = () => {
             <div className="pt-6 sm:pt-8">
               <button
                 onClick={navigateToCatalog}
-                className="group relative inline-flex items-center justify-center gap-2 sm:gap-3 md:gap-4 px-8 sm:px-10 md:px-12 py-3.5 sm:py-4 md:py-5 bg-black/80 hover:bg-black/90 border-2 border-white hover:border-white rounded-xl sm:rounded-2xl transition-all duration-300 backdrop-blur-md shadow-[0_8px_32px_rgba(0,0,0,1)] hover:shadow-[0_16px_48px_rgba(59,130,246,0.4)] active:scale-95 overflow-hidden"
+                className="group relative inline-flex items-center justify-center gap-2 sm:gap-3 md:gap-4 px-8 sm:px-10 md:px-12 py-3.5 sm:py-4 md:py-5 bg-black/70 hover:bg-black/80 border-2 border-white/60 hover:border-white rounded-xl sm:rounded-2xl transition-all duration-300 backdrop-blur-md shadow-[0_8px_32px_rgba(0,0,0,1)] hover:shadow-[0_12px_40px_rgba(0,0,0,1)] active:scale-95"
               >
-                {/* Animated gradient glow background */}
-                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-yellow-400/20 animate-gradient-shift" />
-                </div>
-
-                {/* Pulsing ring effect */}
-                <div className="absolute inset-0 rounded-xl sm:rounded-2xl">
-                  <div className="absolute inset-0 rounded-xl sm:rounded-2xl border-2 border-blue-400/40 animate-pulse" />
-                </div>
-
-                <span className="relative text-white font-manrope font-semibold text-sm sm:text-base md:text-xl lg:text-2xl drop-shadow-[0_4px_16px_rgba(0,0,0,1)] [text-shadow:_0_0_30px_rgb(0_0_0_/_100%)] whitespace-nowrap">
+                <span className="text-white font-manrope font-semibold text-sm sm:text-base md:text-xl lg:text-2xl drop-shadow-[0_4px_16px_rgba(0,0,0,1)] [text-shadow:_0_0_30px_rgb(0_0_0_/_100%)] whitespace-nowrap">
                   Перейти в каталог
                 </span>
-                <svg
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2.5"
-                  className="relative text-white group-hover:translate-x-1 transition-transform duration-300 drop-shadow-[0_4px_12px_rgba(0,0,0,1)] sm:w-6 sm:h-6"
+                <svg 
+                  width="20" 
+                  height="20" 
+                  viewBox="0 0 24 24" 
+                  fill="none" 
+                  stroke="currentColor" 
+                  strokeWidth="2.5" 
+                  className="text-white group-hover:translate-x-1 transition-transform duration-300 drop-shadow-[0_4px_12px_rgba(0,0,0,1)] sm:w-6 sm:h-6"
                 >
                   <path d="M5 12h14M12 5l7 7-7 7"/>
                 </svg>
@@ -253,13 +236,8 @@ const MainPage: React.FC = () => {
             </div>
           </div>
         </section>
-
-        {/* Footer section */}
-        <section className="snap-start">
-          <Footer />
-        </section>
       </div>
-    </div>
+    </PageContainer>
   );
 };
 

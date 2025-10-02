@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useCart } from '../../context/CartContext';
 import Header from '../shared/Header';
 import Footer from '../shared/Footer';
+import Img from '../shared/Img';
 
 type DeliveryMethod = 'russian-post' | 'cdek' | 'home-delivery';
 
@@ -238,7 +239,7 @@ const CheckoutPage: React.FC = () => {
               {step === 'contacts' ? (
                 // Шаг 1: Контактная информация
                 <form onSubmit={(e) => { e.preventDefault(); handleNextStep(); }} className="space-y-4 sm:space-y-5 md:space-y-6">
-                  <div className="backdrop-blur-md bg-gradient-to-br from-white/10 via-white/5 to-white/5 border border-white/20 rounded-xl sm:rounded-2xl p-5 sm:p-6 md:p-7 lg:p-9 shadow-2xl shadow-black/20">
+                  <div className="bg-black/40 backdrop-blur rounded-xl sm:rounded-2xl p-5 sm:p-6 md:p-7 lg:p-9">
                     <div className="flex items-center gap-3 sm:gap-4 mb-6 sm:mb-7 md:mb-8">
                       <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-br from-white/20 to-white/10 flex items-center justify-center">
                         <svg className="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -345,32 +346,11 @@ const CheckoutPage: React.FC = () => {
                       </div>
                     </div>
                   </div>
-
-                  <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
-                    <button
-                      type="button"
-                      onClick={() => navigate('/cart')}
-                      className="px-4 sm:px-6 md:px-8 py-2.5 sm:py-3 md:py-3.5 bg-white/5 backdrop-blur-md border border-white/10 rounded-lg sm:rounded-xl text-sm sm:text-base md:text-lg font-medium text-white hover:bg-white/10 transition-all duration-300"
-                    >
-                      Вернуться в корзину
-                    </button>
-                    <button
-                      type="submit"
-                      disabled={!isContactFormValid}
-                      className={`flex-1 px-4 sm:px-6 md:px-8 py-2.5 sm:py-3 md:py-3.5 rounded-lg sm:rounded-xl text-sm sm:text-base md:text-lg font-medium transition-all duration-300 ${
-                        isContactFormValid
-                          ? 'bg-gradient-to-r from-white/90 to-white/70 text-black hover:from-white hover:to-white/80'
-                          : 'bg-white/5 text-gray-500 cursor-not-allowed border border-white/10'
-                      }`}
-                    >
-                      Далее
-                    </button>
-                  </div>
                 </form>
               ) : (
                 // Шаг 2: Способ доставки
                 <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5 md:space-y-6">
-                  <div className="backdrop-blur-md bg-gradient-to-br from-white/10 via-white/5 to-white/5 border border-white/20 rounded-xl sm:rounded-2xl p-5 sm:p-6 md:p-7 lg:p-9 shadow-2xl shadow-black/20">
+                  <div className="bg-black/40 backdrop-blur rounded-xl sm:rounded-2xl p-5 sm:p-6 md:p-7 lg:p-9">
                     <div className="flex items-center gap-3 sm:gap-4 mb-6 sm:mb-7 md:mb-8">
                       <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-br from-white/20 to-white/10 flex items-center justify-center">
                         <svg className="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -522,34 +502,13 @@ const CheckoutPage: React.FC = () => {
                       </div>
                     </div>
                   </div>
-
-                  <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
-                    <button
-                      type="button"
-                      onClick={handlePrevStep}
-                      className="px-4 sm:px-6 md:px-8 py-2.5 sm:py-3 md:py-3.5 bg-white/5 backdrop-blur-md border border-white/10 rounded-lg sm:rounded-xl text-sm sm:text-base md:text-lg font-medium text-white hover:bg-white/10 transition-all duration-300"
-                    >
-                      Назад
-                    </button>
-                    <button
-                      type="submit"
-                      disabled={!isDeliveryFormValid()}
-                      className={`flex-1 px-4 sm:px-6 md:px-8 py-2.5 sm:py-3 md:py-3.5 rounded-lg sm:rounded-xl text-sm sm:text-base md:text-lg font-medium transition-all duration-300 ${
-                        isDeliveryFormValid()
-                          ? 'bg-gradient-to-r from-white/90 to-white/70 text-black hover:from-white hover:to-white/80'
-                          : 'bg-white/5 text-gray-500 cursor-not-allowed border border-white/10'
-                      }`}
-                    >
-                      Оформить заказ
-                    </button>
-                  </div>
                 </form>
               )}
             </div>
 
             {/* Правая колонка - Сводка заказа */}
             <div className="lg:sticky lg:top-28 h-fit">
-              <div className="backdrop-blur-md bg-gradient-to-br from-white/10 via-white/5 to-white/5 border border-white/20 rounded-xl sm:rounded-2xl p-5 sm:p-6 md:p-7 shadow-2xl shadow-black/20">
+              <div className="bg-black/40 backdrop-blur rounded-xl sm:rounded-2xl p-5 sm:p-6 md:p-7">
                 <div className="flex items-center gap-3 mb-5 sm:mb-6">
                   <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-gradient-to-br from-white/20 to-white/10 flex items-center justify-center">
                     <svg className="w-4 h-4 sm:w-5 sm:h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -570,7 +529,7 @@ const CheckoutPage: React.FC = () => {
                 >
                   {cart.map((item) => (
                     <div key={item.id} className="flex gap-3 sm:gap-4 p-3 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 transition-colors">
-                      <img
+                      <Img
                         src={item.image}
                         alt={item.title}
                         className="w-16 h-16 sm:w-18 sm:h-18 md:w-20 md:h-20 object-cover rounded-lg border border-white/10"
@@ -599,10 +558,6 @@ const CheckoutPage: React.FC = () => {
                 </div>
 
                 <div className="border-t border-white/20 pt-5 sm:pt-6 mt-5 sm:mt-6 space-y-3">
-                  <div className="flex justify-between items-center text-sm sm:text-base text-gray-300">
-                    <span>Товары:</span>
-                    <span>{getTotalPrice()} ₽</span>
-                  </div>
                   {step === 'delivery' && (
                     <div className="flex justify-between items-center text-sm sm:text-base text-gray-300">
                       <span>Доставка:</span>
@@ -616,6 +571,51 @@ const CheckoutPage: React.FC = () => {
                     </span>
                   </div>
                 </div>
+
+                {/* Action Buttons */}
+                {step === 'contacts' ? (
+                  <div className="flex flex-col gap-3 mt-5 sm:mt-6">
+                    <button
+                      onClick={handleNextStep}
+                      disabled={!isContactFormValid}
+                      className={`w-full px-4 sm:px-6 md:px-8 py-2.5 sm:py-3 md:py-3.5 rounded-lg sm:rounded-xl text-sm sm:text-base md:text-lg font-medium transition-all duration-300 ${
+                        isContactFormValid
+                          ? 'bg-gradient-to-r from-white/90 to-white/70 text-black hover:from-white hover:to-white/80'
+                          : 'bg-white/5 text-gray-500 cursor-not-allowed border border-white/10'
+                      }`}
+                    >
+                      Далее
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => navigate('/cart')}
+                      className="w-full px-4 sm:px-6 md:px-8 py-2.5 sm:py-3 md:py-3.5 bg-white/5 backdrop-blur-md border border-white/10 rounded-lg sm:rounded-xl text-sm sm:text-base md:text-lg font-medium text-white hover:bg-white/10 transition-all duration-300"
+                    >
+                      Вернуться в корзину
+                    </button>
+                  </div>
+                ) : (
+                  <div className="flex flex-col gap-3 mt-5 sm:mt-6">
+                    <button
+                      onClick={handleSubmit}
+                      disabled={!isDeliveryFormValid()}
+                      className={`w-full px-4 sm:px-6 md:px-8 py-2.5 sm:py-3 md:py-3.5 rounded-lg sm:rounded-xl text-sm sm:text-base md:text-lg font-medium transition-all duration-300 ${
+                        isDeliveryFormValid()
+                          ? 'bg-gradient-to-r from-white/90 to-white/70 text-black hover:from-white hover:to-white/80'
+                          : 'bg-white/5 text-gray-500 cursor-not-allowed border border-white/10'
+                      }`}
+                    >
+                      Оформить заказ
+                    </button>
+                    <button
+                      type="button"
+                      onClick={handlePrevStep}
+                      className="w-full px-4 sm:px-6 md:px-8 py-2.5 sm:py-3 md:py-3.5 bg-white/5 backdrop-blur-md border border-white/10 rounded-lg sm:rounded-xl text-sm sm:text-base md:text-lg font-medium text-white hover:bg-white/10 transition-all duration-300"
+                    >
+                      Назад
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
           </div>

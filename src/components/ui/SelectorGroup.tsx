@@ -53,7 +53,7 @@ const SelectorGroup: React.FC<SelectorGroupProps> = ({
   return (
     <div className={`space-y-2 sm:space-y-2.5 ${className}`}>
       {title && (
-        <p className="text-white/90 font-manrope font-medium text-sm sm:text-base md:text-lg">
+        <p className="text-white/60 font-manrope font-medium text-xs sm:text-sm mb-1.5">
           {title}
         </p>
       )}

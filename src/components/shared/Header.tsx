@@ -33,7 +33,7 @@ const Header: React.FC<HeaderProps> = ({ className = '', onNavigate }) => {
         <div className="flex justify-start">
           <button
             onClick={() => navigate('/')}
-            className="relative w-10 h-10 cursor-pointer transition-all hover:rotate-[-5deg] hover:scale-110 focus:outline-none focus:ring-2 focus:ring-white/40 rounded-lg group"
+            className="relative w-10 h-10 cursor-pointer transition-all hover:rotate-[-5deg] hover:scale-110 focus:outline-none rounded-lg group"
           >
             <div className="absolute inset-0 bg-white/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity blur-md" />
             <Img
@@ -53,7 +53,7 @@ const Header: React.FC<HeaderProps> = ({ className = '', onNavigate }) => {
                 key={targetPath}
                 onClick={() => go(targetPath.slice(1))}
                 aria-current={active ? 'page' : undefined}
-                className={`relative font-manrope font-semibold text-sm lg:text-base px-3 lg:px-5 py-2.5 rounded-xl transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-white/30 whitespace-nowrap ${
+                className={`relative font-manrope font-semibold text-sm lg:text-base px-3 lg:px-5 py-2.5 rounded-xl transition-all duration-300 focus:outline-none whitespace-nowrap ${
                   active
                     ? 'text-white bg-white/10 shadow-lg shadow-white/5'
                     : 'text-white/60 hover:text-white hover:bg-white/5'
@@ -77,7 +77,7 @@ const Header: React.FC<HeaderProps> = ({ className = '', onNavigate }) => {
         <div className="md:hidden flex justify-center">
           <button 
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="flex items-center justify-center w-10 h-10 rounded-lg hover:bg-white/10 transition-colors focus:outline-none focus:ring-2 focus:ring-white/30"
+            className="flex items-center justify-center w-10 h-10 rounded-lg hover:bg-white/10 transition-colors focus:outline-none"
           >
             {mobileMenuOpen ? (
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-white">
@@ -99,7 +99,7 @@ const Header: React.FC<HeaderProps> = ({ className = '', onNavigate }) => {
           <button 
             id="cart-button"
             onClick={() => navigate(ROUTES.CART)}
-            className="relative w-10 h-10 flex items-center justify-center cursor-pointer hover:scale-110 transition-all focus:outline-none focus:ring-2 focus:ring-white/40 rounded-lg group"
+            className="relative w-10 h-10 flex items-center justify-center cursor-pointer hover:scale-110 transition-all focus:outline-none rounded-lg group"
           >
             {/* Hover background */}
             <div className="absolute inset-0 bg-white/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -133,7 +133,7 @@ const Header: React.FC<HeaderProps> = ({ className = '', onNavigate }) => {
                   go(targetPath.slice(1));
                   setMobileMenuOpen(false);
                 }}
-                className={`w-full text-left font-manrope font-semibold text-base px-4 py-3 rounded-xl transition-all duration-300 ${
+                className={`w-full text-left font-manrope font-semibold text-base px-4 py-3 rounded-xl transition-all duration-300 focus:outline-none ${
                   active 
                     ? 'text-white bg-white/10' 
                     : 'text-white/60 hover:text-white hover:bg-white/5'

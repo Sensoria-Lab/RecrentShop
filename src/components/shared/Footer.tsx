@@ -1,4 +1,5 @@
 import React from 'react';
+import { SOCIAL_LINKS } from '../../constants/config';
 
 /**
  * Footer Component
@@ -19,7 +20,7 @@ const Footer: React.FC = () => {
             <div className="flex items-center gap-2 sm:gap-3">
               {/* Twitch */}
               <a
-                href="https://twitch.tv/recrent"
+                href={SOCIAL_LINKS.twitch}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="group relative w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center bg-black/80 hover:bg-purple-600/40 border border-white/40 hover:border-purple-400 rounded-lg transition-all duration-300 backdrop-blur-sm shadow-[0_4px_20px_rgba(0,0,0,0.9)] hover:shadow-[0_8px_32px_rgba(147,51,234,0.6)] hover:scale-110 hover:-translate-y-1 active:scale-95"
@@ -32,7 +33,7 @@ const Footer: React.FC = () => {
 
               {/* Telegram */}
               <a
-                href="https://t.me/recrent"
+                href={SOCIAL_LINKS.telegram}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="group relative w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center bg-black/80 hover:bg-blue-500/40 border border-white/40 hover:border-blue-400 rounded-lg transition-all duration-300 backdrop-blur-sm shadow-[0_4px_20px_rgba(0,0,0,0.9)] hover:shadow-[0_8px_32px_rgba(59,130,246,0.6)] hover:scale-110 hover:-translate-y-1 active:scale-95"
@@ -45,7 +46,7 @@ const Footer: React.FC = () => {
 
               {/* TikTok */}
               <a
-                href="https://tiktok.com/@recrent.twitch"
+                href={SOCIAL_LINKS.tiktok}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="group relative w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center bg-black/80 hover:bg-pink-600/40 border border-white/40 hover:border-pink-400 rounded-lg transition-all duration-300 backdrop-blur-sm shadow-[0_4px_20px_rgba(0,0,0,0.9)] hover:shadow-[0_8px_32px_rgba(236,72,153,0.6)] hover:scale-110 hover:-translate-y-1 active:scale-95"
@@ -58,7 +59,7 @@ const Footer: React.FC = () => {
 
               {/* YouTube */}
               <a
-                href="https://youtube.com/c/RecrentChannel"
+                href={SOCIAL_LINKS.youtube}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="group relative w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center bg-black/80 hover:bg-red-600/40 border border-white/40 hover:border-red-400 rounded-lg transition-all duration-300 backdrop-blur-sm shadow-[0_4px_20px_rgba(0,0,0,0.9)] hover:shadow-[0_8px_32px_rgba(239,68,68,0.6)] hover:scale-110 hover:-translate-y-1 active:scale-95"

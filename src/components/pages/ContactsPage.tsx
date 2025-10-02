@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import PageLayout from '../shared/PageLayout';
 import Modal from '../shared/Modal';
+import { SITE_CONFIG, SOCIAL_LINKS, COMPANY_INFO, TEXTS } from '../../constants/config';
 
 // Contact card component
 interface ContactCardProps {
@@ -70,7 +71,7 @@ const ContactsPage: React.FC = () => {
     {
       id: 'email',
       title: 'Электронная почта',
-      preview: 'info@recrentshop.ru',
+      preview: SITE_CONFIG.email,
       icon: (
         <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
           <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
@@ -80,16 +81,16 @@ const ContactsPage: React.FC = () => {
       content: (
         <div className="space-y-4 sm:space-y-5 md:space-y-6">
           <p className="text-sm sm:text-base md:text-lg">
-            По всем вопросам пишите на нашу электронную почту:
+            {TEXTS.emailPrompt}
           </p>
           <a
-            href="mailto:info@recrentshop.ru"
+            href={`mailto:${SITE_CONFIG.email}`}
             className="inline-block text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-white hover:text-white/80 transition-colors underline decoration-white/30 hover:decoration-white/60 break-all"
           >
-            info@recrentshop.ru
+            {SITE_CONFIG.email}
           </a>
           <p className="text-white/70 text-xs sm:text-sm md:text-base">
-            Мы отвечаем на все письма в течение 24 часов в рабочие дни.
+            {TEXTS.emailResponse}
           </p>
         </div>
       )
@@ -97,7 +98,7 @@ const ContactsPage: React.FC = () => {
     {
       id: 'company',
       title: 'Реквизиты компании',
-      preview: 'ИП Осинцев Юрий Витальевич',
+      preview: COMPANY_INFO.name,
       icon: (
         <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
           <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
@@ -107,23 +108,23 @@ const ContactsPage: React.FC = () => {
       content: (
         <div className="space-y-4 sm:space-y-5 md:space-y-6 text-left">
           <div className="p-3 sm:p-4 md:p-5 lg:p-6 bg-white/5 rounded-lg sm:rounded-xl border border-white/10">
-            <p className="text-base sm:text-lg md:text-xl lg:text-2xl font-bold mb-3 sm:mb-4 md:mb-5 lg:mb-6">ИП Осинцев Юрий Витальевич</p>
-            
+            <p className="text-base sm:text-lg md:text-xl lg:text-2xl font-bold mb-3 sm:mb-4 md:mb-5 lg:mb-6">{COMPANY_INFO.name}</p>
+
             <div className="space-y-2 sm:space-y-3 md:space-y-4 text-xs sm:text-sm md:text-base lg:text-lg">
               <div className="flex flex-col sm:flex-row sm:items-start gap-1 sm:gap-3">
                 <span className="text-white/60 sm:min-w-[80px] md:min-w-[100px] lg:min-w-[120px]">ИНН:</span>
-                <span className="font-semibold break-all">450100470595</span>
+                <span className="font-semibold break-all">{COMPANY_INFO.inn}</span>
               </div>
-              
+
               <div className="flex flex-col sm:flex-row sm:items-start gap-1 sm:gap-3">
                 <span className="text-white/60 sm:min-w-[80px] md:min-w-[100px] lg:min-w-[120px]">ОГРНИП:</span>
-                <span className="font-semibold break-all">321774600455545</span>
+                <span className="font-semibold break-all">{COMPANY_INFO.ogrnip}</span>
               </div>
             </div>
           </div>
-          
+
           <p className="text-white/70 text-[10px] sm:text-xs md:text-sm">
-            Индивидуальный предприниматель, зарегистрированный в Российской Федерации
+            {COMPANY_INFO.description}
           </p>
         </div>
       )
@@ -131,7 +132,7 @@ const ContactsPage: React.FC = () => {
     {
       id: 'socials',
       title: 'Социальные сети',
-      preview: 'Подпишитесь на наши аккаунты',
+      preview: TEXTS.subscribePrompt,
       icon: (
         <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
           <circle cx="18" cy="5" r="3"/>
@@ -144,12 +145,12 @@ const ContactsPage: React.FC = () => {
       content: (
         <div className="space-y-4 sm:space-y-5 md:space-y-6">
           <p className="text-sm sm:text-base md:text-lg">
-            Следите за новостями и обновлениями в наших социальных сетях:
+            {TEXTS.socialsPrompt}
           </p>
-          
+
           <div className="grid grid-cols-1 gap-3 sm:gap-4">
             <button
-              onClick={() => window.open('https://instagram.com/recrentshop', '_blank')}
+              onClick={() => window.open(SOCIAL_LINKS.instagram, '_blank')}
               className="flex items-center gap-2 sm:gap-3 md:gap-4 p-3 sm:p-4 bg-white/5 hover:bg-white/10 rounded-lg sm:rounded-xl border border-white/10 hover:border-white/20 transition-all group cursor-pointer"
             >
               <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-lg sm:rounded-xl flex items-center justify-center flex-shrink-0">
@@ -169,7 +170,7 @@ const ContactsPage: React.FC = () => {
             </button>
             
             <button
-              onClick={() => window.open('https://vk.com/recrentshop', '_blank')}
+              onClick={() => window.open(SOCIAL_LINKS.vk, '_blank')}
               className="flex items-center gap-2 sm:gap-3 md:gap-4 p-3 sm:p-4 bg-white/5 hover:bg-white/10 rounded-lg sm:rounded-xl border border-white/10 hover:border-white/20 transition-all group cursor-pointer"
             >
               <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg sm:rounded-xl flex items-center justify-center flex-shrink-0">
@@ -179,7 +180,7 @@ const ContactsPage: React.FC = () => {
               </div>
               <div className="flex-1 text-left min-w-0">
                 <p className="font-semibold text-sm sm:text-base truncate">VKontakte</p>
-                <p className="text-white/60 text-xs sm:text-sm truncate">vk.com/recrentshop</p>
+                <p className="text-white/60 text-xs sm:text-sm truncate">{SOCIAL_LINKS.vk.replace('https://', '')}</p>
               </div>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-white/40 group-hover:text-white/80 group-hover:translate-x-1 transition-all sm:w-5 sm:h-5 flex-shrink-0">
                 <path d="M5 12h14M12 5l7 7-7 7"/>
@@ -192,7 +193,7 @@ const ContactsPage: React.FC = () => {
     {
       id: 'support',
       title: 'Поддержка',
-      preview: 'Часы работы и время ответа',
+      preview: TEXTS.supportHours,
       icon: (
         <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
           <circle cx="12" cy="12" r="10"/>

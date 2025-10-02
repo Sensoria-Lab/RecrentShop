@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import SelectorGroup from '../ui/SelectorGroup';
 import Header from '../shared/Header';
@@ -7,8 +7,11 @@ import DecryptedText from '../shared/DecryptedText';
 import Img from '../shared/Img';
 import StarRating from '../shared/StarRating';
 import QuantitySelector from '../ui/QuantitySelector';
+import ProductCard from '../ui/ProductCard';
+import ProductCarousel from '../ui/ProductCarousel';
+import Modal from '../shared/Modal';
 import { ALL_PRODUCTS } from '../../data/products';
-import { useProduct, useProductImages, useAddToCart } from '../../hooks';
+import { useProduct, useProductImages, useAddToCart, useProductNavigation } from '../../hooks';
 import { COLOR_OPTIONS, SIZE_OPTIONS, TYPE_OPTIONS, CLOTHING_SIZE_OPTIONS } from '../../constants/selectorOptions';
 import { getClothingDescription, MOUSEPAD_DIMENSIONS, COLOR_NAMES, PRODUCT_DESCRIPTIONS } from '../../constants/productDescriptions';
 import { isClothing, isProMousepad } from '../../lib/productUtils';
@@ -42,6 +45,12 @@ const ProductPage: React.FC = () => {
     setQuantity
   } = useProduct(productData);
 
+  // Состояние для модального окна таблицы размеров
+  const [showSizeChart, setShowSizeChart] = useState(false);
+  
+  // Состояние для модального окна описания
+  const [showFullDescription, setShowFullDescription] = useState(false);
+
   // Используем хук для получения правильных изображений
   const productImages = useProductImages(productData, selectedSize, selectedColor);
 
@@ -51,6 +60,37 @@ const ProductPage: React.FC = () => {
 
   // Получаем описание для одежды
   const clothingDescription = getClothingDescription(selectedColor);
+
+  // Получаем полное описание в зависимости от типа товара
+  const fullDescription = useMemo(() => {
+    if (isClothingProduct) {
+      return clothingDescription;
+    } else if (isProMousepadProduct) {
+      const desc = PRODUCT_DESCRIPTIONS.pro[selectedType as keyof typeof PRODUCT_DESCRIPTIONS.pro];
+      return desc.main + '\n\n' + desc.details.join('\n\n');
+    } else {
+      const desc = PRODUCT_DESCRIPTIONS.regular[selectedType as keyof typeof PRODUCT_DESCRIPTIONS.regular];
+      return desc.main + '\n\n' + desc.details.join('\n\n');
+    }
+  }, [isClothingProduct, isProMousepadProduct, clothingDescription, selectedType]);
+
+  // Проверяем, нужна ли кнопка "Читать полностью" (если текст длиннее 300 символов)
+  const needsReadMore = fullDescription.length > 300;
+
+  // Хук для навигации к другим продуктам
+  const { navigateToProduct } = useProductNavigation();
+
+  // Получаем похожие товары (той же категории, но не текущий)
+  const similarProducts = useMemo(() => {
+    if (!productData) return [];
+    
+    return ALL_PRODUCTS
+      .filter(p => 
+        p.id !== productData.id && // Не показываем текущий товар
+        p.category === productData.category // Та же категория
+      )
+      .slice(0, 4); // Максимум 4 товара
+  }, [productData]);
 
   // Динамический subtitle в зависимости от выбранного цвета (для ковриков)
   const dynamicSubtitle = useMemo(() => {
@@ -92,7 +132,7 @@ const ProductPage: React.FC = () => {
         </div>
 
         {/* Main content with increased padding */}
-        <main className="flex-1 px-3 sm:px-6 md:px-10 lg:px-20 py-4 sm:py-6 md:py-10">
+        <main className="flex-1 px-3 sm:px-6 md:px-10 lg:px-20 py-4 sm:py-6 md:py-10 max-w-[1400px] mx-auto w-full">
           {/* Product section */}
           <div className="bg-black/40 backdrop-blur rounded-lg sm:rounded-xl p-3 sm:p-5 md:p-8 lg:p-14 mb-4 sm:mb-6 md:mb-10">
             <div className="flex flex-col lg:flex-row gap-4 sm:gap-6 md:gap-10 lg:gap-14 items-start justify-between">
@@ -176,8 +216,8 @@ const ProductPage: React.FC = () => {
                     />
                   </h1>
                   
-                  {/* Rating with background card */}
-                  <div className="inline-flex items-center gap-2 sm:gap-2.5 bg-white/10 backdrop-blur-sm rounded-lg px-3 py-1.5 sm:py-2 border border-white/20">
+                  {/* Rating */}
+                  <div className="inline-flex items-center gap-2 sm:gap-2.5">
                     <StarRating rating={productData?.rating || 5} />
                     <div className="h-3.5 sm:h-4 w-px bg-white/30"></div>
                     <span className="text-white font-manrope font-semibold text-sm sm:text-base">{productData?.rating || 5}</span>
@@ -190,14 +230,14 @@ const ProductPage: React.FC = () => {
                   {/* Colors - не показываем для Pro коврика */}
                   {!isProMousepadProduct && (
                     <div className="space-y-2 sm:space-y-2.5">
-                      <p className="text-white/90 font-manrope font-medium text-sm sm:text-base md:text-lg">Цвет</p>
+                      <p className="text-white/60 font-manrope font-medium text-xs sm:text-sm mb-1.5">Цвет</p>
                       <div className="flex gap-2 sm:gap-2.5 md:gap-3">
                         {isClothingProduct ? (
                           // Для одежды только черный и белый
                           <>
                             <button
                               onClick={() => setSelectedColor('black')}
-                              className={`w-7 h-7 sm:w-8 sm:h-8 md:w-9 md:h-9 lg:w-10 lg:h-10 rounded-md sm:rounded-lg border-2 transition-all active:scale-95 ${
+                              className={`w-7 h-7 sm:w-8 sm:h-8 md:w-9 md:h-9 lg:w-10 lg:h-10 rounded-md sm:rounded-lg border-2 transition-all active:scale-95 ring-1 ring-white/20 ${
                                 selectedColor === 'black'
                                   ? 'border-blue-500'
                                   : 'border-transparent hover:border-gray-400'
@@ -207,7 +247,7 @@ const ProductPage: React.FC = () => {
                             />
                             <button
                               onClick={() => setSelectedColor('white')}
-                              className={`w-7 h-7 sm:w-8 sm:h-8 md:w-9 md:h-9 lg:w-10 lg:h-10 rounded-md sm:rounded-lg border-2 transition-all active:scale-95 ${
+                              className={`w-7 h-7 sm:w-8 sm:h-8 md:w-9 md:h-9 lg:w-10 lg:h-10 rounded-md sm:rounded-lg border-2 transition-all active:scale-95 ring-1 ring-white/20 ${
                                 selectedColor === 'white'
                                   ? 'border-blue-500'
                                   : 'border-transparent hover:border-gray-400'
@@ -222,7 +262,7 @@ const ProductPage: React.FC = () => {
                             <button
                               key={option.id}
                               onClick={() => setSelectedColor(option.id)}
-                              className={`w-7 h-7 sm:w-8 sm:h-8 md:w-9 md:h-9 lg:w-10 lg:h-10 rounded-md sm:rounded-lg border-2 transition-all active:scale-95 ${
+                              className={`w-7 h-7 sm:w-8 sm:h-8 md:w-9 md:h-9 lg:w-10 lg:h-10 rounded-md sm:rounded-lg border-2 transition-all active:scale-95 ring-1 ring-white/20 ${
                                 selectedColor === option.id
                                   ? 'border-blue-500'
                                   : 'border-transparent hover:border-gray-400'
@@ -238,15 +278,26 @@ const ProductPage: React.FC = () => {
 
                   {/* Sizes - не показываем для Pro коврика */}
                   {isClothingProduct ? (
-                    // Для одежды размеры XS-2XL
-                    <SelectorGroup
-                      title="Размер"
-                      options={CLOTHING_SIZE_OPTIONS}
-                      selectedValue={selectedClothingSize}
-                      onChange={setSelectedClothingSize}
-                      size="md"
-                      allowDeselect={false}
-                    />
+                    <div className="space-y-3">
+                      {/* Для одежды размеры XS-2XL */}
+                      <SelectorGroup
+                        title="Размер"
+                        options={CLOTHING_SIZE_OPTIONS}
+                        selectedValue={selectedClothingSize}
+                        onChange={setSelectedClothingSize}
+                        size="md"
+                        allowDeselect={false}
+                      />
+                      {/* Size Chart Button - Only for clothing */}
+                      <button
+                        onClick={() => setShowSizeChart(true)}
+                        className="text-white/70 hover:text-white font-manrope text-xs sm:text-sm 
+                                   transition-colors duration-200 flex items-center gap-1.5 underline decoration-dotted underline-offset-4"
+                      >
+                        <span>📏</span>
+                        <span>Таблица размеров</span>
+                      </button>
+                    </div>
                   ) : !isProMousepadProduct && (
                     // Для обычных ковриков размеры XL/L
                     <SelectorGroup
@@ -273,7 +324,7 @@ const ProductPage: React.FC = () => {
                 </div>
 
                 {/* Divider */}
-                <div className="w-full h-px bg-white/20 my-5"></div>
+                <div className="w-full h-px bg-gradient-to-r from-white/10 to-transparent my-6"></div>
 
                 {/* Price and Actions */}
                 <div>
@@ -291,13 +342,10 @@ const ProductPage: React.FC = () => {
                     <button 
                       onClick={handleAddToCartClick}
                       disabled={flyingToCart}
-                      className={`bg-blue-600 hover:bg-blue-700 text-white font-manrope font-semibold text-sm sm:text-base px-5 sm:px-6 py-2.5 rounded-lg transition-all duration-200 flex items-center justify-center gap-2 whitespace-nowrap ${
+                      className={`bg-blue-600 hover:bg-blue-700 text-white font-manrope font-semibold text-sm sm:text-base px-5 sm:px-6 py-2.5 rounded-lg transition-all duration-200 flex items-center justify-center whitespace-nowrap ${
                         flyingToCart ? 'opacity-50 cursor-not-allowed' : 'hover:shadow-lg hover:shadow-blue-500/30'
                       }`}
                     >
-                      <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-                      </svg>
                       {flyingToCart ? 'Добавление...' : 'В корзину'}
                     </button>
 
@@ -310,12 +358,12 @@ const ProductPage: React.FC = () => {
           </div>
 
           {/* Specifications */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-5 md:gap-7 mb-3 sm:mb-5 md:mb-7">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-5 md:gap-7 mb-3 sm:mb-5 md:mb-7 lg:items-start">
             {/* Description */}
-            <div className="bg-black/40 backdrop-blur rounded-lg sm:rounded-xl p-3 sm:p-5 md:p-8 lg:p-10">
-              <h3 className="text-white font-manrope font-semibold text-lg sm:text-xl md:text-2xl lg:text-3xl mb-2 sm:mb-3">Описание</h3>
-              <div className="w-24 sm:w-32 md:w-40 h-px bg-white/40 mb-3 sm:mb-5"></div>
-              <div className="text-white font-manrope font-medium text-xs sm:text-sm md:text-base leading-relaxed space-y-2 sm:space-y-3">
+            <div className={`bg-black/40 backdrop-blur rounded-lg sm:rounded-xl p-4 sm:p-5 md:p-6 lg:p-8 flex flex-col ${isClothingProduct ? 'lg:h-[28vh]' : 'lg:h-full'}`}>
+              <h3 className="text-white font-manrope font-semibold text-base sm:text-lg md:text-xl mb-2 sm:mb-3">Описание</h3>
+              <div className="w-16 sm:w-20 md:w-24 h-px bg-gradient-to-r from-white/10 to-transparent mb-3 sm:mb-4"></div>
+              <div className={`text-white/90 font-manrope font-normal text-xs sm:text-sm leading-relaxed space-y-2 flex-1 overflow-hidden ${isClothingProduct ? 'line-clamp-[10]' : ''}`}>
                 {isClothingProduct ? (
                   // Описание для одежды
                   <p className="whitespace-pre-line">{clothingDescription}</p>
@@ -337,65 +385,75 @@ const ProductPage: React.FC = () => {
                   </>
                 )}
               </div>
+              <button
+                onClick={() => setShowFullDescription(true)}
+                className="mt-4 w-full bg-white/5 hover:bg-white/10 border border-white/20 text-white font-manrope font-medium py-2.5 px-4 rounded-lg text-xs sm:text-sm transition-all duration-300 flex items-center justify-center gap-2 group"
+              >
+                <span className="text-base">📖</span>
+                <span>Читать полностью</span>
+                <svg className="w-3 h-3 sm:w-4 sm:h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
             </div>
 
             {/* Specifications */}
             <div className="space-y-3 sm:space-y-5 md:space-y-7">
               {/* Characteristics */}
-              <div className="bg-black/40 backdrop-blur rounded-lg sm:rounded-xl p-3 sm:p-5 md:p-8 lg:p-10">
-                <h3 className="text-white font-manrope font-semibold text-lg sm:text-xl md:text-2xl lg:text-3xl mb-2 sm:mb-3">Характеристики</h3>
-                <div className="w-36 sm:w-48 md:w-64 h-px bg-white/40 mb-3 sm:mb-5"></div>
-                <div className="space-y-2 sm:space-y-3">
+              <div className={`bg-black/40 backdrop-blur rounded-lg sm:rounded-xl p-4 sm:p-5 md:p-6 lg:p-8 flex flex-col ${isClothingProduct ? 'lg:min-h-[28vh]' : ''}`}>
+                <h3 className="text-white font-manrope font-semibold text-base sm:text-lg md:text-xl mb-2 sm:mb-3">Характеристики</h3>
+                <div className="w-16 sm:w-20 md:w-24 h-px bg-gradient-to-r from-white/10 to-transparent mb-3 sm:mb-4"></div>
+                <div className={`space-y-2 sm:space-y-2.5 ${isClothingProduct ? 'flex-1 flex flex-col justify-center' : ''}`}>
                   {isClothingProduct ? (
                     // Характеристики для одежды
                     <>
                       <div className="flex flex-col sm:flex-row justify-between gap-1">
-                        <span className="text-white font-manrope font-medium text-xs sm:text-sm md:text-base lg:text-lg">Состав материала</span>
-                        <span className="text-white/80 sm:text-white font-manrope font-medium text-xs sm:text-sm md:text-base lg:text-lg">Футер 3-х нитка начес</span>
+                        <span className="text-white font-manrope font-medium text-xs sm:text-sm">Состав материала</span>
+                        <span className="text-white/80 font-manrope font-normal text-xs sm:text-sm">Футер 3-х нитка начес</span>
                       </div>
                       <div className="flex flex-col sm:flex-row justify-between gap-1">
-                        <span className="text-white font-manrope font-medium text-xs sm:text-sm md:text-base lg:text-lg">Состав</span>
-                        <span className="text-white/80 sm:text-white font-manrope font-medium text-xs sm:text-sm md:text-base lg:text-lg">80% хб + 20% пэ</span>
+                        <span className="text-white font-manrope font-medium text-xs sm:text-sm">Состав</span>
+                        <span className="text-white/80 font-manrope font-normal text-xs sm:text-sm">80% хб + 20% пэ</span>
                       </div>
                       <div className="flex flex-col sm:flex-row justify-between gap-1">
-                        <span className="text-white font-manrope font-medium text-xs sm:text-sm md:text-base lg:text-lg">Плотность</span>
-                        <span className="text-white/80 sm:text-white font-manrope font-medium text-xs sm:text-sm md:text-base lg:text-lg">330 гр/м²</span>
+                        <span className="text-white font-manrope font-medium text-xs sm:text-sm">Плотность</span>
+                        <span className="text-white/80 font-manrope font-normal text-xs sm:text-sm">330 гр/м²</span>
                       </div>
                       <div className="flex flex-col sm:flex-row justify-between gap-1">
-                        <span className="text-white font-manrope font-medium text-xs sm:text-sm md:text-base lg:text-lg">Цвет</span>
-                        <span className="text-white/80 sm:text-white font-manrope font-medium text-xs sm:text-sm md:text-base lg:text-lg">{selectedColor === 'black' ? 'Черный' : 'Белый'}</span>
+                        <span className="text-white font-manrope font-medium text-xs sm:text-sm">Цвет</span>
+                        <span className="text-white/80 font-manrope font-normal text-xs sm:text-sm">{selectedColor === 'black' ? 'Черный' : 'Белый'}</span>
                       </div>
                     </>
                   ) : isProMousepadProduct ? (
                     // Характеристики для Pro ковриков
                     <>
                       <div className="flex flex-col sm:flex-row justify-between gap-1">
-                        <span className="text-white font-manrope font-medium text-xs sm:text-sm md:text-base lg:text-lg">Материал покрытия</span>
-                        <span className="text-white/80 sm:text-white font-manrope font-medium text-xs sm:text-sm md:text-base lg:text-lg">{PRODUCT_DESCRIPTIONS.pro[selectedType as keyof typeof PRODUCT_DESCRIPTIONS.pro].material}</span>
+                        <span className="text-white font-manrope font-medium text-xs sm:text-sm">Материал покрытия</span>
+                        <span className="text-white/80 font-manrope font-normal text-xs sm:text-sm">{PRODUCT_DESCRIPTIONS.pro[selectedType as keyof typeof PRODUCT_DESCRIPTIONS.pro].material}</span>
                       </div>
                       <div className="flex flex-col sm:flex-row justify-between gap-1">
-                        <span className="text-white font-manrope font-medium text-xs sm:text-sm md:text-base lg:text-lg">Материал основания</span>
-                        <span className="text-white/80 sm:text-white font-manrope font-medium text-xs sm:text-sm md:text-base lg:text-lg">{PRODUCT_DESCRIPTIONS.pro[selectedType as keyof typeof PRODUCT_DESCRIPTIONS.pro].base}</span>
+                        <span className="text-white font-manrope font-medium text-xs sm:text-sm">Материал основания</span>
+                        <span className="text-white/80 font-manrope font-normal text-xs sm:text-sm">{PRODUCT_DESCRIPTIONS.pro[selectedType as keyof typeof PRODUCT_DESCRIPTIONS.pro].base}</span>
                       </div>
                       <div className="flex flex-col sm:flex-row justify-between gap-1">
-                        <span className="text-white font-manrope font-medium text-xs sm:text-sm md:text-base lg:text-lg">Цвет</span>
-                        <span className="text-white/80 sm:text-white font-manrope font-medium text-xs sm:text-sm md:text-base lg:text-lg">Черный</span>
+                        <span className="text-white font-manrope font-medium text-xs sm:text-sm">Цвет</span>
+                        <span className="text-white/80 font-manrope font-normal text-xs sm:text-sm">Черный</span>
                       </div>
                     </>
                   ) : (
                     // Характеристики для обычных ковриков
                     <>
                       <div className="flex flex-col sm:flex-row justify-between gap-1">
-                        <span className="text-white font-manrope font-medium text-xs sm:text-sm md:text-base lg:text-lg">Материал покрытия</span>
-                        <span className="text-white/80 sm:text-white font-manrope font-medium text-xs sm:text-sm md:text-base lg:text-lg">{PRODUCT_DESCRIPTIONS.regular[selectedType as keyof typeof PRODUCT_DESCRIPTIONS.regular].material}</span>
+                        <span className="text-white font-manrope font-medium text-xs sm:text-sm">Материал покрытия</span>
+                        <span className="text-white/80 font-manrope font-normal text-xs sm:text-sm">{PRODUCT_DESCRIPTIONS.regular[selectedType as keyof typeof PRODUCT_DESCRIPTIONS.regular].material}</span>
                       </div>
                       <div className="flex flex-col sm:flex-row justify-between gap-1">
-                        <span className="text-white font-manrope font-medium text-xs sm:text-sm md:text-base lg:text-lg">Материал основания</span>
-                        <span className="text-white/80 sm:text-white font-manrope font-medium text-xs sm:text-sm md:text-base lg:text-lg">Резина</span>
+                        <span className="text-white font-manrope font-medium text-xs sm:text-sm">Материал основания</span>
+                        <span className="text-white/80 font-manrope font-normal text-xs sm:text-sm">Резина</span>
                       </div>
                       <div className="flex flex-col sm:flex-row justify-between gap-1">
-                        <span className="text-white font-manrope font-medium text-xs sm:text-sm md:text-base lg:text-lg">Цвет</span>
-                        <span className="text-white/80 sm:text-white font-manrope font-medium text-xs sm:text-sm md:text-base lg:text-lg">{COLOR_NAMES[selectedColor as keyof typeof COLOR_NAMES]}</span>
+                        <span className="text-white font-manrope font-medium text-xs sm:text-sm">Цвет</span>
+                        <span className="text-white/80 font-manrope font-normal text-xs sm:text-sm">{COLOR_NAMES[selectedColor as keyof typeof COLOR_NAMES]}</span>
                       </div>
                     </>
                   )}
@@ -404,86 +462,186 @@ const ProductPage: React.FC = () => {
 
               {/* Dimensions - только для ковриков */}
               {!isClothingProduct && (
-                <div className="bg-black/40 backdrop-blur rounded-lg sm:rounded-xl p-3 sm:p-5 md:p-8 lg:p-10">
-                  <h3 className="text-white font-manrope font-semibold text-lg sm:text-xl md:text-2xl lg:text-3xl mb-2 sm:mb-3">Размеры</h3>
-                  <div className="w-24 sm:w-28 md:w-36 h-px bg-white/40 mb-3 sm:mb-5"></div>
-                  <div className="space-y-2 sm:space-y-3">
+                <div className="bg-black/40 backdrop-blur rounded-lg sm:rounded-xl p-4 sm:p-5 md:p-6 lg:p-8">
+                  <h3 className="text-white font-manrope font-semibold text-base sm:text-lg md:text-xl mb-2 sm:mb-3">Размеры</h3>
+                  <div className="w-16 sm:w-20 md:w-24 h-px bg-gradient-to-r from-white/10 to-transparent mb-3 sm:mb-4"></div>
+                  <div className="space-y-2 sm:space-y-2.5">
                     <div className="flex flex-col sm:flex-row justify-between gap-1">
-                      <span className="text-white font-manrope font-medium text-xs sm:text-sm md:text-base lg:text-lg">Толщина</span>
-                      <span className="text-white/80 sm:text-white font-manrope font-medium text-xs sm:text-sm md:text-base lg:text-lg">{isProMousepadProduct ? '3.5 мм' : '4 мм'}</span>
+                      <span className="text-white font-manrope font-medium text-xs sm:text-sm">Толщина</span>
+                      <span className="text-white/80 font-manrope font-normal text-xs sm:text-sm">{isProMousepadProduct ? '3.5 мм' : '4 мм'}</span>
                     </div>
                     <div className="flex flex-col sm:flex-row justify-between gap-1">
-                      <span className="text-white font-manrope font-medium text-xs sm:text-sm md:text-base lg:text-lg">Длина</span>
-                      <span className="text-white/80 sm:text-white font-manrope font-medium text-xs sm:text-sm md:text-base lg:text-lg">{isProMousepadProduct ? '500 мм' : MOUSEPAD_DIMENSIONS[selectedSize as keyof typeof MOUSEPAD_DIMENSIONS].length}</span>
+                      <span className="text-white font-manrope font-medium text-xs sm:text-sm">Длина</span>
+                      <span className="text-white/80 font-manrope font-normal text-xs sm:text-sm">{isProMousepadProduct ? '500 мм' : MOUSEPAD_DIMENSIONS[selectedSize as keyof typeof MOUSEPAD_DIMENSIONS].length}</span>
                     </div>
                     <div className="flex flex-col sm:flex-row justify-between gap-1">
-                      <span className="text-white font-manrope font-medium text-xs sm:text-sm md:text-base lg:text-lg">Ширина</span>
-                      <span className="text-white/80 sm:text-white font-manrope font-medium text-xs sm:text-sm md:text-base lg:text-lg">{isProMousepadProduct ? '430 мм' : MOUSEPAD_DIMENSIONS[selectedSize as keyof typeof MOUSEPAD_DIMENSIONS].width}</span>
+                      <span className="text-white font-manrope font-medium text-xs sm:text-sm">Ширина</span>
+                      <span className="text-white/80 font-manrope font-normal text-xs sm:text-sm">{isProMousepadProduct ? '430 мм' : MOUSEPAD_DIMENSIONS[selectedSize as keyof typeof MOUSEPAD_DIMENSIONS].width}</span>
                     </div>
                   </div>
                 </div>
               )}
-
-              {/* Article */}
-              <div className="bg-black/40 backdrop-blur rounded-lg sm:rounded-xl p-3 sm:p-5 md:p-8 lg:p-10">
-                <h3 className="text-white font-manrope font-semibold text-lg sm:text-xl md:text-2xl lg:text-3xl mb-2 sm:mb-3">Артикул</h3>
-                <div className="w-24 sm:w-28 md:w-36 h-px bg-white/40 mb-3 sm:mb-5"></div>
-                <div className="flex flex-col sm:flex-row justify-between gap-1">
-                  <span className="text-white font-manrope font-medium text-xs sm:text-sm md:text-base lg:text-lg">№</span>
-                  <span className="text-white/80 sm:text-white font-manrope font-medium text-xs sm:text-sm md:text-base lg:text-lg">110</span>
-                </div>
-              </div>
             </div>
           </div>
 
           {/* Reviews */}
-          <div className="bg-black/40 backdrop-blur rounded-lg sm:rounded-xl p-3 sm:p-5 md:p-8 lg:p-10">
-            <h3 className="text-white font-manrope font-bold text-xl sm:text-2xl md:text-3xl lg:text-4xl mb-3 sm:mb-5 md:mb-7 text-center">Отзывы</h3>
+          <div className="bg-black/40 backdrop-blur rounded-lg sm:rounded-xl p-4 sm:p-5 md:p-6 lg:p-8">
+            <h3 className="text-white font-manrope font-bold text-lg sm:text-xl md:text-2xl mb-4 sm:mb-5 text-center">Отзывы</h3>
 
-            <div className="space-y-3 sm:space-y-5 md:space-y-7">
+            <div className="space-y-3 sm:space-y-4">
               {/* Review 1 */}
-              <div className="bg-black/40 p-3 sm:p-5 md:p-8 lg:p-10 rounded-lg sm:rounded-xl border-b border-white/20">
-                <div className="flex justify-between items-center mb-3 sm:mb-5">
-                  <h4 className="text-white font-manrope font-bold text-sm sm:text-base md:text-xl lg:text-2xl">Никита Литвиненко</h4>
+              <div className="bg-black/40 p-3 sm:p-4 md:p-5 rounded-lg sm:rounded-xl border-b border-white/20">
+                <div className="flex justify-between items-center mb-2 sm:mb-3">
+                  <h4 className="text-white font-manrope font-semibold text-sm sm:text-base">Никита Литвиненко</h4>
                   <StarRating rating={5} />
                 </div>
-                <p className="text-white font-manrope font-medium text-xs sm:text-sm md:text-base lg:text-lg mb-3 sm:mb-5 leading-relaxed">
+                <p className="text-white/90 font-manrope font-normal text-xs sm:text-sm mb-3 leading-relaxed">
                   приехал быстро (буквально 3-4 дня с учетом праздников), коврик огромен, даже неожиданно огромен, качество 15/10, исполнение принта 25/10, за такую цену чуть ли не лучшее предложение на рынке ковров, спасибо за такое прекрасное исполнение!
                 </p>
                 <div className="flex justify-between items-end">
-                  <div className="flex gap-1.5 sm:gap-2 md:gap-3">
-                    <div className="w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 bg-blue-100 rounded-lg sm:rounded-xl"></div>
-                    <div className="w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 bg-green-100 rounded-lg sm:rounded-xl"></div>
-                    <div className="w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 bg-red-100 rounded-lg sm:rounded-xl"></div>
+                  <div className="flex gap-1.5 sm:gap-2">
+                    <div className="w-12 h-12 sm:w-14 sm:h-14 bg-blue-100 rounded-lg"></div>
+                    <div className="w-12 h-12 sm:w-14 sm:h-14 bg-green-100 rounded-lg"></div>
+                    <div className="w-12 h-12 sm:w-14 sm:h-14 bg-red-100 rounded-lg"></div>
                   </div>
-                  <span className="text-white font-manrope font-medium text-xs sm:text-sm md:text-base lg:text-lg">09.11.2025</span>
+                  <span className="text-white/70 font-manrope font-normal text-xs sm:text-sm">09.11.2025</span>
                 </div>
               </div>
 
               {/* Review 2 */}
-              <div className="bg-black/40 p-3 sm:p-5 md:p-8 lg:p-10 rounded-lg sm:rounded-xl">
-                <div className="flex justify-between items-center mb-3 sm:mb-5">
-                  <h4 className="text-white font-manrope font-bold text-sm sm:text-base md:text-xl lg:text-2xl">Даниилс Ушаковс</h4>
+              <div className="bg-black/40 p-3 sm:p-4 md:p-5 rounded-lg sm:rounded-xl">
+                <div className="flex justify-between items-center mb-2 sm:mb-3">
+                  <h4 className="text-white font-manrope font-semibold text-sm sm:text-base">Даниилс Ушаковс</h4>
                   <StarRating rating={5} />
                 </div>
-                <p className="text-white font-manrope font-medium text-xs sm:text-sm md:text-base lg:text-lg mb-3 sm:mb-5 leading-relaxed">
+                <p className="text-white/90 font-manrope font-normal text-xs sm:text-sm mb-3 leading-relaxed">
                   Коврик - огонь! Единственный вопрос, не нашел нигде, как его правильно стирать, чтобы не повредить поверхность?
                 </p>
                 <div className="flex justify-between items-end">
-                  <div className="flex gap-1.5 sm:gap-2 md:gap-3">
-                    <div className="w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 bg-blue-100 rounded-lg sm:rounded-xl"></div>
-                    <div className="w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 bg-green-100 rounded-lg sm:rounded-xl"></div>
-                    <div className="w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 bg-red-100 rounded-lg sm:rounded-xl"></div>
+                  <div className="flex gap-1.5 sm:gap-2">
+                    <div className="w-12 h-12 sm:w-14 sm:h-14 bg-blue-100 rounded-lg"></div>
+                    <div className="w-12 h-12 sm:w-14 sm:h-14 bg-green-100 rounded-lg"></div>
+                    <div className="w-12 h-12 sm:w-14 sm:h-14 bg-red-100 rounded-lg"></div>
                   </div>
-                  <span className="text-white font-manrope font-medium text-xs sm:text-sm md:text-base lg:text-lg">09.11.2025</span>
+                  <span className="text-white/70 font-manrope font-normal text-xs sm:text-sm">09.11.2025</span>
                 </div>
               </div>
             </div>
           </div>
+
+          {/* Similar Products Section */}
+          {similarProducts.length > 0 && (
+            <div className="bg-black/40 backdrop-blur rounded-lg sm:rounded-xl p-4 sm:p-5 md:p-6 lg:p-8 mt-3 sm:mt-5 md:mt-7">
+              <div className="mb-4 sm:mb-5">
+                <h3 className="text-white font-manrope font-bold text-lg sm:text-xl md:text-2xl mb-2 sm:mb-3">
+                  Похожие товары
+                </h3>
+                <div className="w-24 sm:w-32 md:w-40 h-px bg-gradient-to-r from-white/10 to-transparent"></div>
+              </div>
+              
+              <div className="pb-4 sm:pb-6 md:pb-8 px-2 sm:px-4">
+                <ProductCarousel itemsPerView={3}>
+                  {similarProducts.map((product) => (
+                    <ProductCard
+                      key={product.id}
+                      id={product.id}
+                      image={product.image}
+                      images={product.images}
+                      title={product.title}
+                      subtitle={product.subtitle}
+                      productSize={product.productSize}
+                      productColor={product.productColor}
+                      price={product.price}
+                      priceNumeric={product.priceNumeric}
+                      rating={product.rating}
+                      reviewCount={product.reviewCount}
+                      color={product.color}
+                      category={product.category}
+                      clothingType={product.clothingType}
+                      size="small-catalog"
+                      onAddToCart={() => {}}
+                      onProductClick={() => {
+                        navigateToProduct(product);
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                      }}
+                    />
+                  ))}
+                </ProductCarousel>
+              </div>
+            </div>
+          )}
         </main>
         
         {/* Footer */}
         <Footer />
+
+        {/* Size Chart Modal */}
+        <Modal isOpen={showSizeChart} onClose={() => setShowSizeChart(false)}>
+          <div className="p-4 sm:p-6 max-w-4xl">
+            <h2 className="text-white font-manrope font-bold text-xl sm:text-2xl mb-4 flex items-center gap-2">
+              <span>📏</span>
+              <span>Таблица размеров</span>
+            </h2>
+            
+            {/* Size Chart Image */}
+            <div className="bg-white/5 rounded-xl overflow-hidden border border-white/10">
+              <Img
+                src="/images/size-chart.webp"
+                alt="Таблица размеров одежды"
+                className="w-full h-auto"
+                onError={(e) => {
+                  // Если изображение не загрузилось, показываем заглушку
+                  const target = e.target as HTMLImageElement;
+                  target.style.display = 'none';
+                  if (target.parentElement) {
+                    const placeholder = document.createElement('div');
+                    placeholder.className = 'w-full aspect-[4/3] flex items-center justify-center text-white/60 font-manrope p-8 text-center';
+                    placeholder.innerHTML = `
+                      <div>
+                        <p class="text-lg mb-2">📐</p>
+                        <p class="text-sm">Таблица размеров скоро будет добавлена</p>
+                        <p class="text-xs mt-2 text-white/40">Пожалуйста, свяжитесь с нами для уточнения размеров</p>
+                      </div>
+                    `;
+                    target.parentElement.appendChild(placeholder);
+                  }
+                }}
+              />
+            </div>
+
+            {/* Size Guide Tips */}
+            <div className="mt-4 space-y-2 text-white/70 text-xs sm:text-sm font-manrope">
+              <p className="flex items-start gap-2">
+                <span>💡</span>
+                <span>Замеряйте свою одежду в расправленном виде</span>
+              </p>
+              <p className="flex items-start gap-2">
+                <span>📐</span>
+                <span>При промежуточных значениях выбирайте больший размер</span>
+              </p>
+              <p className="flex items-start gap-2">
+                <span>❓</span>
+                <span>Не уверены в размере? Напишите нам, мы поможем!</span>
+              </p>
+            </div>
+          </div>
+        </Modal>
+
+        {/* Full Description Modal */}
+        <Modal isOpen={showFullDescription} onClose={() => setShowFullDescription(false)}>
+          <div className="p-4 sm:p-6 max-w-4xl">
+            <h2 className="text-white font-manrope font-bold text-xl sm:text-2xl mb-4 flex items-center gap-2">
+              <span>📖</span>
+              <span>Описание товара</span>
+            </h2>
+            
+            <div className="bg-white/5 rounded-xl p-4 sm:p-6 border border-white/10">
+              <div className="text-white/90 font-manrope font-normal text-sm sm:text-base leading-relaxed space-y-3 whitespace-pre-line">
+                {fullDescription}
+              </div>
+            </div>
+          </div>
+        </Modal>
       </div>
     </div>
   );

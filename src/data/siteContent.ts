@@ -89,8 +89,8 @@ export const SITE_CONTENT: SiteContent = {
 
   // Навигация
   navigation: {
-    main: NAV_ITEMS,
-    mobile: MOBILE_NAV_ITEMS
+    main: [...NAV_ITEMS],
+    mobile: [...MOBILE_NAV_ITEMS]
   }
 };
 
