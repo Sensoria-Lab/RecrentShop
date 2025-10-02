@@ -48,11 +48,34 @@ const CatalogPage: React.FC = () => {
     <PageContainer>
           <div className="max-w-[1600px] mx-auto">
             {/* Page Title */}
-            <div className="text-center mb-4 sm:mb-6 md:mb-8 lg:mb-12">
+            <div className="text-center mb-4 sm:mb-6 md:mb-8">
               <h1 className="text-white font-manrope font-bold text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl mb-3 sm:mb-4 md:mb-6 drop-shadow-[0_4px_12px_rgba(0,0,0,0.9)]">
                 Каталог товаров
               </h1>
               <div className="w-20 sm:w-24 md:w-32 h-0.5 sm:h-1 bg-white/40 mx-auto"></div>
+            </div>
+
+            {/* Category Filter - moved here */}
+            <div className="mb-6 sm:mb-8 flex justify-center">
+              <div className="inline-flex gap-2 sm:gap-3 bg-black/40 backdrop-blur rounded-xl p-2 border border-white/20">
+                {[
+                  { value: 'all', label: 'Все товары' },
+                  { value: 'mousepads', label: 'Коврики' },
+                  { value: 'clothing', label: 'Одежда' }
+                ].map(option => (
+                  <button
+                    key={option.value}
+                    onClick={() => setCategoryFilter(option.value as CategoryFilter)}
+                    className={`px-4 sm:px-6 py-2 sm:py-2.5 rounded-lg font-manrope font-semibold text-sm sm:text-base transition-all ${
+                      categoryFilter === option.value
+                        ? 'bg-white text-black shadow-lg'
+                        : 'text-white/70 hover:text-white hover:bg-white/10'
+                    }`}
+                  >
+                    {option.label}
+                  </button>
+                ))}
+              </div>
             </div>
 
             {/* Mobile filter button */}
@@ -88,39 +111,14 @@ const CatalogPage: React.FC = () => {
                     <select
                       value={sortBy}
                       onChange={(e) => setSortBy(e.target.value as SortOption)}
-                      className="w-full bg-white/10 text-white border border-white/20 rounded-lg px-3 sm:px-4 py-2 font-manrope text-sm sm:text-base focus:outline-none focus:border-white/40 transition-colors"
+                      className="w-full bg-black text-white border border-white/30 rounded-lg px-3 sm:px-4 py-2 font-manrope text-sm sm:text-base focus:outline-none focus:border-white/60 transition-colors cursor-pointer hover:bg-black/80"
+                      style={{ colorScheme: 'dark' }}
                     >
-                      <option value="popularity">По популярности</option>
-                      <option value="rating">По рейтингу</option>
-                      <option value="price-asc">Цена: по возрастанию</option>
-                      <option value="price-desc">Цена: по убыванию</option>
+                      <option value="popularity" className="bg-black text-white">По популярности</option>
+                      <option value="rating" className="bg-black text-white">По рейтингу</option>
+                      <option value="price-asc" className="bg-black text-white">Цена: по возрастанию</option>
+                      <option value="price-desc" className="bg-black text-white">Цена: по убыванию</option>
                     </select>
-                  </div>
-
-                  {/* Category Filter */}
-                  <div className="mb-4 sm:mb-6">
-                    <label className="text-white/80 font-manrope text-xs sm:text-sm mb-2 block">Категория</label>
-                    <div className="space-y-2">
-                      {[
-                        { value: 'all', label: 'Все товары' },
-                        { value: 'mousepads', label: 'Коврики для мыши' },
-                        { value: 'clothing', label: 'Одежда' }
-                      ].map(option => (
-                        <label key={option.value} className="flex items-center gap-2 cursor-pointer group">
-                          <input
-                            type="radio"
-                            name="category"
-                            value={option.value}
-                            checked={categoryFilter === option.value}
-                            onChange={(e) => setCategoryFilter(e.target.value as CategoryFilter)}
-                            className="w-4 h-4 accent-white"
-                          />
-                          <span className="text-white/70 font-manrope text-sm sm:text-base group-hover:text-white transition-colors">
-                            {option.label}
-                          </span>
-                        </label>
-                      ))}
-                    </div>
                   </div>
 
                   {/* Clothing Type Filter */}
@@ -181,34 +179,80 @@ const CatalogPage: React.FC = () => {
                   {/* Size Filter */}
                   <div className="mb-4 sm:mb-6">
                     <label className="text-white/80 font-manrope text-xs sm:text-sm mb-2 block">Размер</label>
-                    <div className="space-y-2">
-                      {[
-                        { value: 'all', label: 'Все размеры' },
-                        ...(categoryFilter !== 'clothing' ? [
-                          { value: 'L', label: 'L (коврики)' },
-                          { value: 'XL', label: 'XL (коврики)' }
-                        ] : []),
-                        ...(categoryFilter !== 'mousepads' ? [
-                          { value: 'S', label: 'S (одежда)' },
-                          { value: 'M', label: 'M (одежда)' },
-                          { value: 'XS', label: 'XS (одежда)' }
-                        ] : [])
-                      ].map(option => (
-                        <label key={option.value} className="flex items-center gap-2 cursor-pointer group">
-                          <input
-                            type="radio"
-                            name="size"
-                            value={option.value}
-                            checked={sizeFilter === option.value}
-                            onChange={(e) => setSizeFilter(e.target.value as SizeFilter)}
-                            className="w-4 h-4 accent-white"
-                          />
-                          <span className="text-white/70 font-manrope group-hover:text-white transition-colors">
-                            {option.label}
-                          </span>
-                        </label>
-                      ))}
-                    </div>
+                    
+                    {/* All sizes option */}
+                    <label className="flex items-center gap-2 cursor-pointer group mb-3">
+                      <input
+                        type="radio"
+                        name="size"
+                        value="all"
+                        checked={sizeFilter === 'all'}
+                        onChange={(e) => setSizeFilter(e.target.value as SizeFilter)}
+                        className="w-4 h-4 accent-white"
+                      />
+                      <span className="text-white/70 font-manrope text-sm sm:text-base group-hover:text-white transition-colors font-semibold">
+                        Все размеры
+                      </span>
+                    </label>
+
+                    {/* Mousepad sizes */}
+                    {categoryFilter !== 'clothing' && (
+                      <div className="mb-3">
+                        <p className="text-white/60 font-manrope text-xs mb-2 uppercase tracking-wider">Коврики для мыши:</p>
+                        <div className="space-y-2 pl-2">
+                          {[
+                            { value: 'L', label: 'L', desc: '450x400 мм' },
+                            { value: 'XL', label: 'XL', desc: '900x400 мм' }
+                          ].map(option => (
+                            <label key={option.value} className="flex items-center gap-2 cursor-pointer group">
+                              <input
+                                type="radio"
+                                name="size"
+                                value={option.value}
+                                checked={sizeFilter === option.value}
+                                onChange={(e) => setSizeFilter(e.target.value as SizeFilter)}
+                                className="w-4 h-4 accent-white"
+                              />
+                              <span className="text-white/70 font-manrope text-sm group-hover:text-white transition-colors">
+                                <span className="font-semibold">{option.label}</span>
+                                <span className="text-xs text-white/50 ml-2">({option.desc})</span>
+                              </span>
+                            </label>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Clothing sizes */}
+                    {categoryFilter !== 'mousepads' && (
+                      <div>
+                        <p className="text-white/60 font-manrope text-xs mb-2 uppercase tracking-wider">Одежда:</p>
+                        <div className="space-y-2 pl-2">
+                          {[
+                            { value: 'XS', label: 'XS' },
+                            { value: 'S', label: 'S' },
+                            { value: 'M', label: 'M' },
+                            { value: 'L', label: 'L (одежда)' },
+                            { value: 'XL', label: 'XL (одежда)' },
+                            { value: '2XL', label: '2XL' }
+                          ].map(option => (
+                            <label key={option.value} className="flex items-center gap-2 cursor-pointer group">
+                              <input
+                                type="radio"
+                                name="size"
+                                value={option.value}
+                                checked={sizeFilter === option.value}
+                                onChange={(e) => setSizeFilter(e.target.value as SizeFilter)}
+                                className="w-4 h-4 accent-white"
+                              />
+                              <span className="text-white/70 font-manrope text-sm group-hover:text-white transition-colors">
+                                {option.label}
+                              </span>
+                            </label>
+                          ))}
+                        </div>
+                      </div>
+                    )}
                   </div>
 
                   {/* Price Range */}
