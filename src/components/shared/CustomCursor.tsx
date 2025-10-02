@@ -3,12 +3,25 @@ import React, { useEffect, useState } from 'react';
 /**
  * Custom Cursor Component
  * Minimal dot cursor with subtle glow effect
+ * Only enabled on desktop devices (not touch screens)
  */
 const CustomCursor: React.FC = () => {
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [isPointer, setIsPointer] = useState(false);
+  const [isTouchDevice, setIsTouchDevice] = useState(false);
 
   useEffect(() => {
+    // Detect if device has touch screen
+    const checkTouchDevice = () => {
+      setIsTouchDevice('ontouchstart' in window || navigator.maxTouchPoints > 0);
+    };
+    
+    checkTouchDevice();
+  }, []);
+
+  useEffect(() => {
+    // Don't add cursor on touch devices
+    if (isTouchDevice) return;
     const updateCursor = (e: MouseEvent) => {
       setPosition({ x: e.clientX, y: e.clientY });
 
@@ -30,7 +43,10 @@ const CustomCursor: React.FC = () => {
     return () => {
       window.removeEventListener('mousemove', updateCursor);
     };
-  }, []);
+  }, [isTouchDevice]);
+
+  // Don't render cursor on touch devices
+  if (isTouchDevice) return null;
 
   return (
     <>
