@@ -228,3 +228,17 @@ html { scrollbar-gutter: stable both-edge; }
   filter: blur(12px);
 }
 
+/* Header shimmer animation */
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.animate-shimmer {
+  animation: shimmer 2s ease-in-out;
+}
+

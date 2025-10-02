@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useCart } from '../../context/CartContext';
 import Img from './Img';
@@ -12,49 +12,8 @@ interface HeaderProps {
 const Header: React.FC<HeaderProps> = ({ className = '', onNavigate }) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const [visible, setVisible] = useState(true);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { getTotalItems } = useCart();
-  const lastY = useRef(0);
-  const [isMouseNearTop, setIsMouseNearTop] = useState(false);
-
-  useEffect(() => {
-    lastY.current = window.scrollY;
-    
-    const onScroll = () => {
-      const y = window.scrollY;
-      if (y < 64) {
-        setVisible(true);
-      } else {
-        // Show on scroll up, hide on scroll down (unless mouse is near top)
-        if (y > lastY.current + 8) {
-          if (!isMouseNearTop) {
-            setVisible(false);
-          }
-        } else if (y < lastY.current - 8) {
-          setVisible(true);
-        }
-      }
-      lastY.current = y;
-    };
-
-    const onMouseMove = (e: MouseEvent) => {
-      // Show header if mouse is within 100px from top
-      const nearTop = e.clientY < 100;
-      setIsMouseNearTop(nearTop);
-      if (nearTop) {
-        setVisible(true);
-      }
-    };
-
-    window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('mousemove', onMouseMove, { passive: true });
-    
-    return () => {
-      window.removeEventListener('scroll', onScroll);
-      window.removeEventListener('mousemove', onMouseMove);
-    };
-  }, [isMouseNearTop]);
 
   const go = (p: string) => {
     if (onNavigate) return onNavigate(p);
@@ -65,7 +24,7 @@ const Header: React.FC<HeaderProps> = ({ className = '', onNavigate }) => {
   const isActive = (target: string) => (target === '/' ? path === '/' : path.startsWith(target));
 
   return (
-    <header className={`relative bg-gradient-to-b from-black/80 to-black/60 backdrop-blur-2xl border border-white/10 rounded-2xl px-4 sm:px-6 py-3 sm:py-4 transition-all duration-300 shadow-2xl shadow-black/50 ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4 pointer-events-none'} ${className}`}>
+    <header className={`relative bg-gradient-to-b from-black to-black/95 backdrop-blur-2xl border border-white/10 rounded-2xl px-4 sm:px-6 py-3 sm:py-4 shadow-2xl shadow-black/50 ${className}`}>
       {/* Bottom gradient border */}
       <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
       
