@@ -96,28 +96,28 @@ const CatalogPage: React.FC = () => {
         <main className="flex-1 px-4 sm:px-8 md:px-12 lg:px-20 py-6 sm:py-8 md:py-12">
           <div className="max-w-[1600px] mx-auto">
             {/* Page Title */}
-            <div className="text-center mb-6 sm:mb-8 md:mb-12">
-              <h1 className="text-white font-manrope font-bold text-3xl sm:text-4xl md:text-5xl lg:text-6xl mb-4 sm:mb-6 drop-shadow-[0_4px_12px_rgba(0,0,0,0.9)]">
+            <div className="text-center mb-4 sm:mb-6 md:mb-8 lg:mb-12">
+              <h1 className="text-white font-manrope font-bold text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl mb-3 sm:mb-4 md:mb-6 drop-shadow-[0_4px_12px_rgba(0,0,0,0.9)]">
                 Каталог товаров
               </h1>
-              <div className="w-24 sm:w-32 h-1 bg-white/40 mx-auto"></div>
+              <div className="w-20 sm:w-24 md:w-32 h-0.5 sm:h-1 bg-white/40 mx-auto"></div>
             </div>
 
             {/* Mobile filter button */}
-            <div className="lg:hidden mb-4">
+            <div className="lg:hidden mb-3 sm:mb-4">
               <button
                 onClick={() => setFiltersOpen(!filtersOpen)}
-                className="w-full bg-black/40 backdrop-blur text-white font-manrope font-semibold px-6 py-3 rounded-xl border border-white/20 hover:bg-black/60 transition-all flex items-center justify-between"
+                className="w-full bg-black/40 backdrop-blur text-white font-manrope font-semibold px-4 sm:px-6 py-2.5 sm:py-3 rounded-lg sm:rounded-xl border border-white/20 hover:bg-black/60 transition-all flex items-center justify-between text-sm sm:text-base"
               >
                 <span>Фильтры</span>
                 <svg 
-                  width="20" 
-                  height="20" 
+                  width="18" 
+                  height="18" 
                   viewBox="0 0 24 24" 
                   fill="none" 
                   stroke="currentColor" 
                   strokeWidth="2"
-                  className={`transition-transform ${filtersOpen ? 'rotate-180' : ''}`}
+                  className={`transition-transform sm:w-5 sm:h-5 ${filtersOpen ? 'rotate-180' : ''}`}
                 >
                   <path d="M6 9l6 6 6-6"/>
                 </svg>
@@ -321,13 +321,13 @@ const CatalogPage: React.FC = () => {
                 
                 
                 {filteredProducts.length === 0 ? (
-                  <div className="bg-black/40 backdrop-blur rounded-xl p-6 sm:p-8 md:p-12 text-center">
-                    <p className="text-white/60 font-manrope text-base sm:text-lg">
+                  <div className="bg-black/40 backdrop-blur rounded-lg sm:rounded-xl p-6 sm:p-8 md:p-12 text-center">
+                    <p className="text-white/60 font-manrope text-sm sm:text-base md:text-lg">
                       Товары не найдены. Попробуйте изменить фильтры.
                     </p>
                   </div>
                 ) : (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-5 md:gap-6 justify-items-center">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3 sm:gap-4 md:gap-5 lg:gap-6 justify-items-center">
                     {filteredProducts.map((product) => (
                       <ProductCard
                         key={product.id}

@@ -179,8 +179,8 @@ const ProductPage: React.FC = () => {
               {/* Product info - left side */}
               <div className="flex-1 max-w-3xl w-full lg:w-auto">
                 {/* Title and rating */}
-                <div className="mb-6 sm:mb-8 md:mb-12">
-                  <h1 className="text-white font-manrope font-bold text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl mb-4 sm:mb-6 leading-tight drop-shadow-[0_4px_12px_rgba(0,0,0,0.9)]">
+                <div className="mb-4 sm:mb-6 md:mb-8 lg:mb-12">
+                  <h1 className="text-white font-manrope font-bold text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl 2xl:text-6xl mb-3 sm:mb-4 md:mb-6 leading-tight drop-shadow-[0_4px_12px_rgba(0,0,0,0.9)]">
                     <DecryptedText
                       text={`${productData?.title || 'Коврик для мыши'} ${productData?.subtitle || '"geoid-white"'}`}
                       duration={900}
@@ -191,7 +191,7 @@ const ProductPage: React.FC = () => {
                   </h1>
                   <div className="flex items-center gap-2 sm:gap-3">
                     <StarRating rating={productData?.rating || 5} />
-                    <span className="text-white font-manrope font-medium text-base sm:text-lg md:text-xl">({productData?.reviewCount || 29})</span>
+                    <span className="text-white font-manrope font-medium text-sm sm:text-base md:text-lg lg:text-xl">({productData?.reviewCount || 29})</span>
                   </div>
                 </div>
 
@@ -236,15 +236,15 @@ const ProductPage: React.FC = () => {
                 </div>
 
                 {/* Price and actions */}
-                <div className="space-y-4 sm:space-y-6">
-                  <div className="text-white font-manrope font-bold text-3xl sm:text-4xl md:text-5xl drop-shadow-[0_3px_10px_rgba(0,0,0,0.8)]">
+                <div className="space-y-3 sm:space-y-4 md:space-y-6">
+                  <div className="text-white font-manrope font-bold text-2xl sm:text-3xl md:text-4xl lg:text-5xl drop-shadow-[0_3px_10px_rgba(0,0,0,0.8)]">
                     {productData?.price || '3000 р.'}
                   </div>
-                  <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 md:gap-10 items-stretch sm:items-center">
+                  <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 md:gap-6 lg:gap-10 items-stretch sm:items-center">
                     <button 
                       onClick={handleAddToCart}
                       disabled={flyingToCart}
-                      className={`bg-blue-600 hover:bg-blue-700 text-white font-manrope font-semibold text-base sm:text-lg md:text-xl lg:text-2xl px-6 sm:px-8 md:px-10 py-3 sm:py-3.5 md:py-4 rounded-xl transition-all duration-200 ${
+                      className={`bg-blue-600 hover:bg-blue-700 text-white font-manrope font-semibold text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl px-5 sm:px-6 md:px-8 lg:px-10 py-2.5 sm:py-3 md:py-3.5 lg:py-4 rounded-lg sm:rounded-xl transition-all duration-200 ${
                         flyingToCart ? 'scale-95 opacity-50 cursor-not-allowed' : 'hover:scale-105 active:scale-95'
                       }`}
                     >

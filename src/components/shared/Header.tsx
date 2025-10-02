@@ -85,11 +85,11 @@ const Header: React.FC<HeaderProps> = ({ className = '', onNavigate }) => {
         </div>
 
         {/* Center: Navigation */}
-        <nav className="hidden md:flex gap-2 items-center justify-center">
+        <nav className="hidden md:flex gap-1 lg:gap-2 items-center justify-center">
           {[
             { path: '/catalog', label: 'Каталог' },
             { path: '/contacts', label: 'Контакты' },
-            { path: '/info', label: 'Информация' }
+            { path: '/info', label: 'Инфо' }
           ].map(({ path: targetPath, label }) => {
             const active = isActive(targetPath);
             return (
@@ -97,7 +97,7 @@ const Header: React.FC<HeaderProps> = ({ className = '', onNavigate }) => {
                 key={targetPath}
                 onClick={() => go(targetPath.slice(1))}
                 aria-current={active ? 'page' : undefined}
-                className={`relative font-manrope font-semibold text-base px-5 py-2.5 rounded-xl transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-white/30 ${
+                className={`relative font-manrope font-semibold text-sm lg:text-base px-3 lg:px-5 py-2.5 rounded-xl transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-white/30 whitespace-nowrap ${
                   active 
                     ? 'text-white bg-white/10 shadow-lg shadow-white/5' 
                     : 'text-white/60 hover:text-white hover:bg-white/5'
