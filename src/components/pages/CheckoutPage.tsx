@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useCart } from '../../context/CartContext';
 import Header from '../shared/Header';
 
-type DeliveryMethod = 'pickup' | 'russian-post' | 'boxberry' | 'cdek';
+type DeliveryMethod = 'russian-post' | 'cdek' | 'home-delivery';
 
 interface ContactFormData {
   fullName: string;
@@ -18,7 +18,7 @@ interface DeliveryFormData {
   address: string;
   city: string;
   postalCode: string;
-  pickupPoint: string;
+  withInsurance: boolean;
 }
 
 const CheckoutPage: React.FC = () => {
@@ -36,11 +36,11 @@ const CheckoutPage: React.FC = () => {
   });
 
   const [deliveryForm, setDeliveryForm] = useState<DeliveryFormData>({
-    method: 'pickup',
+    method: 'russian-post',
     address: '',
     city: '',
     postalCode: '',
-    pickupPoint: '',
+    withInsurance: false,
   });
 
   useEffect(() => {
@@ -56,14 +56,21 @@ const CheckoutPage: React.FC = () => {
     agreeToPolicy;
 
   const isDeliveryFormValid = () => {
-    if (deliveryForm.method === 'pickup') {
-      return deliveryForm.pickupPoint.trim() !== '';
-    }
     return (
       deliveryForm.city.trim() !== '' &&
       deliveryForm.address.trim() !== '' &&
       deliveryForm.postalCode.trim() !== ''
     );
+  };
+
+  const getDeliveryPrice = () => {
+    const prices = {
+      'russian-post': { withInsurance: 624, withoutInsurance: 473 },
+      'cdek': { withInsurance: 345, withoutInsurance: 293 },
+      'home-delivery': { withInsurance: 633, withoutInsurance: 581 },
+    };
+    const methodPrices = prices[deliveryForm.method];
+    return deliveryForm.withInsurance ? methodPrices.withInsurance : methodPrices.withoutInsurance;
   };
 
   const handleContactInputChange = (
@@ -105,24 +112,25 @@ const CheckoutPage: React.FC = () => {
 
   const deliveryMethods = [
     { 
-      id: 'pickup' as DeliveryMethod, 
-      name: 'Самовывоз', 
-      description: 'Забрать в пункте выдачи' 
-    },
-    { 
       id: 'russian-post' as DeliveryMethod, 
       name: 'Почта России', 
-      description: 'Доставка по всей России' 
-    },
-    { 
-      id: 'boxberry' as DeliveryMethod, 
-      name: 'Boxberry', 
-      description: 'Доставка в пункт выдачи или курьером' 
+      description: 'Доставка по всей России',
+      priceWithInsurance: 624,
+      priceWithoutInsurance: 473
     },
     { 
       id: 'cdek' as DeliveryMethod, 
       name: 'СДЭК', 
-      description: 'Быстрая доставка по России' 
+      description: 'Быстрая доставка в пункт выдачи',
+      priceWithInsurance: 345,
+      priceWithoutInsurance: 293
+    },
+    { 
+      id: 'home-delivery' as DeliveryMethod, 
+      name: 'Доставка на дом', 
+      description: 'Курьерская доставка СДЭК',
+      priceWithInsurance: 633,
+      priceWithoutInsurance: 581
     },
   ];
 
@@ -373,28 +381,22 @@ const CheckoutPage: React.FC = () => {
                       </h2>
                     </div>
 
-                    <div className="grid sm:grid-cols-2 gap-3 sm:gap-4">
+                    <div className="space-y-3 sm:space-y-4">
                       {deliveryMethods.map((method) => {
-                        const icons = {
-                          pickup: (
-                            <svg className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                            </svg>
-                          ),
+                        const icons: Record<DeliveryMethod, JSX.Element> = {
                           'russian-post': (
                             <svg className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                             </svg>
                           ),
-                          boxberry: (
-                            <svg className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-                            </svg>
-                          ),
-                          cdek: (
+                          'cdek': (
                             <svg className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                            </svg>
+                          ),
+                          'home-delivery': (
+                            <svg className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
                             </svg>
                           ),
                         };
@@ -418,21 +420,52 @@ const CheckoutPage: React.FC = () => {
                                 className="mt-1.5 w-5 h-5 accent-white flex-shrink-0"
                               />
                               <div className="flex-1 min-w-0">
-                                <div className="flex items-center gap-3 mb-2">
-                                  <div className={`transition-colors ${
-                                    deliveryForm.method === method.id ? 'text-white' : 'text-gray-400 group-hover:text-gray-300'
-                                  }`}>
-                                    {icons[method.id]}
-                                  </div>
-                                  <div className={`text-base sm:text-lg md:text-xl font-semibold transition-colors ${
-                                    deliveryForm.method === method.id ? 'text-white' : 'text-gray-200 group-hover:text-white'
-                                  }`}>
-                                    {method.name}
+                                <div className="flex items-center justify-between gap-3 mb-2">
+                                  <div className="flex items-center gap-3">
+                                    <div className={`transition-colors ${
+                                      deliveryForm.method === method.id ? 'text-white' : 'text-gray-400 group-hover:text-gray-300'
+                                    }`}>
+                                      {icons[method.id]}
+                                    </div>
+                                    <div className={`text-base sm:text-lg md:text-xl font-semibold transition-colors ${
+                                      deliveryForm.method === method.id ? 'text-white' : 'text-gray-200 group-hover:text-white'
+                                    }`}>
+                                      {method.name}
+                                    </div>
                                   </div>
                                 </div>
-                                <div className="text-xs sm:text-sm text-gray-400 leading-relaxed">
+                                <div className="text-xs sm:text-sm text-gray-400 leading-relaxed mb-3">
                                   {method.description}
                                 </div>
+                                {deliveryForm.method === method.id && (
+                                  <div className="mt-4 pt-4 border-t border-white/10">
+                                    <div className="flex items-start gap-3">
+                                      <input
+                                        type="checkbox"
+                                        id={`insurance-${method.id}`}
+                                        checked={deliveryForm.withInsurance}
+                                        onChange={(e) => {
+                                          e.stopPropagation();
+                                          setDeliveryForm(prev => ({ ...prev, withInsurance: e.target.checked }));
+                                        }}
+                                        onClick={(e) => e.stopPropagation()}
+                                        className="mt-1 w-4 h-4 sm:w-5 sm:h-5 accent-white flex-shrink-0"
+                                      />
+                                      <label 
+                                        htmlFor={`insurance-${method.id}`} 
+                                        className="text-xs sm:text-sm text-gray-300 cursor-pointer flex-1"
+                                        onClick={(e) => e.stopPropagation()}
+                                      >
+                                        Страховка ({deliveryForm.withInsurance ? method.priceWithInsurance : method.priceWithoutInsurance} ₽)
+                                        <span className="block text-gray-500 mt-1">
+                                          {deliveryForm.withInsurance 
+                                            ? 'Посылка застрахована' 
+                                            : 'Без страховки'}
+                                        </span>
+                                      </label>
+                                    </div>
+                                  </div>
+                                )}
                               </div>
                             </div>
                           </div>
@@ -440,71 +473,52 @@ const CheckoutPage: React.FC = () => {
                       })}
                     </div>
 
-                    {/* Поля адреса в зависимости от выбранного способа */}
+                    {/* Поля адреса */}
                     <div className="mt-5 sm:mt-6 space-y-3 sm:space-y-4 md:space-y-5">
-                      {deliveryForm.method === 'pickup' ? (
-                        <div>
-                          <label className="block text-xs sm:text-sm md:text-base text-gray-300 mb-1.5 sm:mb-2">
-                            Пункт выдачи <span className="text-red-400">*</span>
-                          </label>
-                          <input
-                            type="text"
-                            name="pickupPoint"
-                            value={deliveryForm.pickupPoint}
-                            onChange={handleDeliveryInputChange}
-                            className="w-full px-3 sm:px-4 py-2 sm:py-2.5 md:py-3 bg-white/5 border border-white/10 rounded-lg sm:rounded-xl text-sm sm:text-base text-white placeholder-gray-500 focus:outline-none focus:border-white/30 transition-colors"
-                            placeholder="Адрес пункта выдачи"
-                            required
-                          />
-                        </div>
-                      ) : (
-                        <>
-                          <div>
-                            <label className="block text-xs sm:text-sm md:text-base text-gray-300 mb-1.5 sm:mb-2">
-                              Город <span className="text-red-400">*</span>
-                            </label>
-                            <input
-                              type="text"
-                              name="city"
-                              value={deliveryForm.city}
-                              onChange={handleDeliveryInputChange}
-                              className="w-full px-3 sm:px-4 py-2 sm:py-2.5 md:py-3 bg-white/5 border border-white/10 rounded-lg sm:rounded-xl text-sm sm:text-base text-white placeholder-gray-500 focus:outline-none focus:border-white/30 transition-colors"
-                              placeholder="Москва"
-                              required
-                            />
-                          </div>
+                      <div>
+                        <label className="block text-xs sm:text-sm md:text-base text-gray-300 mb-1.5 sm:mb-2">
+                          Город <span className="text-red-400">*</span>
+                        </label>
+                        <input
+                          type="text"
+                          name="city"
+                          value={deliveryForm.city}
+                          onChange={handleDeliveryInputChange}
+                          className="w-full px-3 sm:px-4 py-2 sm:py-2.5 md:py-3 bg-white/5 border border-white/10 rounded-lg sm:rounded-xl text-sm sm:text-base text-white placeholder-gray-500 focus:outline-none focus:border-white/30 transition-colors"
+                          placeholder="Москва"
+                          required
+                        />
+                      </div>
 
-                          <div>
-                            <label className="block text-xs sm:text-sm md:text-base text-gray-300 mb-1.5 sm:mb-2">
-                              Индекс <span className="text-red-400">*</span>
-                            </label>
-                            <input
-                              type="text"
-                              name="postalCode"
-                              value={deliveryForm.postalCode}
-                              onChange={handleDeliveryInputChange}
-                              className="w-full px-3 sm:px-4 py-2 sm:py-2.5 md:py-3 bg-white/5 border border-white/10 rounded-lg sm:rounded-xl text-sm sm:text-base text-white placeholder-gray-500 focus:outline-none focus:border-white/30 transition-colors"
-                              placeholder="123456"
-                              required
-                            />
-                          </div>
+                      <div>
+                        <label className="block text-xs sm:text-sm md:text-base text-gray-300 mb-1.5 sm:mb-2">
+                          Индекс <span className="text-red-400">*</span>
+                        </label>
+                        <input
+                          type="text"
+                          name="postalCode"
+                          value={deliveryForm.postalCode}
+                          onChange={handleDeliveryInputChange}
+                          className="w-full px-3 sm:px-4 py-2 sm:py-2.5 md:py-3 bg-white/5 border border-white/10 rounded-lg sm:rounded-xl text-sm sm:text-base text-white placeholder-gray-500 focus:outline-none focus:border-white/30 transition-colors"
+                          placeholder="123456"
+                          required
+                        />
+                      </div>
 
-                          <div>
-                            <label className="block text-xs sm:text-sm md:text-base text-gray-300 mb-1.5 sm:mb-2">
-                              Адрес доставки <span className="text-red-400">*</span>
-                            </label>
-                            <textarea
-                              name="address"
-                              value={deliveryForm.address}
-                              onChange={handleDeliveryInputChange}
-                              rows={3}
-                              className="w-full px-3 sm:px-4 py-2 sm:py-2.5 md:py-3 bg-white/5 border border-white/10 rounded-lg sm:rounded-xl text-sm sm:text-base text-white placeholder-gray-500 focus:outline-none focus:border-white/30 transition-colors resize-none"
-                              placeholder="Улица, дом, квартира"
-                              required
-                            />
-                          </div>
-                        </>
-                      )}
+                      <div>
+                        <label className="block text-xs sm:text-sm md:text-base text-gray-300 mb-1.5 sm:mb-2">
+                          Адрес доставки <span className="text-red-400">*</span>
+                        </label>
+                        <textarea
+                          name="address"
+                          value={deliveryForm.address}
+                          onChange={handleDeliveryInputChange}
+                          rows={3}
+                          className="w-full px-3 sm:px-4 py-2 sm:py-2.5 md:py-3 bg-white/5 border border-white/10 rounded-lg sm:rounded-xl text-sm sm:text-base text-white placeholder-gray-500 focus:outline-none focus:border-white/30 transition-colors resize-none"
+                          placeholder="Улица, дом, квартира"
+                          required
+                        />
+                      </div>
                     </div>
                   </div>
 
@@ -583,11 +597,21 @@ const CheckoutPage: React.FC = () => {
                   ))}
                 </div>
 
-                <div className="border-t border-white/20 pt-5 sm:pt-6 mt-5 sm:mt-6">
+                <div className="border-t border-white/20 pt-5 sm:pt-6 mt-5 sm:mt-6 space-y-3">
+                  <div className="flex justify-between items-center text-sm sm:text-base text-gray-300">
+                    <span>Товары:</span>
+                    <span>{getTotalPrice()} ₽</span>
+                  </div>
+                  {step === 'delivery' && (
+                    <div className="flex justify-between items-center text-sm sm:text-base text-gray-300">
+                      <span>Доставка:</span>
+                      <span>{getDeliveryPrice()} ₽</span>
+                    </div>
+                  )}
                   <div className="flex justify-between items-center p-4 rounded-xl bg-gradient-to-r from-white/10 to-white/5 border border-white/20">
                     <span className="text-base sm:text-lg md:text-xl font-semibold text-gray-200">Итого:</span>
                     <span className="text-xl sm:text-2xl md:text-3xl font-bold bg-gradient-to-r from-white via-gray-100 to-gray-300 bg-clip-text text-transparent">
-                      {getTotalPrice()} ₽
+                      {step === 'delivery' ? getTotalPrice() + getDeliveryPrice() : getTotalPrice()} ₽
                     </span>
                   </div>
                 </div>
