@@ -108,12 +108,23 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
 
   const translateX = -(actualIndex * (cardWidth + gap));
 
+  // If only one item, show it centered without arrows
+  if (totalItems === 1) {
+    return (
+      <div className="flex justify-center items-center py-3">
+        <div style={{ width: `${cardWidth}px` }}>
+          {children[0]}
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="relative flex items-center gap-4">
       {/* Left Arrow */}
       <button
         onClick={handlePrev}
-        className="flex-shrink-0 bg-black/70 hover:bg-black/90 text-white p-3 rounded-full transition-all duration-200 hover:scale-110 z-10"
+        className="flex-shrink-0 bg-black/70 hover:bg-black/90 text-white p-3 rounded-full transition-all duration-200 hover:scale-110 active:scale-95 z-10"
         aria-label="Previous"
       >
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -151,7 +162,7 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
       {/* Right Arrow */}
       <button
         onClick={handleNext}
-        className="flex-shrink-0 bg-black/70 hover:bg-black/90 text-white p-3 rounded-full transition-all duration-200 hover:scale-110 z-10"
+        className="flex-shrink-0 bg-black/70 hover:bg-black/90 text-white p-3 rounded-full transition-all duration-200 hover:scale-110 active:scale-95 z-10"
         aria-label="Next"
       >
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
