@@ -279,6 +279,26 @@ export const CLOTHING: Product[] = [
     clothingType: 'tshirt'
   },
   {
+    id: 10,
+    image: '/images/products/clothing/tshirts/Serpents2.0_white/img_7205.webp',
+    images: [
+      '/images/products/clothing/tshirts/Serpents2.0_white/img_7205.webp',
+      '/images/products/clothing/tshirts/Serpents2.0_white/img_7206.webp',
+      '/images/products/clothing/tshirts/Serpents2.0_white/img_7210.webp',
+      '/images/products/clothing/tshirts/Serpents2.0_white/razmernaya_setka_futbolka_20_zmei_na_spine_iyun_2024.webp'
+    ],
+    title: 'Футболка-оверсайз',
+    subtitle: '"Seprents"',
+    productColor: 'Белый',
+    price: '6 000 р.',
+    priceNumeric: 6000,
+    rating: 5,
+    reviewCount: 31,
+    color: 'white',
+    category: 'clothing',
+    clothingType: 'tshirt'
+  },
+  {
     id: 12,
     image: '/images/products/clothing/hoodies/seprents_black/003-01_hudi.webp',
     images: [

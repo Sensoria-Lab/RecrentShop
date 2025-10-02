@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import PageContainer from '../shared/PageContainer';
 import ProductCard from '../ui/ProductCard';
 import ProductCarousel from '../ui/ProductCarousel';
@@ -8,6 +9,7 @@ import { useProductNavigation } from '../../hooks';
 import { ROUTES } from '../../constants/routes';
 
 const MainPage: React.FC = () => {
+  const navigate = useNavigate();
   const { navigateToProduct } = useProductNavigation();
 
   const handleProductClick = (productData: any) => {
@@ -23,7 +25,7 @@ const MainPage: React.FC = () => {
   
   // Helper for catalog navigation
   const navigateToCatalog = () => {
-    window.location.href = ROUTES.CATALOG;
+    navigate(ROUTES.CATALOG);
   };
 
   return (
