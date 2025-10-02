@@ -9,7 +9,7 @@ const CartPage: React.FC = () => {
   const { items, removeItem, updateQuantity, clearCart, getTotalPrice } = useCart();
 
   const handleCheckout = () => {
-    alert('Оформление заказа будет реализовано позже');
+    navigate('/checkout');
   };
 
   const handleContinueShopping = () => {

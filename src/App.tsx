@@ -13,6 +13,7 @@ const ContactsPage = lazy(() => import('./components/pages/ContactsPage'));
 const CatalogPage = lazy(() => import('./components/pages/CatalogPage'));
 const InfoPage = lazy(() => import('./components/pages/InfoPage'));
 const CartPage = lazy(() => import('./components/pages/CartPage'));
+const CheckoutPage = lazy(() => import('./components/pages/CheckoutPage'));
 const NotFoundPage = lazy(() => import('./components/pages/NotFoundPage'));
 
 /**
@@ -46,6 +47,7 @@ function App() {
             <Route path="/info" element={<InfoPage />} />
             <Route path="/product" element={<ProductPage />} />
             <Route path="/cart" element={<CartPage />} />
+            <Route path="/checkout" element={<CheckoutPage />} />
             <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </Suspense>
