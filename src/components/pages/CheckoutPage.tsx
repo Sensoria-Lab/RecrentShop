@@ -141,10 +141,20 @@ const CheckoutPage: React.FC = () => {
         </div>
 
         {/* Main content */}
-        <main className="flex-1 px-3 sm:px-4 md:px-6 py-6 sm:py-8 md:py-12">
+        <main className="flex-1 px-3 sm:px-4 md:px-6 lg:px-8 py-6 sm:py-8 md:py-12">
           <div className="max-w-7xl mx-auto">
-          {/* Хлебные крошки */}
-          <div className="mb-8 sm:mb-10 md:mb-12 flex items-center justify-center gap-3 sm:gap-4 md:gap-6">
+            {/* Background container */}
+            <div className="bg-black/40 backdrop-blur rounded-lg sm:rounded-xl md:rounded-2xl p-4 sm:p-6 md:p-8 lg:p-12">
+              {/* Page title */}
+              <div className="text-center mb-6 sm:mb-8 md:mb-10 lg:mb-12">
+                <h1 className="text-white font-manrope font-bold text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl mb-3 sm:mb-4 md:mb-6 drop-shadow-[0_4px_12px_rgba(0,0,0,0.9)]">
+                  Оформление заказа
+                </h1>
+                <div className="w-20 sm:w-24 md:w-32 h-0.5 sm:h-1 bg-white/40 mx-auto"></div>
+              </div>
+
+              {/* Хлебные крошки */}
+              <div className="mb-8 sm:mb-10 md:mb-12 flex items-center justify-center gap-3 sm:gap-4 md:gap-6">
             <Link 
               to="/cart" 
               className="flex flex-col items-center gap-2 group"
@@ -584,6 +594,7 @@ const CheckoutPage: React.FC = () => {
               </div>
             </div>
           </div>
+            </div>
           </div>
         </main>
       </div>
