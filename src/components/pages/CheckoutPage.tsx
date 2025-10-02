@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useCart } from '../../context/CartContext';
-import PageLayout from '../shared/PageLayout';
+import Header from '../shared/Header';
 
 type DeliveryMethod = 'pickup' | 'russian-post' | 'boxberry' | 'cdek';
 
@@ -131,9 +131,18 @@ const CheckoutPage: React.FC = () => {
   }
 
   return (
-    <PageLayout>
-      <div className="min-h-screen pt-20 sm:pt-24 md:pt-28 pb-8 sm:pb-12 md:pb-16 px-3 sm:px-4 md:px-6">
-        <div className="max-w-7xl mx-auto">
+    <div className="relative min-h-screen w-full overflow-hidden">
+      <div className="relative z-10 min-h-screen flex flex-col">
+        {/* Header */}
+        <div className="flex justify-center px-4 sm:px-8 md:px-12 py-4 sticky top-0 z-50">
+          <div className="max-w-[900px] w-full">
+            <Header />
+          </div>
+        </div>
+
+        {/* Main content */}
+        <main className="flex-1 px-3 sm:px-4 md:px-6 py-6 sm:py-8 md:py-12">
+          <div className="max-w-7xl mx-auto">
           {/* Хлебные крошки */}
           <div className="mb-8 sm:mb-10 md:mb-12 flex items-center justify-center gap-3 sm:gap-4 md:gap-6">
             <Link 
@@ -575,9 +584,10 @@ const CheckoutPage: React.FC = () => {
               </div>
             </div>
           </div>
-        </div>
+          </div>
+        </main>
       </div>
-    </PageLayout>
+    </div>
   );
 };
 
