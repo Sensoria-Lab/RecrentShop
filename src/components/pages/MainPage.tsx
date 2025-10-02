@@ -102,12 +102,16 @@ const MainPage: React.FC = () => {
                       key={product.id}
                       id={product.id}
                       image={product.image}
+                      images={product.images}
                       title={product.title}
                       subtitle={product.subtitle}
                       productSize={product.productSize}
                       price={product.price}
+                      priceNumeric={product.priceNumeric}
                       rating={product.rating}
                       reviewCount={product.reviewCount}
+                      color={product.color}
+                      category={product.category}
                       size="small-catalog"
                       onAddToCart={() => {}}
                       onProductClick={handleProductClick}
@@ -130,12 +134,17 @@ const MainPage: React.FC = () => {
                       key={product.id}
                       id={product.id}
                       image={product.image}
+                      images={product.images}
                       title={product.title}
                       subtitle={product.subtitle}
                       productColor={product.productColor}
                       price={product.price}
+                      priceNumeric={product.priceNumeric}
                       rating={product.rating}
                       reviewCount={product.reviewCount}
+                      color={product.color}
+                      category={product.category}
+                      clothingType={product.clothingType}
                       size="small-catalog"
                       onAddToCart={() => {}}
                       onProductClick={handleProductClick}

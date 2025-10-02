@@ -5,6 +5,7 @@
 export interface Product {
   id: number;
   image: string;
+  images?: string[]; // Multiple product images for gallery
   title: string;
   subtitle: string;
   productSize?: string;
@@ -15,11 +16,11 @@ export interface Product {
   reviewCount: number;
   color: string;
   category: 'mousepads' | 'clothing';
-  clothingType?: 'hoodie' | 'tshirt';
+  clothingType?: 'hoodie' | 'tshirt' | 'sleeve';
 }
 
 export type SortOption = 'popularity' | 'price-asc' | 'price-desc' | 'rating';
 export type ColorFilter = 'all' | 'black' | 'white' | 'red';
 export type SizeFilter = 'all' | 'L' | 'XL' | 'S' | 'M' | 'XS';
 export type CategoryFilter = 'all' | 'mousepads' | 'clothing';
-export type ClothingTypeFilter = 'all' | 'hoodie' | 'tshirt';
+export type ClothingTypeFilter = 'all' | 'hoodie' | 'tshirt' | 'sleeve';

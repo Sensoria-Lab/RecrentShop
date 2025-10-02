@@ -333,13 +333,18 @@ const CatalogPage: React.FC = () => {
                         key={product.id}
                         id={product.id}
                         image={product.image}
+                        images={product.images}
                         title={product.title}
                         subtitle={product.subtitle}
                         productSize={product.productSize}
                         productColor={product.productColor}
                         price={product.price}
+                        priceNumeric={product.priceNumeric}
                         rating={product.rating}
                         reviewCount={product.reviewCount}
+                        color={product.color}
+                        category={product.category}
+                        clothingType={product.clothingType}
                         size="medium"
                         onAddToCart={() => {}}
                         onProductClick={handleProductClick}

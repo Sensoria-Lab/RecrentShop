@@ -6,13 +6,18 @@ import Img from '../shared/Img';
 export interface ProductCardProps {
   id?: number;
   image: string;
+  images?: string[]; // Multiple product images
   title: string;
   subtitle?: string; // Вторая строка названия (модель/бренд)
   productSize?: string; // Размер товара (XL, L, и т.д.)
   productColor?: string; // Цвет товара (white, black, и т.д.)
   price: string;
+  priceNumeric?: number;
   rating?: number;
   reviewCount?: number;
+  color?: string; // Цвет для логики переключения
+  category?: 'mousepads' | 'clothing';
+  clothingType?: 'hoodie' | 'tshirt' | 'sleeve';
   size?: 'small' | 'medium' | 'large' | 'small-catalog';
   onAddToCart?: () => void;
   onProductClick?: (productData: ProductCardProps) => void;
@@ -21,13 +26,18 @@ export interface ProductCardProps {
 const ProductCard: React.FC<ProductCardProps> = ({
   id,
   image,
+  images,
   title,
   subtitle,
   productSize,
   productColor,
   price,
+  priceNumeric,
   rating = 5,
   reviewCount,
+  color,
+  category,
+  clothingType,
   size = 'medium',
   onAddToCart,
   onProductClick
@@ -82,13 +92,18 @@ const ProductCard: React.FC<ProductCardProps> = ({
       onProductClick({
         id,
         image,
+        images,
         title,
         subtitle,
         productSize,
         productColor,
         price,
+        priceNumeric,
         rating,
         reviewCount,
+        color,
+        category,
+        clothingType,
         size
       });
     }
