@@ -12,6 +12,7 @@ const Header: React.FC<HeaderProps> = ({ className = '', onNavigate }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const [visible, setVisible] = useState(true);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { getTotalItems } = useCart();
   const lastY = useRef(0);
   const [isMouseNearTop, setIsMouseNearTop] = useState(false);
@@ -63,11 +64,11 @@ const Header: React.FC<HeaderProps> = ({ className = '', onNavigate }) => {
   const isActive = (target: string) => (target === '/' ? path === '/' : path.startsWith(target));
 
   return (
-    <header className={`relative bg-gradient-to-b from-black/80 to-black/60 backdrop-blur-2xl border border-white/10 rounded-2xl px-6 py-4 transition-all duration-300 shadow-2xl shadow-black/50 ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4 pointer-events-none'} ${className}`}>
+    <header className={`relative bg-gradient-to-b from-black/80 to-black/60 backdrop-blur-2xl border border-white/10 rounded-2xl px-4 sm:px-6 py-3 sm:py-4 transition-all duration-300 shadow-2xl shadow-black/50 ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4 pointer-events-none'} ${className}`}>
       {/* Bottom gradient border */}
       <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
       
-      <div className="grid grid-cols-3 items-center gap-4">
+      <div className="grid grid-cols-3 items-center gap-2 sm:gap-4">
         {/* Left: Logo */}
         <div className="flex justify-start">
           <button
@@ -118,12 +119,22 @@ const Header: React.FC<HeaderProps> = ({ className = '', onNavigate }) => {
 
         {/* Mobile menu button (center on mobile) */}
         <div className="md:hidden flex justify-center">
-          <button className="flex items-center justify-center w-10 h-10 rounded-lg hover:bg-white/10 transition-colors focus:outline-none focus:ring-2 focus:ring-white/30">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-white">
-              <line x1="3" y1="12" x2="21" y2="12"/>
-              <line x1="3" y1="6" x2="21" y2="6"/>
-              <line x1="3" y1="18" x2="21" y2="18"/>
-            </svg>
+          <button 
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="flex items-center justify-center w-10 h-10 rounded-lg hover:bg-white/10 transition-colors focus:outline-none focus:ring-2 focus:ring-white/30"
+          >
+            {mobileMenuOpen ? (
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-white">
+                <line x1="18" y1="6" x2="6" y2="18"/>
+                <line x1="6" y1="6" x2="18" y2="18"/>
+              </svg>
+            ) : (
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-white">
+                <line x1="3" y1="12" x2="21" y2="12"/>
+                <line x1="3" y1="6" x2="21" y2="6"/>
+                <line x1="3" y1="18" x2="21" y2="18"/>
+              </svg>
+            )}
           </button>
         </div>
 
@@ -153,6 +164,35 @@ const Header: React.FC<HeaderProps> = ({ className = '', onNavigate }) => {
           </button>
         </div>
       </div>
+
+      {/* Mobile Navigation Menu */}
+      {mobileMenuOpen && (
+        <nav className="md:hidden mt-4 pt-4 border-t border-white/10 space-y-2">
+          {[
+            { path: '/catalog', label: 'Каталог' },
+            { path: '/contacts', label: 'Контакты' },
+            { path: '/info', label: 'Информация' }
+          ].map(({ path: targetPath, label }) => {
+            const active = isActive(targetPath);
+            return (
+              <button
+                key={targetPath}
+                onClick={() => {
+                  go(targetPath.slice(1));
+                  setMobileMenuOpen(false);
+                }}
+                className={`w-full text-left font-manrope font-semibold text-base px-4 py-3 rounded-xl transition-all duration-300 ${
+                  active 
+                    ? 'text-white bg-white/10' 
+                    : 'text-white/60 hover:text-white hover:bg-white/5'
+                }`}
+              >
+                {label}
+              </button>
+            );
+          })}
+        </nav>
+      )}
     </header>
   );
 };

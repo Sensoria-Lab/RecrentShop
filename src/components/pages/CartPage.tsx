@@ -18,17 +18,17 @@ const CartPage: React.FC = () => {
 
   return (
     <PageLayout>
-      <div className="min-h-screen px-8">
+      <div className="min-h-screen px-4 sm:px-6 md:px-8">
         <div className="max-w-7xl mx-auto">
           {/* Background container */}
-          <div className="bg-black/40 backdrop-blur rounded-xl p-12 lg:p-16">
+          <div className="bg-black/40 backdrop-blur rounded-xl p-4 sm:p-6 md:p-10 lg:p-12 xl:p-16">
             {/* Page Title */}
-            <div className="text-center mb-16">
-              <h1 className="text-white font-manrope font-bold text-5xl lg:text-6xl mb-4 drop-shadow-[0_4px_12px_rgba(0,0,0,0.9)]">
+            <div className="text-center mb-8 sm:mb-12 md:mb-16">
+              <h1 className="text-white font-manrope font-bold text-3xl sm:text-4xl md:text-5xl lg:text-6xl mb-3 sm:mb-4 drop-shadow-[0_4px_12px_rgba(0,0,0,0.9)]">
                 Корзина
               </h1>
-              <div className="w-32 h-1 bg-white/40 mx-auto"></div>
-              <p className="text-xl text-white/70 font-manrope mt-6">
+              <div className="w-24 sm:w-32 h-1 bg-white/40 mx-auto"></div>
+              <p className="text-base sm:text-lg md:text-xl text-white/70 font-manrope mt-4 sm:mt-6">
                 {items.length === 0
                   ? 'Ваша корзина пуста'
                   : `Товаров в корзине: ${items.reduce((sum, item) => sum + item.quantity, 0)}`}
@@ -37,18 +37,18 @@ const CartPage: React.FC = () => {
 
           {items.length === 0 ? (
             /* Empty Cart State */
-            <div className="flex flex-col items-center justify-center py-20">
-              <div className="relative overflow-hidden rounded-2xl max-w-2xl text-center">
+            <div className="flex flex-col items-center justify-center py-10 sm:py-16 md:py-20">
+              <div className="relative overflow-hidden rounded-xl sm:rounded-2xl max-w-2xl text-center w-full">
                 {/* Animated gradient background */}
                 <div className="absolute inset-0 bg-gradient-to-br from-zinc-800/40 via-zinc-900/60 to-black/80 backdrop-blur-sm border border-white/10" />
                 
                 {/* Shine effect */}
                 <div className="absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-transparent" />
 
-                <div className="relative z-10 p-16">
-                  <div className="mb-8">
+                <div className="relative z-10 p-6 sm:p-10 md:p-16">
+                  <div className="mb-6 sm:mb-8">
                     <svg
-                      className="w-32 h-32 mx-auto text-white/20"
+                      className="w-20 h-20 sm:w-28 sm:h-28 md:w-32 md:h-32 mx-auto text-white/20"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -61,15 +61,15 @@ const CartPage: React.FC = () => {
                       />
                     </svg>
                   </div>
-                  <h2 className="text-3xl font-manrope font-bold text-white mb-4">
+                  <h2 className="text-xl sm:text-2xl md:text-3xl font-manrope font-bold text-white mb-3 sm:mb-4">
                     Корзина пуста
                   </h2>
-                  <p className="text-xl text-white/60 mb-8">
+                  <p className="text-base sm:text-lg md:text-xl text-white/60 mb-6 sm:mb-8">
                     Добавьте товары из каталога, чтобы оформить заказ
                   </p>
                   <button
                     onClick={handleContinueShopping}
-                    className="px-10 py-4 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-manrope font-semibold text-xl rounded-xl transition-all duration-200 shadow-lg hover:shadow-blue-500/50 hover:scale-105"
+                    className="px-6 sm:px-8 md:px-10 py-3 sm:py-3.5 md:py-4 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-manrope font-semibold text-base sm:text-lg md:text-xl rounded-xl transition-all duration-200 shadow-lg hover:shadow-blue-500/50 hover:scale-105"
                   >
                     Перейти в каталог
                   </button>
@@ -78,7 +78,7 @@ const CartPage: React.FC = () => {
             </div>
           ) : (
             /* Cart with Items */
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
               {/* Cart Items - Left Column */}
               <div className="lg:col-span-2 space-y-4">
                 {items.map((item) => (

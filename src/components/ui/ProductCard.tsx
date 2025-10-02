@@ -36,36 +36,36 @@ const ProductCard: React.FC<ProductCardProps> = ({
   
   const sizeClasses = {
     small: {
-      container: 'w-[330px]',
-      image: 'h-[280px]',
-      imageContainer: 'w-[280px]',
-      title: 'text-lg',
-      price: 'text-xl',
-      button: 'px-[80px] py-[4px] text-lg'
+      container: 'w-full max-w-[330px]',
+      image: 'h-[200px] sm:h-[240px] md:h-[280px]',
+      imageContainer: 'w-full max-w-[280px]',
+      title: 'text-base sm:text-lg',
+      price: 'text-lg sm:text-xl',
+      button: 'px-4 sm:px-6 md:px-[80px] py-[4px] text-sm sm:text-base md:text-lg'
     },
     medium: {
-      container: 'w-[364px]',
-      image: 'h-[289px]',
+      container: 'w-full max-w-[364px]',
+      image: 'h-[220px] sm:h-[260px] md:h-[289px]',
       imageContainer: 'w-full',
-      title: 'text-xl',
-      price: 'text-2xl',
-      button: 'px-[100px] py-[5px] text-xl'
+      title: 'text-base sm:text-lg md:text-xl',
+      price: 'text-lg sm:text-xl md:text-2xl',
+      button: 'px-4 sm:px-6 md:px-[100px] py-[5px] text-sm sm:text-base md:text-xl'
     },
     large: {
-      container: 'w-[378px]',
-      image: 'h-[392px]',
-      imageContainer: 'w-[328px]',
-      title: 'text-xl',
-      price: 'text-2xl',
-      button: 'px-[104px] py-[5px] text-xl'
+      container: 'w-full max-w-[378px]',
+      image: 'h-[280px] sm:h-[340px] md:h-[392px]',
+      imageContainer: 'w-full max-w-[328px]',
+      title: 'text-base sm:text-lg md:text-xl',
+      price: 'text-lg sm:text-xl md:text-2xl',
+      button: 'px-4 sm:px-6 md:px-[104px] py-[5px] text-sm sm:text-base md:text-xl'
     },
     'small-catalog': {
-      container: 'w-[340px]', // Увеличено для премиум вида
-      image: 'h-[290px]', // Увеличено пропорционально
-      imageContainer: 'w-[300px]', // Увеличено пропорционально
-      title: 'text-xl', // Увеличен размер шрифта
-      price: 'text-2xl', // Увеличен размер шрифта
-      button: 'px-[95px] py-[6px] text-lg' // Увеличено под новую ширину
+      container: 'w-full max-w-[340px]',
+      image: 'h-[220px] sm:h-[260px] md:h-[290px]',
+      imageContainer: 'w-full max-w-[300px]',
+      title: 'text-base sm:text-lg md:text-xl',
+      price: 'text-lg sm:text-xl md:text-2xl',
+      button: 'px-4 sm:px-6 md:px-[95px] py-[6px] text-sm sm:text-base md:text-lg'
     }
   };
 
@@ -115,8 +115,8 @@ const ProductCard: React.FC<ProductCardProps> = ({
 
   // Различные стили для каталога и других страниц
   const cardStyles = size === 'small-catalog'
-    ? `relative overflow-hidden rounded-2xl p-6 ${classes.container} flex flex-col cursor-pointer group`
-    : `bg-black/90 backdrop-blur-sm rounded-xl p-6 ${classes.container} flex flex-col border border-white/20 shadow-2xl hover:shadow-white/10 hover:border-white/30 transition-all duration-300 hover:transform hover:scale-105 ${onProductClick ? 'cursor-pointer' : ''}`;
+    ? `relative overflow-hidden rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 ${classes.container} flex flex-col cursor-pointer group`
+    : `bg-black/90 backdrop-blur-sm rounded-xl p-4 sm:p-5 md:p-6 ${classes.container} flex flex-col border border-white/20 shadow-2xl hover:shadow-white/10 hover:border-white/30 transition-all duration-300 hover:transform hover:scale-105 ${onProductClick ? 'cursor-pointer' : ''}`;
 
 
   return (
@@ -136,7 +136,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
       {/* Content wrapper with relative positioning */}
       <div className="relative z-10">
         {/* Product Image */}
-        <div className={`${classes.image} relative rounded-xl mx-auto ${classes.imageContainer} ${size === 'small-catalog' ? 'bg-white/5 p-4 transition-all duration-500' : 'rounded-lg overflow-hidden'}`}>
+        <div className={`${classes.image} relative rounded-lg sm:rounded-xl mx-auto ${classes.imageContainer} ${size === 'small-catalog' ? 'bg-white/5 p-3 sm:p-4 transition-all duration-500' : 'rounded-lg overflow-hidden'}`}>
           <Img
             src={image}
             alt={title}
@@ -145,7 +145,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
         </div>
 
         {/* Product Title */}
-        <div className="h-[90px] flex flex-col justify-between mt-4">
+        <div className="min-h-[70px] sm:min-h-[80px] md:min-h-[90px] flex flex-col justify-between mt-3 sm:mt-4">
         <div className="flex-1 flex flex-col justify-start">
           <h3 className={`text-white font-manrope font-extrabold ${classes.title} leading-tight tracking-wide drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]`}>
             {title}
@@ -156,14 +156,14 @@ const ProductCard: React.FC<ProductCardProps> = ({
             </p>
           )}
         </div>
-        <div className="h-[22px] flex items-end gap-4">
+        <div className="min-h-[18px] sm:min-h-[20px] md:min-h-[22px] flex items-end gap-2 sm:gap-3 md:gap-4 flex-wrap">
           {productSize && (
-            <span className="text-white/80 font-manrope font-medium text-sm">
+            <span className="text-white/80 font-manrope font-medium text-xs sm:text-sm">
               Размер: {productSize}
             </span>
           )}
           {productColor && (
-            <span className="text-white/80 font-manrope font-medium text-sm">
+            <span className="text-white/80 font-manrope font-medium text-xs sm:text-sm">
               Цвет: {productColor}
             </span>
           )}
@@ -171,21 +171,21 @@ const ProductCard: React.FC<ProductCardProps> = ({
       </div>
 
         {/* Rating */}
-        <div className="mt-3">
+        <div className="mt-2 sm:mt-3">
           <StarRating rating={rating} reviewCount={reviewCount} size="sm" />
         </div>
 
         {/* Divider */}
-        <div className="w-full h-px bg-gradient-to-r from-transparent via-white/25 to-transparent my-4"></div>
+        <div className="w-full h-px bg-gradient-to-r from-transparent via-white/25 to-transparent my-3 sm:my-4"></div>
 
         {/* Price and Add to Cart */}
-        <div className="mt-auto flex items-center justify-between">
+        <div className="mt-auto flex items-center justify-between gap-2 flex-wrap sm:flex-nowrap">
           <span className={`text-white font-manrope font-extrabold ${classes.price} tracking-wide drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]`}>
             {price}
           </span>
           <button
             onClick={handleAddToCart}
-            className="add-to-cart-button px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold rounded-lg transition-all duration-200 shadow-lg hover:shadow-blue-500/50 hover:scale-105 active:scale-95"
+            className="add-to-cart-button px-3 sm:px-4 py-1.5 sm:py-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold text-xs sm:text-sm md:text-base rounded-lg transition-all duration-200 shadow-lg hover:shadow-blue-500/50 hover:scale-105 active:scale-95 whitespace-nowrap"
           >
             В корзину
           </button>

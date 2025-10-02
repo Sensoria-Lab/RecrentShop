@@ -165,22 +165,22 @@ const ProductPage: React.FC = () => {
       {/* Main layout container */}
       <div className="relative z-10 min-h-screen flex flex-col">
         {/* Header */}
-        <div className="flex justify-center px-12 py-4 sticky top-0 z-50">
+        <div className="flex justify-center px-4 sm:px-8 md:px-12 py-4 sticky top-0 z-50">
           <div className="max-w-[900px] w-full">
             <Header />
           </div>
         </div>
 
         {/* Main content with increased padding */}
-        <main className="flex-1 px-20 py-12">
+        <main className="flex-1 px-4 sm:px-8 md:px-12 lg:px-20 py-6 sm:py-8 md:py-12">
           {/* Product section */}
-          <div className="bg-black/40 backdrop-blur rounded-xl p-16 mb-12">
-            <div className="flex gap-16 items-start justify-between">
+          <div className="bg-black/40 backdrop-blur rounded-xl p-4 sm:p-6 md:p-10 lg:p-16 mb-6 sm:mb-8 md:mb-12">
+            <div className="flex flex-col lg:flex-row gap-6 sm:gap-8 md:gap-12 lg:gap-16 items-start justify-between">
               {/* Product info - left side */}
-              <div className="flex-1 max-w-3xl">
+              <div className="flex-1 max-w-3xl w-full lg:w-auto">
                 {/* Title and rating */}
-                <div className="mb-12">
-                  <h1 className="text-white font-manrope font-bold text-5xl lg:text-6xl mb-6 leading-tight drop-shadow-[0_4px_12px_rgba(0,0,0,0.9)]">
+                <div className="mb-6 sm:mb-8 md:mb-12">
+                  <h1 className="text-white font-manrope font-bold text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl mb-4 sm:mb-6 leading-tight drop-shadow-[0_4px_12px_rgba(0,0,0,0.9)]">
                     <DecryptedText
                       text={`${productData?.title || 'Коврик для мыши'} ${productData?.subtitle || '"geoid-white"'}`}
                       duration={900}
@@ -189,22 +189,22 @@ const ProductPage: React.FC = () => {
                       showAnimation={false}
                     />
                   </h1>
-                  <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-2 sm:gap-3">
                     <StarRating rating={productData?.rating || 5} />
-                    <span className="text-white font-manrope font-medium text-xl">({productData?.reviewCount || 29})</span>
+                    <span className="text-white font-manrope font-medium text-base sm:text-lg md:text-xl">({productData?.reviewCount || 29})</span>
                   </div>
                 </div>
 
                 {/* Product options using pre-made selectors */}
-                <div className="space-y-8 mb-12">
+                <div className="space-y-4 sm:space-y-6 md:space-y-8 mb-6 sm:mb-8 md:mb-12">
                   {/* Colors */}
                   <div className="space-y-3">
-                    <div className="flex gap-3">
+                    <div className="flex gap-2 sm:gap-3">
                       {colorOptions.map((option) => (
                         <button
                           key={option.id}
                           onClick={() => setSelectedColor(option.id)}
-                          className={`w-12 h-12 rounded-lg border-2 transition-all ${
+                          className={`w-10 h-10 sm:w-12 sm:h-12 rounded-lg border-2 transition-all ${
                             selectedColor === option.id
                               ? 'border-blue-500'
                               : 'border-transparent hover:border-gray-400'
@@ -236,15 +236,15 @@ const ProductPage: React.FC = () => {
                 </div>
 
                 {/* Price and actions */}
-                <div className="space-y-6">
-                  <div className="text-white font-manrope font-bold text-5xl drop-shadow-[0_3px_10px_rgba(0,0,0,0.8)]">
+                <div className="space-y-4 sm:space-y-6">
+                  <div className="text-white font-manrope font-bold text-3xl sm:text-4xl md:text-5xl drop-shadow-[0_3px_10px_rgba(0,0,0,0.8)]">
                     {productData?.price || '3000 р.'}
                   </div>
-                  <div className="flex gap-10 items-center">
+                  <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 md:gap-10 items-stretch sm:items-center">
                     <button 
                       onClick={handleAddToCart}
                       disabled={flyingToCart}
-                      className={`bg-blue-600 hover:bg-blue-700 text-white font-manrope font-semibold text-2xl px-10 py-4 rounded-xl transition-all duration-200 ${
+                      className={`bg-blue-600 hover:bg-blue-700 text-white font-manrope font-semibold text-base sm:text-lg md:text-xl lg:text-2xl px-6 sm:px-8 md:px-10 py-3 sm:py-3.5 md:py-4 rounded-xl transition-all duration-200 ${
                         flyingToCart ? 'scale-95 opacity-50 cursor-not-allowed' : 'hover:scale-105 active:scale-95'
                       }`}
                     >
@@ -256,17 +256,17 @@ const ProductPage: React.FC = () => {
               </div>
 
               {/* Product images - right side */}
-              <div className="flex-shrink-0 w-[580px]">
-                <div className="bg-white/5 rounded-xl p-8">
+              <div className="flex-shrink-0 w-full lg:w-[580px]">
+                <div className="bg-white/5 rounded-xl p-4 sm:p-6 md:p-8">
                   {/* Main image with navigation arrows */}
-                  <div className="mb-8 relative flex items-center">
+                  <div className="mb-4 sm:mb-6 md:mb-8 relative flex items-center">
                     {/* Left arrow - outside image */}
                     <button
                       onClick={() => setSelectedImage(selectedImage === 0 ? productImages.length - 1 : selectedImage - 1)}
-                      className="bg-black/50 hover:bg-black/70 text-white p-3 rounded-full transition-colors mr-4 flex-shrink-0"
+                      className="bg-black/50 hover:bg-black/70 text-white p-2 sm:p-3 rounded-full transition-colors mr-2 sm:mr-4 flex-shrink-0"
                       aria-label="Previous image"
                     >
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="sm:w-5 sm:h-5">
                         <path d="M15 18l-6-6 6-6"/>
                       </svg>
                     </button>
@@ -278,32 +278,32 @@ const ProductPage: React.FC = () => {
                         key={`${selectedSize}-${selectedColor}-${selectedImage}`}
                         src={productImages[selectedImage]}
                         alt="Product"
-                        className="w-full h-96 object-contain rounded-xl transition-all duration-300"
+                        className="w-full h-48 sm:h-64 md:h-80 lg:h-96 object-contain rounded-xl transition-all duration-300"
                       />
                     </div>
 
                     {/* Right arrow - outside image */}
                     <button
                       onClick={() => setSelectedImage(selectedImage === productImages.length - 1 ? 0 : selectedImage + 1)}
-                      className="bg-black/50 hover:bg-black/70 text-white p-3 rounded-full transition-colors ml-4 flex-shrink-0"
+                      className="bg-black/50 hover:bg-black/70 text-white p-2 sm:p-3 rounded-full transition-colors ml-2 sm:ml-4 flex-shrink-0"
                       aria-label="Next image"
                     >
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="sm:w-5 sm:h-5">
                         <path d="M9 18l6-6-6-6"/>
                       </svg>
                     </button>
                   </div>
 
                   {/* Divider */}
-                  <div className="w-full h-px bg-white/20 mb-8"></div>
+                  <div className="w-full h-px bg-white/20 mb-4 sm:mb-6 md:mb-8"></div>
 
                   {/* Thumbnail images */}
-                  <div className="flex gap-4 justify-center">
+                  <div className="flex gap-2 sm:gap-3 md:gap-4 justify-center">
                     {productImages.map((image, index) => (
                       <button
                         key={index}
                         onClick={() => setSelectedImage(index)}
-                        className={`w-24 h-20 rounded-xl overflow-hidden border-2 transition-all ${
+                        className={`w-16 h-14 sm:w-20 sm:h-16 md:w-24 md:h-20 rounded-lg sm:rounded-xl overflow-hidden border-2 transition-all ${
                           selectedImage === index
                             ? 'border-white shadow-lg shadow-white/20'
                             : 'border-transparent opacity-70 hover:opacity-100 hover:border-white/30'
@@ -324,12 +324,12 @@ const ProductPage: React.FC = () => {
           </div>
 
           {/* Specifications */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 md:gap-8 mb-4 sm:mb-6 md:mb-8">
             {/* Description */}
-            <div className="bg-black/40 backdrop-blur rounded-xl p-12">
-              <h3 className="text-white font-manrope font-semibold text-4xl mb-4">Описание</h3>
-              <div className="w-48 h-px bg-white/40 mb-6"></div>
-              <div className="text-white font-manrope font-medium text-lg leading-relaxed space-y-4">
+            <div className="bg-black/40 backdrop-blur rounded-xl p-4 sm:p-6 md:p-10 lg:p-12">
+              <h3 className="text-white font-manrope font-semibold text-2xl sm:text-3xl md:text-4xl mb-3 sm:mb-4">Описание</h3>
+              <div className="w-32 sm:w-40 md:w-48 h-px bg-white/40 mb-4 sm:mb-6"></div>
+              <div className="text-white font-manrope font-medium text-sm sm:text-base md:text-lg leading-relaxed space-y-3 sm:space-y-4">
                 <p>{descriptions[selectedType as keyof typeof descriptions].main}</p>
                 {descriptions[selectedType as keyof typeof descriptions].details.map((detail, index) => (
                   <p key={index}>{detail}</p>
@@ -338,66 +338,66 @@ const ProductPage: React.FC = () => {
             </div>
 
             {/* Specifications */}
-            <div className="space-y-8">
+            <div className="space-y-4 sm:space-y-6 md:space-y-8">
               {/* Characteristics */}
-              <div className="bg-black/40 backdrop-blur rounded-xl p-12">
-                <h3 className="text-white font-manrope font-semibold text-4xl mb-4">Характеристики</h3>
-                <div className="w-80 h-px bg-white/40 mb-6"></div>
-                <div className="space-y-4">
-                  <div className="flex justify-between">
-                    <span className="text-white font-manrope font-medium text-xl">Материал покрытия</span>
-                    <span className="text-white font-manrope font-medium text-xl">{descriptions[selectedType as keyof typeof descriptions].material}</span>
+              <div className="bg-black/40 backdrop-blur rounded-xl p-4 sm:p-6 md:p-10 lg:p-12">
+                <h3 className="text-white font-manrope font-semibold text-2xl sm:text-3xl md:text-4xl mb-3 sm:mb-4">Характеристики</h3>
+                <div className="w-48 sm:w-64 md:w-80 h-px bg-white/40 mb-4 sm:mb-6"></div>
+                <div className="space-y-3 sm:space-y-4">
+                  <div className="flex flex-col sm:flex-row justify-between gap-1 sm:gap-2">
+                    <span className="text-white font-manrope font-medium text-sm sm:text-base md:text-lg lg:text-xl">Материал покрытия</span>
+                    <span className="text-white/80 sm:text-white font-manrope font-medium text-sm sm:text-base md:text-lg lg:text-xl">{descriptions[selectedType as keyof typeof descriptions].material}</span>
                   </div>
-                  <div className="flex justify-between">
-                    <span className="text-white font-manrope font-medium text-xl">Материал основания</span>
-                    <span className="text-white font-manrope font-medium text-xl">Резина</span>
+                  <div className="flex flex-col sm:flex-row justify-between gap-1 sm:gap-2">
+                    <span className="text-white font-manrope font-medium text-sm sm:text-base md:text-lg lg:text-xl">Материал основания</span>
+                    <span className="text-white/80 sm:text-white font-manrope font-medium text-sm sm:text-base md:text-lg lg:text-xl">Резина</span>
                   </div>
-                  <div className="flex justify-between">
-                    <span className="text-white font-manrope font-medium text-xl">Цвет</span>
-                    <span className="text-white font-manrope font-medium text-xl">{colorNames[selectedColor as keyof typeof colorNames]}</span>
+                  <div className="flex flex-col sm:flex-row justify-between gap-1 sm:gap-2">
+                    <span className="text-white font-manrope font-medium text-sm sm:text-base md:text-lg lg:text-xl">Цвет</span>
+                    <span className="text-white/80 sm:text-white font-manrope font-medium text-sm sm:text-base md:text-lg lg:text-xl">{colorNames[selectedColor as keyof typeof colorNames]}</span>
                   </div>
                 </div>
               </div>
 
               {/* Dimensions */}
-              <div className="bg-black/40 backdrop-blur rounded-xl p-12">
-                <h3 className="text-white font-manrope font-semibold text-4xl mb-4">Размеры</h3>
-                <div className="w-44 h-px bg-white/40 mb-6"></div>
-                <div className="space-y-4">
-                  <div className="flex justify-between">
-                    <span className="text-white font-manrope font-medium text-xl">Толщина</span>
-                    <span className="text-white font-manrope font-medium text-xl">4 мм</span>
+              <div className="bg-black/40 backdrop-blur rounded-xl p-4 sm:p-6 md:p-10 lg:p-12">
+                <h3 className="text-white font-manrope font-semibold text-2xl sm:text-3xl md:text-4xl mb-3 sm:mb-4">Размеры</h3>
+                <div className="w-32 sm:w-36 md:w-44 h-px bg-white/40 mb-4 sm:mb-6"></div>
+                <div className="space-y-3 sm:space-y-4">
+                  <div className="flex flex-col sm:flex-row justify-between gap-1 sm:gap-2">
+                    <span className="text-white font-manrope font-medium text-sm sm:text-base md:text-lg lg:text-xl">Толщина</span>
+                    <span className="text-white/80 sm:text-white font-manrope font-medium text-sm sm:text-base md:text-lg lg:text-xl">4 мм</span>
                   </div>
-                  <div className="flex justify-between">
-                    <span className="text-white font-manrope font-medium text-xl">Длина</span>
-                    <span className="text-white font-manrope font-medium text-xl">{dimensions[selectedSize as keyof typeof dimensions].length}</span>
+                  <div className="flex flex-col sm:flex-row justify-between gap-1 sm:gap-2">
+                    <span className="text-white font-manrope font-medium text-sm sm:text-base md:text-lg lg:text-xl">Длина</span>
+                    <span className="text-white/80 sm:text-white font-manrope font-medium text-sm sm:text-base md:text-lg lg:text-xl">{dimensions[selectedSize as keyof typeof dimensions].length}</span>
                   </div>
-                  <div className="flex justify-between">
-                    <span className="text-white font-manrope font-medium text-xl">Ширина</span>
-                    <span className="text-white font-manrope font-medium text-xl">{dimensions[selectedSize as keyof typeof dimensions].width}</span>
+                  <div className="flex flex-col sm:flex-row justify-between gap-1 sm:gap-2">
+                    <span className="text-white font-manrope font-medium text-sm sm:text-base md:text-lg lg:text-xl">Ширина</span>
+                    <span className="text-white/80 sm:text-white font-manrope font-medium text-sm sm:text-base md:text-lg lg:text-xl">{dimensions[selectedSize as keyof typeof dimensions].width}</span>
                   </div>
                 </div>
               </div>
 
               {/* Article */}
-              <div className="bg-black/40 backdrop-blur rounded-xl p-12">
-                <h3 className="text-white font-manrope font-semibold text-4xl mb-4">Артикул</h3>
-                <div className="w-44 h-px bg-white/40 mb-6"></div>
-                <div className="flex justify-between">
-                  <span className="text-white font-manrope font-medium text-xl">№</span>
-                  <span className="text-white font-manrope font-medium text-xl">110</span>
+              <div className="bg-black/40 backdrop-blur rounded-xl p-4 sm:p-6 md:p-10 lg:p-12">
+                <h3 className="text-white font-manrope font-semibold text-2xl sm:text-3xl md:text-4xl mb-3 sm:mb-4">Артикул</h3>
+                <div className="w-32 sm:w-36 md:w-44 h-px bg-white/40 mb-4 sm:mb-6"></div>
+                <div className="flex flex-col sm:flex-row justify-between gap-1 sm:gap-2">
+                  <span className="text-white font-manrope font-medium text-sm sm:text-base md:text-lg lg:text-xl">№</span>
+                  <span className="text-white/80 sm:text-white font-manrope font-medium text-sm sm:text-base md:text-lg lg:text-xl">110</span>
                 </div>
               </div>
             </div>
           </div>
 
           {/* Reviews */}
-          <div className="bg-black/40 backdrop-blur rounded-xl p-12">
-            <h3 className="text-white font-manrope font-bold text-5xl mb-8 text-center">Отзывы</h3>
+          <div className="bg-black/40 backdrop-blur rounded-xl p-4 sm:p-6 md:p-10 lg:p-12">
+            <h3 className="text-white font-manrope font-bold text-2xl sm:text-3xl md:text-4xl lg:text-5xl mb-4 sm:mb-6 md:mb-8 text-center">Отзывы</h3>
 
-            <div className="space-y-8">
+            <div className="space-y-4 sm:space-y-6 md:space-y-8">
               {/* Review 1 */}
-              <div className="bg-black/40 p-12 rounded-xl border-b border-white/20">
+              <div className="bg-black/40 p-4 sm:p-6 md:p-10 lg:p-12 rounded-xl border-b border-white/20">
                 <div className="flex justify-between items-center mb-6">
                   <h4 className="text-white font-manrope font-bold text-3xl">Никита Литвиненко</h4>
                   <StarRating rating={5} />

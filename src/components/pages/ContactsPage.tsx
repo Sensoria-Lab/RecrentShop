@@ -12,7 +12,7 @@ interface ContactCardProps {
 
 const ContactCard: React.FC<ContactCardProps> = ({ title, onClick, icon, preview }) => (
   <div 
-    className="relative overflow-hidden rounded-2xl cursor-pointer group"
+    className="relative overflow-hidden rounded-xl sm:rounded-2xl cursor-pointer group"
     onClick={onClick}
   >
     {/* Animated gradient background */}
@@ -24,21 +24,21 @@ const ContactCard: React.FC<ContactCardProps> = ({ title, onClick, icon, preview
     </div>
     
     {/* Content */}
-    <div className="relative p-8 flex items-center gap-6">
+    <div className="relative p-4 sm:p-6 md:p-8 flex items-center gap-3 sm:gap-4 md:gap-6">
       {/* Icon container */}
-      <div className="flex-shrink-0 w-14 h-14 rounded-xl bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-sm flex items-center justify-center border border-white/10 group-hover:scale-110 group-hover:border-white/20 transition-all duration-300">
+      <div className="flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-lg sm:rounded-xl bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-sm flex items-center justify-center border border-white/10 group-hover:scale-110 group-hover:border-white/20 transition-all duration-300">
         <div className="text-white/90 group-hover:text-white transition-colors">
           {icon}
         </div>
       </div>
       
       {/* Text */}
-      <div className="flex-1">
-        <h3 className="text-white font-manrope font-semibold text-xl group-hover:text-white/90 transition-colors drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
+      <div className="flex-1 min-w-0">
+        <h3 className="text-white font-manrope font-semibold text-base sm:text-lg md:text-xl group-hover:text-white/90 transition-colors drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)] truncate">
           {title}
         </h3>
         {preview && (
-          <p className="text-white/60 text-sm mt-1 group-hover:text-white/70 transition-colors">
+          <p className="text-white/60 text-xs sm:text-sm mt-1 group-hover:text-white/70 transition-colors truncate">
             {preview}
           </p>
         )}
@@ -46,7 +46,7 @@ const ContactCard: React.FC<ContactCardProps> = ({ title, onClick, icon, preview
       
       {/* Arrow */}
       <div className="flex-shrink-0 transform group-hover:translate-x-1 transition-transform duration-300">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="text-white/40 group-hover:text-white/80">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="text-white/40 group-hover:text-white/80 sm:w-5 sm:h-5">
           <path d="M9 6l6 6-6 6"/>
         </svg>
       </div>

@@ -13,6 +13,7 @@ import type {
 
 const CatalogPage: React.FC = () => {
   const navigate = useNavigate();
+  const [filtersOpen, setFiltersOpen] = useState(false);
   
   // Filter states
   const [sortBy, setSortBy] = useState<SortOption>('popularity');
@@ -85,36 +86,57 @@ const CatalogPage: React.FC = () => {
     <div className="relative min-h-screen w-full overflow-hidden">
       <div className="relative z-10 min-h-screen flex flex-col">
         {/* Header */}
-        <div className="flex justify-center px-12 py-4 sticky top-0 z-50">
+        <div className="flex justify-center px-4 sm:px-8 md:px-12 py-4 sticky top-0 z-50">
           <div className="max-w-[900px] w-full">
             <Header />
           </div>
         </div>
 
         {/* Main content */}
-        <main className="flex-1 px-20 py-12">
+        <main className="flex-1 px-4 sm:px-8 md:px-12 lg:px-20 py-6 sm:py-8 md:py-12">
           <div className="max-w-[1600px] mx-auto">
             {/* Page Title */}
-            <div className="text-center mb-12">
-              <h1 className="text-white font-manrope font-bold text-5xl lg:text-6xl mb-6 drop-shadow-[0_4px_12px_rgba(0,0,0,0.9)]">
+            <div className="text-center mb-6 sm:mb-8 md:mb-12">
+              <h1 className="text-white font-manrope font-bold text-3xl sm:text-4xl md:text-5xl lg:text-6xl mb-4 sm:mb-6 drop-shadow-[0_4px_12px_rgba(0,0,0,0.9)]">
                 Каталог товаров
               </h1>
-              <div className="w-32 h-1 bg-white/40 mx-auto"></div>
+              <div className="w-24 sm:w-32 h-1 bg-white/40 mx-auto"></div>
             </div>
 
-            <div className="flex gap-8">
+            {/* Mobile filter button */}
+            <div className="lg:hidden mb-4">
+              <button
+                onClick={() => setFiltersOpen(!filtersOpen)}
+                className="w-full bg-black/40 backdrop-blur text-white font-manrope font-semibold px-6 py-3 rounded-xl border border-white/20 hover:bg-black/60 transition-all flex items-center justify-between"
+              >
+                <span>Фильтры</span>
+                <svg 
+                  width="20" 
+                  height="20" 
+                  viewBox="0 0 24 24" 
+                  fill="none" 
+                  stroke="currentColor" 
+                  strokeWidth="2"
+                  className={`transition-transform ${filtersOpen ? 'rotate-180' : ''}`}
+                >
+                  <path d="M6 9l6 6 6-6"/>
+                </svg>
+              </button>
+            </div>
+
+            <div className="flex flex-col lg:flex-row gap-4 sm:gap-6 md:gap-8">
               {/* Filters Sidebar */}
-              <aside className="w-80 flex-shrink-0">
-                <div className="bg-black/40 backdrop-blur rounded-xl p-6 sticky top-28">
-                  <h2 className="text-white font-manrope font-bold text-xl mb-6">Фильтры</h2>
+              <aside className={`lg:w-80 w-full flex-shrink-0 ${filtersOpen ? 'block' : 'hidden lg:block'}`}>
+                <div className="bg-black/40 backdrop-blur rounded-xl p-4 sm:p-5 md:p-6 lg:sticky lg:top-28">
+                  <h2 className="text-white font-manrope font-bold text-lg sm:text-xl mb-4 sm:mb-6">Фильтры</h2>
                   
                   {/* Sort By */}
-                  <div className="mb-6">
-                    <label className="text-white/80 font-manrope text-sm mb-2 block">Сортировка</label>
+                  <div className="mb-4 sm:mb-6">
+                    <label className="text-white/80 font-manrope text-xs sm:text-sm mb-2 block">Сортировка</label>
                     <select
                       value={sortBy}
                       onChange={(e) => setSortBy(e.target.value as SortOption)}
-                      className="w-full bg-white/10 text-white border border-white/20 rounded-lg px-4 py-2 font-manrope focus:outline-none focus:border-white/40 transition-colors"
+                      className="w-full bg-white/10 text-white border border-white/20 rounded-lg px-3 sm:px-4 py-2 font-manrope text-sm sm:text-base focus:outline-none focus:border-white/40 transition-colors"
                     >
                       <option value="popularity">По популярности</option>
                       <option value="rating">По рейтингу</option>
@@ -124,8 +146,8 @@ const CatalogPage: React.FC = () => {
                   </div>
 
                   {/* Category Filter */}
-                  <div className="mb-6">
-                    <label className="text-white/80 font-manrope text-sm mb-2 block">Категория</label>
+                  <div className="mb-4 sm:mb-6">
+                    <label className="text-white/80 font-manrope text-xs sm:text-sm mb-2 block">Категория</label>
                     <div className="space-y-2">
                       {[
                         { value: 'all', label: 'Все товары' },
@@ -141,7 +163,7 @@ const CatalogPage: React.FC = () => {
                             onChange={(e) => setCategoryFilter(e.target.value as CategoryFilter)}
                             className="w-4 h-4 accent-white"
                           />
-                          <span className="text-white/70 font-manrope group-hover:text-white transition-colors">
+                          <span className="text-white/70 font-manrope text-sm sm:text-base group-hover:text-white transition-colors">
                             {option.label}
                           </span>
                         </label>
@@ -151,8 +173,8 @@ const CatalogPage: React.FC = () => {
 
                   {/* Clothing Type Filter */}
                   {(categoryFilter === 'clothing' || categoryFilter === 'all') && (
-                    <div className="mb-6">
-                      <label className="text-white/80 font-manrope text-sm mb-2 block">Тип одежды</label>
+                    <div className="mb-4 sm:mb-6">
+                      <label className="text-white/80 font-manrope text-xs sm:text-sm mb-2 block">Тип одежды</label>
                       <div className="space-y-2">
                         {[
                           { value: 'all', label: 'Вся одежда' },
@@ -178,8 +200,8 @@ const CatalogPage: React.FC = () => {
                   )}
 
                   {/* Color Filter */}
-                  <div className="mb-6">
-                    <label className="text-white/80 font-manrope text-sm mb-2 block">Цвет</label>
+                  <div className="mb-4 sm:mb-6">
+                    <label className="text-white/80 font-manrope text-xs sm:text-sm mb-2 block">Цвет</label>
                     <div className="space-y-2">
                       {[
                         { value: 'all', label: 'Все цвета' },
@@ -205,8 +227,8 @@ const CatalogPage: React.FC = () => {
                   </div>
 
                   {/* Size Filter */}
-                  <div className="mb-6">
-                    <label className="text-white/80 font-manrope text-sm mb-2 block">Размер</label>
+                  <div className="mb-4 sm:mb-6">
+                    <label className="text-white/80 font-manrope text-xs sm:text-sm mb-2 block">Размер</label>
                     <div className="space-y-2">
                       {[
                         { value: 'all', label: 'Все размеры' },
@@ -238,8 +260,8 @@ const CatalogPage: React.FC = () => {
                   </div>
 
                   {/* Price Range */}
-                  <div className="mb-6">
-                    <label className="text-white/80 font-manrope text-sm mb-2 block">
+                  <div className="mb-4 sm:mb-6">
+                    <label className="text-white/80 font-manrope text-xs sm:text-sm mb-2 block">
                       Цена: {priceRange[0]} - {priceRange[1]} р.
                     </label>
                     <input
@@ -254,8 +276,8 @@ const CatalogPage: React.FC = () => {
                   </div>
 
                   {/* Rating Filter */}
-                  <div className="mb-6">
-                    <label className="text-white/80 font-manrope text-sm mb-2 block">Минимальный рейтинг</label>
+                  <div className="mb-4 sm:mb-6">
+                    <label className="text-white/80 font-manrope text-xs sm:text-sm mb-2 block">Минимальный рейтинг</label>
                     <div className="space-y-2">
                       {[0, 3, 4, 5].map(rating => (
                         <label key={rating} className="flex items-center gap-2 cursor-pointer group">
@@ -285,8 +307,9 @@ const CatalogPage: React.FC = () => {
                       setClothingTypeFilter('all');
                       setPriceRange([0, 10000]);
                       setMinRating(0);
+                      setFiltersOpen(false);
                     }}
-                    className="w-full bg-white/10 hover:bg-white/20 text-white font-manrope py-2 rounded-lg transition-colors"
+                    className="w-full bg-white/10 hover:bg-white/20 text-white font-manrope py-2 text-sm sm:text-base rounded-lg transition-colors"
                   >
                     Сбросить фильтры
                   </button>
@@ -298,13 +321,13 @@ const CatalogPage: React.FC = () => {
                 
                 
                 {filteredProducts.length === 0 ? (
-                  <div className="bg-black/40 backdrop-blur rounded-xl p-12 text-center">
-                    <p className="text-white/60 font-manrope text-lg">
+                  <div className="bg-black/40 backdrop-blur rounded-xl p-6 sm:p-8 md:p-12 text-center">
+                    <p className="text-white/60 font-manrope text-base sm:text-lg">
                       Товары не найдены. Попробуйте изменить фильтры.
                     </p>
                   </div>
                 ) : (
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-5 md:gap-6 justify-items-center">
                     {filteredProducts.map((product) => (
                       <ProductCard
                         key={product.id}

@@ -12,34 +12,44 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const carouselRef = useRef<HTMLDivElement>(null);
+  const [responsiveItemsPerView, setResponsiveItemsPerView] = useState(itemsPerView);
 
   // Create infinite loop by duplicating items
   const extendedChildren = [
-    ...children.slice(-itemsPerView),
+    ...children.slice(-responsiveItemsPerView),
     ...children,
-    ...children.slice(0, itemsPerView)
+    ...children.slice(0, responsiveItemsPerView)
   ];
 
   const totalItems = children.length;
-  const actualIndex = currentIndex + itemsPerView;
+  const actualIndex = currentIndex + responsiveItemsPerView;
   const [containerWidth, setContainerWidth] = useState(0);
   const gap = 32; // 32px gap between items (gap-8)
   
-  // Calculate card width based on container
+  // Calculate card width based on container and responsive items
   useEffect(() => {
     const updateWidth = () => {
       if (carouselRef.current?.parentElement) {
         const width = carouselRef.current.parentElement.offsetWidth;
         setContainerWidth(width);
+        
+        // Responsive items per view
+        if (width < 768) {
+          setResponsiveItemsPerView(1); // Mobile
+        } else if (width < 1024) {
+          setResponsiveItemsPerView(2); // Tablet
+        } else {
+          setResponsiveItemsPerView(itemsPerView); // Desktop
+        }
       }
     };
     
     updateWidth();
     window.addEventListener('resize', updateWidth);
     return () => window.removeEventListener('resize', updateWidth);
-  }, []);
+  }, [itemsPerView]);
   
-  const cardWidth = containerWidth > 0 ? (containerWidth - gap * (itemsPerView - 1)) / itemsPerView : 340;
+  const cardWidth = containerWidth > 0 ? (containerWidth - gap * (responsiveItemsPerView - 1)) / responsiveItemsPerView : 340;
 
   const handlePrev = () => {
     if (isTransitioning) return;
