@@ -5,11 +5,9 @@ import ProductCarousel from '../ui/ProductCarousel';
 import SectionHeader from '../ui/SectionHeader';
 import Header from '../shared/Header';
 import Footer from '../shared/Footer';
-import Img from '../shared/Img';
 import { getSortedMousepads, CLOTHING, ALL_PRODUCTS } from '../../data/products';
 import { useProductNavigation } from '../../hooks';
 import { ROUTES } from '../../constants/routes';
-import { useCart } from '../../context/CartContext';
 
 const MainPage: React.FC = () => {
   const navigate = useNavigate();
