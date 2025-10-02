@@ -1,13 +1,17 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
 import SelectorGroup from '../ui/SelectorGroup';
 import Header from '../shared/Header';
+import Footer from '../shared/Footer';
 import DecryptedText from '../shared/DecryptedText';
-import { useCart } from '../../context/CartContext';
 import Img from '../shared/Img';
 import StarRating from '../shared/StarRating';
 import QuantitySelector from '../ui/QuantitySelector';
 import { ALL_PRODUCTS } from '../../data/products';
+import { useProduct, useProductImages, useAddToCart } from '../../hooks';
+import { COLOR_OPTIONS, SIZE_OPTIONS, TYPE_OPTIONS, CLOTHING_SIZE_OPTIONS } from '../../constants/selectorOptions';
+import { getClothingDescription, MOUSEPAD_DIMENSIONS, COLOR_NAMES, PRODUCT_DESCRIPTIONS } from '../../constants/productDescriptions';
+import { isClothing, isProMousepad } from '../../lib/productUtils';
 
 const ProductPage: React.FC = () => {
   const location = useLocation();
@@ -22,332 +26,58 @@ const ProductPage: React.FC = () => {
     return passedProductData;
   }, [passedProductData]);
   
-  const { addItem } = useCart();
+  // Используем кастомные хуки для управления состоянием и логикой
+  const {
+    selectedImage,
+    setSelectedImage,
+    selectedColor,
+    setSelectedColor,
+    selectedSize,
+    setSelectedSize,
+    selectedType,
+    setSelectedType,
+    selectedClothingSize,
+    setSelectedClothingSize,
+    quantity,
+    setQuantity
+  } = useProduct(productData);
+
+  // Используем хук для получения правильных изображений
+  const productImages = useProductImages(productData, selectedSize, selectedColor);
+
+  // Используем утилиты для проверки типа продукта
+  const isClothingProduct = isClothing(productData);
+  const isProMousepadProduct = isProMousepad(productData);
+
+  // Получаем описание для одежды
+  const clothingDescription = getClothingDescription(selectedColor);
+
+  // Динамический subtitle в зависимости от выбранного цвета (для ковриков)
+  const dynamicSubtitle = useMemo(() => {
+    if (!productData || isClothingProduct || isProMousepadProduct) {
+      return productData?.subtitle || '';
+    }
+    
+    // Для обычных ковриков меняем название в зависимости от цвета
+    if (selectedColor === 'red') {
+      return '"logo-red"';
+    } else if (selectedColor === 'blue') {
+      return '"logo-blue"';
+    } else if (selectedColor === 'white') {
+      return '"geoid-white"';
+    } else {
+      // black by default
+      return '"geoid-black"';
+    }
+  }, [productData, selectedColor, isClothingProduct, isProMousepadProduct]);
+
+  // Используем хук для добавления в корзину с анимацией
+  const { handleAddToCart: addToCart, flyingToCart } = useAddToCart();
   
-  const [selectedImage, setSelectedImage] = useState(0);
-  const [selectedColor, setSelectedColor] = useState('black');
-  const [selectedSize, setSelectedSize] = useState('xl');
-  const [selectedType, setSelectedType] = useState('speed');
-  const [selectedClothingSize, setSelectedClothingSize] = useState('L');
-  const [quantity, setQuantity] = useState(1);
-  const [flyingToCart, setFlyingToCart] = useState(false);
-
-  // Динамические изображения в зависимости от размера и цвета
-  const productImages = useMemo(() => {
-    // Если нет данных продукта, используем дефолтные изображения
-    if (!productData) {
-      const mainImage = '/images/products/mousepads/xl/mousepad-geoid-black.webp';
-      return [mainImage, mainImage, mainImage];
-    }
-
-    // Для ковриков - динамически формируем пути на основе размера и цвета
-    if (productData.category === 'mousepads') {
-      // Пробуем найти соответствующие изображения
-      // Для коврика Pro Speed используем специальную папку
-      if (productData.subtitle?.includes('Pro Speed')) {
-        return [
-          '/images/products/mousepads/pro/control.webp',
-          '/images/products/mousepads/pro/control_2.webp',
-          '/images/products/mousepads/pro/control_3.webp'
-        ];
-      }
-      
-      // Для logo-blue ковриков
-      if (productData.subtitle?.includes('logo-blue')) {
-        if (selectedSize === 'xl') {
-          return [
-            '/images/products/mousepads/xl/xl_blue/lxl_01_1.webp',
-            '/images/products/mousepads/xl/xl_blue/lxl_02_1.webp',
-            '/images/products/mousepads/xl/xl_blue/xl_01_2.webp',
-            '/images/products/mousepads/xl/xl_blue/xl_02_2.webp'
-          ];
-        } else {
-          return [
-            '/images/products/mousepads/l/l_blue/107_l_logo-blue_01.webp',
-            '/images/products/mousepads/l/l_blue/107_l_logo-blue_02.webp',
-            '/images/products/mousepads/l/l_blue/107_l_logo-blue_03.webp',
-            '/images/products/mousepads/l/l_blue/107_l_logo-blue_04.webp'
-          ];
-        }
-      }
-      
-      // Для обычных geoid ковриков
-      if (selectedSize === 'xl') {
-        if (selectedColor === 'red') {
-          return [
-            '/images/products/mousepads/xl/xl_red/010_xl_logo-red_01.webp',
-            '/images/products/mousepads/xl/xl_red/010_xl_logo-red_02.webp',
-            '/images/products/mousepads/xl/xl_red/010_xl_logo-red_03.webp',
-            '/images/products/mousepads/xl/xl_red/010_xl_logo-red_04.webp'
-          ];
-        } else if (selectedColor === 'white') {
-          return [
-            '/images/products/mousepads/xl/xl_white_geoid/11.webp',
-            '/images/products/mousepads/xl/xl_white_geoid/4_4.webp',
-            '/images/products/mousepads/xl/xl_white_geoid/5_4.webp'
-          ];
-        } else {
-          // black по умолчанию
-          return [
-            '/images/products/mousepads/xl/xl_black_geoid/114_001.webp',
-            '/images/products/mousepads/xl/xl_black_geoid/114_002.webp',
-            '/images/products/mousepads/xl/xl_black_geoid/114_003.webp'
-          ];
-        }
-      } else {
-        // Size L
-        if (selectedColor === 'red') {
-          return [
-            '/images/products/mousepads/l/l_red/109_l_logo-red_01.webp',
-            '/images/products/mousepads/l/l_red/109_l_logo-red_02.webp',
-            '/images/products/mousepads/l/l_red/109_l_logo-red_03.webp',
-            '/images/products/mousepads/l/l_red/109_l_logo-red_04.webp'
-          ];
-        } else if (selectedColor === 'white') {
-          return [
-            '/images/products/mousepads/l/l_white_geoid/011_l_white_01.webp',
-            '/images/products/mousepads/l/l_white_geoid/011_l_white_02.webp',
-            '/images/products/mousepads/l/l_white_geoid/011_l_white_04.webp',
-            '/images/products/mousepads/l/l_white_geoid/011_l_white_05.webp'
-          ];
-        } else {
-          // black по умолчанию
-          return [
-            '/images/products/mousepads/l/l_black_geoid/013_l_black_01.webp',
-            '/images/products/mousepads/l/l_black_geoid/013_l_black_02.webp',
-            '/images/products/mousepads/l/l_black_geoid/013_l_black_04.webp',
-            '/images/products/mousepads/l/l_black_geoid/013_l_black_05.webp'
-          ];
-        }
-      }
-    }
-    
-    // Для одежды и рукавов используем статический массив из данных
-    if (productData.images && productData.images.length > 0) {
-      return productData.images;
-    }
-    
-    // Иначе используем основное изображение
-    const mainImage = productData.image;
-    return [mainImage, mainImage, mainImage];
-  }, [productData, selectedSize, selectedColor]);
-
-  // Инициализация селекторов на основе данных продукта
-  useEffect(() => {
-    if (productData) {
-      // Устанавливаем размер из данных продукта
-      if (productData.productSize) {
-        const sizeMap: { [key: string]: string } = {
-          'XL': 'xl',
-          'L': 'l',
-          'M': 'l',
-          'S': 'l'
-        };
-        setSelectedSize(sizeMap[productData.productSize] || 'xl');
-      }
-      
-      // Устанавливаем цвет из данных продукта
-      if (productData.color) {
-        setSelectedColor(productData.color);
-        
-        // Для одежды также устанавливаем размер
-        if (productData.category === 'clothing' && productData.productSize) {
-          setSelectedClothingSize(productData.productSize);
-        }
-      }
-    }
-  }, [productData]);
-
-  // Сбрасываем индекс изображения при смене размера или цвета
-  useEffect(() => {
-    setSelectedImage(0);
-  }, [selectedSize, selectedColor]);
-
-  // Опции для селекторов
-  const colorOptions = [
-    { id: 'black', label: 'Черный', color: '#000000' },
-    { id: 'white', label: 'Белый', color: '#FFFFFF' },
-    { id: 'red', label: 'Красный', color: '#DC2626' }
-  ];
-
-  const sizeOptions = [
-    { id: 'xl', label: 'XL(930x430)' },
-    { id: 'l', label: 'L(500x430)' }
-  ];
-
-  const typeOptions = [
-    { id: 'speed', label: 'Speed' },
-    { id: 'balance', label: 'Balance' }
-  ];
-
-  const clothingSizeOptions = [
-    { id: 'XS', label: 'XS' },
-    { id: 'S', label: 'S' },
-    { id: 'M', label: 'M' },
-    { id: 'L', label: 'L' },
-    { id: 'XL', label: 'XL' },
-    { id: '2XL', label: '2XL' }
-  ];
-
-  // Определяем, является ли продукт одеждой
-  const isClothing = productData?.category === 'clothing';
-  
-  // Определяем, является ли продукт Pro ковриком (poron base)
-  const isProMousepad = productData?.subtitle?.toLowerCase().includes('poron');
-
-  // Динамическое описание в зависимости от выбранного типа
-  const descriptions = useMemo(() => ({
-    speed: {
-      main: 'Одна из самых быстрых тканей на рынке. Гладкая поверхность обеспечивает глайд без каких либо усилий.',
-      details: [
-        'Мягкая подложка из порона дает дополнительный контроль при давлении на мышь, а также плотное прилегание к любому столу.',
-        'Шов по краям расположен ниже уровня поверхности, что позволяет никак не ощущать его рукой и многократно увеличивает срок службы.',
-        'Лучше всего подойдет для динамичных игр, в которых важен трекинг, таких как Apex Legends, Warzone, Marvel Rivals и т.д.'
-      ],
-      material: 'Ткань с покрытием (Speed)',
-      base: 'Poron (мягкая пена)'
-    },
-    balance: {
-      main: 'Гладкая поверхность с улучшенным контролем. Сбалансированное сочетание скорости и точности.',
-      details: [
-        'Мягкая подложка из порона дает дополнительный контроль при давлении на мышь, а также плотное прилегание к любому столу.',
-        'Шов по краям расположен ниже уровня поверхности, что позволяет никак не ощущать его рукой и многократно увеличивает срок службы.',
-        'Идеально подходит для тактических шутеров и игр, требующих высокой точности прицеливания.'
-      ],
-      material: 'Ткань с покрытием (Control)',
-      base: 'Poron (мягкая пена)'
-    }
-  }), []);
-
-  // Описание для обычных ковриков (не Pro)
-  const regularMousepadDescriptions = useMemo(() => ({
-    speed: {
-      main: 'Гладкая и равномерная текстура обеспечивает стабильное скольжение и плавные точные движения',
-      details: [
-        'Коврик ложится ровно сразу из коробки',
-        'Прорезиненное основание обеспечивает плотное прилегание к любой поверхности',
-        'Коврик имеет прошитые края, что заметно увеличивает срок службы',
-        'Материал жаккард обеспечивает быстрое скольжение и устойчивость к износу. Новое покрытие более скоростное, чем полиэстер, но, несмотря на высокую скорость начальных движений, имеет хорошую останавливающую способность.'
-      ],
-      material: 'Жаккард (Speed)'
-    },
-    balance: {
-      main: 'Сбалансированная текстура для идеального сочетания скорости и контроля',
-      details: [
-        'Коврик ложится ровно сразу из коробки',
-        'Прорезиненное основание обеспечивает плотное прилегание к любой поверхности',
-        'Коврик имеет прошитые края, что заметно увеличивает срок службы',
-        'Материал полиэстер обеспечивает оптимальный баланс между скоростью и точностью. Идеально подходит для игр, требующих точного прицеливания и быстрых реакций.'
-      ],
-      material: 'Полиэстер (Balance)'
-    }
-  }), []);
-
-  // Описание для одежды
-  const clothingDescription = `Материал футер 3-х нитк., начес.
-
-Цвет: ${selectedColor === 'black' ? 'черный' : 'белый'}
-
-На фото размер худи-оверсайз: L. Рост Дмитрия: 185 см, вес 80 кг.
-
-(Размер изделия может отличаться от размерной сетки на несколько сантиметров, в меньшую или большую сторону!)
-
-Требуется ручная стирка перед использованием изделия! Правила ухода на этикетке и на нашем сайте!
-
-Для создания худи-оверсайз проделана очень большая работа!
-
-Уделялось внимание каждой детали!
-
-Что получилось в итоге:
-
-Для производства использовался материал: футер 3-х ниточный, с начесом европейского качества-пенье!
-
-Мы сделали трехсоставной капюшон, он дублирован основной тканью, выглядит объемным и удобным!
-
-Добавили манжеты кашкорсе, для лучшей фиксации!
-
-Все изделие прошито мелким стяжком!
-
-Сделали дополнительные отсрочки швов (горловой шов, шов втачивания рукава, в местах где пришивается кашкорсе)
-
-Принт на рукав, грудь и спину наносился методом шелкографии!
-
-Ну и в финале упаковали в индивидуальную упаковку-пакет на скотч клапане и наклеили маркировку с наименованием изделия, размером и правилами по уходу!`;
-
-  // Динамические размеры
-  const dimensions = useMemo(() => ({
-    xl: { length: '930 мм', width: '430 мм' },
-    l: { length: '500 мм', width: '430 мм' }
-  }), []);
-
-  // Динамический цвет
-  const colorNames = useMemo(() => ({
-    black: 'Черный',
-    gray: 'Серый',
-    red: 'Красный'
-  }), []);
-
-  // Обработчик добавления в корзину с анимацией
-  const handleAddToCart = () => {
-    // Запуск анимации
-    setFlyingToCart(true);
-    
-    // Создаем летящую копию изображения
-    const productImageElement = document.getElementById('product-main-image');
-    const cartIcon = document.getElementById('cart-button');
-    
-    if (productImageElement && cartIcon) {
-      const imageRect = productImageElement.getBoundingClientRect();
-      const cartRect = cartIcon.getBoundingClientRect();
-      
-      // Создаем клон изображения
-      const flyingImage = document.createElement('img');
-      flyingImage.src = productImages[selectedImage];
-      flyingImage.style.cssText = `
-        position: fixed;
-        left: ${imageRect.left}px;
-        top: ${imageRect.top}px;
-        width: ${imageRect.width}px;
-        height: ${imageRect.height}px;
-        z-index: 10000;
-        pointer-events: none;
-        transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-        object-fit: contain;
-      `;
-      
-      document.body.appendChild(flyingImage);
-      
-      // Запускаем анимацию
-      setTimeout(() => {
-        flyingImage.style.left = `${cartRect.left}px`;
-        flyingImage.style.top = `${cartRect.top}px`;
-        flyingImage.style.width = '50px';
-        flyingImage.style.height = '50px';
-        flyingImage.style.opacity = '0';
-      }, 10);
-      
-      // Удаляем элемент после анимации
-      setTimeout(() => {
-        document.body.removeChild(flyingImage);
-        setFlyingToCart(false);
-      }, 850);
-    }
-    
-    // Добавляем товары в корзину
-    for (let i = 0; i < quantity; i++) {
-      addItem({
-        id: `${productData?.id || 'product'}-${selectedSize}-${selectedColor}-${selectedType}-${Date.now()}-${i}`,
-        image: productImages[selectedImage],
-        title: productData?.title || 'Коврик для мыши',
-        subtitle: productData?.subtitle || '"geoid-white"',
-        price: productData?.price || '3000 р.',
-        selectedSize: sizeOptions.find(opt => opt.id === selectedSize)?.label,
-        selectedColor: colorNames[selectedColor as keyof typeof colorNames],
-        selectedType: typeOptions.find(opt => opt.id === selectedType)?.label
-      });
-    }
-    
-    setQuantity(1); // Сбросить количество
+  // Wrapper для handleAddToCart с правильными параметрами
+  const handleAddToCartClick = () => {
+    addToCart(productData, quantity);
+    setQuantity(1);
   };
 
   return (
@@ -367,8 +97,8 @@ const ProductPage: React.FC = () => {
           <div className="bg-black/40 backdrop-blur rounded-lg sm:rounded-xl p-3 sm:p-5 md:p-8 lg:p-14 mb-4 sm:mb-6 md:mb-10">
             <div className="flex flex-col lg:flex-row gap-4 sm:gap-6 md:gap-10 lg:gap-14 items-start justify-between">
               {/* Product images - top on mobile, right on desktop */}
-              <div className="flex-shrink-0 w-full lg:w-[580px] lg:order-2">
-                <div className="bg-white/5 rounded-lg sm:rounded-xl p-3 sm:p-5 md:p-7">
+              <div className="flex-shrink-0 w-full lg:w-[580px] lg:order-2 lg:h-full">
+                <div className="bg-white/5 rounded-lg sm:rounded-xl p-3 sm:p-5 md:p-7 h-full flex flex-col">
                   {/* Main image with navigation arrows */}
                   <div className="mb-3 sm:mb-5 md:mb-7 relative flex items-center">
                     {/* Left arrow - outside image */}
@@ -409,7 +139,7 @@ const ProductPage: React.FC = () => {
                   <div className="w-full h-px bg-white/20 mb-3 sm:mb-5 md:mb-7"></div>
 
                   {/* Thumbnail images */}
-                  <div className="flex gap-2 sm:gap-3 md:gap-4 justify-center">
+                  <div className="flex gap-2 sm:gap-3 md:gap-4 justify-center flex-1 items-end">
                     {productImages.map((image: string, index: number) => (
                       <button
                         key={index}
@@ -435,29 +165,34 @@ const ProductPage: React.FC = () => {
               {/* Product info - left side on desktop, below images on mobile */}
               <div className="flex-1 max-w-3xl w-full lg:w-auto lg:order-1">
                 {/* Title and rating */}
-                <div className="mb-3 sm:mb-5 md:mb-7 lg:mb-10">
-                  <h1 className="text-white font-manrope font-bold text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl 2xl:text-5xl mb-2 sm:mb-3 md:mb-5 leading-tight drop-shadow-[0_4px_12px_rgba(0,0,0,0.9)]">
+                <div className="mb-5 sm:mb-6">
+                  <h1 className="text-white font-manrope font-bold text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl mb-3 leading-tight drop-shadow-[0_4px_12px_rgba(0,0,0,0.9)]">
                     <DecryptedText
-                      text={`${productData?.title || 'Коврик для мыши'} ${productData?.subtitle || '"geoid-white"'}`}
+                      text={`${productData?.title || 'Коврик для мыши'} ${dynamicSubtitle}`}
                       duration={900}
                       delay={400}
                       className="text-white font-manrope font-bold"
                       showAnimation={false}
                     />
                   </h1>
-                  <div className="flex items-center gap-1.5 sm:gap-2 md:gap-3">
+                  
+                  {/* Rating with background card */}
+                  <div className="inline-flex items-center gap-2 sm:gap-2.5 bg-white/10 backdrop-blur-sm rounded-lg px-3 py-1.5 sm:py-2 border border-white/20">
                     <StarRating rating={productData?.rating || 5} />
-                    <span className="text-white font-manrope font-medium text-xs sm:text-sm md:text-base lg:text-lg">({productData?.reviewCount || 29})</span>
+                    <div className="h-3.5 sm:h-4 w-px bg-white/30"></div>
+                    <span className="text-white font-manrope font-semibold text-sm sm:text-base">{productData?.rating || 5}</span>
+                    <span className="text-white/70 font-manrope font-medium text-xs sm:text-sm">({productData?.reviewCount || 29} отзывов)</span>
                   </div>
                 </div>
 
                 {/* Product options using pre-made selectors */}
-                <div className="space-y-2 sm:space-y-3 md:space-y-4 lg:space-y-5 mb-3 sm:mb-4 md:mb-6 lg:mb-8">
+                <div className="space-y-4 mb-5 sm:mb-6">
                   {/* Colors - не показываем для Pro коврика */}
-                  {!isProMousepad && (
-                    <div className="space-y-1.5 sm:space-y-2">
-                      <div className="flex gap-1.5 sm:gap-2 md:gap-2.5">
-                        {isClothing ? (
+                  {!isProMousepadProduct && (
+                    <div className="space-y-2 sm:space-y-2.5">
+                      <p className="text-white/90 font-manrope font-medium text-sm sm:text-base md:text-lg">Цвет</p>
+                      <div className="flex gap-2 sm:gap-2.5 md:gap-3">
+                        {isClothingProduct ? (
                           // Для одежды только черный и белый
                           <>
                             <button
@@ -483,7 +218,7 @@ const ProductPage: React.FC = () => {
                           </>
                         ) : (
                           // Для обычных ковриков все цвета
-                          colorOptions.map((option) => (
+                          COLOR_OPTIONS.map((option) => (
                             <button
                               key={option.id}
                               onClick={() => setSelectedColor(option.id)}
@@ -502,19 +237,21 @@ const ProductPage: React.FC = () => {
                   )}
 
                   {/* Sizes - не показываем для Pro коврика */}
-                  {isClothing ? (
+                  {isClothingProduct ? (
                     // Для одежды размеры XS-2XL
                     <SelectorGroup
-                      options={clothingSizeOptions}
+                      title="Размер"
+                      options={CLOTHING_SIZE_OPTIONS}
                       selectedValue={selectedClothingSize}
                       onChange={setSelectedClothingSize}
                       size="md"
                       allowDeselect={false}
                     />
-                  ) : !isProMousepad && (
+                  ) : !isProMousepadProduct && (
                     // Для обычных ковриков размеры XL/L
                     <SelectorGroup
-                      options={sizeOptions}
+                      title="Размер"
+                      options={SIZE_OPTIONS}
                       selectedValue={selectedSize}
                       onChange={setSelectedSize}
                       size="md"
@@ -523,9 +260,10 @@ const ProductPage: React.FC = () => {
                   )}
 
                   {/* Types - только для ковриков (и Pro, и обычных) */}
-                  {!isClothing && (
+                  {!isClothingProduct && (
                     <SelectorGroup
-                      options={typeOptions}
+                      title="Тип поверхности"
+                      options={TYPE_OPTIONS}
                       selectedValue={selectedType}
                       onChange={setSelectedType}
                       size="md"
@@ -534,21 +272,36 @@ const ProductPage: React.FC = () => {
                   )}
                 </div>
 
-                {/* Price and actions */}
-                <div className="space-y-2 sm:space-y-3 md:space-y-5">
-                  <div className="text-white font-manrope font-bold text-xl sm:text-2xl md:text-3xl lg:text-4xl drop-shadow-[0_3px_10px_rgba(0,0,0,0.8)]">
-                    {productData?.price || '3000 р.'}
+                {/* Divider */}
+                <div className="w-full h-px bg-white/20 my-5"></div>
+
+                {/* Price and Actions */}
+                <div>
+                  {/* Price */}
+                  <div className="mb-4">
+                    <p className="text-white/60 font-manrope font-medium text-xs sm:text-sm mb-1.5">Цена</p>
+                    <div className="text-white font-manrope font-bold text-3xl sm:text-4xl md:text-5xl">
+                      {productData?.price || '3000 р.'}
+                    </div>
                   </div>
-                  <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 md:gap-5 lg:gap-8 items-stretch sm:items-center">
+
+                  {/* Actions row */}
+                  <div className="flex items-center gap-3">
+                    {/* Add to cart button - compact width */}
                     <button 
-                      onClick={handleAddToCart}
+                      onClick={handleAddToCartClick}
                       disabled={flyingToCart}
-                      className={`bg-blue-600 hover:bg-blue-700 text-white font-manrope font-semibold text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl px-4 sm:px-5 md:px-7 lg:px-9 py-2 sm:py-2.5 md:py-3 lg:py-3.5 rounded-md sm:rounded-lg md:rounded-xl transition-all duration-200 ${
-                        flyingToCart ? 'scale-95 opacity-50 cursor-not-allowed' : 'hover:scale-105 active:scale-95'
+                      className={`bg-blue-600 hover:bg-blue-700 text-white font-manrope font-semibold text-sm sm:text-base px-5 sm:px-6 py-2.5 rounded-lg transition-all duration-200 flex items-center justify-center gap-2 whitespace-nowrap ${
+                        flyingToCart ? 'opacity-50 cursor-not-allowed' : 'hover:shadow-lg hover:shadow-blue-500/30'
                       }`}
                     >
+                      <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                      </svg>
                       {flyingToCart ? 'Добавление...' : 'В корзину'}
                     </button>
+
+                    {/* Quantity selector - same height as button */}
                     <QuantitySelector quantity={quantity} onChange={setQuantity} />
                   </div>
                 </div>
@@ -563,22 +316,22 @@ const ProductPage: React.FC = () => {
               <h3 className="text-white font-manrope font-semibold text-lg sm:text-xl md:text-2xl lg:text-3xl mb-2 sm:mb-3">Описание</h3>
               <div className="w-24 sm:w-32 md:w-40 h-px bg-white/40 mb-3 sm:mb-5"></div>
               <div className="text-white font-manrope font-medium text-xs sm:text-sm md:text-base leading-relaxed space-y-2 sm:space-y-3">
-                {isClothing ? (
+                {isClothingProduct ? (
                   // Описание для одежды
                   <p className="whitespace-pre-line">{clothingDescription}</p>
-                ) : isProMousepad ? (
+                ) : isProMousepadProduct ? (
                   // Описание для Pro ковриков
                   <>
-                    <p>{descriptions[selectedType as keyof typeof descriptions].main}</p>
-                    {descriptions[selectedType as keyof typeof descriptions].details.map((detail, index) => (
+                    <p>{PRODUCT_DESCRIPTIONS.pro[selectedType as keyof typeof PRODUCT_DESCRIPTIONS.pro].main}</p>
+                    {PRODUCT_DESCRIPTIONS.pro[selectedType as keyof typeof PRODUCT_DESCRIPTIONS.pro].details.map((detail, index) => (
                       <p key={index}>{detail}</p>
                     ))}
                   </>
                 ) : (
                   // Описание для обычных ковриков
                   <>
-                    <p>{regularMousepadDescriptions[selectedType as keyof typeof regularMousepadDescriptions].main}</p>
-                    {regularMousepadDescriptions[selectedType as keyof typeof regularMousepadDescriptions].details.map((detail, index) => (
+                    <p>{PRODUCT_DESCRIPTIONS.regular[selectedType as keyof typeof PRODUCT_DESCRIPTIONS.regular].main}</p>
+                    {PRODUCT_DESCRIPTIONS.regular[selectedType as keyof typeof PRODUCT_DESCRIPTIONS.regular].details.map((detail, index) => (
                       <p key={index}>{detail}</p>
                     ))}
                   </>
@@ -593,7 +346,7 @@ const ProductPage: React.FC = () => {
                 <h3 className="text-white font-manrope font-semibold text-lg sm:text-xl md:text-2xl lg:text-3xl mb-2 sm:mb-3">Характеристики</h3>
                 <div className="w-36 sm:w-48 md:w-64 h-px bg-white/40 mb-3 sm:mb-5"></div>
                 <div className="space-y-2 sm:space-y-3">
-                  {isClothing ? (
+                  {isClothingProduct ? (
                     // Характеристики для одежды
                     <>
                       <div className="flex flex-col sm:flex-row justify-between gap-1">
@@ -613,16 +366,16 @@ const ProductPage: React.FC = () => {
                         <span className="text-white/80 sm:text-white font-manrope font-medium text-xs sm:text-sm md:text-base lg:text-lg">{selectedColor === 'black' ? 'Черный' : 'Белый'}</span>
                       </div>
                     </>
-                  ) : isProMousepad ? (
+                  ) : isProMousepadProduct ? (
                     // Характеристики для Pro ковриков
                     <>
                       <div className="flex flex-col sm:flex-row justify-between gap-1">
                         <span className="text-white font-manrope font-medium text-xs sm:text-sm md:text-base lg:text-lg">Материал покрытия</span>
-                        <span className="text-white/80 sm:text-white font-manrope font-medium text-xs sm:text-sm md:text-base lg:text-lg">{descriptions[selectedType as keyof typeof descriptions].material}</span>
+                        <span className="text-white/80 sm:text-white font-manrope font-medium text-xs sm:text-sm md:text-base lg:text-lg">{PRODUCT_DESCRIPTIONS.pro[selectedType as keyof typeof PRODUCT_DESCRIPTIONS.pro].material}</span>
                       </div>
                       <div className="flex flex-col sm:flex-row justify-between gap-1">
                         <span className="text-white font-manrope font-medium text-xs sm:text-sm md:text-base lg:text-lg">Материал основания</span>
-                        <span className="text-white/80 sm:text-white font-manrope font-medium text-xs sm:text-sm md:text-base lg:text-lg">{descriptions[selectedType as keyof typeof descriptions].base}</span>
+                        <span className="text-white/80 sm:text-white font-manrope font-medium text-xs sm:text-sm md:text-base lg:text-lg">{PRODUCT_DESCRIPTIONS.pro[selectedType as keyof typeof PRODUCT_DESCRIPTIONS.pro].base}</span>
                       </div>
                       <div className="flex flex-col sm:flex-row justify-between gap-1">
                         <span className="text-white font-manrope font-medium text-xs sm:text-sm md:text-base lg:text-lg">Цвет</span>
@@ -634,7 +387,7 @@ const ProductPage: React.FC = () => {
                     <>
                       <div className="flex flex-col sm:flex-row justify-between gap-1">
                         <span className="text-white font-manrope font-medium text-xs sm:text-sm md:text-base lg:text-lg">Материал покрытия</span>
-                        <span className="text-white/80 sm:text-white font-manrope font-medium text-xs sm:text-sm md:text-base lg:text-lg">{regularMousepadDescriptions[selectedType as keyof typeof regularMousepadDescriptions].material}</span>
+                        <span className="text-white/80 sm:text-white font-manrope font-medium text-xs sm:text-sm md:text-base lg:text-lg">{PRODUCT_DESCRIPTIONS.regular[selectedType as keyof typeof PRODUCT_DESCRIPTIONS.regular].material}</span>
                       </div>
                       <div className="flex flex-col sm:flex-row justify-between gap-1">
                         <span className="text-white font-manrope font-medium text-xs sm:text-sm md:text-base lg:text-lg">Материал основания</span>
@@ -642,7 +395,7 @@ const ProductPage: React.FC = () => {
                       </div>
                       <div className="flex flex-col sm:flex-row justify-between gap-1">
                         <span className="text-white font-manrope font-medium text-xs sm:text-sm md:text-base lg:text-lg">Цвет</span>
-                        <span className="text-white/80 sm:text-white font-manrope font-medium text-xs sm:text-sm md:text-base lg:text-lg">{colorNames[selectedColor as keyof typeof colorNames]}</span>
+                        <span className="text-white/80 sm:text-white font-manrope font-medium text-xs sm:text-sm md:text-base lg:text-lg">{COLOR_NAMES[selectedColor as keyof typeof COLOR_NAMES]}</span>
                       </div>
                     </>
                   )}
@@ -650,22 +403,22 @@ const ProductPage: React.FC = () => {
               </div>
 
               {/* Dimensions - только для ковриков */}
-              {!isClothing && (
+              {!isClothingProduct && (
                 <div className="bg-black/40 backdrop-blur rounded-lg sm:rounded-xl p-3 sm:p-5 md:p-8 lg:p-10">
                   <h3 className="text-white font-manrope font-semibold text-lg sm:text-xl md:text-2xl lg:text-3xl mb-2 sm:mb-3">Размеры</h3>
                   <div className="w-24 sm:w-28 md:w-36 h-px bg-white/40 mb-3 sm:mb-5"></div>
                   <div className="space-y-2 sm:space-y-3">
                     <div className="flex flex-col sm:flex-row justify-between gap-1">
                       <span className="text-white font-manrope font-medium text-xs sm:text-sm md:text-base lg:text-lg">Толщина</span>
-                      <span className="text-white/80 sm:text-white font-manrope font-medium text-xs sm:text-sm md:text-base lg:text-lg">{isProMousepad ? '3.5 мм' : '4 мм'}</span>
+                      <span className="text-white/80 sm:text-white font-manrope font-medium text-xs sm:text-sm md:text-base lg:text-lg">{isProMousepadProduct ? '3.5 мм' : '4 мм'}</span>
                     </div>
                     <div className="flex flex-col sm:flex-row justify-between gap-1">
                       <span className="text-white font-manrope font-medium text-xs sm:text-sm md:text-base lg:text-lg">Длина</span>
-                      <span className="text-white/80 sm:text-white font-manrope font-medium text-xs sm:text-sm md:text-base lg:text-lg">{isProMousepad ? '500 мм' : dimensions[selectedSize as keyof typeof dimensions].length}</span>
+                      <span className="text-white/80 sm:text-white font-manrope font-medium text-xs sm:text-sm md:text-base lg:text-lg">{isProMousepadProduct ? '500 мм' : MOUSEPAD_DIMENSIONS[selectedSize as keyof typeof MOUSEPAD_DIMENSIONS].length}</span>
                     </div>
                     <div className="flex flex-col sm:flex-row justify-between gap-1">
                       <span className="text-white font-manrope font-medium text-xs sm:text-sm md:text-base lg:text-lg">Ширина</span>
-                      <span className="text-white/80 sm:text-white font-manrope font-medium text-xs sm:text-sm md:text-base lg:text-lg">{isProMousepad ? '430 мм' : dimensions[selectedSize as keyof typeof dimensions].width}</span>
+                      <span className="text-white/80 sm:text-white font-manrope font-medium text-xs sm:text-sm md:text-base lg:text-lg">{isProMousepadProduct ? '430 мм' : MOUSEPAD_DIMENSIONS[selectedSize as keyof typeof MOUSEPAD_DIMENSIONS].width}</span>
                     </div>
                   </div>
                 </div>
@@ -728,6 +481,9 @@ const ProductPage: React.FC = () => {
             </div>
           </div>
         </main>
+        
+        {/* Footer */}
+        <Footer />
       </div>
     </div>
   );

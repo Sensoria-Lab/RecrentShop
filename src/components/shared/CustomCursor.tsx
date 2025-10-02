@@ -26,7 +26,14 @@ const CustomCursor: React.FC = () => {
       setPosition({ x: e.clientX, y: e.clientY });
 
       // Check if hovering over clickable element
-      const target = e.target as HTMLElement;
+      const target = e.target;
+      
+      // Ensure target is an HTMLElement with closest method
+      if (!(target instanceof HTMLElement)) {
+        setIsPointer(false);
+        return;
+      }
+      
       const isClickable = 
         target.tagName === 'A' || 
         target.tagName === 'BUTTON' || 

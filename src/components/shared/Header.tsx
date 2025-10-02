@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useCart } from '../../context/CartContext';
 import Img from './Img';
+import { ROUTES, NAV_ITEMS, MOBILE_NAV_ITEMS } from '../../constants/routes';
 
 interface HeaderProps {
   className?: string;
@@ -86,11 +87,7 @@ const Header: React.FC<HeaderProps> = ({ className = '', onNavigate }) => {
 
         {/* Center: Navigation */}
         <nav className="hidden md:flex gap-1 lg:gap-2 items-center justify-center">
-          {[
-            { path: '/catalog', label: 'Каталог' },
-            { path: '/contacts', label: 'Контакты' },
-            { path: '/info', label: 'Инфо' }
-          ].map(({ path: targetPath, label }) => {
+          {NAV_ITEMS.map(({ path: targetPath, label }) => {
             const active = isActive(targetPath);
             return (
               <button
@@ -142,7 +139,7 @@ const Header: React.FC<HeaderProps> = ({ className = '', onNavigate }) => {
         <div className="flex justify-end">
           <button 
             id="cart-button"
-            onClick={() => navigate('/cart')}
+            onClick={() => navigate(ROUTES.CART)}
             className="relative w-10 h-10 flex items-center justify-center cursor-pointer hover:scale-110 transition-all focus:outline-none focus:ring-2 focus:ring-white/40 rounded-lg group"
           >
             {/* Hover background */}
@@ -168,11 +165,7 @@ const Header: React.FC<HeaderProps> = ({ className = '', onNavigate }) => {
       {/* Mobile Navigation Menu */}
       {mobileMenuOpen && (
         <nav className="md:hidden mt-4 pt-4 border-t border-white/10 space-y-2">
-          {[
-            { path: '/catalog', label: 'Каталог' },
-            { path: '/contacts', label: 'Контакты' },
-            { path: '/info', label: 'Информация' }
-          ].map(({ path: targetPath, label }) => {
+          {MOBILE_NAV_ITEMS.map(({ path: targetPath, label }) => {
             const active = isActive(targetPath);
             return (
               <button

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useCart } from '../../context/CartContext';
 import Header from '../shared/Header';
+import Footer from '../shared/Footer';
 
 type DeliveryMethod = 'russian-post' | 'cdek' | 'home-delivery';
 
@@ -621,6 +622,9 @@ const CheckoutPage: React.FC = () => {
             </div>
           </div>
         </main>
+        
+        {/* Footer */}
+        <Footer />
       </div>
     </div>
   );

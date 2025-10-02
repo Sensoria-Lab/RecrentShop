@@ -1,8 +1,8 @@
-import React, { useState, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
 import ProductCard from '../ui/ProductCard';
-import Header from '../shared/Header';
+import PageContainer from '../shared/PageContainer';
 import { ALL_PRODUCTS } from '../../data/products';
+import { useProductFilters, useProductNavigation } from '../../hooks';
 import type { 
   SortOption, 
   CategoryFilter, 
@@ -12,7 +12,6 @@ import type {
 } from '../../types/product';
 
 const CatalogPage: React.FC = () => {
-  const navigate = useNavigate();
   const [filtersOpen, setFiltersOpen] = useState(false);
   
   // Filter states
@@ -24,76 +23,29 @@ const CatalogPage: React.FC = () => {
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 10000]);
   const [minRating, setMinRating] = useState<number>(0);
 
+  // Use custom hooks for filtering and navigation
+  const { navigateToProduct } = useProductNavigation();
+  const filteredProducts = useProductFilters(ALL_PRODUCTS, {
+    sortBy,
+    categoryFilter,
+    colorFilter,
+    sizeFilter,
+    clothingTypeFilter,
+    priceRange,
+    minRating
+  });
+
+  // Handler for product card clicks
   const handleProductClick = (productData: any) => {
-    navigate('/product', { state: { productData } });
+    // Find full product data by id
+    const fullProduct = ALL_PRODUCTS.find(p => p.id === productData.id);
+    if (fullProduct) {
+      navigateToProduct(fullProduct);
+    }
   };
 
-  // Filter and sort products
-  const filteredProducts = useMemo(() => {
-    let filtered = [...ALL_PRODUCTS];
-
-    // Apply category filter
-    if (categoryFilter !== 'all') {
-      filtered = filtered.filter(p => p.category === categoryFilter);
-    }
-
-    // Apply color filter
-    if (colorFilter !== 'all') {
-      filtered = filtered.filter(p => p.color === colorFilter);
-    }
-
-    // Apply size filter
-    if (sizeFilter !== 'all') {
-      filtered = filtered.filter(p => p.productSize === sizeFilter);
-    }
-
-    // Apply clothing type filter
-    if (clothingTypeFilter !== 'all') {
-      filtered = filtered.filter(p => p.clothingType === clothingTypeFilter);
-    }
-
-    // Apply price range filter
-    filtered = filtered.filter(p => 
-      p.priceNumeric >= priceRange[0] && p.priceNumeric <= priceRange[1]
-    );
-
-    // Apply rating filter
-    filtered = filtered.filter(p => p.rating >= minRating);
-
-    // Apply sorting
-    switch (sortBy) {
-      case 'popularity':
-        filtered.sort((a, b) => b.reviewCount - a.reviewCount);
-        break;
-      case 'price-asc':
-        filtered.sort((a, b) => a.priceNumeric - b.priceNumeric);
-        break;
-      case 'price-desc':
-        filtered.sort((a, b) => b.priceNumeric - a.priceNumeric);
-        break;
-      case 'rating':
-        filtered.sort((a, b) => {
-          if (b.rating === a.rating) return b.reviewCount - a.reviewCount;
-          return b.rating - a.rating;
-        });
-        break;
-    }
-
-    return filtered;
-  }, [sortBy, categoryFilter, colorFilter, sizeFilter, clothingTypeFilter, priceRange, minRating]);
-
   return (
-    <div className="relative min-h-screen w-full overflow-hidden">
-      <div className="relative z-10 min-h-screen flex flex-col">
-        {/* Header */}
-        <div className="flex justify-center px-4 sm:px-8 md:px-12 py-4 sticky top-0 z-50">
-          <div className="max-w-[900px] w-full">
-            <Header />
-          </div>
-        </div>
-
-        {/* Main content */}
-        <main className="flex-1 px-4 sm:px-8 md:px-12 lg:px-20 py-6 sm:py-8 md:py-12">
+    <PageContainer>
           <div className="max-w-[1600px] mx-auto">
             {/* Page Title */}
             <div className="text-center mb-4 sm:mb-6 md:mb-8 lg:mb-12">
@@ -355,9 +307,7 @@ const CatalogPage: React.FC = () => {
               </div>
             </div>
           </div>
-        </main>
-      </div>
-    </div>
+    </PageContainer>
   );
 };
 

@@ -1,12 +1,13 @@
 import React from 'react';
 import Header from './Header';
+import Footer from './Footer';
 
 interface PageLayoutProps {
   children: React.ReactNode;
 }
 
 /**
- * Simplified page layout with header
+ * Simplified page layout with header and footer
  * Background is handled globally in App.tsx
  */
 const PageLayout: React.FC<PageLayoutProps> = ({ children }) => {
@@ -20,6 +21,7 @@ const PageLayout: React.FC<PageLayoutProps> = ({ children }) => {
       <main className="flex-1 px-20 py-12">
         {children}
       </main>
+      <Footer />
     </div>
   );
 };
