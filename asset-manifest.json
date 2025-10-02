@@ -1,31 +1,31 @@
 {
   "files": {
-    "main.css": "/RecrentShop/static/css/main.aedaaa5f.css",
-    "main.js": "/RecrentShop/static/js/main.7cfd4f52.js",
-    "static/js/787.08f03849.chunk.js": "/RecrentShop/static/js/787.08f03849.chunk.js",
+    "main.css": "/RecrentShop/static/css/main.0adfd58c.css",
+    "main.js": "/RecrentShop/static/js/main.0ded6242.js",
+    "static/js/787.47a65164.chunk.js": "/RecrentShop/static/js/787.47a65164.chunk.js",
     "static/js/568.e49d4bbc.chunk.js": "/RecrentShop/static/js/568.e49d4bbc.chunk.js",
-    "static/js/104.b23d045a.chunk.js": "/RecrentShop/static/js/104.b23d045a.chunk.js",
-    "static/js/604.d8537273.chunk.js": "/RecrentShop/static/js/604.d8537273.chunk.js",
-    "static/js/561.c0c5435e.chunk.js": "/RecrentShop/static/js/561.c0c5435e.chunk.js",
-    "static/js/85.35c1b8f5.chunk.js": "/RecrentShop/static/js/85.35c1b8f5.chunk.js",
-    "static/js/607.62bf95d6.chunk.js": "/RecrentShop/static/js/607.62bf95d6.chunk.js",
-    "static/js/286.4582d0a5.chunk.js": "/RecrentShop/static/js/286.4582d0a5.chunk.js",
-    "static/js/963.963553f5.chunk.js": "/RecrentShop/static/js/963.963553f5.chunk.js",
+    "static/js/104.7c8af6ff.chunk.js": "/RecrentShop/static/js/104.7c8af6ff.chunk.js",
+    "static/js/604.929302a3.chunk.js": "/RecrentShop/static/js/604.929302a3.chunk.js",
+    "static/js/561.53dceed5.chunk.js": "/RecrentShop/static/js/561.53dceed5.chunk.js",
+    "static/js/85.efdc97f8.chunk.js": "/RecrentShop/static/js/85.efdc97f8.chunk.js",
+    "static/js/607.bce3cdc8.chunk.js": "/RecrentShop/static/js/607.bce3cdc8.chunk.js",
+    "static/js/286.74cb8d17.chunk.js": "/RecrentShop/static/js/286.74cb8d17.chunk.js",
+    "static/js/963.e53fe41a.chunk.js": "/RecrentShop/static/js/963.e53fe41a.chunk.js",
     "index.html": "/RecrentShop/index.html",
-    "main.aedaaa5f.css.map": "/RecrentShop/static/css/main.aedaaa5f.css.map",
-    "main.7cfd4f52.js.map": "/RecrentShop/static/js/main.7cfd4f52.js.map",
-    "787.08f03849.chunk.js.map": "/RecrentShop/static/js/787.08f03849.chunk.js.map",
+    "main.0adfd58c.css.map": "/RecrentShop/static/css/main.0adfd58c.css.map",
+    "main.0ded6242.js.map": "/RecrentShop/static/js/main.0ded6242.js.map",
+    "787.47a65164.chunk.js.map": "/RecrentShop/static/js/787.47a65164.chunk.js.map",
     "568.e49d4bbc.chunk.js.map": "/RecrentShop/static/js/568.e49d4bbc.chunk.js.map",
-    "104.b23d045a.chunk.js.map": "/RecrentShop/static/js/104.b23d045a.chunk.js.map",
-    "604.d8537273.chunk.js.map": "/RecrentShop/static/js/604.d8537273.chunk.js.map",
-    "561.c0c5435e.chunk.js.map": "/RecrentShop/static/js/561.c0c5435e.chunk.js.map",
-    "85.35c1b8f5.chunk.js.map": "/RecrentShop/static/js/85.35c1b8f5.chunk.js.map",
-    "607.62bf95d6.chunk.js.map": "/RecrentShop/static/js/607.62bf95d6.chunk.js.map",
-    "286.4582d0a5.chunk.js.map": "/RecrentShop/static/js/286.4582d0a5.chunk.js.map",
-    "963.963553f5.chunk.js.map": "/RecrentShop/static/js/963.963553f5.chunk.js.map"
+    "104.7c8af6ff.chunk.js.map": "/RecrentShop/static/js/104.7c8af6ff.chunk.js.map",
+    "604.929302a3.chunk.js.map": "/RecrentShop/static/js/604.929302a3.chunk.js.map",
+    "561.53dceed5.chunk.js.map": "/RecrentShop/static/js/561.53dceed5.chunk.js.map",
+    "85.efdc97f8.chunk.js.map": "/RecrentShop/static/js/85.efdc97f8.chunk.js.map",
+    "607.bce3cdc8.chunk.js.map": "/RecrentShop/static/js/607.bce3cdc8.chunk.js.map",
+    "286.74cb8d17.chunk.js.map": "/RecrentShop/static/js/286.74cb8d17.chunk.js.map",
+    "963.e53fe41a.chunk.js.map": "/RecrentShop/static/js/963.e53fe41a.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.aedaaa5f.css",
-    "static/js/main.7cfd4f52.js"
+    "static/css/main.0adfd58c.css",
+    "static/js/main.0ded6242.js"
   ]
 }
