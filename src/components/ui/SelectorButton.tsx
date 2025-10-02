@@ -27,14 +27,14 @@ const SelectorButton: React.FC<SelectorButtonProps> = ({
   variant = 'default'
 }) => {
   const sizeClasses = {
-    sm: 'px-3 py-2 text-sm',
-    md: 'px-5 py-4 text-lg',
-    lg: 'px-6 py-5 text-xl'
+    sm: 'px-2 py-1.5 text-xs sm:px-2.5 sm:py-2 sm:text-sm',
+    md: 'px-3 py-2 text-xs sm:px-4 sm:py-2.5 sm:text-sm md:px-5 md:py-3 md:text-base',
+    lg: 'px-4 py-2.5 text-sm sm:px-5 sm:py-3 sm:text-base md:px-6 md:py-4 md:text-lg'
   };
 
   const borderClasses = selected
-    ? 'border-[var(--color-accent)] border-[3px] shadow-[0_0_0_1px_rgba(255,255,255,0.15)]'
-    : 'border-white/20 border-[2px]';
+    ? 'border-[var(--color-accent)] border-2 sm:border-[2.5px] md:border-[3px] shadow-[0_0_0_1px_rgba(255,255,255,0.15)]'
+    : 'border-white/20 border sm:border-[1.5px] md:border-2';
 
   const hoverClasses = !selected && !disabled
     ? 'hover:border-[var(--color-accent)] hover:border-opacity-80 transition-all duration-200'
@@ -52,11 +52,11 @@ const SelectorButton: React.FC<SelectorButtonProps> = ({
         box-border
         content-stretch
         flex
-        gap-2
+        gap-1 sm:gap-1.5 md:gap-2
         items-center
         justify-center
         relative
-        rounded-xl
+        rounded-lg sm:rounded-xl
         ${sizeClasses[size]}
         ${disabledClasses}
         ${className}
@@ -71,7 +71,7 @@ const SelectorButton: React.FC<SelectorButtonProps> = ({
           border-solid
           inset-0
           pointer-events-none
-          rounded-xl
+          rounded-lg sm:rounded-xl
           ${borderClasses}
           ${hoverClasses}
           ${selected ? 'bg-[var(--color-accent-rgba,rgba(250,204,21,0.08))]' : 'bg-white/5'}

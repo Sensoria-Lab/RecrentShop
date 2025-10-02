@@ -176,87 +176,8 @@ const ProductPage: React.FC = () => {
           {/* Product section */}
           <div className="bg-black/40 backdrop-blur rounded-lg sm:rounded-xl p-3 sm:p-5 md:p-8 lg:p-14 mb-4 sm:mb-6 md:mb-10">
             <div className="flex flex-col lg:flex-row gap-4 sm:gap-6 md:gap-10 lg:gap-14 items-start justify-between">
-              {/* Product info - left side */}
-              <div className="flex-1 max-w-3xl w-full lg:w-auto">
-                {/* Title and rating */}
-                <div className="mb-3 sm:mb-5 md:mb-7 lg:mb-10">
-                  <h1 className="text-white font-manrope font-bold text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl 2xl:text-5xl mb-2 sm:mb-3 md:mb-5 leading-tight drop-shadow-[0_4px_12px_rgba(0,0,0,0.9)]">
-                    <DecryptedText
-                      text={`${productData?.title || 'Коврик для мыши'} ${productData?.subtitle || '"geoid-white"'}`}
-                      duration={900}
-                      delay={400}
-                      className="text-white font-manrope font-bold"
-                      showAnimation={false}
-                    />
-                  </h1>
-                  <div className="flex items-center gap-1.5 sm:gap-2 md:gap-3">
-                    <StarRating rating={productData?.rating || 5} />
-                    <span className="text-white font-manrope font-medium text-xs sm:text-sm md:text-base lg:text-lg">({productData?.reviewCount || 29})</span>
-                  </div>
-                </div>
-
-                {/* Product options using pre-made selectors */}
-                <div className="space-y-3 sm:space-y-5 md:space-y-7 mb-4 sm:mb-6 md:mb-10">
-                  {/* Colors */}
-                  <div className="space-y-2">
-                    <div className="flex gap-1.5 sm:gap-2 md:gap-3">
-                      {colorOptions.map((option) => (
-                        <button
-                          key={option.id}
-                          onClick={() => setSelectedColor(option.id)}
-                          className={`w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-md sm:rounded-lg border-2 transition-all ${
-                            selectedColor === option.id
-                              ? 'border-blue-500'
-                              : 'border-transparent hover:border-gray-400'
-                          }`}
-                          style={{ backgroundColor: option.color }}
-                          title={option.label}
-                        />
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Sizes */}
-                  <SelectorGroup
-                    options={sizeOptions}
-                    selectedValue={selectedSize}
-                    onChange={setSelectedSize}
-                    size="md"
-                    allowDeselect={false}
-                  />
-
-                  {/* Types */}
-                  <SelectorGroup
-                    options={typeOptions}
-                    selectedValue={selectedType}
-                    onChange={setSelectedType}
-                    size="md"
-                    allowDeselect={false}
-                  />
-                </div>
-
-                {/* Price and actions */}
-                <div className="space-y-2 sm:space-y-3 md:space-y-5">
-                  <div className="text-white font-manrope font-bold text-xl sm:text-2xl md:text-3xl lg:text-4xl drop-shadow-[0_3px_10px_rgba(0,0,0,0.8)]">
-                    {productData?.price || '3000 р.'}
-                  </div>
-                  <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 md:gap-5 lg:gap-8 items-stretch sm:items-center">
-                    <button 
-                      onClick={handleAddToCart}
-                      disabled={flyingToCart}
-                      className={`bg-blue-600 hover:bg-blue-700 text-white font-manrope font-semibold text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl px-4 sm:px-5 md:px-7 lg:px-9 py-2 sm:py-2.5 md:py-3 lg:py-3.5 rounded-md sm:rounded-lg md:rounded-xl transition-all duration-200 ${
-                        flyingToCart ? 'scale-95 opacity-50 cursor-not-allowed' : 'hover:scale-105 active:scale-95'
-                      }`}
-                    >
-                      {flyingToCart ? 'Добавление...' : 'В корзину'}
-                    </button>
-                    <QuantitySelector quantity={quantity} onChange={setQuantity} />
-                  </div>
-                </div>
-              </div>
-
-              {/* Product images - right side */}
-              <div className="flex-shrink-0 w-full lg:w-[580px]">
+              {/* Product images - top on mobile, right on desktop */}
+              <div className="flex-shrink-0 w-full lg:w-[580px] lg:order-2">
                 <div className="bg-white/5 rounded-lg sm:rounded-xl p-3 sm:p-5 md:p-7">
                   {/* Main image with navigation arrows */}
                   <div className="mb-3 sm:mb-5 md:mb-7 relative flex items-center">
@@ -317,6 +238,85 @@ const ProductPage: React.FC = () => {
                         />
                       </button>
                     ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Product info - left side on desktop, below images on mobile */}
+              <div className="flex-1 max-w-3xl w-full lg:w-auto lg:order-1">
+                {/* Title and rating */}
+                <div className="mb-3 sm:mb-5 md:mb-7 lg:mb-10">
+                  <h1 className="text-white font-manrope font-bold text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl 2xl:text-5xl mb-2 sm:mb-3 md:mb-5 leading-tight drop-shadow-[0_4px_12px_rgba(0,0,0,0.9)]">
+                    <DecryptedText
+                      text={`${productData?.title || 'Коврик для мыши'} ${productData?.subtitle || '"geoid-white"'}`}
+                      duration={900}
+                      delay={400}
+                      className="text-white font-manrope font-bold"
+                      showAnimation={false}
+                    />
+                  </h1>
+                  <div className="flex items-center gap-1.5 sm:gap-2 md:gap-3">
+                    <StarRating rating={productData?.rating || 5} />
+                    <span className="text-white font-manrope font-medium text-xs sm:text-sm md:text-base lg:text-lg">({productData?.reviewCount || 29})</span>
+                  </div>
+                </div>
+
+                {/* Product options using pre-made selectors */}
+                <div className="space-y-2 sm:space-y-3 md:space-y-4 lg:space-y-5 mb-3 sm:mb-4 md:mb-6 lg:mb-8">
+                  {/* Colors */}
+                  <div className="space-y-1.5 sm:space-y-2">
+                    <div className="flex gap-1.5 sm:gap-2 md:gap-2.5">
+                      {colorOptions.map((option) => (
+                        <button
+                          key={option.id}
+                          onClick={() => setSelectedColor(option.id)}
+                          className={`w-7 h-7 sm:w-8 sm:h-8 md:w-9 md:h-9 lg:w-10 lg:h-10 rounded-md sm:rounded-lg border-2 transition-all active:scale-95 ${
+                            selectedColor === option.id
+                              ? 'border-blue-500'
+                              : 'border-transparent hover:border-gray-400'
+                          }`}
+                          style={{ backgroundColor: option.color }}
+                          title={option.label}
+                        />
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Sizes */}
+                  <SelectorGroup
+                    options={sizeOptions}
+                    selectedValue={selectedSize}
+                    onChange={setSelectedSize}
+                    size="md"
+                    allowDeselect={false}
+                  />
+
+                  {/* Types */}
+                  <SelectorGroup
+                    options={typeOptions}
+                    selectedValue={selectedType}
+                    onChange={setSelectedType}
+                    size="md"
+                    allowDeselect={false}
+                  />
+                </div>
+
+                {/* Price and actions */}
+                <div className="space-y-2 sm:space-y-3 md:space-y-5">
+                  <div className="text-white font-manrope font-bold text-xl sm:text-2xl md:text-3xl lg:text-4xl drop-shadow-[0_3px_10px_rgba(0,0,0,0.8)]">
+                    {productData?.price || '3000 р.'}
+                  </div>
+                  <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 md:gap-5 lg:gap-8 items-stretch sm:items-center">
+                    <button 
+                      onClick={handleAddToCart}
+                      disabled={flyingToCart}
+                      className={`bg-blue-600 hover:bg-blue-700 text-white font-manrope font-semibold text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl px-4 sm:px-5 md:px-7 lg:px-9 py-2 sm:py-2.5 md:py-3 lg:py-3.5 rounded-md sm:rounded-lg md:rounded-xl transition-all duration-200 ${
+                        flyingToCart ? 'scale-95 opacity-50 cursor-not-allowed' : 'hover:scale-105 active:scale-95'
+                      }`}
+                    >
+                      {flyingToCart ? 'Добавление...' : 'В корзину'}
+                    </button>
+                    <QuantitySelector quantity={quantity} onChange={setQuantity} />
                   </div>
                 </div>
               </div>

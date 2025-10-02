@@ -51,13 +51,13 @@ const SelectorGroup: React.FC<SelectorGroupProps> = ({
   };
 
   return (
-    <div className={`space-y-3 ${className}`}>
+    <div className={`space-y-2 sm:space-y-2.5 md:space-y-3 ${className}`}>
       {title && (
-        <h3 className="text-white font-manrope font-semibold text-lg">
+        <h3 className="text-white font-manrope font-semibold text-sm sm:text-base md:text-lg">
           {title}
         </h3>
       )}
-      <div className="flex flex-wrap gap-3">
+      <div className="flex flex-wrap gap-2 sm:gap-2.5 md:gap-3">
         {options.map((option) => (
           <SelectorButton
             key={option.id}
