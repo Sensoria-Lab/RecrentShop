@@ -1,22 +1,26 @@
 import React, { useState, useEffect, useRef } from 'react';
 import ProductCard from '../ui/ProductCard';
 import PageContainer from '../shared/PageContainer';
-import { ALL_PRODUCTS } from '../../data/products';
 import { useProductFilters, useProductNavigation } from '../../hooks';
 import type {
   SortOption,
   CategoryFilter,
   ColorFilter,
   SizeFilter,
-  ClothingTypeFilter
+  ClothingTypeFilter,
+  Product
 } from '../../types/product';
+
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
 
 const CatalogPage: React.FC = () => {
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [visibleItems, setVisibleItems] = useState<Set<number>>(new Set());
   const observerRef = useRef<IntersectionObserver | null>(null);
   const categoryButtonRefs = useRef<{ [key: string]: HTMLButtonElement | null }>({});
-  
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+
   // Filter states
   const [sortBy, setSortBy] = useState<SortOption>('popularity');
   const [categoryFilter, setCategoryFilter] = useState<CategoryFilter>('all');
@@ -26,9 +30,27 @@ const CatalogPage: React.FC = () => {
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 10000]);
   const [minRating, setMinRating] = useState<number>(0);
 
+  // Fetch products from API
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch(`${API_URL}/products`);
+        const data = await response.json();
+        setProducts(data);
+      } catch (error) {
+        console.error('Error fetching products:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
   // Use custom hooks for filtering and navigation
   const { navigateToProduct } = useProductNavigation();
-  const filteredProducts = useProductFilters(ALL_PRODUCTS, {
+  const filteredProducts = useProductFilters(products, {
     sortBy,
     categoryFilter,
     colorFilter,
@@ -41,7 +63,7 @@ const CatalogPage: React.FC = () => {
   // Handler for product card clicks
   const handleProductClick = (productData: any) => {
     // Find full product data by id
-    const fullProduct = ALL_PRODUCTS.find(p => p.id === productData.id);
+    const fullProduct = products.find(p => p.id === productData.id);
     if (fullProduct) {
       navigateToProduct(fullProduct);
     }
@@ -360,9 +382,15 @@ const CatalogPage: React.FC = () => {
 
               {/* Products Grid */}
               <div className="flex-1">
-                
-                
-                {filteredProducts.length === 0 ? (
+
+                {loading ? (
+                  <div className="bg-black/40 backdrop-blur rounded-lg sm:rounded-xl p-6 sm:p-8 md:p-12 text-center">
+                    <div className="inline-block w-12 h-12 border-4 border-white border-t-transparent rounded-full animate-spin mb-4"></div>
+                    <p className="text-white/60 font-manrope text-sm sm:text-base md:text-lg">
+                      Загрузка товаров...
+                    </p>
+                  </div>
+                ) : filteredProducts.length === 0 ? (
                   <div className="bg-black/40 backdrop-blur rounded-lg sm:rounded-xl p-6 sm:p-8 md:p-12 text-center">
                     <p className="text-white/60 font-manrope text-sm sm:text-base md:text-lg">
                       Товары не найдены. Попробуйте изменить фильтры.

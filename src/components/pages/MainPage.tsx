@@ -4,9 +4,11 @@ import PageContainer from '../shared/PageContainer';
 import ProductCard from '../ui/ProductCard';
 import ProductCarousel from '../ui/ProductCarousel';
 import SectionHeader from '../ui/SectionHeader';
-import { getSortedMousepads, CLOTHING, ALL_PRODUCTS } from '../../data/products';
 import { useProductNavigation } from '../../hooks';
 import { ROUTES } from '../../constants/routes';
+import type { Product } from '../../types/product';
+
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
 
 const MainPage: React.FC = () => {
   const navigate = useNavigate();
@@ -14,17 +16,46 @@ const MainPage: React.FC = () => {
   const [currentSection, setCurrentSection] = React.useState(0);
   const [isScrolling, setIsScrolling] = React.useState(false);
   const containerRef = React.useRef<HTMLDivElement>(null);
+  const [products, setProducts] = React.useState<Product[]>([]);
+  const [loading, setLoading] = React.useState(true);
+
+  // Fetch products from API
+  React.useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch(`${API_URL}/products`);
+        const data = await response.json();
+        setProducts(data);
+      } catch (error) {
+        console.error('Error fetching products:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, []);
 
   const handleProductClick = (productData: any) => {
     // Find full product data by id
-    const fullProduct = ALL_PRODUCTS.find(p => p.id === productData.id);
+    const fullProduct = products.find(p => p.id === productData.id);
     if (fullProduct) {
       navigateToProduct(fullProduct);
     }
   };
 
-  const sortedMousepads = getSortedMousepads();
-  const clothing = CLOTHING;
+  // Filter and sort products
+  const sortedMousepads = products
+    .filter(p => p.category === 'mousepads')
+    .sort((a, b) => {
+      if (b.rating !== a.rating) {
+        return b.rating - a.rating;
+      }
+      return b.reviewCount - a.reviewCount;
+    });
+
+  const clothing = products.filter(p => p.category === 'clothing');
 
   // Helper for catalog navigation
   const navigateToCatalog = () => {
