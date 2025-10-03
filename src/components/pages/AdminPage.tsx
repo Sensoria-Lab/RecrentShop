@@ -156,10 +156,17 @@ const AdminPage: React.FC = () => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
-  // Handle price change
+  // Handle price change with automatic " р." formatting
   const handlePriceChange = (value: string) => {
-    updateField('price', value);
+    // Extract only numbers
     const numeric = parseInt(value.replace(/\D/g, '')) || 0;
+
+    // Format with spaces for thousands and add " р."
+    const formatted = numeric > 0
+      ? `${numeric.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ')} р.`
+      : '';
+
+    updateField('price', formatted);
     updateField('priceNumeric', numeric);
   };
 
@@ -267,31 +274,18 @@ const AdminPage: React.FC = () => {
                     </div>
 
                     {/* Price */}
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <label className="block text-sm font-medium mb-2 text-gray-300">
-                          Цена <span className="text-red-500">*</span>
-                        </label>
-                        <input
-                          type="text"
-                          value={formData.price || ''}
-                          onChange={(e) => handlePriceChange(e.target.value)}
-                          className="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-lg focus:border-red-500 outline-none transition-colors"
-                          placeholder="3 000 р."
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium mb-2 text-gray-300">
-                          Цена (число)
-                        </label>
-                        <input
-                          type="number"
-                          value={formData.priceNumeric || 0}
-                          onChange={(e) => updateField('priceNumeric', parseInt(e.target.value) || 0)}
-                          className="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-lg focus:border-red-500 outline-none transition-colors"
-                          placeholder="3000"
-                        />
-                      </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-2 text-gray-300">
+                        Цена <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        type="text"
+                        value={formData.price || ''}
+                        onChange={(e) => handlePriceChange(e.target.value)}
+                        className="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-lg focus:border-red-500 outline-none transition-colors"
+                        placeholder="Введите цифры: 3000"
+                      />
+                      <p className="text-xs text-gray-500 mt-1">Просто введите число, " р." добавится автоматически</p>
                     </div>
 
                     {/* Category & Color */}

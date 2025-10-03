@@ -14,7 +14,9 @@ router.get('/', async (req, res) => {
     // Parse JSON images field
     const parsedProducts = products.map(product => ({
       ...product,
-      images: product.images ? JSON.parse(product.images) : []
+      images: product.images && typeof product.images === 'string' && product.images.trim() !== ''
+        ? JSON.parse(product.images)
+        : (Array.isArray(product.images) ? product.images : [])
     }));
 
     res.json(parsedProducts);
@@ -38,7 +40,9 @@ router.get('/:id', async (req, res) => {
 
     const product = {
       ...products[0],
-      images: products[0].images ? JSON.parse(products[0].images) : []
+      images: products[0].images && typeof products[0].images === 'string' && products[0].images.trim() !== ''
+        ? JSON.parse(products[0].images)
+        : (Array.isArray(products[0].images) ? products[0].images : [])
     };
 
     res.json(product);
