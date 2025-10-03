@@ -288,10 +288,9 @@ const ProductPage: React.FC = () => {
                       {/* Size Chart Button - Only for clothing */}
                       <button
                         onClick={() => setShowSizeChart(true)}
-                        className="text-white/70 hover:text-white font-manrope text-xs sm:text-sm 
+                        className="text-white/70 hover:text-white font-manrope text-xs sm:text-sm
                                    transition-colors duration-200 flex items-center gap-1.5 underline decoration-dotted underline-offset-4"
                       >
-                        <span>📏</span>
                         <span>Таблица размеров</span>
                       </button>
                     </div>
@@ -386,7 +385,6 @@ const ProductPage: React.FC = () => {
                 onClick={() => setShowFullDescription(true)}
                 className="mt-4 w-full bg-white/5 hover:bg-white/10 border border-white/20 text-white font-manrope font-medium py-2.5 px-4 rounded-lg text-xs sm:text-sm transition-all duration-300 flex items-center justify-center gap-2 group"
               >
-                <span className="text-base">📖</span>
                 <span>Читать полностью</span>
                 <svg className="w-3 h-3 sm:w-4 sm:h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -575,9 +573,8 @@ const ProductPage: React.FC = () => {
         {/* Size Chart Modal */}
         <Modal isOpen={showSizeChart} onClose={() => setShowSizeChart(false)}>
           <div className="p-4 sm:p-6 max-w-4xl">
-            <h2 className="text-white font-manrope font-bold text-xl sm:text-2xl mb-4 flex items-center gap-2">
-              <span>📏</span>
-              <span>Таблица размеров</span>
+            <h2 className="text-white font-manrope font-bold text-xl sm:text-2xl mb-4">
+              Таблица размеров
             </h2>
             
             {/* Size Chart Image */}
@@ -595,7 +592,6 @@ const ProductPage: React.FC = () => {
                     placeholder.className = 'w-full aspect-[4/3] flex items-center justify-center text-white/60 font-manrope p-8 text-center';
                     placeholder.innerHTML = `
                       <div>
-                        <p class="text-lg mb-2">📐</p>
                         <p class="text-sm">Таблица размеров скоро будет добавлена</p>
                         <p class="text-xs mt-2 text-white/40">Пожалуйста, свяжитесь с нами для уточнения размеров</p>
                       </div>
@@ -608,18 +604,9 @@ const ProductPage: React.FC = () => {
 
             {/* Size Guide Tips */}
             <div className="mt-4 space-y-2 text-white/70 text-xs sm:text-sm font-manrope">
-              <p className="flex items-start gap-2">
-                <span>💡</span>
-                <span>Замеряйте свою одежду в расправленном виде</span>
-              </p>
-              <p className="flex items-start gap-2">
-                <span>📐</span>
-                <span>При промежуточных значениях выбирайте больший размер</span>
-              </p>
-              <p className="flex items-start gap-2">
-                <span>❓</span>
-                <span>Не уверены в размере? Напишите нам, мы поможем!</span>
-              </p>
+              <p>• Замеряйте свою одежду в расправленном виде</p>
+              <p>• При промежуточных значениях выбирайте больший размер</p>
+              <p>• Не уверены в размере? Напишите нам, мы поможем!</p>
             </div>
           </div>
         </Modal>
@@ -627,9 +614,8 @@ const ProductPage: React.FC = () => {
         {/* Full Description Modal */}
         <Modal isOpen={showFullDescription} onClose={() => setShowFullDescription(false)}>
           <div className="p-4 sm:p-6 max-w-4xl">
-            <h2 className="text-white font-manrope font-bold text-xl sm:text-2xl mb-4 flex items-center gap-2">
-              <span>📖</span>
-              <span>Описание товара</span>
+            <h2 className="text-white font-manrope font-bold text-xl sm:text-2xl mb-4">
+              Описание товара
             </h2>
             
             <div className="bg-white/5 rounded-xl p-4 sm:p-6 border border-white/10">

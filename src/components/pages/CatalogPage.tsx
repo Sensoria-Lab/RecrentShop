@@ -20,6 +20,7 @@ const CatalogPage: React.FC = () => {
   const categoryButtonRefs = useRef<{ [key: string]: HTMLButtonElement | null }>({});
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
+  const [itemsToShow, setItemsToShow] = useState(9); // Show 9 items initially (3x3 grid)
 
   // Filter states
   const [sortBy, setSortBy] = useState<SortOption>('popularity');
@@ -102,10 +103,16 @@ const CatalogPage: React.FC = () => {
     };
   }, []);
 
-  // Reset visible items when filters change (except category to preserve background)
+  // Reset visible items and pagination when filters change
   useEffect(() => {
     setVisibleItems(new Set());
-  }, [sortBy, colorFilter, sizeFilter, clothingTypeFilter, priceRange, minRating]);
+    setItemsToShow(9); // Reset to initial 9 items
+  }, [sortBy, categoryFilter, colorFilter, sizeFilter, clothingTypeFilter, priceRange, minRating]);
+
+  // Load more items
+  const loadMoreItems = () => {
+    setItemsToShow(prev => prev + 9); // Load 9 more items
+  };
 
   return (
     <PageContainer>
@@ -196,61 +203,6 @@ const CatalogPage: React.FC = () => {
                       <option value="price-asc" className="bg-black text-white">Цена: по возрастанию</option>
                       <option value="price-desc" className="bg-black text-white">Цена: по убыванию</option>
                     </select>
-                  </div>
-
-                  {/* Clothing Type Filter */}
-                  {(categoryFilter === 'clothing' || categoryFilter === 'all') && (
-                    <div className="mb-4 sm:mb-6">
-                      <label className="text-white/80 font-manrope text-xs sm:text-sm mb-2 block">Тип одежды</label>
-                      <div className="space-y-2">
-                        {[
-                          { value: 'all', label: 'Вся одежда' },
-                          { value: 'hoodie', label: 'Худи' },
-                          { value: 'tshirt', label: 'Футболки' }
-                        ].map(option => (
-                          <label key={option.value} className="flex items-center gap-2 cursor-pointer group">
-                            <input
-                              type="radio"
-                              name="clothingType"
-                              value={option.value}
-                              checked={clothingTypeFilter === option.value}
-                              onChange={(e) => setClothingTypeFilter(e.target.value as ClothingTypeFilter)}
-                              className="w-4 h-4 accent-white"
-                            />
-                            <span className="text-white/70 font-manrope group-hover:text-white transition-colors">
-                              {option.label}
-                            </span>
-                          </label>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Color Filter */}
-                  <div className="mb-4 sm:mb-6">
-                    <label className="text-white/80 font-manrope text-xs sm:text-sm mb-2 block">Цвет</label>
-                    <div className="space-y-2">
-                      {[
-                        { value: 'all', label: 'Все цвета' },
-                        { value: 'black', label: 'Черный' },
-                        { value: 'white', label: 'Белый' },
-                        { value: 'red', label: 'Красный' }
-                      ].map(option => (
-                        <label key={option.value} className="flex items-center gap-2 cursor-pointer group">
-                          <input
-                            type="radio"
-                            name="color"
-                            value={option.value}
-                            checked={colorFilter === option.value}
-                            onChange={(e) => setColorFilter(e.target.value as ColorFilter)}
-                            className="w-4 h-4 accent-white"
-                          />
-                          <span className="text-white/70 font-manrope group-hover:text-white transition-colors">
-                            {option.label}
-                          </span>
-                        </label>
-                      ))}
-                    </div>
                   </div>
 
                   {/* Size Filter */}
@@ -348,28 +300,6 @@ const CatalogPage: React.FC = () => {
                     />
                   </div>
 
-                  {/* Rating Filter */}
-                  <div className="mb-4 sm:mb-6">
-                    <label className="text-white/80 font-manrope text-xs sm:text-sm mb-2 block">Минимальный рейтинг</label>
-                    <div className="space-y-2">
-                      {[0, 3, 4, 5].map(rating => (
-                        <label key={rating} className="flex items-center gap-2 cursor-pointer group">
-                          <input
-                            type="radio"
-                            name="rating"
-                            value={rating}
-                            checked={minRating === rating}
-                            onChange={() => setMinRating(rating)}
-                            className="w-4 h-4 accent-white"
-                          />
-                          <span className="text-white/70 font-manrope group-hover:text-white transition-colors">
-                            {rating === 0 ? 'Любой' : `${rating}+ ⭐`}
-                          </span>
-                        </label>
-                      ))}
-                    </div>
-                  </div>
-
                   {/* Reset Filters */}
                   <button
                     onClick={() => {
@@ -391,60 +321,83 @@ const CatalogPage: React.FC = () => {
 
               {/* Products Grid */}
               <div className="flex-1">
-
                 {loading ? (
-                  <div className="bg-black/40 backdrop-blur rounded-lg sm:rounded-xl p-6 sm:p-8 md:p-12 text-center">
-                    <div className="inline-block w-12 h-12 border-4 border-white border-t-transparent rounded-full animate-spin mb-4"></div>
-                    <p className="text-white/60 font-manrope text-sm sm:text-base md:text-lg">
-                      Загрузка товаров...
-                    </p>
+                  <div className="bg-black/40 backdrop-blur rounded-lg sm:rounded-xl p-6 sm:p-8 md:p-12 text-center min-h-[600px] flex items-center justify-center">
+                    <div>
+                      <div className="inline-block w-12 h-12 border-4 border-white border-t-transparent rounded-full animate-spin mb-4"></div>
+                      <p className="text-white/60 font-manrope text-sm sm:text-base md:text-lg">
+                        Загрузка товаров...
+                      </p>
+                    </div>
                   </div>
                 ) : filteredProducts.length === 0 ? (
-                  <div className="bg-black/40 backdrop-blur rounded-lg sm:rounded-xl p-6 sm:p-8 md:p-12 text-center">
+                  <div className="bg-black/40 backdrop-blur rounded-lg sm:rounded-xl p-6 sm:p-8 md:p-12 text-center min-h-[600px] flex items-center justify-center">
                     <p className="text-white/60 font-manrope text-sm sm:text-base md:text-lg">
                       Товары не найдены. Попробуйте изменить фильтры.
                     </p>
                   </div>
                 ) : (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3 sm:gap-3 md:gap-4 lg:gap-4">
-                    {filteredProducts.map((product, index) => {
-                      const delayClass = `scroll-fade-in-delay-${Math.min(index % 4, 4)}`;
-                      const isVisible = visibleItems.has(index);
+                  <>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3 sm:gap-3 md:gap-4 lg:gap-4 min-h-[600px]">
+                      {filteredProducts.slice(0, itemsToShow).map((product, index) => {
+                        const delayClass = `scroll-fade-in-delay-${Math.min(index % 4, 4)}`;
+                        const isVisible = visibleItems.has(index);
 
-                      return (
-                        <div
-                          key={product.id}
-                          data-index={index}
-                          ref={(el) => {
-                            if (el && observerRef.current && !isVisible) {
-                              observerRef.current.observe(el);
-                            }
-                          }}
-                          className={`w-full flex justify-center ${isVisible ? `scroll-fade-in ${delayClass}` : ''}`}
+                        return (
+                          <div
+                            key={product.id}
+                            data-index={index}
+                            ref={(el) => {
+                              if (el && observerRef.current && !isVisible) {
+                                observerRef.current.observe(el);
+                              }
+                            }}
+                            className={`w-full flex justify-center ${isVisible ? `scroll-fade-in ${delayClass}` : ''}`}
+                          >
+                            <ProductCard
+                              id={product.id}
+                              image={product.image}
+                              images={product.images}
+                              title={product.title}
+                              subtitle={product.subtitle}
+                              productSize={product.productSize}
+                              productColor={product.productColor}
+                              price={product.price}
+                              priceNumeric={product.priceNumeric}
+                              rating={product.rating}
+                              reviewCount={product.reviewCount}
+                              color={product.color}
+                              category={product.category}
+                              clothingType={product.clothingType}
+                              size="small-catalog"
+                              onAddToCart={() => {}}
+                              onProductClick={handleProductClick}
+                            />
+                          </div>
+                        );
+                      })}
+                    </div>
+
+                    {/* Load More Button */}
+                    {itemsToShow < filteredProducts.length && (
+                      <div className="mt-8 flex justify-center">
+                        <button
+                          onClick={loadMoreItems}
+                          className="bg-white/10 hover:bg-white/20 border border-white/30 hover:border-white/50 text-white font-manrope font-semibold px-8 py-3 rounded-lg transition-all duration-300 flex items-center gap-2 group"
                         >
-                          <ProductCard
-                            id={product.id}
-                            image={product.image}
-                            images={product.images}
-                            title={product.title}
-                            subtitle={product.subtitle}
-                            productSize={product.productSize}
-                            productColor={product.productColor}
-                            price={product.price}
-                            priceNumeric={product.priceNumeric}
-                            rating={product.rating}
-                            reviewCount={product.reviewCount}
-                            color={product.color}
-                            category={product.category}
-                            clothingType={product.clothingType}
-                            size="small-catalog"
-                            onAddToCart={() => {}}
-                            onProductClick={handleProductClick}
-                          />
-                        </div>
-                      );
-                    })}
-                  </div>
+                          <span>Загрузить еще</span>
+                          <svg
+                            className="w-4 h-4 transition-transform group-hover:translate-y-0.5"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                          </svg>
+                        </button>
+                      </div>
+                    )}
+                  </>
                 )}
               </div>
             </div>

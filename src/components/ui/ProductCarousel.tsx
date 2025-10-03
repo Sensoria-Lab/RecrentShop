@@ -24,7 +24,7 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
   const totalItems = children.length;
   const actualIndex = currentIndex + responsiveItemsPerView;
   const [containerWidth, setContainerWidth] = useState(0);
-  const gap = 32; // 32px gap between items (gap-8)
+  const gap = 16; // 16px gap between items (gap-4)
   
   // Calculate card width based on container and responsive items
   useEffect(() => {
@@ -63,30 +63,49 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
     setCurrentIndex((prev) => prev + 1);
   };
 
-  // Touch / pointer swipe support
+  // Touch / pointer swipe support with drag
   const startXRef = useRef<number | null>(null);
   const deltaXRef = useRef(0);
+  const isDraggingRef = useRef(false);
+  const [dragOffset, setDragOffset] = useState(0);
 
   const onPointerDown = (e: React.PointerEvent) => {
     startXRef.current = e.clientX;
     deltaXRef.current = 0;
+    isDraggingRef.current = true;
+    if (carouselRef.current) {
+      (e.target as HTMLElement).setPointerCapture(e.pointerId);
+    }
   };
 
   const onPointerMove = (e: React.PointerEvent) => {
-    if (startXRef.current == null) return;
+    if (startXRef.current == null || !isDraggingRef.current) return;
     deltaXRef.current = e.clientX - startXRef.current;
+    setDragOffset(deltaXRef.current);
   };
 
   const onPointerUp = () => {
     if (startXRef.current == null) return;
-    const threshold = 48; // swipe threshold
+    isDraggingRef.current = false;
+    const threshold = 48;
+
+    // Calculate how many items to move based on drag distance
+    const itemWidth = cardWidth + gap;
+    const itemsMoved = Math.round(Math.abs(deltaXRef.current) / itemWidth);
+
     if (deltaXRef.current > threshold) {
-      handlePrev();
+      for (let i = 0; i < Math.max(1, itemsMoved); i++) {
+        if (!isTransitioning) handlePrev();
+      }
     } else if (deltaXRef.current < -threshold) {
-      handleNext();
+      for (let i = 0; i < Math.max(1, itemsMoved); i++) {
+        if (!isTransitioning) handleNext();
+      }
     }
+
     startXRef.current = null;
     deltaXRef.current = 0;
+    setDragOffset(0);
   };
 
   useEffect(() => {
@@ -106,7 +125,7 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
     return () => clearTimeout(timer);
   }, [currentIndex, isTransitioning, totalItems]);
 
-  const translateX = -(actualIndex * (cardWidth + gap));
+  const translateX = -(actualIndex * (cardWidth + gap)) + dragOffset;
 
   // If only one item, show it centered without arrows
   if (totalItems === 1) {
@@ -133,7 +152,8 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
       </button>
 
       {/* Carousel Container */}
-      <div className="overflow-hidden flex-1 py-3 touch-pan-y"
+      <div
+        className="overflow-hidden flex-1 py-3 flex items-center cursor-grab active:cursor-grabbing select-none"
         onPointerDown={onPointerDown}
         onPointerMove={onPointerMove}
         onPointerUp={onPointerUp}
@@ -141,16 +161,16 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
       >
         <div
           ref={carouselRef}
-          className="flex gap-8"
+          className="flex gap-4 items-center"
           style={{
             transform: `translateX(${translateX}px)`,
-            transition: isTransitioning ? 'transform 0.28s cubic-bezier(0.4, 0.1, 0.2, 1)' : 'none',
+            transition: isTransitioning || dragOffset === 0 ? 'transform 0.28s cubic-bezier(0.4, 0.1, 0.2, 1)' : 'none',
           }}
         >
           {extendedChildren.map((child, index) => (
             <div
               key={index}
-              className="flex-shrink-0"
+              className="flex-shrink-0 flex items-center justify-center"
               style={{ width: `${cardWidth}px` }}
             >
               {child}
