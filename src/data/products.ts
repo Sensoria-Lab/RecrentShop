@@ -279,7 +279,7 @@ export const CLOTHING: Product[] = [
     clothingType: 'tshirt'
   },
   {
-    id: 10,
+    id: 18,
     image: '/images/products/clothing/tshirts/Serpents2.0_white/img_7205.webp',
     images: [
       '/images/products/clothing/tshirts/Serpents2.0_white/img_7205.webp',
