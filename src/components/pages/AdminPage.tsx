@@ -1,18 +1,55 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import PageLayout from '../shared/PageLayout';
-import { ALL_PRODUCTS } from '../../data/products';
 import { Product } from '../../types/product';
-import { Pencil, Trash2, Plus, Save, X } from 'lucide-react';
+import { Pencil, Trash2, Plus, Save, X, LogOut } from 'lucide-react';
+import { isAuthenticated, logout, getAuthToken, getCurrentUser } from '../../utils/auth';
+
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
 
 /**
  * Admin Panel Page
  * Allows adding, editing, and deleting products
  */
 const AdminPage: React.FC = () => {
-  const [products, setProducts] = useState<Product[]>(ALL_PRODUCTS);
+  const navigate = useNavigate();
+  const [products, setProducts] = useState<Product[]>([]);
   const [editingId, setEditingId] = useState<number | null>(null);
   const [isAdding, setIsAdding] = useState(false);
   const [formData, setFormData] = useState<Partial<Product>>({});
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+  const currentUser = getCurrentUser();
+
+  // Check authentication on mount
+  useEffect(() => {
+    if (!isAuthenticated()) {
+      navigate('/admin/login');
+      return;
+    }
+    loadProducts();
+  }, [navigate]);
+
+  // Load products from API
+  const loadProducts = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch(`${API_URL}/products`);
+      const data = await response.json();
+      setProducts(data);
+    } catch (err) {
+      setError('Ошибка загрузки товаров');
+      console.error('Load products error:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Logout handler
+  const handleLogout = () => {
+    logout();
+    navigate('/admin/login');
+  };
 
   // Start editing a product
   const handleEdit = (product: Product) => {
@@ -41,21 +78,42 @@ const AdminPage: React.FC = () => {
   };
 
   // Save product (add or update)
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!formData.title || !formData.price) {
       alert('Заполните все обязательные поля');
       return;
     }
 
-    if (isAdding) {
-      setProducts([...products, formData as Product]);
-    } else {
-      setProducts(products.map(p => p.id === editingId ? formData as Product : p));
-    }
+    try {
+      const token = getAuthToken();
+      const url = isAdding ? `${API_URL}/products` : `${API_URL}/products/${editingId}`;
+      const method = isAdding ? 'POST' : 'PUT';
 
-    setEditingId(null);
-    setIsAdding(false);
-    setFormData({});
+      const response = await fetch(url, {
+        method,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(formData)
+      });
+
+      if (!response.ok) {
+        throw new Error('Ошибка сохранения товара');
+      }
+
+      // Reload products
+      await loadProducts();
+
+      setEditingId(null);
+      setIsAdding(false);
+      setFormData({});
+      alert(isAdding ? 'Товар добавлен!' : 'Товар обновлен!');
+
+    } catch (err: any) {
+      alert(err.message || 'Ошибка сохранения');
+      console.error('Save error:', err);
+    }
   };
 
   // Cancel editing
@@ -66,9 +124,31 @@ const AdminPage: React.FC = () => {
   };
 
   // Delete product
-  const handleDelete = (id: number) => {
-    if (window.confirm('Вы уверены, что хотите удалить этот товар?')) {
-      setProducts(products.filter(p => p.id !== id));
+  const handleDelete = async (id: number) => {
+    if (!window.confirm('Вы уверены, что хотите удалить этот товар?')) {
+      return;
+    }
+
+    try {
+      const token = getAuthToken();
+      const response = await fetch(`${API_URL}/products/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error('Ошибка удаления товара');
+      }
+
+      // Reload products
+      await loadProducts();
+      alert('Товар удален!');
+
+    } catch (err: any) {
+      alert(err.message || 'Ошибка удаления');
+      console.error('Delete error:', err);
     }
   };
 
@@ -83,17 +163,45 @@ const AdminPage: React.FC = () => {
         <div className="max-w-7xl mx-auto">
           {/* Header */}
           <div className="flex justify-between items-center mb-8">
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-red-500 to-purple-600 bg-clip-text text-transparent">
-              Админ-панель
-            </h1>
-            <button
-              onClick={handleAdd}
-              className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-red-500 to-purple-600 rounded-lg hover:opacity-90 transition-opacity"
-            >
-              <Plus size={20} />
-              Добавить товар
-            </button>
+            <div>
+              <h1 className="text-4xl font-bold bg-gradient-to-r from-red-500 to-purple-600 bg-clip-text text-transparent">
+                Админ-панель
+              </h1>
+              {currentUser && (
+                <p className="text-gray-400 mt-2">Вы вошли как: {currentUser.username}</p>
+              )}
+            </div>
+            <div className="flex gap-3">
+              <button
+                onClick={handleAdd}
+                className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-red-500 to-purple-600 rounded-lg hover:opacity-90 transition-opacity"
+              >
+                <Plus size={20} />
+                Добавить товар
+              </button>
+              <button
+                onClick={handleLogout}
+                className="flex items-center gap-2 px-6 py-3 bg-gray-700 rounded-lg hover:bg-gray-600 transition-colors"
+              >
+                <LogOut size={20} />
+                Выйти
+              </button>
+            </div>
           </div>
+
+          {/* Loading & Error States */}
+          {loading && (
+            <div className="text-center py-12">
+              <div className="inline-block w-12 h-12 border-4 border-red-500 border-t-transparent rounded-full animate-spin"></div>
+              <p className="text-gray-400 mt-4">Загрузка товаров...</p>
+            </div>
+          )}
+
+          {error && (
+            <div className="mb-8 p-4 bg-red-500/10 border border-red-500/50 rounded-lg text-red-400">
+              {error}
+            </div>
+          )}
 
           {/* Add/Edit Form */}
           {(isAdding || editingId !== null) && (

@@ -14,6 +14,7 @@ const InfoPage = lazy(() => import('./components/pages/InfoPage'));
 const CartPage = lazy(() => import('./components/pages/CartPage'));
 const CheckoutPage = lazy(() => import('./components/pages/CheckoutPage'));
 const AdminPage = lazy(() => import('./components/pages/AdminPage'));
+const AdminLoginPage = lazy(() => import('./components/pages/AdminLoginPage'));
 const NotFoundPage = lazy(() => import('./components/pages/NotFoundPage'));
 
 /**
@@ -45,6 +46,7 @@ function App() {
             <Route path="/product" element={<ProductPage />} />
             <Route path="/cart" element={<CartPage />} />
             <Route path="/checkout" element={<CheckoutPage />} />
+            <Route path="/admin/login" element={<AdminLoginPage />} />
             <Route path="/admin" element={<AdminPage />} />
             <Route path="*" element={<NotFoundPage />} />
           </Routes>
