@@ -6,9 +6,8 @@ import ProductCarousel from '../ui/ProductCarousel';
 import SectionHeader from '../ui/SectionHeader';
 import { useProductNavigation } from '../../hooks';
 import { ROUTES } from '../../constants/routes';
+import { API_CONFIG } from '../../config/constants';
 import type { Product } from '../../types/product';
-
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
 
 const MainPage: React.FC = () => {
   const navigate = useNavigate();
@@ -17,20 +16,16 @@ const MainPage: React.FC = () => {
   const [isScrolling, setIsScrolling] = React.useState(false);
   const containerRef = React.useRef<HTMLDivElement>(null);
   const [products, setProducts] = React.useState<Product[]>([]);
-  const [loading, setLoading] = React.useState(true);
 
   // Fetch products from API
   React.useEffect(() => {
     const fetchProducts = async () => {
       try {
-        setLoading(true);
-        const response = await fetch(`${API_URL}/products`);
+        const response = await fetch(`${API_CONFIG.BASE_URL}/products`);
         const data = await response.json();
         setProducts(data);
       } catch (error) {
         console.error('Error fetching products:', error);
-      } finally {
-        setLoading(false);
       }
     };
 

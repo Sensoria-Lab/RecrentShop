@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PageLayout from '../shared/PageLayout';
 import { Lock, User } from 'lucide-react';
-
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+import { API_CONFIG, AUTH_CONFIG } from '../../config/constants';
 
 /**
  * Admin Login Page
@@ -23,7 +22,7 @@ const AdminLoginPage: React.FC = () => {
     setLoading(true);
 
     try {
-      const response = await fetch(`${API_URL}/auth/login`, {
+      const response = await fetch(`${API_CONFIG.BASE_URL}/auth/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -38,8 +37,8 @@ const AdminLoginPage: React.FC = () => {
       }
 
       // Save token to localStorage
-      localStorage.setItem('adminToken', data.token);
-      localStorage.setItem('adminUser', JSON.stringify(data.user));
+      localStorage.setItem(AUTH_CONFIG.TOKEN_KEY, data.token);
+      localStorage.setItem(AUTH_CONFIG.USER_KEY, JSON.stringify(data.user));
 
       // Redirect to admin panel
       navigate('/admin');

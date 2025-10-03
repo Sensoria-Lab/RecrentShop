@@ -5,8 +5,7 @@ import { Product } from '../../types/product';
 import { Pencil, Trash2, Plus, Save, X, LogOut, Eye } from 'lucide-react';
 import { isAuthenticated, logout, getAuthToken, getCurrentUser } from '../../utils/auth';
 import StarRating from '../shared/StarRating';
-
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+import { API_CONFIG } from '../../config/constants';
 
 /**
  * Admin Panel Page
@@ -35,7 +34,7 @@ const AdminPage: React.FC = () => {
   const loadProducts = async () => {
     try {
       setLoading(true);
-      const response = await fetch(`${API_URL}/products`);
+      const response = await fetch(`${API_CONFIG.BASE_URL}/products`);
       const data = await response.json();
       setProducts(data);
     } catch (err) {
@@ -88,7 +87,7 @@ const AdminPage: React.FC = () => {
 
     try {
       const token = getAuthToken();
-      const url = isAdding ? `${API_URL}/products` : `${API_URL}/products/${editingId}`;
+      const url = isAdding ? `${API_CONFIG.BASE_URL}/products` : `${API_CONFIG.BASE_URL}/products/${editingId}`;
       const method = isAdding ? 'POST' : 'PUT';
 
       console.log('Saving product:', formData);
@@ -139,7 +138,7 @@ const AdminPage: React.FC = () => {
 
     try {
       const token = getAuthToken();
-      const response = await fetch(`${API_URL}/products/${id}`, {
+      const response = await fetch(`${API_CONFIG.BASE_URL}/products/${id}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`

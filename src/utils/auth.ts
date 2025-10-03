@@ -2,13 +2,13 @@
  * Authentication utilities
  */
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+import { API_CONFIG, AUTH_CONFIG } from '../config/constants';
 
 /**
  * Check if user is authenticated
  */
 export const isAuthenticated = (): boolean => {
-  const token = localStorage.getItem('adminToken');
+  const token = localStorage.getItem(AUTH_CONFIG.TOKEN_KEY);
   return !!token;
 };
 
@@ -16,14 +16,14 @@ export const isAuthenticated = (): boolean => {
  * Get auth token
  */
 export const getAuthToken = (): string | null => {
-  return localStorage.getItem('adminToken');
+  return localStorage.getItem(AUTH_CONFIG.TOKEN_KEY);
 };
 
 /**
  * Get current admin user
  */
 export const getCurrentUser = (): { id: number; username: string } | null => {
-  const userStr = localStorage.getItem('adminUser');
+  const userStr = localStorage.getItem(AUTH_CONFIG.USER_KEY);
   if (!userStr) return null;
 
   try {
@@ -37,8 +37,8 @@ export const getCurrentUser = (): { id: number; username: string } | null => {
  * Logout user
  */
 export const logout = (): void => {
-  localStorage.removeItem('adminToken');
-  localStorage.removeItem('adminUser');
+  localStorage.removeItem(AUTH_CONFIG.TOKEN_KEY);
+  localStorage.removeItem(AUTH_CONFIG.USER_KEY);
 };
 
 /**
@@ -49,7 +49,7 @@ export const verifyToken = async (): Promise<boolean> => {
   if (!token) return false;
 
   try {
-    const response = await fetch(`${API_URL}/auth/verify`, {
+    const response = await fetch(`${API_CONFIG.BASE_URL}/auth/verify`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

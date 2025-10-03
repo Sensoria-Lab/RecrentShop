@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import ProductCard from '../ui/ProductCard';
 import PageContainer from '../shared/PageContainer';
 import { useProductFilters, useProductNavigation } from '../../hooks';
+import { API_CONFIG } from '../../config/constants';
 import type {
   SortOption,
   CategoryFilter,
@@ -10,8 +11,6 @@ import type {
   ClothingTypeFilter,
   Product
 } from '../../types/product';
-
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
 
 const CatalogPage: React.FC = () => {
   const [filtersOpen, setFiltersOpen] = useState(false);
@@ -35,7 +34,7 @@ const CatalogPage: React.FC = () => {
     const fetchProducts = async () => {
       try {
         setLoading(true);
-        const response = await fetch(`${API_URL}/products`);
+        const response = await fetch(`${API_CONFIG.BASE_URL}/products`);
         const data = await response.json();
         setProducts(data);
       } catch (error) {

@@ -74,9 +74,6 @@ const ProductPage: React.FC = () => {
     }
   }, [isClothingProduct, isProMousepadProduct, clothingDescription, selectedType]);
 
-  // Проверяем, нужна ли кнопка "Читать полностью" (если текст длиннее 300 символов)
-  const needsReadMore = fullDescription.length > 300;
-
   // Хук для навигации к другим продуктам
   const { navigateToProduct } = useProductNavigation();
 
