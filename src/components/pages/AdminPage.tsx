@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import PageLayout from '../shared/PageLayout';
+import PageContainer from '../shared/PageContainer';
 import { Product } from '../../types/product';
 import { Pencil, Trash2, Plus, Save, X, LogOut, Eye } from 'lucide-react';
 import { isAuthenticated, logout, getAuthToken, getCurrentUser } from '../../utils/auth';
-import StarRating from '../shared/StarRating';
 import { API_CONFIG } from '../../config/constants';
 
 /**
@@ -69,8 +68,6 @@ const AdminPage: React.FC = () => {
       subtitle: '',
       price: '',
       priceNumeric: 0,
-      rating: 5,
-      reviewCount: 0,
       color: 'black',
       category: 'mousepads',
       image: '',
@@ -178,8 +175,8 @@ const AdminPage: React.FC = () => {
   };
 
   return (
-    <PageLayout>
-      <div className="min-h-screen bg-black text-white py-12 px-4">
+    <PageContainer>
+      <div className="min-h-screen text-white py-12 px-4">
         <div className="max-w-7xl mx-auto">
           {/* Header */}
           <div className="flex justify-between items-center mb-8">
@@ -373,35 +370,6 @@ const AdminPage: React.FC = () => {
                       </div>
                     )}
 
-                    {/* Rating & Reviews */}
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <label className="block text-sm font-medium mb-2 text-gray-300">
-                          Рейтинг (1-5)
-                        </label>
-                        <input
-                          type="number"
-                          min="1"
-                          max="5"
-                          value={formData.rating || 5}
-                          onChange={(e) => updateField('rating', parseInt(e.target.value))}
-                          className="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-lg focus:border-red-500 outline-none transition-colors"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium mb-2 text-gray-300">
-                          Количество отзывов
-                        </label>
-                        <input
-                          type="number"
-                          min="0"
-                          value={formData.reviewCount || 0}
-                          onChange={(e) => updateField('reviewCount', parseInt(e.target.value))}
-                          className="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-lg focus:border-red-500 outline-none transition-colors"
-                        />
-                      </div>
-                    </div>
-
                     {/* Image URL */}
                     <div>
                       <label className="block text-sm font-medium mb-2 text-gray-300">
@@ -493,14 +461,6 @@ const AdminPage: React.FC = () => {
                         {formData.price || '0 р.'}
                       </p>
 
-                      {/* Rating */}
-                      <div className="flex items-center gap-2">
-                        <StarRating rating={formData.rating || 0} />
-                        <span className="text-sm text-gray-400">
-                          ({formData.reviewCount || 0})
-                        </span>
-                      </div>
-
                       {/* Category Badge */}
                       <div className="flex gap-2 flex-wrap">
                         <span className="px-3 py-1 bg-gray-800 rounded-full text-xs">
@@ -536,7 +496,6 @@ const AdminPage: React.FC = () => {
                       <th className="px-6 py-4 text-left text-sm font-semibold">Название</th>
                       <th className="px-6 py-4 text-left text-sm font-semibold">Цена</th>
                       <th className="px-6 py-4 text-left text-sm font-semibold">Категория</th>
-                      <th className="px-6 py-4 text-left text-sm font-semibold">Рейтинг</th>
                       <th className="px-6 py-4 text-left text-sm font-semibold">Действия</th>
                     </tr>
                   </thead>
@@ -557,9 +516,6 @@ const AdminPage: React.FC = () => {
                         </td>
                         <td className="px-6 py-4 text-sm">{product.price}</td>
                         <td className="px-6 py-4 text-sm capitalize">{product.category}</td>
-                        <td className="px-6 py-4 text-sm">
-                          {product.rating} ⭐ ({product.reviewCount})
-                        </td>
                         <td className="px-6 py-4">
                           <div className="flex gap-2">
                             <button
@@ -605,7 +561,7 @@ const AdminPage: React.FC = () => {
           )}
         </div>
       </div>
-    </PageLayout>
+    </PageContainer>
   );
 };
 
