@@ -190,7 +190,7 @@ const AdminPage: React.FC = () => {
           </div>
 
           {/* Loading & Error States */}
-          {loading && (
+          {loading && !isAdding && !editingId && (
             <div className="text-center py-12">
               <div className="inline-block w-12 h-12 border-4 border-red-500 border-t-transparent rounded-full animate-spin"></div>
               <p className="text-gray-400 mt-4">Загрузка товаров...</p>
@@ -200,6 +200,14 @@ const AdminPage: React.FC = () => {
           {error && (
             <div className="mb-8 p-4 bg-red-500/10 border border-red-500/50 rounded-lg text-red-400">
               {error}
+            </div>
+          )}
+
+          {/* Empty State */}
+          {!loading && products.length === 0 && !isAdding && !editingId && (
+            <div className="text-center py-12 border border-gray-800 rounded-lg bg-gray-900/30">
+              <p className="text-gray-400 text-lg mb-4">База данных пуста</p>
+              <p className="text-gray-500 text-sm">Нажмите "Добавить товар" чтобы создать первый товар</p>
             </div>
           )}
 
