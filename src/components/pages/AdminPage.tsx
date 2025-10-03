@@ -2,14 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PageLayout from '../shared/PageLayout';
 import { Product } from '../../types/product';
-import { Pencil, Trash2, Plus, Save, X, LogOut } from 'lucide-react';
+import { Pencil, Trash2, Plus, Save, X, LogOut, Eye } from 'lucide-react';
 import { isAuthenticated, logout, getAuthToken, getCurrentUser } from '../../utils/auth';
+import StarRating from '../shared/StarRating';
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
 
 /**
  * Admin Panel Page
- * Allows adding, editing, and deleting products
+ * Allows adding, editing, and deleting products with live preview
  */
 const AdminPage: React.FC = () => {
   const navigate = useNavigate();
@@ -54,7 +55,7 @@ const AdminPage: React.FC = () => {
   // Start editing a product
   const handleEdit = (product: Product) => {
     setEditingId(product.id);
-    setFormData(product);
+    setFormData({ ...product });
     setIsAdding(false);
   };
 
@@ -62,8 +63,9 @@ const AdminPage: React.FC = () => {
   const handleAdd = () => {
     setIsAdding(true);
     setEditingId(null);
+    const newId = products.length > 0 ? Math.max(...products.map(p => p.id)) + 1 : 1;
     setFormData({
-      id: Math.max(...products.map(p => p.id)) + 1,
+      id: newId,
       title: '',
       subtitle: '',
       price: '',
@@ -102,9 +104,7 @@ const AdminPage: React.FC = () => {
         throw new Error('Ошибка сохранения товара');
       }
 
-      // Reload products
       await loadProducts();
-
       setEditingId(null);
       setIsAdding(false);
       setFormData({});
@@ -142,7 +142,6 @@ const AdminPage: React.FC = () => {
         throw new Error('Ошибка удаления товара');
       }
 
-      // Reload products
       await loadProducts();
       alert('Товар удален!');
 
@@ -153,8 +152,15 @@ const AdminPage: React.FC = () => {
   };
 
   // Update form field
-  const handleFieldChange = (field: keyof Product, value: any) => {
-    setFormData({ ...formData, [field]: value });
+  const updateField = (field: keyof Product, value: any) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
+  };
+
+  // Handle price change
+  const handlePriceChange = (value: string) => {
+    updateField('price', value);
+    const numeric = parseInt(value.replace(/\D/g, '')) || 0;
+    updateField('priceNumeric', numeric);
   };
 
   return (
@@ -211,253 +217,391 @@ const AdminPage: React.FC = () => {
             </div>
           )}
 
-          {/* Add/Edit Form */}
+          {/* Add/Edit Form with Preview */}
           {(isAdding || editingId !== null) && (
-            <div className="mb-8 p-6 border border-gray-800 rounded-lg bg-gray-900/50 backdrop-blur-sm">
-              <h2 className="text-2xl font-bold mb-4">
-                {isAdding ? 'Добавить товар' : 'Редактировать товар'}
-              </h2>
+            <div className="mb-8 grid grid-cols-1 lg:grid-cols-3 gap-6">
+              {/* Form Section */}
+              <div className="lg:col-span-2">
+                <div className="p-6 border border-gray-800 rounded-lg bg-gray-900/50 backdrop-blur-sm">
+                  <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
+                    {isAdding ? (
+                      <>
+                        <Plus size={24} className="text-green-500" />
+                        Добавить товар
+                      </>
+                    ) : (
+                      <>
+                        <Pencil size={24} className="text-blue-500" />
+                        Редактировать товар
+                      </>
+                    )}
+                  </h2>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium mb-2">Название *</label>
-                  <input
-                    type="text"
-                    value={formData.title || ''}
-                    onChange={(e) => handleFieldChange('title', e.target.value)}
-                    className="w-full px-4 py-2 bg-black border border-gray-700 rounded-lg focus:border-red-500 outline-none"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium mb-2">Подзаголовок</label>
-                  <input
-                    type="text"
-                    value={formData.subtitle || ''}
-                    onChange={(e) => handleFieldChange('subtitle', e.target.value)}
-                    className="w-full px-4 py-2 bg-black border border-gray-700 rounded-lg focus:border-red-500 outline-none"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium mb-2">Цена *</label>
-                  <input
-                    type="text"
-                    value={formData.price || ''}
-                    onChange={(e) => {
-                      handleFieldChange('price', e.target.value);
-                      handleFieldChange('priceNumeric', parseInt(e.target.value.replace(/\D/g, '')) || 0);
-                    }}
-                    placeholder="3 000 р."
-                    className="w-full px-4 py-2 bg-black border border-gray-700 rounded-lg focus:border-red-500 outline-none"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium mb-2">Категория *</label>
-                  <select
-                    value={formData.category || 'mousepads'}
-                    onChange={(e) => handleFieldChange('category', e.target.value as 'mousepads' | 'clothing')}
-                    className="w-full px-4 py-2 bg-black border border-gray-700 rounded-lg focus:border-red-500 outline-none"
-                  >
-                    <option value="mousepads">Коврики</option>
-                    <option value="clothing">Одежда</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium mb-2">Цвет</label>
-                  <select
-                    value={formData.color || 'black'}
-                    onChange={(e) => handleFieldChange('color', e.target.value)}
-                    className="w-full px-4 py-2 bg-black border border-gray-700 rounded-lg focus:border-red-500 outline-none"
-                  >
-                    <option value="black">Черный</option>
-                    <option value="white">Белый</option>
-                    <option value="red">Красный</option>
-                  </select>
-                </div>
-
-                {formData.category === 'mousepads' && (
-                  <div>
-                    <label className="block text-sm font-medium mb-2">Размер</label>
-                    <input
-                      type="text"
-                      value={formData.productSize || ''}
-                      onChange={(e) => handleFieldChange('productSize', e.target.value)}
-                      placeholder="L, XL"
-                      className="w-full px-4 py-2 bg-black border border-gray-700 rounded-lg focus:border-red-500 outline-none"
-                    />
-                  </div>
-                )}
-
-                {formData.category === 'clothing' && (
-                  <>
+                  <div className="space-y-4">
+                    {/* Title */}
                     <div>
-                      <label className="block text-sm font-medium mb-2">Цвет (описание)</label>
+                      <label className="block text-sm font-medium mb-2 text-gray-300">
+                        Название <span className="text-red-500">*</span>
+                      </label>
                       <input
                         type="text"
-                        value={formData.productColor || ''}
-                        onChange={(e) => handleFieldChange('productColor', e.target.value)}
-                        placeholder="Белый, Черный"
-                        className="w-full px-4 py-2 bg-black border border-gray-700 rounded-lg focus:border-red-500 outline-none"
+                        value={formData.title || ''}
+                        onChange={(e) => updateField('title', e.target.value)}
+                        className="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-lg focus:border-red-500 outline-none transition-colors"
+                        placeholder="Коврик для мыши"
                       />
                     </div>
+
+                    {/* Subtitle */}
                     <div>
-                      <label className="block text-sm font-medium mb-2">Тип одежды</label>
-                      <select
-                        value={formData.clothingType || 'hoodie'}
-                        onChange={(e) => handleFieldChange('clothingType', e.target.value as 'hoodie' | 'tshirt' | 'sleeve')}
-                        className="w-full px-4 py-2 bg-black border border-gray-700 rounded-lg focus:border-red-500 outline-none"
-                      >
-                        <option value="hoodie">Худи</option>
-                        <option value="tshirt">Футболка</option>
-                        <option value="sleeve">Рукав</option>
-                      </select>
+                      <label className="block text-sm font-medium mb-2 text-gray-300">
+                        Подзаголовок
+                      </label>
+                      <input
+                        type="text"
+                        value={formData.subtitle || ''}
+                        onChange={(e) => updateField('subtitle', e.target.value)}
+                        className="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-lg focus:border-red-500 outline-none transition-colors"
+                        placeholder='"geoid-black"'
+                      />
                     </div>
-                  </>
-                )}
 
-                <div>
-                  <label className="block text-sm font-medium mb-2">Рейтинг (1-5)</label>
-                  <input
-                    type="number"
-                    min="1"
-                    max="5"
-                    value={formData.rating || 5}
-                    onChange={(e) => handleFieldChange('rating', parseInt(e.target.value))}
-                    className="w-full px-4 py-2 bg-black border border-gray-700 rounded-lg focus:border-red-500 outline-none"
-                  />
-                </div>
+                    {/* Price */}
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium mb-2 text-gray-300">
+                          Цена <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                          type="text"
+                          value={formData.price || ''}
+                          onChange={(e) => handlePriceChange(e.target.value)}
+                          className="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-lg focus:border-red-500 outline-none transition-colors"
+                          placeholder="3 000 р."
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium mb-2 text-gray-300">
+                          Цена (число)
+                        </label>
+                        <input
+                          type="number"
+                          value={formData.priceNumeric || 0}
+                          onChange={(e) => updateField('priceNumeric', parseInt(e.target.value) || 0)}
+                          className="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-lg focus:border-red-500 outline-none transition-colors"
+                          placeholder="3000"
+                        />
+                      </div>
+                    </div>
 
-                <div>
-                  <label className="block text-sm font-medium mb-2">Количество отзывов</label>
-                  <input
-                    type="number"
-                    min="0"
-                    value={formData.reviewCount || 0}
-                    onChange={(e) => handleFieldChange('reviewCount', parseInt(e.target.value))}
-                    className="w-full px-4 py-2 bg-black border border-gray-700 rounded-lg focus:border-red-500 outline-none"
-                  />
-                </div>
+                    {/* Category & Color */}
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium mb-2 text-gray-300">
+                          Категория <span className="text-red-500">*</span>
+                        </label>
+                        <select
+                          value={formData.category || 'mousepads'}
+                          onChange={(e) => updateField('category', e.target.value as 'mousepads' | 'clothing')}
+                          className="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-lg focus:border-red-500 outline-none transition-colors"
+                        >
+                          <option value="mousepads">Коврики</option>
+                          <option value="clothing">Одежда</option>
+                        </select>
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium mb-2 text-gray-300">
+                          Цвет
+                        </label>
+                        <select
+                          value={formData.color || 'black'}
+                          onChange={(e) => updateField('color', e.target.value)}
+                          className="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-lg focus:border-red-500 outline-none transition-colors"
+                        >
+                          <option value="black">Черный</option>
+                          <option value="white">Белый</option>
+                          <option value="red">Красный</option>
+                        </select>
+                      </div>
+                    </div>
 
-                <div className="md:col-span-2">
-                  <label className="block text-sm font-medium mb-2">URL главного изображения</label>
-                  <input
-                    type="text"
-                    value={formData.image || ''}
-                    onChange={(e) => handleFieldChange('image', e.target.value)}
-                    placeholder="/images/products/..."
-                    className="w-full px-4 py-2 bg-black border border-gray-700 rounded-lg focus:border-red-500 outline-none"
-                  />
-                </div>
+                    {/* Conditional fields based on category */}
+                    {formData.category === 'mousepads' && (
+                      <div>
+                        <label className="block text-sm font-medium mb-2 text-gray-300">
+                          Размер
+                        </label>
+                        <input
+                          type="text"
+                          value={formData.productSize || ''}
+                          onChange={(e) => updateField('productSize', e.target.value)}
+                          placeholder="L, XL, M"
+                          className="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-lg focus:border-red-500 outline-none transition-colors"
+                        />
+                      </div>
+                    )}
 
-                <div className="md:col-span-2">
-                  <label className="block text-sm font-medium mb-2">URLs дополнительных изображений (через запятую)</label>
-                  <textarea
-                    value={formData.images?.join(', ') || ''}
-                    onChange={(e) => handleFieldChange('images', e.target.value.split(',').map(s => s.trim()))}
-                    placeholder="/images/products/..., /images/products/..."
-                    rows={3}
-                    className="w-full px-4 py-2 bg-black border border-gray-700 rounded-lg focus:border-red-500 outline-none"
-                  />
+                    {formData.category === 'clothing' && (
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-sm font-medium mb-2 text-gray-300">
+                            Цвет (описание)
+                          </label>
+                          <input
+                            type="text"
+                            value={formData.productColor || ''}
+                            onChange={(e) => updateField('productColor', e.target.value)}
+                            placeholder="Белый, Черный"
+                            className="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-lg focus:border-red-500 outline-none transition-colors"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium mb-2 text-gray-300">
+                            Тип одежды
+                          </label>
+                          <select
+                            value={formData.clothingType || 'hoodie'}
+                            onChange={(e) => updateField('clothingType', e.target.value as 'hoodie' | 'tshirt' | 'sleeve')}
+                            className="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-lg focus:border-red-500 outline-none transition-colors"
+                          >
+                            <option value="hoodie">Худи</option>
+                            <option value="tshirt">Футболка</option>
+                            <option value="sleeve">Рукав</option>
+                          </select>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Rating & Reviews */}
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium mb-2 text-gray-300">
+                          Рейтинг (1-5)
+                        </label>
+                        <input
+                          type="number"
+                          min="1"
+                          max="5"
+                          value={formData.rating || 5}
+                          onChange={(e) => updateField('rating', parseInt(e.target.value))}
+                          className="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-lg focus:border-red-500 outline-none transition-colors"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium mb-2 text-gray-300">
+                          Количество отзывов
+                        </label>
+                        <input
+                          type="number"
+                          min="0"
+                          value={formData.reviewCount || 0}
+                          onChange={(e) => updateField('reviewCount', parseInt(e.target.value))}
+                          className="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-lg focus:border-red-500 outline-none transition-colors"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Image URL */}
+                    <div>
+                      <label className="block text-sm font-medium mb-2 text-gray-300">
+                        URL главного изображения
+                      </label>
+                      <input
+                        type="text"
+                        value={formData.image || ''}
+                        onChange={(e) => updateField('image', e.target.value)}
+                        placeholder="/images/products/..."
+                        className="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-lg focus:border-red-500 outline-none transition-colors"
+                      />
+                    </div>
+
+                    {/* Additional Images */}
+                    <div>
+                      <label className="block text-sm font-medium mb-2 text-gray-300">
+                        URLs дополнительных изображений
+                      </label>
+                      <textarea
+                        value={formData.images?.join(', ') || ''}
+                        onChange={(e) => updateField('images', e.target.value.split(',').map(s => s.trim()).filter(Boolean))}
+                        placeholder="/images/products/..., /images/products/..."
+                        rows={3}
+                        className="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-lg focus:border-red-500 outline-none transition-colors resize-none"
+                      />
+                      <p className="text-xs text-gray-500 mt-1">Разделяйте URL запятыми</p>
+                    </div>
+
+                    {/* Action Buttons */}
+                    <div className="flex gap-4 pt-4">
+                      <button
+                        onClick={handleSave}
+                        className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-green-500 to-emerald-600 rounded-lg hover:opacity-90 transition-opacity font-semibold"
+                      >
+                        <Save size={20} />
+                        Сохранить
+                      </button>
+                      <button
+                        onClick={handleCancel}
+                        className="flex items-center gap-2 px-6 py-3 bg-gray-700 rounded-lg hover:bg-gray-600 transition-colors"
+                      >
+                        <X size={20} />
+                        Отмена
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </div>
 
-              <div className="flex gap-4 mt-6">
-                <button
-                  onClick={handleSave}
-                  className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-green-500 to-emerald-600 rounded-lg hover:opacity-90 transition-opacity"
-                >
-                  <Save size={20} />
-                  Сохранить
-                </button>
-                <button
-                  onClick={handleCancel}
-                  className="flex items-center gap-2 px-6 py-3 bg-gray-700 rounded-lg hover:bg-gray-600 transition-colors"
-                >
-                  <X size={20} />
-                  Отмена
-                </button>
+              {/* Preview Section */}
+              <div className="lg:col-span-1">
+                <div className="sticky top-4 p-6 border border-gray-800 rounded-lg bg-gray-900/50 backdrop-blur-sm">
+                  <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
+                    <Eye size={20} className="text-purple-500" />
+                    Превью
+                  </h3>
+
+                  <div className="space-y-4">
+                    {/* Product Image */}
+                    {formData.image ? (
+                      <div className="aspect-square rounded-lg overflow-hidden bg-gray-800 border border-gray-700">
+                        <img
+                          src={formData.image}
+                          alt={formData.title || 'Preview'}
+                          className="w-full h-full object-cover"
+                          onError={(e) => {
+                            e.currentTarget.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="400" height="400"%3E%3Crect fill="%23374151" width="400" height="400"/%3E%3Ctext fill="%239CA3AF" font-family="sans-serif" font-size="18" x="50%25" y="50%25" text-anchor="middle" dominant-baseline="middle"%3EИзображение не найдено%3C/text%3E%3C/svg%3E';
+                          }}
+                        />
+                      </div>
+                    ) : (
+                      <div className="aspect-square rounded-lg bg-gray-800 border border-gray-700 flex items-center justify-center">
+                        <p className="text-gray-500 text-sm">Нет изображения</p>
+                      </div>
+                    )}
+
+                    {/* Product Info */}
+                    <div className="space-y-2">
+                      <h4 className="font-semibold text-lg">
+                        {formData.title || 'Название товара'}
+                      </h4>
+                      {formData.subtitle && (
+                        <p className="text-sm text-gray-400">{formData.subtitle}</p>
+                      )}
+
+                      {/* Price */}
+                      <p className="text-2xl font-bold bg-gradient-to-r from-red-500 to-purple-600 bg-clip-text text-transparent">
+                        {formData.price || '0 р.'}
+                      </p>
+
+                      {/* Rating */}
+                      <div className="flex items-center gap-2">
+                        <StarRating rating={formData.rating || 0} />
+                        <span className="text-sm text-gray-400">
+                          ({formData.reviewCount || 0})
+                        </span>
+                      </div>
+
+                      {/* Category Badge */}
+                      <div className="flex gap-2 flex-wrap">
+                        <span className="px-3 py-1 bg-gray-800 rounded-full text-xs">
+                          {formData.category === 'mousepads' ? 'Коврики' : 'Одежда'}
+                        </span>
+                        {formData.productSize && (
+                          <span className="px-3 py-1 bg-gray-800 rounded-full text-xs">
+                            {formData.productSize}
+                          </span>
+                        )}
+                        {formData.clothingType && (
+                          <span className="px-3 py-1 bg-gray-800 rounded-full text-xs capitalize">
+                            {formData.clothingType}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           )}
 
           {/* Products Table */}
-          <div className="border border-gray-800 rounded-lg overflow-hidden">
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead className="bg-gray-900/50 backdrop-blur-sm">
-                  <tr>
-                    <th className="px-6 py-4 text-left text-sm font-semibold">ID</th>
-                    <th className="px-6 py-4 text-left text-sm font-semibold">Изображение</th>
-                    <th className="px-6 py-4 text-left text-sm font-semibold">Название</th>
-                    <th className="px-6 py-4 text-left text-sm font-semibold">Цена</th>
-                    <th className="px-6 py-4 text-left text-sm font-semibold">Категория</th>
-                    <th className="px-6 py-4 text-left text-sm font-semibold">Рейтинг</th>
-                    <th className="px-6 py-4 text-left text-sm font-semibold">Действия</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-800">
-                  {products.map((product) => (
-                    <tr key={product.id} className="hover:bg-gray-900/30 transition-colors">
-                      <td className="px-6 py-4 text-sm">{product.id}</td>
-                      <td className="px-6 py-4">
-                        <img
-                          src={product.image}
-                          alt={product.title}
-                          className="w-16 h-16 object-cover rounded-lg"
-                        />
-                      </td>
-                      <td className="px-6 py-4">
-                        <div className="text-sm font-medium">{product.title}</div>
-                        <div className="text-sm text-gray-400">{product.subtitle}</div>
-                      </td>
-                      <td className="px-6 py-4 text-sm">{product.price}</td>
-                      <td className="px-6 py-4 text-sm capitalize">{product.category}</td>
-                      <td className="px-6 py-4 text-sm">
-                        {product.rating} ⭐ ({product.reviewCount})
-                      </td>
-                      <td className="px-6 py-4">
-                        <div className="flex gap-2">
-                          <button
-                            onClick={() => handleEdit(product)}
-                            className="p-2 bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors"
-                            title="Редактировать"
-                          >
-                            <Pencil size={16} />
-                          </button>
-                          <button
-                            onClick={() => handleDelete(product.id)}
-                            className="p-2 bg-red-600 rounded-lg hover:bg-red-700 transition-colors"
-                            title="Удалить"
-                          >
-                            <Trash2 size={16} />
-                          </button>
-                        </div>
-                      </td>
+          {!loading && products.length > 0 && (
+            <div className="border border-gray-800 rounded-lg overflow-hidden">
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead className="bg-gray-900/50 backdrop-blur-sm">
+                    <tr>
+                      <th className="px-6 py-4 text-left text-sm font-semibold">ID</th>
+                      <th className="px-6 py-4 text-left text-sm font-semibold">Изображение</th>
+                      <th className="px-6 py-4 text-left text-sm font-semibold">Название</th>
+                      <th className="px-6 py-4 text-left text-sm font-semibold">Цена</th>
+                      <th className="px-6 py-4 text-left text-sm font-semibold">Категория</th>
+                      <th className="px-6 py-4 text-left text-sm font-semibold">Рейтинг</th>
+                      <th className="px-6 py-4 text-left text-sm font-semibold">Действия</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody className="divide-y divide-gray-800">
+                    {products.map((product) => (
+                      <tr key={product.id} className="hover:bg-gray-900/30 transition-colors">
+                        <td className="px-6 py-4 text-sm">{product.id}</td>
+                        <td className="px-6 py-4">
+                          <img
+                            src={product.image}
+                            alt={product.title}
+                            className="w-16 h-16 object-cover rounded-lg border border-gray-700"
+                          />
+                        </td>
+                        <td className="px-6 py-4">
+                          <div className="text-sm font-medium">{product.title}</div>
+                          <div className="text-sm text-gray-400">{product.subtitle}</div>
+                        </td>
+                        <td className="px-6 py-4 text-sm">{product.price}</td>
+                        <td className="px-6 py-4 text-sm capitalize">{product.category}</td>
+                        <td className="px-6 py-4 text-sm">
+                          {product.rating} ⭐ ({product.reviewCount})
+                        </td>
+                        <td className="px-6 py-4">
+                          <div className="flex gap-2">
+                            <button
+                              onClick={() => handleEdit(product)}
+                              className="p-2 bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors"
+                              title="Редактировать"
+                            >
+                              <Pencil size={16} />
+                            </button>
+                            <button
+                              onClick={() => handleDelete(product.id)}
+                              className="p-2 bg-red-600 rounded-lg hover:bg-red-700 transition-colors"
+                              title="Удалить"
+                            >
+                              <Trash2 size={16} />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
-          </div>
+          )}
 
           {/* Stats */}
-          <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="p-6 border border-gray-800 rounded-lg bg-gray-900/50 backdrop-blur-sm">
-              <div className="text-sm text-gray-400 mb-1">Всего товаров</div>
-              <div className="text-3xl font-bold">{products.length}</div>
+          {!loading && products.length > 0 && (
+            <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="p-6 border border-gray-800 rounded-lg bg-gray-900/50 backdrop-blur-sm">
+                <div className="text-sm text-gray-400 mb-1">Всего товаров</div>
+                <div className="text-3xl font-bold">{products.length}</div>
+              </div>
+              <div className="p-6 border border-gray-800 rounded-lg bg-gray-900/50 backdrop-blur-sm">
+                <div className="text-sm text-gray-400 mb-1">Коврики</div>
+                <div className="text-3xl font-bold">{products.filter(p => p.category === 'mousepads').length}</div>
+              </div>
+              <div className="p-6 border border-gray-800 rounded-lg bg-gray-900/50 backdrop-blur-sm">
+                <div className="text-sm text-gray-400 mb-1">Одежда</div>
+                <div className="text-3xl font-bold">{products.filter(p => p.category === 'clothing').length}</div>
+              </div>
             </div>
-            <div className="p-6 border border-gray-800 rounded-lg bg-gray-900/50 backdrop-blur-sm">
-              <div className="text-sm text-gray-400 mb-1">Коврики</div>
-              <div className="text-3xl font-bold">{products.filter(p => p.category === 'mousepads').length}</div>
-            </div>
-            <div className="p-6 border border-gray-800 rounded-lg bg-gray-900/50 backdrop-blur-sm">
-              <div className="text-sm text-gray-400 mb-1">Одежда</div>
-              <div className="text-3xl font-bold">{products.filter(p => p.category === 'clothing').length}</div>
-            </div>
-          </div>
+          )}
         </div>
       </div>
     </PageLayout>
