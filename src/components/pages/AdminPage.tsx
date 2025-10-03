@@ -91,6 +91,10 @@ const AdminPage: React.FC = () => {
       const url = isAdding ? `${API_URL}/products` : `${API_URL}/products/${editingId}`;
       const method = isAdding ? 'POST' : 'PUT';
 
+      console.log('Saving product:', formData);
+      console.log('URL:', url);
+      console.log('Method:', method);
+
       const response = await fetch(url, {
         method,
         headers: {
@@ -100,8 +104,12 @@ const AdminPage: React.FC = () => {
         body: JSON.stringify(formData)
       });
 
+      console.log('Response status:', response.status);
+
       if (!response.ok) {
-        throw new Error('Ошибка сохранения товара');
+        const errorData = await response.json().catch(() => ({}));
+        console.error('Error response:', errorData);
+        throw new Error(errorData.error || 'Ошибка сохранения товара');
       }
 
       await loadProducts();
