@@ -176,29 +176,29 @@ const AdminPage: React.FC = () => {
 
   return (
     <PageContainer>
-      <div className="min-h-screen text-white py-12 px-4">
-        <div className="max-w-7xl mx-auto">
+      <div className="max-w-7xl mx-auto">
+        <div className="bg-black/40 backdrop-blur rounded-xl p-8">
           {/* Header */}
           <div className="flex justify-between items-center mb-8">
             <div>
-              <h1 className="text-4xl font-bold bg-gradient-to-r from-red-500 to-purple-600 bg-clip-text text-transparent">
+              <h1 className="text-4xl font-bold text-white">
                 Админ-панель
               </h1>
               {currentUser && (
-                <p className="text-gray-400 mt-2">Вы вошли как: {currentUser.username}</p>
+                <p className="text-white/60 mt-2">Вы вошли как: {currentUser.username}</p>
               )}
             </div>
             <div className="flex gap-3">
               <button
                 onClick={handleAdd}
-                className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-red-500 to-purple-600 rounded-lg hover:opacity-90 transition-opacity"
+                className="flex items-center gap-2 px-6 py-3 bg-white text-black rounded-lg hover:bg-white/90 transition-all"
               >
                 <Plus size={20} />
                 Добавить товар
               </button>
               <button
                 onClick={handleLogout}
-                className="flex items-center gap-2 px-6 py-3 bg-gray-700 rounded-lg hover:bg-gray-600 transition-colors"
+                className="flex items-center gap-2 px-6 py-3 border border-white/20 text-white rounded-lg hover:bg-white/10 transition-all"
               >
                 <LogOut size={20} />
                 Выйти
@@ -209,8 +209,8 @@ const AdminPage: React.FC = () => {
           {/* Loading & Error States */}
           {loading && !isAdding && !editingId && (
             <div className="text-center py-12">
-              <div className="inline-block w-12 h-12 border-4 border-red-500 border-t-transparent rounded-full animate-spin"></div>
-              <p className="text-gray-400 mt-4">Загрузка товаров...</p>
+              <div className="inline-block w-12 h-12 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
+              <p className="text-white/60 mt-4">Загрузка товаров...</p>
             </div>
           )}
 
@@ -222,9 +222,9 @@ const AdminPage: React.FC = () => {
 
           {/* Empty State */}
           {!loading && products.length === 0 && !isAdding && !editingId && (
-            <div className="text-center py-12 border border-gray-800 rounded-lg bg-gray-900/30">
-              <p className="text-gray-400 text-lg mb-4">База данных пуста</p>
-              <p className="text-gray-500 text-sm">Нажмите "Добавить товар" чтобы создать первый товар</p>
+            <div className="text-center py-12 border border-white/20 rounded-lg bg-white/5">
+              <p className="text-white text-lg mb-4">База данных пуста</p>
+              <p className="text-white/60 text-sm">Нажмите "Добавить товар" чтобы создать первый товар</p>
             </div>
           )}
 
@@ -233,16 +233,16 @@ const AdminPage: React.FC = () => {
             <div className="mb-8 grid grid-cols-1 lg:grid-cols-3 gap-6">
               {/* Form Section */}
               <div className="lg:col-span-2">
-                <div className="p-6 border border-gray-800 rounded-lg bg-gray-900/50 backdrop-blur-sm">
-                  <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
+                <div className="p-6 border border-white/20 rounded-lg bg-white/5 backdrop-blur-sm">
+                  <h2 className="text-2xl font-bold mb-6 flex items-center gap-2 text-white">
                     {isAdding ? (
                       <>
-                        <Plus size={24} className="text-green-500" />
+                        <Plus size={24} className="text-white" />
                         Добавить товар
                       </>
                     ) : (
                       <>
-                        <Pencil size={24} className="text-blue-500" />
+                        <Pencil size={24} className="text-white" />
                         Редактировать товар
                       </>
                     )}
@@ -251,70 +251,70 @@ const AdminPage: React.FC = () => {
                   <div className="space-y-4">
                     {/* Title */}
                     <div>
-                      <label className="block text-sm font-medium mb-2 text-gray-300">
-                        Название <span className="text-red-500">*</span>
+                      <label className="block text-sm font-medium mb-2 text-white">
+                        Название <span className="text-red-400">*</span>
                       </label>
                       <input
                         type="text"
                         value={formData.title || ''}
                         onChange={(e) => updateField('title', e.target.value)}
-                        className="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-lg focus:border-red-500 outline-none transition-colors"
+                        className="w-full px-4 py-3 bg-black/30 border border-white/20 rounded-lg focus:border-white outline-none transition-colors text-white placeholder:text-white/40"
                         placeholder="Коврик для мыши"
                       />
                     </div>
 
                     {/* Subtitle */}
                     <div>
-                      <label className="block text-sm font-medium mb-2 text-gray-300">
+                      <label className="block text-sm font-medium mb-2 text-white">
                         Подзаголовок
                       </label>
                       <input
                         type="text"
                         value={formData.subtitle || ''}
                         onChange={(e) => updateField('subtitle', e.target.value)}
-                        className="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-lg focus:border-red-500 outline-none transition-colors"
+                        className="w-full px-4 py-3 bg-black/30 border border-white/20 rounded-lg focus:border-white outline-none transition-colors text-white placeholder:text-white/40"
                         placeholder='"geoid-black"'
                       />
                     </div>
 
                     {/* Price */}
                     <div>
-                      <label className="block text-sm font-medium mb-2 text-gray-300">
-                        Цена <span className="text-red-500">*</span>
+                      <label className="block text-sm font-medium mb-2 text-white">
+                        Цена <span className="text-red-400">*</span>
                       </label>
                       <input
                         type="text"
                         value={formData.price || ''}
                         onChange={(e) => handlePriceChange(e.target.value)}
-                        className="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-lg focus:border-red-500 outline-none transition-colors"
+                        className="w-full px-4 py-3 bg-black/30 border border-white/20 rounded-lg focus:border-white outline-none transition-colors text-white placeholder:text-white/40"
                         placeholder="Введите цифры: 3000"
                       />
-                      <p className="text-xs text-gray-500 mt-1">Просто введите число, " р." добавится автоматически</p>
+                      <p className="text-xs text-white/60 mt-1">Просто введите число, " р." добавится автоматически</p>
                     </div>
 
                     {/* Category & Color */}
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <label className="block text-sm font-medium mb-2 text-gray-300">
-                          Категория <span className="text-red-500">*</span>
+                        <label className="block text-sm font-medium mb-2 text-white">
+                          Категория <span className="text-red-400">*</span>
                         </label>
                         <select
                           value={formData.category || 'mousepads'}
                           onChange={(e) => updateField('category', e.target.value as 'mousepads' | 'clothing')}
-                          className="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-lg focus:border-red-500 outline-none transition-colors"
+                          className="w-full px-4 py-3 bg-black/30 border border-white/20 rounded-lg focus:border-white outline-none transition-colors text-white"
                         >
-                          <option value="mousepads">Коврики</option>
-                          <option value="clothing">Одежда</option>
+                          <option value="mousepads" className="bg-black">Коврики</option>
+                          <option value="clothing" className="bg-black">Одежда</option>
                         </select>
                       </div>
                       <div>
-                        <label className="block text-sm font-medium mb-2 text-gray-300">
+                        <label className="block text-sm font-medium mb-2 text-white">
                           Цвет
                         </label>
                         <select
                           value={formData.color || 'black'}
                           onChange={(e) => updateField('color', e.target.value)}
-                          className="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-lg focus:border-red-500 outline-none transition-colors"
+                          className="w-full px-4 py-3 bg-black/30 border border-white/20 rounded-lg focus:border-white outline-none transition-colors text-white placeholder:text-white/40"
                         >
                           <option value="black">Черный</option>
                           <option value="white">Белый</option>
@@ -326,7 +326,7 @@ const AdminPage: React.FC = () => {
                     {/* Conditional fields based on category */}
                     {formData.category === 'mousepads' && (
                       <div>
-                        <label className="block text-sm font-medium mb-2 text-gray-300">
+                        <label className="block text-sm font-medium mb-2 text-white">
                           Размер
                         </label>
                         <input
@@ -334,7 +334,7 @@ const AdminPage: React.FC = () => {
                           value={formData.productSize || ''}
                           onChange={(e) => updateField('productSize', e.target.value)}
                           placeholder="L, XL, M"
-                          className="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-lg focus:border-red-500 outline-none transition-colors"
+                          className="w-full px-4 py-3 bg-black/30 border border-white/20 rounded-lg focus:border-white outline-none transition-colors text-white placeholder:text-white/40"
                         />
                       </div>
                     )}
@@ -342,7 +342,7 @@ const AdminPage: React.FC = () => {
                     {formData.category === 'clothing' && (
                       <div className="grid grid-cols-2 gap-4">
                         <div>
-                          <label className="block text-sm font-medium mb-2 text-gray-300">
+                          <label className="block text-sm font-medium mb-2 text-white">
                             Цвет (описание)
                           </label>
                           <input
@@ -350,17 +350,17 @@ const AdminPage: React.FC = () => {
                             value={formData.productColor || ''}
                             onChange={(e) => updateField('productColor', e.target.value)}
                             placeholder="Белый, Черный"
-                            className="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-lg focus:border-red-500 outline-none transition-colors"
+                            className="w-full px-4 py-3 bg-black/30 border border-white/20 rounded-lg focus:border-white outline-none transition-colors text-white placeholder:text-white/40"
                           />
                         </div>
                         <div>
-                          <label className="block text-sm font-medium mb-2 text-gray-300">
+                          <label className="block text-sm font-medium mb-2 text-white">
                             Тип одежды
                           </label>
                           <select
                             value={formData.clothingType || 'hoodie'}
                             onChange={(e) => updateField('clothingType', e.target.value as 'hoodie' | 'tshirt' | 'sleeve')}
-                            className="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-lg focus:border-red-500 outline-none transition-colors"
+                            className="w-full px-4 py-3 bg-black/30 border border-white/20 rounded-lg focus:border-white outline-none transition-colors text-white placeholder:text-white/40"
                           >
                             <option value="hoodie">Худи</option>
                             <option value="tshirt">Футболка</option>
@@ -372,7 +372,7 @@ const AdminPage: React.FC = () => {
 
                     {/* Image URL */}
                     <div>
-                      <label className="block text-sm font-medium mb-2 text-gray-300">
+                      <label className="block text-sm font-medium mb-2 text-white">
                         URL главного изображения
                       </label>
                       <input
@@ -380,13 +380,13 @@ const AdminPage: React.FC = () => {
                         value={formData.image || ''}
                         onChange={(e) => updateField('image', e.target.value)}
                         placeholder="/images/products/..."
-                        className="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-lg focus:border-red-500 outline-none transition-colors"
+                        className="w-full px-4 py-3 bg-black/30 border border-white/20 rounded-lg focus:border-white outline-none transition-colors text-white placeholder:text-white/40"
                       />
                     </div>
 
                     {/* Additional Images */}
                     <div>
-                      <label className="block text-sm font-medium mb-2 text-gray-300">
+                      <label className="block text-sm font-medium mb-2 text-white">
                         URLs дополнительных изображений
                       </label>
                       <textarea
@@ -394,23 +394,23 @@ const AdminPage: React.FC = () => {
                         onChange={(e) => updateField('images', e.target.value.split(',').map(s => s.trim()).filter(Boolean))}
                         placeholder="/images/products/..., /images/products/..."
                         rows={3}
-                        className="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-lg focus:border-red-500 outline-none transition-colors resize-none"
+                        className="w-full px-4 py-3 bg-black/30 border border-white/20 rounded-lg focus:border-white outline-none transition-colors resize-none"
                       />
-                      <p className="text-xs text-gray-500 mt-1">Разделяйте URL запятыми</p>
+                      <p className="text-xs text-white/60 mt-1">Разделяйте URL запятыми</p>
                     </div>
 
                     {/* Action Buttons */}
                     <div className="flex gap-4 pt-4">
                       <button
                         onClick={handleSave}
-                        className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-green-500 to-emerald-600 rounded-lg hover:opacity-90 transition-opacity font-semibold"
+                        className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-white text-black rounded-lg hover:bg-white/90 transition-all font-semibold"
                       >
                         <Save size={20} />
                         Сохранить
                       </button>
                       <button
                         onClick={handleCancel}
-                        className="flex items-center gap-2 px-6 py-3 bg-gray-700 rounded-lg hover:bg-gray-600 transition-colors"
+                        className="flex items-center gap-2 px-6 py-3 border border-white/20 text-white rounded-lg hover:bg-white/10 transition-all"
                       >
                         <X size={20} />
                         Отмена
@@ -422,16 +422,16 @@ const AdminPage: React.FC = () => {
 
               {/* Preview Section */}
               <div className="lg:col-span-1">
-                <div className="sticky top-4 p-6 border border-gray-800 rounded-lg bg-gray-900/50 backdrop-blur-sm">
-                  <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
-                    <Eye size={20} className="text-purple-500" />
+                <div className="sticky top-4 p-6 border border-white/20 rounded-lg bg-white/5 backdrop-blur-sm">
+                  <h3 className="text-xl font-bold mb-4 flex items-center gap-2 text-white">
+                    <Eye size={20} className="text-white" />
                     Превью
                   </h3>
 
                   <div className="space-y-4">
                     {/* Product Image */}
                     {formData.image ? (
-                      <div className="aspect-square rounded-lg overflow-hidden bg-gray-800 border border-gray-700">
+                      <div className="aspect-square rounded-lg overflow-hidden bg-white/5 border border-white/20">
                         <img
                           src={formData.image}
                           alt={formData.title || 'Preview'}
@@ -442,37 +442,37 @@ const AdminPage: React.FC = () => {
                         />
                       </div>
                     ) : (
-                      <div className="aspect-square rounded-lg bg-gray-800 border border-gray-700 flex items-center justify-center">
-                        <p className="text-gray-500 text-sm">Нет изображения</p>
+                      <div className="aspect-square rounded-lg bg-white/5 border border-white/20 flex items-center justify-center">
+                        <p className="text-white/60 text-sm">Нет изображения</p>
                       </div>
                     )}
 
                     {/* Product Info */}
                     <div className="space-y-2">
-                      <h4 className="font-semibold text-lg">
+                      <h4 className="font-semibold text-lg text-white">
                         {formData.title || 'Название товара'}
                       </h4>
                       {formData.subtitle && (
-                        <p className="text-sm text-gray-400">{formData.subtitle}</p>
+                        <p className="text-sm text-white/60">{formData.subtitle}</p>
                       )}
 
                       {/* Price */}
-                      <p className="text-2xl font-bold bg-gradient-to-r from-red-500 to-purple-600 bg-clip-text text-transparent">
+                      <p className="text-2xl font-bold text-white">
                         {formData.price || '0 р.'}
                       </p>
 
                       {/* Category Badge */}
                       <div className="flex gap-2 flex-wrap">
-                        <span className="px-3 py-1 bg-gray-800 rounded-full text-xs">
+                        <span className="px-3 py-1 bg-white/5 rounded-full text-xs text-white">
                           {formData.category === 'mousepads' ? 'Коврики' : 'Одежда'}
                         </span>
                         {formData.productSize && (
-                          <span className="px-3 py-1 bg-gray-800 rounded-full text-xs">
+                          <span className="px-3 py-1 bg-white/5 rounded-full text-xs text-white">
                             {formData.productSize}
                           </span>
                         )}
                         {formData.clothingType && (
-                          <span className="px-3 py-1 bg-gray-800 rounded-full text-xs capitalize">
+                          <span className="px-3 py-1 bg-white/5 rounded-full text-xs capitalize text-white">
                             {formData.clothingType}
                           </span>
                         )}
@@ -486,48 +486,48 @@ const AdminPage: React.FC = () => {
 
           {/* Products Table */}
           {!loading && products.length > 0 && (
-            <div className="border border-gray-800 rounded-lg overflow-hidden">
+            <div className="border border-white/20 rounded-lg overflow-hidden">
               <div className="overflow-x-auto">
                 <table className="w-full">
-                  <thead className="bg-gray-900/50 backdrop-blur-sm">
+                  <thead className="bg-white/5 backdrop-blur-sm">
                     <tr>
-                      <th className="px-6 py-4 text-left text-sm font-semibold">ID</th>
-                      <th className="px-6 py-4 text-left text-sm font-semibold">Изображение</th>
-                      <th className="px-6 py-4 text-left text-sm font-semibold">Название</th>
-                      <th className="px-6 py-4 text-left text-sm font-semibold">Цена</th>
-                      <th className="px-6 py-4 text-left text-sm font-semibold">Категория</th>
-                      <th className="px-6 py-4 text-left text-sm font-semibold">Действия</th>
+                      <th className="px-6 py-4 text-left text-sm font-semibold text-white">ID</th>
+                      <th className="px-6 py-4 text-left text-sm font-semibold text-white">Изображение</th>
+                      <th className="px-6 py-4 text-left text-sm font-semibold text-white">Название</th>
+                      <th className="px-6 py-4 text-left text-sm font-semibold text-white">Цена</th>
+                      <th className="px-6 py-4 text-left text-sm font-semibold text-white">Категория</th>
+                      <th className="px-6 py-4 text-left text-sm font-semibold text-white">Действия</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-gray-800">
+                  <tbody className="divide-y divide-white/20">
                     {products.map((product) => (
-                      <tr key={product.id} className="hover:bg-gray-900/30 transition-colors">
-                        <td className="px-6 py-4 text-sm">{product.id}</td>
+                      <tr key={product.id} className="hover:bg-white/5 transition-colors">
+                        <td className="px-6 py-4 text-sm text-white">{product.id}</td>
                         <td className="px-6 py-4">
                           <img
                             src={product.image}
                             alt={product.title}
-                            className="w-16 h-16 object-cover rounded-lg border border-gray-700"
+                            className="w-16 h-16 object-cover rounded-lg border border-white/20"
                           />
                         </td>
                         <td className="px-6 py-4">
-                          <div className="text-sm font-medium">{product.title}</div>
-                          <div className="text-sm text-gray-400">{product.subtitle}</div>
+                          <div className="text-sm font-medium text-white">{product.title}</div>
+                          <div className="text-sm text-white/60">{product.subtitle}</div>
                         </td>
-                        <td className="px-6 py-4 text-sm">{product.price}</td>
-                        <td className="px-6 py-4 text-sm capitalize">{product.category}</td>
+                        <td className="px-6 py-4 text-sm text-white">{product.price}</td>
+                        <td className="px-6 py-4 text-sm capitalize text-white">{product.category}</td>
                         <td className="px-6 py-4">
                           <div className="flex gap-2">
                             <button
                               onClick={() => handleEdit(product)}
-                              className="p-2 bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors"
+                              className="p-2 border border-white/20 rounded-lg hover:bg-white/10 transition-all text-white"
                               title="Редактировать"
                             >
                               <Pencil size={16} />
                             </button>
                             <button
                               onClick={() => handleDelete(product.id)}
-                              className="p-2 bg-red-600 rounded-lg hover:bg-red-700 transition-colors"
+                              className="p-2 border border-white/20 rounded-lg hover:bg-white/10 transition-all text-white"
                               title="Удалить"
                             >
                               <Trash2 size={16} />
@@ -545,17 +545,17 @@ const AdminPage: React.FC = () => {
           {/* Stats */}
           {!loading && products.length > 0 && (
             <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="p-6 border border-gray-800 rounded-lg bg-gray-900/50 backdrop-blur-sm">
-                <div className="text-sm text-gray-400 mb-1">Всего товаров</div>
-                <div className="text-3xl font-bold">{products.length}</div>
+              <div className="p-6 border border-white/20 rounded-lg bg-white/5 backdrop-blur-sm">
+                <div className="text-sm text-white/60 mb-1">Всего товаров</div>
+                <div className="text-3xl font-bold text-white">{products.length}</div>
               </div>
-              <div className="p-6 border border-gray-800 rounded-lg bg-gray-900/50 backdrop-blur-sm">
-                <div className="text-sm text-gray-400 mb-1">Коврики</div>
-                <div className="text-3xl font-bold">{products.filter(p => p.category === 'mousepads').length}</div>
+              <div className="p-6 border border-white/20 rounded-lg bg-white/5 backdrop-blur-sm">
+                <div className="text-sm text-white/60 mb-1">Коврики</div>
+                <div className="text-3xl font-bold text-white">{products.filter(p => p.category === 'mousepads').length}</div>
               </div>
-              <div className="p-6 border border-gray-800 rounded-lg bg-gray-900/50 backdrop-blur-sm">
-                <div className="text-sm text-gray-400 mb-1">Одежда</div>
-                <div className="text-3xl font-bold">{products.filter(p => p.category === 'clothing').length}</div>
+              <div className="p-6 border border-white/20 rounded-lg bg-white/5 backdrop-blur-sm">
+                <div className="text-sm text-white/60 mb-1">Одежда</div>
+                <div className="text-3xl font-bold text-white">{products.filter(p => p.category === 'clothing').length}</div>
               </div>
             </div>
           )}
