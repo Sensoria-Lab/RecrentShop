@@ -19,6 +19,13 @@ const AdminLoginPage: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+
+    // Check if running in production without API
+    if (API_CONFIG.USE_STATIC_DATA) {
+      setError('Админ-панель недоступна на production без настроенного backend API. Запустите приложение локально для доступа к админ-панели.');
+      return;
+    }
+
     setLoading(true);
 
     try {

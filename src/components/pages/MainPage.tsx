@@ -7,6 +7,7 @@ import SectionHeader from '../ui/SectionHeader';
 import { useProductNavigation } from '../../hooks';
 import { ROUTES } from '../../constants/routes';
 import { API_CONFIG } from '../../config/constants';
+import { ALL_PRODUCTS } from '../../data/products';
 import type { Product } from '../../types/product';
 
 const MainPage: React.FC = () => {
@@ -17,15 +18,23 @@ const MainPage: React.FC = () => {
   const containerRef = React.useRef<HTMLDivElement>(null);
   const [products, setProducts] = React.useState<Product[]>([]);
 
-  // Fetch products from API
+  // Fetch products from API or use static data
   React.useEffect(() => {
     const fetchProducts = async () => {
+      // Use static data in production if no API URL is configured
+      if (API_CONFIG.USE_STATIC_DATA) {
+        setProducts(ALL_PRODUCTS);
+        return;
+      }
+
       try {
         const response = await fetch(`${API_CONFIG.BASE_URL}/products`);
         const data = await response.json();
         setProducts(data);
       } catch (error) {
         console.error('Error fetching products:', error);
+        // Fallback to static data on error
+        setProducts(ALL_PRODUCTS);
       }
     };
 

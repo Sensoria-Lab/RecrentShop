@@ -3,6 +3,7 @@ import ProductCard from '../ui/ProductCard';
 import PageContainer from '../shared/PageContainer';
 import { useProductFilters, useProductNavigation } from '../../hooks';
 import { API_CONFIG } from '../../config/constants';
+import { ALL_PRODUCTS } from '../../data/products';
 import type {
   SortOption,
   CategoryFilter,
@@ -29,9 +30,16 @@ const CatalogPage: React.FC = () => {
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 10000]);
   const [minRating, setMinRating] = useState<number>(0);
 
-  // Fetch products from API
+  // Fetch products from API or use static data
   useEffect(() => {
     const fetchProducts = async () => {
+      // Use static data in production if no API URL is configured
+      if (API_CONFIG.USE_STATIC_DATA) {
+        setProducts(ALL_PRODUCTS);
+        setLoading(false);
+        return;
+      }
+
       try {
         setLoading(true);
         const response = await fetch(`${API_CONFIG.BASE_URL}/products`);
@@ -39,6 +47,8 @@ const CatalogPage: React.FC = () => {
         setProducts(data);
       } catch (error) {
         console.error('Error fetching products:', error);
+        // Fallback to static data on error
+        setProducts(ALL_PRODUCTS);
       } finally {
         setLoading(false);
       }

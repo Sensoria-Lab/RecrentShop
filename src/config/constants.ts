@@ -6,6 +6,7 @@
 export const API_CONFIG = {
   BASE_URL: process.env.REACT_APP_API_URL || 'http://localhost:5000/api',
   TIMEOUT: 30000, // 30 seconds
+  USE_STATIC_DATA: process.env.NODE_ENV === 'production' && !process.env.REACT_APP_API_URL,
 } as const;
 
 // GitHub Pages Configuration
