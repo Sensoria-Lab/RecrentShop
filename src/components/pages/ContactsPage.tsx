@@ -241,11 +241,11 @@ const ContactsPage: React.FC = () => {
 
   return (
     <PageLayout>
-      <div className="max-w-5xl mx-auto">
+      <div className="max-w-6xl mx-auto">
         {/* Background container for title and cards */}
-        <div className="bg-black/40 backdrop-blur rounded-lg sm:rounded-xl p-4 sm:p-6 md:p-10 lg:p-14">
+        <div className="bg-black/40 backdrop-blur rounded-lg sm:rounded-xl md:rounded-2xl p-6 sm:p-8 md:p-12 lg:p-16 xl:p-20">
           {/* Page title */}
-          <div className="text-center mb-6 sm:mb-10 md:mb-16 lg:mb-20 scroll-fade-in">
+          <div className="text-center mb-8 sm:mb-12 md:mb-16 lg:mb-20 scroll-fade-in">
             <h1 className="text-white font-manrope font-bold text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl mb-3 sm:mb-4 md:mb-6 drop-shadow-[0_4px_12px_rgba(0,0,0,0.9)]">
               Контакты
             </h1>
@@ -253,7 +253,7 @@ const ContactsPage: React.FC = () => {
           </div>
 
           {/* Contact cards grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-5 md:gap-7 lg:gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 md:gap-8 lg:gap-10">
             {contactItems.map((item, index) => (
               <div key={item.id} className={`scroll-fade-in scroll-fade-in-delay-${Math.min(index % 4 + 1, 4)}`}>
                 <ContactCard
