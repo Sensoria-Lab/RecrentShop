@@ -286,6 +286,13 @@ html { scrollbar-gutter: stable both-edge; }
   transform-origin: center;
 }
 
+/* Prevent single-letter wrap: keep words together and provide small gap between words */
+.title-word {
+  display: inline-block;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
 /* CTA entrance: subtle pop with fade and lift */
 @keyframes ctaPopIn {
   0% { opacity: 0; transform: translateY(12px) scale(0.98); }

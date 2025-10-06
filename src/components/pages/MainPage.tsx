@@ -81,13 +81,23 @@ const MainPage: React.FC = () => {
               <h1 className="text-white font-manrope font-bold text-3xl xs:text-4xl sm:text-5xl md:text-7xl lg:text-8xl xl:text-9xl 2xl:text-[10rem] tracking-tight drop-shadow-[0_6px_20px_rgba(0,0,0,1)] [text-shadow:_0_0_40px_rgb(0_0_0_/_100%)] leading-tight">
                 {(() => {
                   const title = 'RECRENT SHOP';
-                  return title.split('').map((ch, idx) => (
-                    <span
-                      key={`title-char-${idx}`}
-                      className="inline-block letter-appear"
-                      style={{ animationDelay: `${idx * 60}ms` }}
-                    >
-                      {ch === ' ' ? '\u00A0' : ch}
+                  const words = title.split(' ');
+                  let charIndex = 0;
+                  return words.map((word, wi) => (
+                    <span key={`word-${wi}`} className="title-word">
+                      {word.split('').map((ch) => {
+                        const idx = charIndex++;
+                        return (
+                          <span
+                            key={`title-char-${idx}`}
+                            className="inline-block letter-appear"
+                            style={{ animationDelay: `${idx * 60}ms` }}
+                          >
+                            {ch}
+                          </span>
+                        );
+                      })}
+                      {wi < words.length - 1 ? <span style={{ display: 'inline-block', width: '0.32em' }} /> : null}
                     </span>
                   ));
                 })()}
