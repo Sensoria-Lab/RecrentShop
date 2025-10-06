@@ -261,3 +261,5 @@ html { scrollbar-gutter: stable both-edge; }
   animation: shimmer 2s ease-in-out;
 }
 
+/* Removed shadcn text hover/blur utilities at user's request */
+

@@ -65,12 +65,7 @@ const MainPage: React.FC = () => {
     navigate(ROUTES.CATALOG);
   };
 
-  const scrollToNextSection = () => {
-    const section = document.getElementById('mousepads');
-    if (section) {
-      section.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-  };
+  // previously: scroll helper removed (not used)
 
   return (
     <PageContainer isMainPage={true}>
