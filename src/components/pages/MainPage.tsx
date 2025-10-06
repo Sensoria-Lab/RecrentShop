@@ -76,8 +76,21 @@ const MainPage: React.FC = () => {
 
             {/* Logo or Brand Name */}
             <div className="px-2 flex items-center justify-center" style={{ minHeight: '40vh' }}>
+              {/* Animated heading: split into letters for staggered reveal */}
+              {/** Title is split so we can stagger each character with a small upward reveal */}
               <h1 className="text-white font-manrope font-bold text-3xl xs:text-4xl sm:text-5xl md:text-7xl lg:text-8xl xl:text-9xl 2xl:text-[10rem] tracking-tight drop-shadow-[0_6px_20px_rgba(0,0,0,1)] [text-shadow:_0_0_40px_rgb(0_0_0_/_100%)] leading-tight">
-                RECRENT SHOP
+                {(() => {
+                  const title = 'RECRENT SHOP';
+                  return title.split('').map((ch, idx) => (
+                    <span
+                      key={`title-char-${idx}`}
+                      className="inline-block letter-appear"
+                      style={{ animationDelay: `${idx * 60}ms` }}
+                    >
+                      {ch === ' ' ? '\u00A0' : ch}
+                    </span>
+                  ));
+                })()}
               </h1>
             </div>
 
@@ -85,7 +98,8 @@ const MainPage: React.FC = () => {
             <div className="pt-2 sm:pt-4">
               <button
                 onClick={navigateToCatalog}
-                className="group relative inline-flex items-center justify-center gap-2 sm:gap-3 md:gap-4 px-8 sm:px-10 md:px-12 py-3.5 sm:py-4 md:py-5 bg-black/70 hover:bg-black/80 border-2 border-white/60 hover:border-white rounded-xl sm:rounded-2xl transition-all duration-300 backdrop-blur-md shadow-[0_8px_32px_rgba(0,0,0,1)] hover:shadow-[0_12px_40px_rgba(0,0,0,1)] active:scale-95"
+                className="group relative inline-flex items-center justify-center gap-2 sm:gap-3 md:gap-4 px-8 sm:px-10 md:px-12 py-3.5 sm:py-4 md:py-5 bg-black/70 hover:bg-black/80 border-2 border-white/60 hover:border-white rounded-xl sm:rounded-2xl transition-all duration-300 backdrop-blur-md shadow-[0_8px_32px_rgba(0,0,0,1)] hover:shadow-[0_12px_40px_rgba(0,0,0,1)] active:scale-95 cta-appear"
+                style={{ animationDelay: `${('RECRENT SHOP'.length * 60) + 200}ms` }}
               >
                 <span className="text-white font-manrope font-semibold text-sm sm:text-base md:text-xl lg:text-2xl drop-shadow-[0_4px_16px_rgba(0,0,0,1)] [text-shadow:_0_0_30px_rgb(0_0_0_/_100%)] whitespace-nowrap">
                   Перейти в каталог

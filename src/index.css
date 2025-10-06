@@ -263,3 +263,39 @@ html { scrollbar-gutter: stable both-edge; }
 
 /* Removed shadcn text hover/blur utilities at user's request */
 
+/* Animated heading letters: fade in and slide up with stagger */
+@keyframes letterFadeUp {
+  0% { opacity: 0; transform: translateY(18px); }
+  60% { opacity: 1; transform: translateY(-6px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+.letter-appear {
+  opacity: 0;
+  transform: translateY(18px);
+  display: inline-block;
+  animation: letterFadeUp 520ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* CTA entrance: subtle pop with fade and lift */
+@keyframes ctaPopIn {
+  0% { opacity: 0; transform: translateY(12px) scale(0.98); }
+  60% { opacity: 1; transform: translateY(-6px) scale(1.02); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.cta-appear {
+  opacity: 0;
+  transform: translateY(12px) scale(0.98);
+  animation: ctaPopIn 420ms cubic-bezier(0.2, 0.9, 0.25, 1) both;
+}
+
+/* Reduce motion preference: disable animations for users who asked for reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .letter-appear, .cta-appear {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
