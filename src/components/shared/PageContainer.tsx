@@ -48,7 +48,9 @@ const PageContainer: React.FC<PageContainerProps> = ({ children, className = '',
   }, [lastScrollY]);
 
   return (
-    <div className={`relative w-full ${isMainPage ? 'h-screen overflow-hidden' : 'min-h-screen'}`}>
+    // Do not force the main page into a fixed-height container; prefer natural flow so
+    // tall screens don't end up with excessive empty space. Use min-h-screen for baseline.
+    <div className={`relative w-full min-h-screen`}>
       {/* Header with slide-down animation */}
       <div
         className={`fixed top-0 left-0 right-0 z-[9999] transition-all duration-150 ease-out ${
@@ -76,7 +78,7 @@ const PageContainer: React.FC<PageContainerProps> = ({ children, className = '',
       </div>
 
       {/* Main content */}
-      <main className={`${isMainPage ? 'h-full' : 'relative z-10 min-h-screen flex flex-col'} ${className}`}>
+      <main className={`relative z-10 min-h-screen flex flex-col ${className}`}>
         {!isMainPage && <div className="h-32" />}
         {children}
         {!isMainPage && (

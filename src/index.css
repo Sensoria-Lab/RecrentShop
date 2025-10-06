@@ -284,13 +284,24 @@ html { scrollbar-gutter: stable both-edge; }
   -ms-user-select: none;
   user-select: none;
   transform-origin: center;
+  /* Hint to browser about upcoming transform to reduce layout reflow/jank */
+  will-change: transform, opacity;
+  transform-style: preserve-3d;
 }
 
 /* Prevent single-letter wrap: keep words together and provide small gap between words */
 .title-word {
-  display: inline-block;
+  /* Use inline-flex so the letters inside a word vertically center together
+     and the whole word won't shift relative to adjacent words. */
+  display: inline-flex;
+  align-items: center;
   white-space: nowrap;
-  vertical-align: middle;
+  line-height: 1;
+}
+
+/* Add spacing only between words to avoid nudging final word */
+.title-word:not(:last-child) {
+  margin-right: 0.28rem;
 }
 
 /* CTA entrance: subtle pop with fade and lift */

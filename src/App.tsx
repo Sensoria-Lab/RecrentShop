@@ -30,7 +30,7 @@ function App() {
 
   return (
     <CartProvider>
-    <div className="relative min-h-screen overflow-hidden bg-black">
+  <div className="relative min-h-screen bg-black">
       {/* Pixel Blast Background Effect */}
       <BackgroundBeams />
 

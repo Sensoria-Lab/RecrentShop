@@ -69,13 +69,13 @@ const MainPage: React.FC = () => {
 
   return (
     <PageContainer isMainPage={true}>
-      <div ref={containerRef} className="h-full overflow-y-scroll scroll-smooth snap-y snap-mandatory">
+  <div ref={containerRef} className="h-screen overflow-y-auto scroll-smooth snap-y snap-mandatory">
         {/* Hero section - centered with full viewport height */}
-        <section id="hero" className="h-screen snap-start flex flex-col items-center justify-center px-4 sm:px-6 md:px-8 py-8 sm:py-12 md:py-16">
+  <section id="hero" className="h-screen snap-center flex flex-col items-center justify-center px-4 sm:px-6 md:px-8 py-8 sm:py-12 md:py-16">
           <div className="max-w-4xl w-full text-center space-y-8 sm:space-y-12">
 
             {/* Logo or Brand Name */}
-            <div className="px-2 flex items-center justify-center" style={{ minHeight: '40vh' }}>
+            <div className="px-2 flex items-center justify-center">
               {/* Animated heading: split into letters for staggered reveal */}
               {/** Title is split so we can stagger each character with a small upward reveal */}
               <h1 className="text-white font-manrope font-bold text-3xl xs:text-4xl sm:text-5xl md:text-7xl lg:text-8xl xl:text-9xl 2xl:text-[10rem] tracking-tight drop-shadow-[0_6px_20px_rgba(0,0,0,1)] [text-shadow:_0_0_40px_rgb(0_0_0_/_100%)] leading-tight">
@@ -97,7 +97,7 @@ const MainPage: React.FC = () => {
                           </span>
                         );
                       })}
-                      {wi < words.length - 1 ? <span style={{ display: 'inline-block', width: '0.32em' }} /> : null}
+                      {/* spacing between words is handled via CSS (.title-word:not(:last-child)) */}
                     </span>
                   ));
                 })()}
@@ -132,7 +132,7 @@ const MainPage: React.FC = () => {
         </section>
 
         {/* Mousepads Section */}
-        <section id="mousepads" className="h-screen snap-start px-8 md:px-12 lg:px-16 xl:px-20 2xl:px-24 py-8 md:py-10 lg:py-12 flex items-center">
+  <section id="mousepads" className="min-h-[55vh] lg:min-h-[65vh] snap-center px-8 md:px-12 lg:px-16 xl:px-20 2xl:px-24 py-8 md:py-10 lg:py-12 flex items-center">
           <div className="w-full max-w-[1400px] mx-auto">
             <div className="bg-black/40 backdrop-blur rounded-xl p-3 md:p-4 lg:p-5 xl:p-6">
               <SectionHeader
@@ -168,7 +168,7 @@ const MainPage: React.FC = () => {
         </section>
 
         {/* Clothing Section */}
-        <section id="clothing" className="h-screen snap-start px-8 md:px-12 lg:px-16 xl:px-20 2xl:px-24 py-8 md:py-10 lg:py-12 flex flex-col">
+  <section id="clothing" className="min-h-[55vh] lg:min-h-[65vh] snap-center px-8 md:px-12 lg:px-16 xl:px-20 2xl:px-24 py-8 md:py-10 lg:py-12 flex flex-col">
           <div className="w-full max-w-[1400px] mx-auto flex-shrink-0">
             <div className="bg-black/40 backdrop-blur rounded-xl p-3 md:p-4 lg:p-5 xl:p-6">
               <SectionHeader
