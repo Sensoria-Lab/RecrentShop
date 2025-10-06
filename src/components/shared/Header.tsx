@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useCart } from '../../context/CartContext';
 import Img from './Img';
-import { ROUTES, NAV_ITEMS, MOBILE_NAV_ITEMS } from '../../constants/routes';
+import { ROUTES, MOBILE_NAV_ITEMS } from '../../constants/routes';
 
 interface HeaderProps {
   className?: string;
@@ -73,25 +73,14 @@ const Header: React.FC<HeaderProps> = ({ className = '', onNavigate }) => {
           </button>
 
           <button
-            onClick={() => go('info')}
+            onClick={() => go('support')}
             className={`font-manrope font-medium text-sm lg:text-base px-4 lg:px-5 py-2 transition-all duration-200 focus:outline-none whitespace-nowrap ${
-              isActive('/info')
+              isActive('/support')
                 ? 'text-white'
                 : 'text-white/70 hover:text-white'
             }`}
           >
-            Инфо
-          </button>
-
-          <button
-            onClick={() => go('contacts')}
-            className={`font-manrope font-medium text-sm lg:text-base px-4 lg:px-5 py-2 transition-all duration-200 focus:outline-none whitespace-nowrap ${
-              isActive('/contacts')
-                ? 'text-white'
-                : 'text-white/70 hover:text-white'
-            }`}
-          >
-            Контакты
+            Поддержка
           </button>
 
           <div className="w-px h-6 bg-white/20 mx-2" />

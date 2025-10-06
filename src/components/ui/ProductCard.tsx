@@ -21,6 +21,8 @@ export interface ProductCardProps {
   size?: 'small' | 'medium' | 'large' | 'small-catalog';
   onAddToCart?: () => void;
   onProductClick?: (productData: ProductCardProps) => void;
+  /** Если true — карточка растягивается по высоте родителя и убирает max-width ограничения */
+  stretch?: boolean;
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({
@@ -40,7 +42,8 @@ const ProductCard: React.FC<ProductCardProps> = ({
   clothingType,
   size = 'medium',
   onAddToCart,
-  onProductClick
+  onProductClick,
+  stretch = false
 }) => {
   const { addItem } = useCart();
   
@@ -80,6 +83,9 @@ const ProductCard: React.FC<ProductCardProps> = ({
   };
 
   const classes = sizeClasses[size];
+
+  // Если требуется растянуть карточку, убираем max-width ограничения и позволяем использовать всю ширину
+  const containerBase = stretch ? 'w-full' : classes.container;
 
   const handleCardClick = (e: React.MouseEvent) => {
     // Prevent card click if clicking add to cart button
@@ -129,9 +135,11 @@ const ProductCard: React.FC<ProductCardProps> = ({
   };
 
   // Различные стили для каталога и других страниц
+  const minHeightClasses = stretch ? 'lg:min-h-[420px] xl:min-h-[480px]' : '';
+
   const cardStyles = size === 'small-catalog'
-    ? `relative rounded-lg sm:rounded-xl md:rounded-2xl p-2 sm:p-3 md:p-4 lg:p-5 xl:p-6 ${classes.container} flex flex-col cursor-pointer group bg-gradient-to-br from-zinc-800/40 via-zinc-900/60 to-black/80 backdrop-blur-sm border border-white/10 hover:border-white/30 transition-all duration-300`
-    : `bg-black/90 backdrop-blur-sm rounded-lg sm:rounded-xl p-2 sm:p-3 md:p-4 lg:p-5 xl:p-6 ${classes.container} flex flex-col border border-white/20 shadow-2xl hover:shadow-white/10 hover:border-white/30 transition-all duration-300 hover:transform hover:scale-105 ${onProductClick ? 'cursor-pointer' : ''}`;
+    ? `relative rounded-lg sm:rounded-xl md:rounded-2xl p-2 sm:p-3 md:p-4 lg:p-5 xl:p-6 ${containerBase} flex flex-col h-full ${minHeightClasses} cursor-pointer group bg-gradient-to-br from-zinc-800/40 via-zinc-900/60 to-black/80 backdrop-blur-sm border border-white/10 hover:border-white/30 transition-all duration-300`
+    : `bg-black/90 backdrop-blur-sm rounded-lg sm:rounded-xl p-2 sm:p-3 md:p-4 lg:p-5 xl:p-6 ${containerBase} flex flex-col h-full ${minHeightClasses} border border-white/20 shadow-2xl hover:shadow-white/10 hover:border-white/30 transition-all duration-300 hover:transform hover:scale-105 ${onProductClick ? 'cursor-pointer' : ''}`;
 
 
   return (

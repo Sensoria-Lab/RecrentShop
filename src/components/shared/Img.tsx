@@ -9,7 +9,7 @@ interface ImgProps extends React.ImgHTMLAttributes<HTMLImageElement> {
  * Image component that automatically handles PUBLIC_URL for GitHub Pages
  * Use this instead of regular <img> tags to ensure images work on GitHub Pages
  */
-const Img: React.FC<ImgProps> = ({ src, alt = '', ...props }) => {
+const Img: React.FC<ImgProps> = ({ src, alt = '', loading, decoding, ...props }) => {
   const getFixedSrc = (path: string): string => {
     if (!path) return path;
     
@@ -28,7 +28,11 @@ const Img: React.FC<ImgProps> = ({ src, alt = '', ...props }) => {
     return path;
   };
 
-  return <img src={getFixedSrc(src)} alt={alt} {...props} />;
+  // Default to lazy loading for non-critical images and async decoding to improve performance
+  const finalLoading = loading || 'lazy';
+  const finalDecoding = decoding || 'async';
+
+  return <img src={getFixedSrc(src)} alt={alt} loading={finalLoading} decoding={finalDecoding} {...props} />;
 };
 
 export default Img;

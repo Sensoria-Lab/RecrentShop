@@ -5,8 +5,7 @@
 export const ROUTES = {
   HOME: '/',
   CATALOG: '/catalog',
-  CONTACTS: '/contacts',
-  INFO: '/info',
+  SUPPORT: '/support',
   PRODUCT: '/product',
   CART: '/cart',
   CHECKOUT: '/checkout',
@@ -21,8 +20,7 @@ export type RoutePath = typeof ROUTES[RouteKey];
  */
 export const NAV_ITEMS = [
   { path: ROUTES.CATALOG, label: 'Каталог' },
-  { path: ROUTES.CONTACTS, label: 'Контакты' },
-  { path: ROUTES.INFO, label: 'Инфо' }
+  { path: ROUTES.SUPPORT, label: 'Поддержка' }
 ] as const;
 
 /**
@@ -30,6 +28,5 @@ export const NAV_ITEMS = [
  */
 export const MOBILE_NAV_ITEMS = [
   { path: ROUTES.CATALOG, label: 'Каталог' },
-  { path: ROUTES.CONTACTS, label: 'Контакты' },
-  { path: ROUTES.INFO, label: 'Информация' }
+  { path: ROUTES.SUPPORT, label: 'Поддержка и информация' }
 ] as const;

@@ -156,6 +156,7 @@ const ProductPage: React.FC = () => {
                         key={`${selectedSize}-${selectedColor}-${selectedImage}`}
                         src={productImages[selectedImage]}
                         alt="Product"
+                        loading="eager"
                         className="w-full h-40 sm:h-56 md:h-72 lg:h-80 object-contain rounded-lg sm:rounded-xl transition-all duration-300"
                       />
                     </div>

@@ -116,7 +116,7 @@ const CatalogPage: React.FC = () => {
 
   return (
     <PageContainer>
-          <div className="max-w-[1600px] mx-auto">
+          <div className="max-w-[1800px] mx-auto">
             {/* Background container */}
             <div className="bg-black/40 backdrop-blur rounded-xl p-4 sm:p-6 md:p-8 lg:p-10">
             {/* Page Title */}
@@ -338,7 +338,7 @@ const CatalogPage: React.FC = () => {
                   </div>
                 ) : (
                   <>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3 sm:gap-3 md:gap-4 lg:gap-4 min-h-[600px]">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-3 sm:gap-3 md:gap-4 lg:gap-4 min-h-[600px] items-stretch">
                       {filteredProducts.slice(0, itemsToShow).map((product, index) => {
                         const delayClass = `scroll-fade-in-delay-${Math.min(index % 4, 4)}`;
                         const isVisible = visibleItems.has(index);
@@ -352,7 +352,7 @@ const CatalogPage: React.FC = () => {
                                 observerRef.current.observe(el);
                               }
                             }}
-                            className={`w-full flex justify-center ${isVisible ? `scroll-fade-in ${delayClass}` : ''}`}
+                            className={`w-full flex justify-center h-full ${isVisible ? `scroll-fade-in ${delayClass}` : ''}`}
                           >
                             <ProductCard
                               id={product.id}
@@ -370,6 +370,7 @@ const CatalogPage: React.FC = () => {
                               category={product.category}
                               clothingType={product.clothingType}
                               size="small-catalog"
+                              stretch={true}
                               onAddToCart={() => {}}
                               onProductClick={handleProductClick}
                             />

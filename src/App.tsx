@@ -8,9 +8,8 @@ import BackgroundBeams from './components/shared/BackgroundBeams';
 // Lazy load all pages for better performance
 const MainPage = lazy(() => import('./components/pages/MainPage'));
 const ProductPage = lazy(() => import('./components/pages/ProductPage'));
-const ContactsPage = lazy(() => import('./components/pages/ContactsPage'));
 const CatalogPage = lazy(() => import('./components/pages/CatalogPage'));
-const InfoPage = lazy(() => import('./components/pages/InfoPage'));
+const SupportPage = lazy(() => import('./components/pages/SupportPage'));
 const CartPage = lazy(() => import('./components/pages/CartPage'));
 const CheckoutPage = lazy(() => import('./components/pages/CheckoutPage'));
 const AdminPage = lazy(() => import('./components/pages/AdminPage'));
@@ -41,8 +40,7 @@ function App() {
           <Routes location={location}>
             <Route path="/" element={<MainPage />} />
             <Route path="/catalog" element={<CatalogPage />} />
-            <Route path="/contacts" element={<ContactsPage />} />
-            <Route path="/info" element={<InfoPage />} />
+            <Route path="/support" element={<SupportPage />} />
             <Route path="/product" element={<ProductPage />} />
             <Route path="/cart" element={<CartPage />} />
             <Route path="/checkout" element={<CheckoutPage />} />
