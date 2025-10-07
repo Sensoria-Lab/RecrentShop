@@ -73,7 +73,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
       button: 'px-2 sm:px-3 md:px-4 lg:px-6 py-1.5 sm:py-2 text-[10px] sm:text-xs md:text-sm'
     },
     'small-catalog': {
-      container: 'w-full max-w-[280px] sm:max-w-[320px] md:max-w-[340px]',
+      container: 'w-[280px] sm:w-[320px] md:w-[340px]',
       image: 'h-[150px] sm:h-[200px] md:h-[240px] lg:h-[280px]',
       imageContainer: 'w-full max-w-[250px] sm:max-w-[280px] md:max-w-[300px]',
       title: 'text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl',
@@ -175,7 +175,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
           )}
         </div>
         <div className="min-h-[14px] sm:min-h-[16px] md:min-h-[18px] lg:min-h-[20px] xl:min-h-[22px] flex items-end gap-1 sm:gap-1.5 md:gap-2 flex-wrap text-[10px] sm:text-xs md:text-sm">
-          {productSize && (
+          {productSize && category === 'mousepads' && (
             <span className="text-white/80 font-manrope font-medium">
               Размер: {productSize}
             </span>

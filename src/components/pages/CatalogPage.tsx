@@ -103,6 +103,11 @@ const CatalogPage: React.FC = () => {
     };
   }, []);
 
+  // Reset size filter when category changes to avoid conflicts between mousepad/clothing sizes
+  useEffect(() => {
+    setSizeFilter('all');
+  }, [categoryFilter]);
+
   // Reset visible items and pagination when filters change
   useEffect(() => {
     setVisibleItems(new Set());
@@ -118,9 +123,9 @@ const CatalogPage: React.FC = () => {
     <PageContainer>
           <div className="max-w-[1800px] mx-auto">
             {/* Background container */}
-            <div className="bg-black/40 backdrop-blur rounded-xl p-4 sm:p-6 md:p-8 lg:p-10">
+            <div className="panel">
             {/* Page Title */}
-            <div className="text-center mb-4 sm:mb-6 md:mb-8 scroll-fade-in">
+              <div className="text-center mb-6 sm:mb-8 md:mb-10 pt-6 scroll-fade-in">
               <h1 className="text-white font-manrope font-bold text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl mb-3 sm:mb-4 md:mb-6 drop-shadow-[0_4px_12px_rgba(0,0,0,0.9)]">
                 Каталог товаров
               </h1>
@@ -129,13 +134,13 @@ const CatalogPage: React.FC = () => {
 
             {/* Category Filter - moved here */}
             <div className="mb-6 sm:mb-8 flex justify-center scroll-fade-in scroll-fade-in-delay-1">
-              <div className="relative inline-flex gap-2 sm:gap-3 bg-black/40 backdrop-blur rounded-xl p-2 border border-white/20">
+              <div className="relative inline-flex gap-2 sm:gap-3 bg-black/40 backdrop-blur-md border border-white/20 rounded-xl p-2">
                 {/* Animated background indicator */}
                 <div
-                  className="absolute bg-white rounded-lg shadow-lg transition-all duration-300 ease-out"
+                  className="absolute bg-white rounded-lg shadow-lg transition-all duration-300 ease-out z-0"
                   style={{
                     left: categoryButtonRefs.current[categoryFilter]?.offsetLeft ?? 0,
-                    top: '8px',
+                    top: categoryButtonRefs.current[categoryFilter]?.offsetTop ?? 0,
                     width: categoryButtonRefs.current[categoryFilter]?.offsetWidth ?? 0,
                     height: categoryButtonRefs.current[categoryFilter]?.offsetHeight ?? 0,
                   }}
@@ -186,7 +191,7 @@ const CatalogPage: React.FC = () => {
             <div className="flex flex-col lg:flex-row gap-4 sm:gap-6 md:gap-8">
               {/* Filters Sidebar */}
               <aside className={`lg:w-80 w-full flex-shrink-0 ${filtersOpen ? 'block' : 'hidden lg:block'}`}>
-                <div className="bg-black/40 backdrop-blur rounded-xl p-4 sm:p-5 md:p-6 lg:sticky lg:top-28">
+                <div className="panel lg:sticky lg:top-28 overflow-hidden">
                   <h2 className="text-white font-manrope font-bold text-lg sm:text-xl mb-4 sm:mb-6">Фильтры</h2>
                   
                   {/* Sort By */}
@@ -195,7 +200,7 @@ const CatalogPage: React.FC = () => {
                     <select
                       value={sortBy}
                       onChange={(e) => setSortBy(e.target.value as SortOption)}
-                      className="w-full bg-black text-white border border-white/30 rounded-lg px-3 sm:px-4 py-2 font-manrope text-sm sm:text-base focus:outline-none focus:border-white/60 transition-colors cursor-pointer hover:bg-black/80"
+                      className="w-full form-control"
                       style={{ colorScheme: 'dark' }}
                     >
                       <option value="popularity" className="bg-black text-white">По популярности</option>
@@ -213,7 +218,7 @@ const CatalogPage: React.FC = () => {
                     <label className="flex items-center gap-2 cursor-pointer group mb-3">
                       <input
                         type="radio"
-                        name="size"
+                        name="size-filter"
                         value="all"
                         checked={sizeFilter === 'all'}
                         onChange={(e) => setSizeFilter(e.target.value as SizeFilter)}
@@ -224,19 +229,20 @@ const CatalogPage: React.FC = () => {
                       </span>
                     </label>
 
-                    {/* Mousepad sizes */}
-                    {categoryFilter !== 'clothing' && (
-                      <div className="mb-3">
+                    {/* Size options container - use relative/absolute positioning to prevent layout shift */}
+                    <div className="relative min-h-[240px]">
+                      {/* Mousepad sizes */}
+                      <div className={`${categoryFilter === 'clothing' ? 'opacity-0 pointer-events-none absolute inset-0' : 'opacity-100 relative'} transition-opacity duration-200`}>
                         <p className="text-white/60 font-manrope text-xs mb-2 uppercase tracking-wider">Коврики для мыши:</p>
                         <div className="space-y-2 pl-2">
                           {[
-                            { value: 'L', label: 'L', desc: '450x400 мм' },
-                            { value: 'XL', label: 'XL', desc: '900x400 мм' }
+                            { value: 'L-pad', label: 'L', desc: '450x400 мм' },
+                            { value: 'XL-pad', label: 'XL', desc: '900x400 мм' }
                           ].map(option => (
                             <label key={option.value} className="flex items-center gap-2 cursor-pointer group">
                               <input
                                 type="radio"
-                                name="size"
+                                name="size-filter"
                                 value={option.value}
                                 checked={sizeFilter === option.value}
                                 onChange={(e) => setSizeFilter(e.target.value as SizeFilter)}
@@ -250,25 +256,23 @@ const CatalogPage: React.FC = () => {
                           ))}
                         </div>
                       </div>
-                    )}
 
-                    {/* Clothing sizes */}
-                    {categoryFilter !== 'mousepads' && (
-                      <div>
+                      {/* Clothing sizes */}
+                      <div className={`${categoryFilter === 'mousepads' ? 'opacity-0 pointer-events-none absolute inset-0' : 'opacity-100 relative'} transition-opacity duration-200`}>
                         <p className="text-white/60 font-manrope text-xs mb-2 uppercase tracking-wider">Одежда:</p>
                         <div className="space-y-2 pl-2">
                           {[
-                            { value: 'XS', label: 'XS' },
-                            { value: 'S', label: 'S' },
-                            { value: 'M', label: 'M' },
-                            { value: 'L', label: 'L (одежда)' },
-                            { value: 'XL', label: 'XL (одежда)' },
-                            { value: '2XL', label: '2XL' }
+                            { value: 'XS-cloth', label: 'XS' },
+                            { value: 'S-cloth', label: 'S' },
+                            { value: 'M-cloth', label: 'M' },
+                            { value: 'L-cloth', label: 'L' },
+                            { value: 'XL-cloth', label: 'XL' },
+                            { value: '2XL-cloth', label: '2XL' }
                           ].map(option => (
                             <label key={option.value} className="flex items-center gap-2 cursor-pointer group">
                               <input
                                 type="radio"
-                                name="size"
+                                name="size-filter"
                                 value={option.value}
                                 checked={sizeFilter === option.value}
                                 onChange={(e) => setSizeFilter(e.target.value as SizeFilter)}
@@ -281,7 +285,7 @@ const CatalogPage: React.FC = () => {
                           ))}
                         </div>
                       </div>
-                    )}
+                    </div>
                   </div>
 
                   {/* Price Range */}
@@ -296,7 +300,7 @@ const CatalogPage: React.FC = () => {
                       step="100"
                       value={priceRange[1]}
                       onChange={(e) => setPriceRange([0, parseInt(e.target.value)])}
-                      className="w-full accent-white"
+                      className="w-full form-control"
                     />
                   </div>
 
@@ -322,7 +326,7 @@ const CatalogPage: React.FC = () => {
               {/* Products Grid */}
               <div className="flex-1">
                 {loading ? (
-                  <div className="bg-black/40 backdrop-blur rounded-lg sm:rounded-xl p-6 sm:p-8 md:p-12 text-center min-h-[600px] flex items-center justify-center">
+                  <div className="panel panel-strong text-center min-h-[600px] flex items-center justify-center">
                     <div>
                       <div className="inline-block w-12 h-12 border-4 border-white border-t-transparent rounded-full animate-spin mb-4"></div>
                       <p className="text-white/60 font-manrope text-sm sm:text-base md:text-lg">
@@ -331,14 +335,14 @@ const CatalogPage: React.FC = () => {
                     </div>
                   </div>
                 ) : filteredProducts.length === 0 ? (
-                  <div className="bg-black/40 backdrop-blur rounded-lg sm:rounded-xl p-6 sm:p-8 md:p-12 text-center min-h-[600px] flex items-center justify-center">
-                    <p className="text-white/60 font-manrope text-sm sm:text-base md:text-lg">
+          <div className="panel panel-strong text-center min-h-[600px] flex items-center justify-center">
+            <p className="text-white/60 font-manrope text-sm sm:text-base md:text-lg">
                       Товары не найдены. Попробуйте изменить фильтры.
                     </p>
                   </div>
                 ) : (
                   <>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-3 sm:gap-3 md:gap-4 lg:gap-4 min-h-[600px] items-stretch">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-3 sm:gap-3 md:gap-4 lg:gap-4 min-h-[600px] place-items-center">
                       {filteredProducts.slice(0, itemsToShow).map((product, index) => {
                         const delayClass = `scroll-fade-in-delay-${Math.min(index % 4, 4)}`;
                         const isVisible = visibleItems.has(index);
@@ -352,7 +356,7 @@ const CatalogPage: React.FC = () => {
                                 observerRef.current.observe(el);
                               }
                             }}
-                            className={`w-full flex justify-center h-full ${isVisible ? `scroll-fade-in ${delayClass}` : ''}`}
+                            className={`flex justify-center ${isVisible ? `scroll-fade-in ${delayClass}` : ''}`}
                           >
                             <ProductCard
                               id={product.id}
@@ -370,7 +374,7 @@ const CatalogPage: React.FC = () => {
                               category={product.category}
                               clothingType={product.clothingType}
                               size="small-catalog"
-                              stretch={true}
+                              stretch={false}
                               onAddToCart={() => {}}
                               onProductClick={handleProductClick}
                             />

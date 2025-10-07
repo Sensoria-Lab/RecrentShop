@@ -326,3 +326,148 @@ html { scrollbar-gutter: stable both-edge; }
   }
 }
 
+/* New blur-text animation (inspired by reactbits.dev text blur effect) */
+@keyframes blurReveal {
+  0% {
+    filter: blur(14px);
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  60% {
+    filter: blur(4px);
+    opacity: 1;
+    transform: translateY(-4px);
+  }
+  100% {
+    filter: blur(0);
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.blur-text {
+  display: inline-block;
+  animation: blurReveal 720ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  will-change: transform, filter, opacity;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .blur-text { animation: none !important; filter: none !important; opacity: 1 !important; transform: none !important; }
+  .cta-appear { animation: none !important; opacity: 1 !important; transform: none !important; }
+}
+
+/* Design tokens: standardized panels, buttons and form controls */
+.panel {
+  background: rgba(0,0,0,0.40);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  border-radius: 0.75rem; /* rounded-xl */
+  padding: 1rem;
+}
+
+/* Gradual blur animation: panels start slightly blurred/overlaid and clear on hover/focus */
+.panel {
+  position: relative;
+  overflow: hidden;
+}
+
+.panel::before {
+  /* overlay layer that provides the initial blur/soften effect */
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.08));
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  opacity: 1;
+  transform: scale(1);
+  transition: opacity 580ms cubic-bezier(0.2,0.9,0.2,1), backdrop-filter 580ms cubic-bezier(0.2,0.9,0.2,1), transform 580ms cubic-bezier(0.2,0.9,0.2,1);
+}
+
+.panel > * { position: relative; z-index: 1; }
+
+.panel:hover::before,
+.panel:focus-within::before {
+  -webkit-backdrop-filter: blur(0);
+  backdrop-filter: blur(0);
+  opacity: 0;
+  transform: scale(1.02);
+}
+
+/* Optional utility class to explicitly add the effect to non-panel blocks */
+.gradual-blur { position: relative; overflow: hidden; }
+.gradual-blur::before { content: ''; position:absolute; inset:0; z-index:0; pointer-events:none; background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.08)); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); opacity:1; transform:scale(1); transition: opacity 580ms ease, backdrop-filter 580ms ease, transform 580ms ease; }
+.gradual-blur > * { position: relative; z-index:1; }
+.gradual-blur:hover::before, .gradual-blur:focus-within::before { -webkit-backdrop-filter: blur(0); backdrop-filter: blur(0); opacity:0; transform: scale(1.02); }
+
+.panel-strong {
+  box-shadow: 0 12px 40px rgba(0,0,0,0.6);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+.btn-primary {
+  background: linear-gradient(90deg,#3B82F6,#2563EB);
+  color: white;
+  padding: 0.65rem 1.25rem;
+  border-radius: 0.75rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  box-shadow: 0 8px 28px rgba(37,99,235,0.18);
+}
+
+.btn-secondary {
+  background: rgba(255,255,255,0.04);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+.form-control {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.5rem;
+  color: white;
+}
+
+/* Focus state for accessibility */
+.form-control:focus {
+  outline: none;
+  border-color: rgba(255,255,255,0.18);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.6), 0 0 0 4px rgba(59,130,246,0.06);
+}
+
+/* Select-specific tweaks to avoid native ugly rendering on dark backgrounds */
+
+select.form-control {
+  -webkit-appearance: none;
+  appearance: none;
+  background-color: rgba(255,255,255,0.02);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='white' stroke-width='1.2' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 12px 8px;
+  padding-right: 2.5rem; /* leave space for custom arrow */
+}
+
+/* Range inputs need slimmer track and preserved control visuals */
+input[type="range"].form-control {
+  padding: 0.25rem 0;
+  height: 1.25rem;
+  background: transparent;
+}
+
+/* Ensure inputs/selects use correct box-sizing */
+.form-control, select.form-control, input[type="range"].form-control {
+  box-sizing: border-box;
+  font-family: inherit;
+  font-size: 0.95rem;
+  line-height: 1.15;
+}
+
+

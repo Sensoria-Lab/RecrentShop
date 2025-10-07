@@ -85,6 +85,7 @@ const SupportPage: React.FC = () => {
     {
       id: 'offer',
       title: 'Оферта',
+      preview: 'Правила и условия использования',
       icon: (
         <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
           <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
@@ -100,6 +101,7 @@ const SupportPage: React.FC = () => {
     {
       id: 'track',
       title: 'Где мой заказ',
+      preview: 'Отслеживание посылки',
       icon: (
         <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
           <circle cx="12" cy="12" r="10"/>
@@ -191,8 +193,8 @@ const SupportPage: React.FC = () => {
   return (
     <PageLayout>
       <div className="max-w-6xl mx-auto">
-        <div className="bg-black/40 backdrop-blur rounded-lg sm:rounded-xl md:rounded-2xl p-6 sm:p-8 md:p-12 lg:p-16 xl:p-20">
-          <div className="text-center mb-8 sm:mb-12 md:mb-16 lg:mb-20 scroll-fade-in">
+        <div className="panel panel-strong pt-8 sm:pt-10 md:pt-12 pb-8 sm:pb-10 md:pb-12 px-8 sm:px-10 md:px-12">
+          <div className="text-center mb-10 sm:mb-14 md:mb-18 lg:mb-24 scroll-fade-in">
             <h1 className="text-white font-manrope font-bold text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl mb-3 sm:mb-4 md:mb-6 drop-shadow-[0_4px_12px_rgba(0,0,0,0.9)]">Поддержка</h1>
             <div className="w-20 sm:w-24 md:w-32 h-0.5 sm:h-1 bg-white/40 mx-auto"></div>
           </div>

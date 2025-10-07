@@ -21,7 +21,7 @@ const CartPage: React.FC = () => {
       <div className="min-h-screen px-4 sm:px-6 md:px-8">
         <div className="max-w-7xl mx-auto">
           {/* Background container */}
-          <div className="bg-black/40 backdrop-blur rounded-xl p-4 sm:p-6 md:p-10 lg:p-12 xl:p-16">
+          <div className="panel panel-strong">
             {/* Page Title */}
             <div className="text-center mb-8 sm:mb-12 md:mb-16">
               <h1 className="text-white font-manrope font-bold text-3xl sm:text-4xl md:text-5xl lg:text-6xl mb-3 sm:mb-4 drop-shadow-[0_4px_12px_rgba(0,0,0,0.9)]">
@@ -38,7 +38,7 @@ const CartPage: React.FC = () => {
           {items.length === 0 ? (
             /* Empty Cart State */
             <div className="flex flex-col items-center justify-center py-10 sm:py-16 md:py-20">
-              <div className="relative rounded-xl sm:rounded-2xl max-w-2xl text-center w-full bg-gradient-to-br from-zinc-800/40 via-zinc-900/60 to-black/80 backdrop-blur-sm border border-white/10">
+                <div className="panel panel-strong max-w-2xl text-center w-full">
                 {/* Shine effect */}
                 <div className="absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-transparent pointer-events-none" />
 
@@ -64,10 +64,7 @@ const CartPage: React.FC = () => {
                   <p className="text-base sm:text-lg md:text-xl text-white/60 mb-6 sm:mb-8">
                     Добавьте товары из каталога, чтобы оформить заказ
                   </p>
-                  <button
-                    onClick={handleContinueShopping}
-                    className="px-6 sm:px-8 md:px-10 py-3 sm:py-3.5 md:py-4 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-manrope font-semibold text-base sm:text-lg md:text-xl rounded-xl transition-all duration-200 shadow-lg hover:shadow-blue-500/50 hover:scale-105"
-                  >
+                  <button onClick={handleContinueShopping} className="btn-primary">
                     Перейти в каталог
                   </button>
                 </div>

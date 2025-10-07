@@ -72,44 +72,21 @@ const MainPage: React.FC = () => {
   <div ref={containerRef} className="h-screen overflow-y-auto scroll-smooth snap-y snap-mandatory">
         {/* Hero section - centered with full viewport height */}
   <section id="hero" className="h-screen snap-center flex flex-col items-center justify-center px-4 sm:px-6 md:px-8 py-8 sm:py-12 md:py-16">
-          <div className="max-w-4xl w-full text-center space-y-8 sm:space-y-12">
+            <div className="max-w-4xl w-full text-center space-y-8 sm:space-y-12">
 
             {/* Logo or Brand Name */}
-            <div className="px-2 flex items-center justify-center">
-              {/* Animated heading: split into letters for staggered reveal */}
-              {/** Title is split so we can stagger each character with a small upward reveal */}
-              <h1 className="text-white font-manrope font-bold text-3xl xs:text-4xl sm:text-5xl md:text-7xl lg:text-8xl xl:text-9xl 2xl:text-[10rem] tracking-tight drop-shadow-[0_6px_20px_rgba(0,0,0,1)] [text-shadow:_0_0_40px_rgb(0_0_0_/_100%)] leading-tight">
-                {(() => {
-                  const title = 'RECRENT SHOP';
-                  const words = title.split(' ');
-                  let charIndex = 0;
-                  return words.map((word, wi) => (
-                    <span key={`word-${wi}`} className="title-word">
-                      {word.split('').map((ch) => {
-                        const idx = charIndex++;
-                        return (
-                          <span
-                            key={`title-char-${idx}`}
-                            className="inline-block letter-appear"
-                            style={{ animationDelay: `${idx * 60}ms` }}
-                          >
-                            {ch}
-                          </span>
-                        );
-                      })}
-                      {/* spacing between words is handled via CSS (.title-word:not(:last-child)) */}
-                    </span>
-                  ));
-                })()}
+            <div className="px-2 flex items-center justify-center animate-fade-in-up" style={{ animationDelay: '40ms' }}>
+              {/* Animated heading: blur reveal applied to whole text */}
+              <h1 className="text-white font-manrope font-bold text-3xl xs:text-4xl sm:text-5xl md:text-7xl lg:text-8xl xl:text-9xl 2xl:text-[10rem] tracking-tight drop-shadow-[0_6px_20px_rgba(0,0,0,1)] [text-shadow:_0_0_40px_rgb(0_0_0_/_100%)] leading-tight blur-text">
+                RECRENT SHOP
               </h1>
             </div>
 
             {/* CTA Button */}
-            <div className="pt-2 sm:pt-4">
+              <div className="pt-2 sm:pt-4">
               <button
                 onClick={navigateToCatalog}
-                className="group relative inline-flex items-center justify-center gap-2 sm:gap-3 md:gap-4 px-8 sm:px-10 md:px-12 py-3.5 sm:py-4 md:py-5 bg-black/70 hover:bg-black/80 border-2 border-white/60 hover:border-white rounded-xl sm:rounded-2xl transition-all duration-300 backdrop-blur-md shadow-[0_8px_32px_rgba(0,0,0,1)] hover:shadow-[0_12px_40px_rgba(0,0,0,1)] active:scale-95 cta-appear"
-                style={{ animationDelay: `${('RECRENT SHOP'.length * 60) + 200}ms` }}
+                className="group relative inline-flex items-center justify-center gap-2 sm:gap-3 md:gap-4 px-8 sm:px-10 md:px-12 py-3.5 sm:py-4 md:py-5 bg-black/70 hover:bg-black/80 border-2 border-white/60 hover:border-white rounded-xl sm:rounded-2xl transition-all duration-300 backdrop-blur-md shadow-[0_8px_32px_rgba(0,0,0,1)] hover:shadow-[0_12px_40px_rgba(0,0,0,1)] active:scale-95"
               >
                 <span className="text-white font-manrope font-semibold text-sm sm:text-base md:text-xl lg:text-2xl drop-shadow-[0_4px_16px_rgba(0,0,0,1)] [text-shadow:_0_0_30px_rgb(0_0_0_/_100%)] whitespace-nowrap">
                   Перейти в каталог
@@ -134,7 +111,7 @@ const MainPage: React.FC = () => {
         {/* Mousepads Section */}
   <section id="mousepads" className="min-h-[55vh] lg:min-h-[65vh] snap-center px-8 md:px-12 lg:px-16 xl:px-20 2xl:px-24 py-8 md:py-10 lg:py-12 flex items-center">
           <div className="w-full max-w-[1400px] mx-auto">
-            <div className="bg-black/40 backdrop-blur rounded-xl p-3 md:p-4 lg:p-5 xl:p-6">
+            <div className="panel">
               <SectionHeader
                 title="Коврики для мыши"
                 onShowAll={navigateToCatalog}
@@ -170,7 +147,7 @@ const MainPage: React.FC = () => {
         {/* Clothing Section */}
   <section id="clothing" className="min-h-[55vh] lg:min-h-[65vh] snap-center px-8 md:px-12 lg:px-16 xl:px-20 2xl:px-24 py-8 md:py-10 lg:py-12 flex flex-col">
           <div className="w-full max-w-[1400px] mx-auto flex-shrink-0">
-            <div className="bg-black/40 backdrop-blur rounded-xl p-3 md:p-4 lg:p-5 xl:p-6">
+            <div className="panel">
               <SectionHeader
                 title="Одежда"
                 onShowAll={navigateToCatalog}

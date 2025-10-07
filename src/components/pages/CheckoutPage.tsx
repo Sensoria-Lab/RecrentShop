@@ -154,7 +154,7 @@ const CheckoutPage: React.FC = () => {
         <main className="flex-1 px-3 sm:px-4 md:px-6 lg:px-8 py-6 sm:py-8 md:py-12">
           <div className="max-w-7xl mx-auto">
             {/* Background container */}
-            <div className="bg-black/40 backdrop-blur rounded-lg sm:rounded-xl md:rounded-2xl p-4 sm:p-6 md:p-8 lg:p-12">
+            <div className="panel panel-strong">
               {/* Page title */}
               <div className="text-center mb-6 sm:mb-8 md:mb-10 lg:mb-12">
                 <h1 className="text-white font-manrope font-bold text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl mb-3 sm:mb-4 md:mb-6 drop-shadow-[0_4px_12px_rgba(0,0,0,0.9)]">
@@ -239,7 +239,7 @@ const CheckoutPage: React.FC = () => {
               {step === 'contacts' ? (
                 // Шаг 1: Контактная информация
                 <form onSubmit={(e) => { e.preventDefault(); handleNextStep(); }} className="space-y-4 sm:space-y-5 md:space-y-6">
-                  <div className="bg-black/40 backdrop-blur rounded-xl sm:rounded-2xl p-5 sm:p-6 md:p-7 lg:p-9">
+                  <div className="panel">
                     <div className="flex items-center gap-3 sm:gap-4 mb-6 sm:mb-7 md:mb-8">
                       <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-br from-white/20 to-white/10 flex items-center justify-center">
                         <svg className="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -259,7 +259,7 @@ const CheckoutPage: React.FC = () => {
                           name="fullName"
                           value={contactForm.fullName}
                           onChange={handleContactInputChange}
-                          className="w-full px-3 sm:px-4 py-2 sm:py-2.5 md:py-3 bg-white/5 border border-white/10 rounded-lg sm:rounded-xl text-sm sm:text-base text-white placeholder-gray-500 focus:outline-none focus:border-white/30 transition-colors"
+                          className="w-full form-control"
                           placeholder="Иванов Иван Иванович"
                           required
                         />
@@ -274,7 +274,7 @@ const CheckoutPage: React.FC = () => {
                           name="phone"
                           value={contactForm.phone}
                           onChange={handleContactInputChange}
-                          className="w-full px-3 sm:px-4 py-2 sm:py-2.5 md:py-3 bg-white/5 border border-white/10 rounded-lg sm:rounded-xl text-sm sm:text-base text-white placeholder-gray-500 focus:outline-none focus:border-white/30 transition-colors"
+                          className="w-full form-control"
                           placeholder="+7 (999) 123-45-67"
                           required
                         />
@@ -289,7 +289,7 @@ const CheckoutPage: React.FC = () => {
                           name="email"
                           value={contactForm.email}
                           onChange={handleContactInputChange}
-                          className="w-full px-3 sm:px-4 py-2 sm:py-2.5 md:py-3 bg-white/5 border border-white/10 rounded-lg sm:rounded-xl text-sm sm:text-base text-white placeholder-gray-500 focus:outline-none focus:border-white/30 transition-colors"
+                          className="w-full form-control"
                           placeholder="email@example.com"
                           required
                         />
@@ -304,7 +304,7 @@ const CheckoutPage: React.FC = () => {
                           value={contactForm.vkLink}
                           onChange={handleContactInputChange}
                           rows={2}
-                          className="w-full px-3 sm:px-4 py-2 sm:py-2.5 md:py-3 bg-white/5 border border-white/10 rounded-lg sm:rounded-xl text-sm sm:text-base text-white placeholder-gray-500 focus:outline-none focus:border-white/30 transition-colors resize-none"
+                          className="w-full form-control resize-none"
                           placeholder="https://vk.com/..."
                         />
                       </div>
@@ -318,7 +318,7 @@ const CheckoutPage: React.FC = () => {
                           value={contactForm.additionalInfo}
                           onChange={handleContactInputChange}
                           rows={3}
-                          className="w-full px-3 sm:px-4 py-2 sm:py-2.5 md:py-3 bg-white/5 border border-white/10 rounded-lg sm:rounded-xl text-sm sm:text-base text-white placeholder-gray-500 focus:outline-none focus:border-white/30 transition-colors resize-none"
+                          className="w-full form-control resize-none"
                           placeholder="Комментарии к заказу..."
                         />
                       </div>
@@ -465,7 +465,7 @@ const CheckoutPage: React.FC = () => {
                           name="city"
                           value={deliveryForm.city}
                           onChange={handleDeliveryInputChange}
-                          className="w-full px-3 sm:px-4 py-2 sm:py-2.5 md:py-3 bg-white/5 border border-white/10 rounded-lg sm:rounded-xl text-sm sm:text-base text-white placeholder-gray-500 focus:outline-none focus:border-white/30 transition-colors"
+                          className="w-full form-control"
                           placeholder="Москва"
                           required
                         />
@@ -480,7 +480,7 @@ const CheckoutPage: React.FC = () => {
                           name="postalCode"
                           value={deliveryForm.postalCode}
                           onChange={handleDeliveryInputChange}
-                          className="w-full px-3 sm:px-4 py-2 sm:py-2.5 md:py-3 bg-white/5 border border-white/10 rounded-lg sm:rounded-xl text-sm sm:text-base text-white placeholder-gray-500 focus:outline-none focus:border-white/30 transition-colors"
+                          className="w-full form-control"
                           placeholder="123456"
                           required
                         />
@@ -495,7 +495,7 @@ const CheckoutPage: React.FC = () => {
                           value={deliveryForm.address}
                           onChange={handleDeliveryInputChange}
                           rows={3}
-                          className="w-full px-3 sm:px-4 py-2 sm:py-2.5 md:py-3 bg-white/5 border border-white/10 rounded-lg sm:rounded-xl text-sm sm:text-base text-white placeholder-gray-500 focus:outline-none focus:border-white/30 transition-colors resize-none"
+                          className="w-full form-control resize-none"
                           placeholder="Улица, дом, квартира"
                           required
                         />
@@ -575,15 +575,7 @@ const CheckoutPage: React.FC = () => {
                 {/* Action Buttons */}
                 {step === 'contacts' ? (
                   <div className="flex flex-col gap-3 mt-5 sm:mt-6">
-                    <button
-                      onClick={handleNextStep}
-                      disabled={!isContactFormValid}
-                      className={`w-full px-4 sm:px-6 md:px-8 py-2.5 sm:py-3 md:py-3.5 rounded-lg sm:rounded-xl text-sm sm:text-base md:text-lg font-medium transition-all duration-300 ${
-                        isContactFormValid
-                          ? 'bg-gradient-to-r from-white/90 to-white/70 text-black hover:from-white hover:to-white/80'
-                          : 'bg-white/5 text-gray-500 cursor-not-allowed border border-white/10'
-                      }`}
-                    >
+                    <button onClick={handleNextStep} disabled={!isContactFormValid} className={`btn-primary ${!isContactFormValid ? 'opacity-60 cursor-not-allowed' : ''}`}>
                       Далее
                     </button>
                     <button

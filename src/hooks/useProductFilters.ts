@@ -30,8 +30,28 @@ export const useProductFilters = (products: Product[], filters: FilterOptions) =
     }
 
     // Apply size filter
+    // Note: At this point, category filter is already applied above
+    // Filter values now have suffixes to distinguish categories:
+    // - Mousepads: 'L-pad', 'XL-pad'
+    // - Clothing: 'XS-cloth', 'S-cloth', 'M-cloth', 'L-cloth', 'XL-cloth', '2XL-cloth'
+    // Product data still uses plain sizes: "L", "XL", "XS,S,M,L,XL,2XL"
     if (filters.sizeFilter !== 'all') {
-      filtered = filtered.filter(p => p.productSize === filters.sizeFilter);
+      filtered = filtered.filter(p => {
+        if (!p.productSize) return false;
+        
+        // Extract the size and category from filter value (e.g., "L-pad" -> ["L", "pad"])
+        const [selectedSize, selectedCategory] = filters.sizeFilter.includes('-') 
+          ? filters.sizeFilter.split('-') 
+          : [filters.sizeFilter, null];
+        
+        // If category is specified in filter, check product category matches
+        if (selectedCategory === 'pad' && p.category !== 'mousepads') return false;
+        if (selectedCategory === 'cloth' && p.category !== 'clothing') return false;
+        
+        // Check if productSize contains the selected size (for comma-separated or exact match)
+        const sizes = p.productSize.split(',').map(s => s.trim());
+        return sizes.includes(selectedSize);
+      });
     }
 
     // Apply clothing type filter

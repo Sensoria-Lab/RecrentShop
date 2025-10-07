@@ -131,7 +131,7 @@ const ProductPage: React.FC = () => {
         {/* Main content with increased padding */}
         <main className="flex-1 px-3 sm:px-6 md:px-10 lg:px-20 py-4 sm:py-6 md:py-10 max-w-[1400px] mx-auto w-full">
           {/* Product section */}
-          <div className="bg-black/40 backdrop-blur rounded-lg sm:rounded-xl p-3 sm:p-5 md:p-8 lg:p-14 mb-4 sm:mb-6 md:mb-10">
+          <div className="panel panel-strong mb-4 sm:mb-6 md:mb-10">
             <div className="flex flex-col lg:flex-row gap-4 sm:gap-6 md:gap-10 lg:gap-14 items-start justify-between">
               {/* Product images - top on mobile, right on desktop */}
               <div className="flex-shrink-0 w-full lg:w-[580px] lg:order-2 lg:h-full">
@@ -357,7 +357,7 @@ const ProductPage: React.FC = () => {
           {/* Specifications */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-5 md:gap-7 mb-3 sm:mb-5 md:mb-7 lg:items-start">
             {/* Description */}
-            <div className={`bg-black/40 backdrop-blur rounded-lg sm:rounded-xl p-4 sm:p-5 md:p-6 lg:p-8 flex flex-col ${isClothingProduct ? 'lg:h-[28vh]' : 'lg:h-full'}`}>
+                <div className={`panel flex flex-col ${isClothingProduct ? 'lg:h-[28vh]' : 'lg:h-full'}`}>
               <h3 className="text-white font-manrope font-semibold text-base sm:text-lg md:text-xl mb-2 sm:mb-3">Описание</h3>
               <div className="w-16 sm:w-20 md:w-24 h-px bg-gradient-to-r from-white/10 to-transparent mb-3 sm:mb-4"></div>
               <div className={`text-white/90 font-manrope font-normal text-xs sm:text-sm leading-relaxed space-y-2 flex-1 overflow-hidden ${isClothingProduct ? 'line-clamp-[10]' : ''}`}>
@@ -396,7 +396,7 @@ const ProductPage: React.FC = () => {
             {/* Specifications */}
             <div className="space-y-3 sm:space-y-5 md:space-y-7">
               {/* Characteristics */}
-              <div className={`bg-black/40 backdrop-blur rounded-lg sm:rounded-xl p-4 sm:p-5 md:p-6 lg:p-8 flex flex-col ${isClothingProduct ? 'lg:min-h-[28vh]' : ''}`}>
+              <div className={`panel ${isClothingProduct ? 'lg:min-h-[28vh]' : ''}`}>
                 <h3 className="text-white font-manrope font-semibold text-base sm:text-lg md:text-xl mb-2 sm:mb-3">Характеристики</h3>
                 <div className="w-16 sm:w-20 md:w-24 h-px bg-gradient-to-r from-white/10 to-transparent mb-3 sm:mb-4"></div>
                 <div className={`space-y-2 sm:space-y-2.5 ${isClothingProduct ? 'flex-1 flex flex-col justify-center' : ''}`}>
@@ -458,7 +458,7 @@ const ProductPage: React.FC = () => {
 
               {/* Dimensions - только для ковриков */}
               {!isClothingProduct && (
-                <div className="bg-black/40 backdrop-blur rounded-lg sm:rounded-xl p-4 sm:p-5 md:p-6 lg:p-8">
+                <div className="panel">
                   <h3 className="text-white font-manrope font-semibold text-base sm:text-lg md:text-xl mb-2 sm:mb-3">Размеры</h3>
                   <div className="w-16 sm:w-20 md:w-24 h-px bg-gradient-to-r from-white/10 to-transparent mb-3 sm:mb-4"></div>
                   <div className="space-y-2 sm:space-y-2.5">
@@ -481,7 +481,7 @@ const ProductPage: React.FC = () => {
           </div>
 
           {/* Reviews */}
-          <div className="bg-black/40 backdrop-blur rounded-lg sm:rounded-xl p-4 sm:p-5 md:p-6 lg:p-8">
+          <div className="panel">
             <h3 className="text-white font-manrope font-bold text-lg sm:text-xl md:text-2xl mb-4 sm:mb-5 text-center">Отзывы</h3>
 
             <div className="space-y-3 sm:space-y-4">
@@ -527,7 +527,7 @@ const ProductPage: React.FC = () => {
 
           {/* Similar Products Section */}
           {similarProducts.length > 0 && (
-            <div className="bg-black/40 backdrop-blur rounded-lg sm:rounded-xl p-4 sm:p-5 md:p-6 lg:p-8 mt-3 sm:mt-5 md:mt-7">
+            <div className="panel mt-3 sm:mt-5 md:mt-7">
               <div className="mb-4 sm:mb-5">
                 <h3 className="text-white font-manrope font-bold text-lg sm:text-xl md:text-2xl mb-2 sm:mb-3">
                   Похожие товары

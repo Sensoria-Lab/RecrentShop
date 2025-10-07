@@ -27,11 +27,13 @@
   },
   "scripts": {
     "start": "react-scripts start",
+  "start:fast": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "setup": "npm install",
     "dev": "npm start",
+  "dev:fast": "npm run start:fast",
     "prod": "npm run build",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build"
