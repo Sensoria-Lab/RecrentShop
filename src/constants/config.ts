@@ -1,9 +1,7 @@
-/**
- * Application configuration constants
- * Централизованная конфигурация приложения
+﻿/**
+ * Application Configuration
  */
 
-// Site metadata
 export const SITE_CONFIG = {
   name: 'RECRENT SHOP',
   description: 'Коврики для мыши и одежда премиум качества',
@@ -12,18 +10,17 @@ export const SITE_CONFIG = {
   phone: '+7 (999) 999-99-99'
 } as const;
 
-// Social links
 export const SOCIAL_LINKS = {
-  vk: 'https://vk.com/recrentshop',
+  vk: 'https://vk.com/recrent',
   telegram: 'https://t.me/recrent',
   whatsapp: 'https://wa.me/79999999999',
   instagram: 'https://instagram.com/recrentshop',
   twitch: 'https://twitch.tv/recrent',
-  tiktok: 'https://tiktok.com/@recrent.twitch',
-  youtube: 'https://youtube.com/c/RecrentChannel'
+  tiktok: 'https://www.tiktok.com/@recrent.twitch',
+  youtube: 'https://www.youtube.com/c/recrentchannel',
+  discord: 'https://discord.com/invite/recrent'
 } as const;
 
-// Company information
 export const COMPANY_INFO = {
   name: 'ИП Осинцев Юрий Витальевич',
   inn: '450100470595',
@@ -31,7 +28,6 @@ export const COMPANY_INFO = {
   description: 'Индивидуальный предприниматель, зарегистрированный в Российской Федерации'
 } as const;
 
-// Text constants
 export const TEXTS = {
   emailResponse: 'Мы отвечаем на все письма в течение 24 часов в рабочие дни.',
   emailPrompt: 'По всем вопросам пишите на нашу электронную почту:',
@@ -40,21 +36,30 @@ export const TEXTS = {
   supportHours: 'Часы работы и время ответа'
 } as const;
 
-// Animation durations (ms)
-export const ANIMATION_DURATION = {
-  fast: 150,
-  normal: 300,
-  slow: 500,
-  verySlow: 1000
+export const API_CONFIG = {
+  BASE_URL: process.env.REACT_APP_API_URL || 'http://localhost:5000/api',
+  TIMEOUT: 30000,
+  USE_STATIC_DATA: process.env.NODE_ENV === 'production' && !process.env.REACT_APP_API_URL
 } as const;
 
-// Scroll settings
-export const SCROLL_CONFIG = {
-  snapDuration: 600, // Main page snap scroll duration
-  smoothBehavior: 'smooth' as ScrollBehavior
+export const ROUTES = {
+  HOME: '/',
+  CATALOG: '/catalog',
+  PRODUCT: '/product/:id',
+  CART: '/cart',
+  CHECKOUT: '/checkout',
+  SUPPORT: '/support',
+  ADMIN: '/admin',
+  ADMIN_LOGIN: '/admin/login',
+  NOT_FOUND: '*'
 } as const;
 
-// Products
+export const AUTH_CONFIG = {
+  TOKEN_KEY: 'authToken',
+  USER_KEY: 'currentUser',
+  TOKEN_EXPIRY: 24 * 60 * 60 * 1000
+} as const;
+
 export const PRODUCT_CONFIG = {
   categories: ['mousepads', 'clothing'] as const,
   defaultSort: 'rating',
@@ -62,29 +67,12 @@ export const PRODUCT_CONFIG = {
   carouselItemsPerView: 3
 } as const;
 
-// Cart
 export const CART_CONFIG = {
   maxQuantity: 99,
   minQuantity: 1,
   storageKey: 'recrent-cart'
 } as const;
 
-// API
-export const API_CONFIG = {
-  baseUrl: process.env.REACT_APP_API_URL || 'http://localhost:3001/api',
-  timeout: 10000,
-  retryAttempts: 3,
-  retryDelay: 1000
-} as const;
-
-// Images
-export const IMAGE_CONFIG = {
-  cdnUrl: process.env.REACT_APP_CDN_URL || '',
-  placeholderColor: '#1a1a1a',
-  lazyLoadThreshold: 0.1 // 10% of viewport
-} as const;
-
-// UI
 export const UI_CONFIG = {
   headerHideScrollThreshold: 100,
   headerShowMouseY: 120,
@@ -93,7 +81,24 @@ export const UI_CONFIG = {
   headerZIndex: 9999
 } as const;
 
-// Validation
+export const ANIMATION_DURATION = {
+  fast: 150,
+  normal: 300,
+  slow: 500,
+  verySlow: 1000
+} as const;
+
+export const SCROLL_CONFIG = {
+  snapDuration: 600,
+  smoothBehavior: 'smooth' as ScrollBehavior
+} as const;
+
+export const IMAGE_CONFIG = {
+  cdnUrl: process.env.REACT_APP_CDN_URL || '',
+  placeholderColor: '#1a1a1a',
+  lazyLoadThreshold: 0.1
+} as const;
+
 export const VALIDATION = {
   email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
   phone: /^[+]?[(]?[0-9]{1,4}[)]?[-\s.]?[(]?[0-9]{1,4}[)]?[-\s.]?[0-9]{1,9}$/,

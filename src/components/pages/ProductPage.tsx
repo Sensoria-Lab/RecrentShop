@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useRef, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import SelectorGroup from '../ui/SelectorGroup';
 import Header from '../shared/Header';
@@ -10,7 +10,10 @@ import QuantitySelector from '../ui/QuantitySelector';
 import ProductCard from '../ui/ProductCard';
 import ProductCarousel from '../ui/ProductCarousel';
 import Modal from '../shared/Modal';
+import ReviewCard from '../ui/ReviewCard';
+import ImageGalleryModal from '../shared/ImageGalleryModal';
 import { ALL_PRODUCTS } from '../../data/products';
+import { REVIEWS, hasMoreReviews } from '../../data/reviews';
 import { useProduct, useProductImages, useAddToCart, useProductNavigation } from '../../hooks';
 import { COLOR_OPTIONS, SIZE_OPTIONS, TYPE_OPTIONS, CLOTHING_SIZE_OPTIONS } from '../../constants/selectorOptions';
 import { getClothingDescription, MOUSEPAD_DIMENSIONS, COLOR_NAMES, PRODUCT_DESCRIPTIONS } from '../../constants/productDescriptions';
@@ -50,6 +53,34 @@ const ProductPage: React.FC = () => {
   
   // Состояние для модального окна описания
   const [showFullDescription, setShowFullDescription] = useState(false);
+  
+  // Проверка переполнения описания
+  const descriptionRef = useRef<HTMLDivElement>(null);
+  const [isDescriptionOverflowing, setIsDescriptionOverflowing] = useState(false);
+  
+  // Состояние для отзывов
+  const [displayedReviewsCount, setDisplayedReviewsCount] = useState(2);
+  const displayedReviews = REVIEWS.slice(0, displayedReviewsCount);
+  const showMoreReviews = hasMoreReviews(displayedReviewsCount);
+  
+  const handleLoadMoreReviews = () => {
+    setDisplayedReviewsCount(prev => Math.min(prev + 2, REVIEWS.length));
+  };
+
+  // Состояние для галереи изображений
+  const [galleryImages, setGalleryImages] = useState<string[]>([]);
+  const [galleryInitialIndex, setGalleryInitialIndex] = useState(0);
+  const [isGalleryOpen, setIsGalleryOpen] = useState(false);
+
+  const openGallery = (images: string[], index: number = 0) => {
+    setGalleryImages(images);
+    setGalleryInitialIndex(index);
+    setIsGalleryOpen(true);
+  };
+
+  const closeGallery = () => {
+    setIsGalleryOpen(false);
+  };
 
   // Используем хук для получения правильных изображений
   const productImages = useProductImages(productData, selectedSize, selectedColor);
@@ -57,6 +88,28 @@ const ProductPage: React.FC = () => {
   // Используем утилиты для проверки типа продукта
   const isClothingProduct = isClothing(productData);
   const isProMousepadProduct = isProMousepad(productData);
+  
+  useEffect(() => {
+    const checkOverflow = () => {
+      if (descriptionRef.current) {
+        const isOverflow = descriptionRef.current.scrollHeight > descriptionRef.current.clientHeight;
+        setIsDescriptionOverflowing(isOverflow);
+      }
+    };
+    
+    // Проверяем при монтировании и изменении контента
+    checkOverflow();
+    
+    // Добавляем resize observer для отслеживания изменений
+    const resizeObserver = new ResizeObserver(checkOverflow);
+    if (descriptionRef.current) {
+      resizeObserver.observe(descriptionRef.current);
+    }
+    
+    return () => {
+      resizeObserver.disconnect();
+    };
+  }, [selectedType, selectedColor, isClothingProduct, isProMousepadProduct]);
 
   // Получаем описание для одежды
   const clothingDescription = getClothingDescription(selectedColor);
@@ -131,7 +184,7 @@ const ProductPage: React.FC = () => {
         {/* Main content with increased padding */}
         <main className="flex-1 px-3 sm:px-6 md:px-10 lg:px-20 py-4 sm:py-6 md:py-10 max-w-[1400px] mx-auto w-full">
           {/* Product section */}
-          <div className="panel panel-strong mb-4 sm:mb-6 md:mb-10">
+          <div className="panel panel-strong mb-4 sm:mb-6 md:mb-10 p-6 sm:p-8 md:p-10 lg:p-12">
             <div className="flex flex-col lg:flex-row gap-4 sm:gap-6 md:gap-10 lg:gap-14 items-start justify-between">
               {/* Product images - top on mobile, right on desktop */}
               <div className="flex-shrink-0 w-full lg:w-[580px] lg:order-2 lg:h-full">
@@ -150,7 +203,10 @@ const ProductPage: React.FC = () => {
                     </button>
 
                     {/* Image container */}
-                    <div className="flex-1">
+                    <button 
+                      onClick={() => openGallery(productImages, selectedImage)}
+                      className="flex-1 cursor-pointer group relative"
+                    >
                       <Img
                         id="product-main-image"
                         key={`${selectedSize}-${selectedColor}-${selectedImage}`}
@@ -159,7 +215,15 @@ const ProductPage: React.FC = () => {
                         loading="eager"
                         className="w-full h-40 sm:h-56 md:h-72 lg:h-80 object-contain rounded-lg sm:rounded-xl transition-all duration-300"
                       />
-                    </div>
+                      {/* Hover overlay with zoom icon */}
+                      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-200 rounded-lg sm:rounded-xl flex items-center justify-center">
+                        <div className="bg-white/10 backdrop-blur-sm p-3 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                          <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7" />
+                          </svg>
+                        </div>
+                      </div>
+                    </button>
 
                     {/* Right arrow - outside image */}
                     <button
@@ -355,12 +419,15 @@ const ProductPage: React.FC = () => {
           </div>
 
           {/* Specifications */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-5 md:gap-7 mb-3 sm:mb-5 md:mb-7 lg:items-start">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-5 md:gap-7 mb-3 sm:mb-5 md:mb-7 lg:items-stretch">
             {/* Description */}
-                <div className={`panel flex flex-col ${isClothingProduct ? 'lg:h-[28vh]' : 'lg:h-full'}`}>
+            <div className="panel flex flex-col p-6 sm:p-7 md:p-8 lg:h-[320px]">
               <h3 className="text-white font-manrope font-semibold text-base sm:text-lg md:text-xl mb-2 sm:mb-3">Описание</h3>
               <div className="w-16 sm:w-20 md:w-24 h-px bg-gradient-to-r from-white/10 to-transparent mb-3 sm:mb-4"></div>
-              <div className={`text-white/90 font-manrope font-normal text-xs sm:text-sm leading-relaxed space-y-2 flex-1 overflow-hidden ${isClothingProduct ? 'line-clamp-[10]' : ''}`}>
+              <div 
+                ref={descriptionRef}
+                className="text-white/90 font-manrope font-normal text-xs sm:text-sm leading-relaxed space-y-2 flex-1 overflow-hidden"
+              >
                 {isClothingProduct ? (
                   // Описание для одежды
                   <p className="whitespace-pre-line">{clothingDescription}</p>
@@ -382,24 +449,29 @@ const ProductPage: React.FC = () => {
                   </>
                 )}
               </div>
-              <button
-                onClick={() => setShowFullDescription(true)}
-                className="mt-4 w-full bg-white/5 hover:bg-white/10 border border-white/20 text-white font-manrope font-medium py-2.5 px-4 rounded-lg text-xs sm:text-sm transition-all duration-300 flex items-center justify-center gap-2 group"
-              >
-                <span>Читать полностью</span>
-                <svg className="w-3 h-3 sm:w-4 sm:h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
-              </button>
+              {isDescriptionOverflowing && (
+                <button
+                  onClick={() => setShowFullDescription(true)}
+                  className="mt-4 w-full bg-white/5 hover:bg-white/10 border border-white/20 text-white font-manrope font-medium py-2.5 px-4 rounded-lg text-xs sm:text-sm transition-all duration-300 flex items-center justify-center gap-2 group"
+                >
+                  <span>Показать полностью</span>
+                  <svg className="w-3 h-3 sm:w-4 sm:h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </button>
+              )}
             </div>
 
-            {/* Specifications */}
-            <div className="space-y-3 sm:space-y-5 md:space-y-7">
-              {/* Characteristics */}
-              <div className={`panel ${isClothingProduct ? 'lg:min-h-[28vh]' : ''}`}>
-                <h3 className="text-white font-manrope font-semibold text-base sm:text-lg md:text-xl mb-2 sm:mb-3">Характеристики</h3>
-                <div className="w-16 sm:w-20 md:w-24 h-px bg-gradient-to-r from-white/10 to-transparent mb-3 sm:mb-4"></div>
-                <div className={`space-y-2 sm:space-y-2.5 ${isClothingProduct ? 'flex-1 flex flex-col justify-center' : ''}`}>
+            {/* Specifications & Dimensions Combined */}
+            <div className="panel p-6 sm:p-7 md:p-8 lg:h-[320px] flex flex-col">
+              <h3 className="text-white font-manrope font-semibold text-base sm:text-lg md:text-xl mb-2 sm:mb-3">
+                Характеристики {!isClothingProduct && '& Размеры'}
+              </h3>
+              <div className="w-16 sm:w-20 md:w-24 h-px bg-gradient-to-r from-white/10 to-transparent mb-3 sm:mb-4"></div>
+              
+              <div className="space-y-4 flex-1 overflow-y-auto">
+                {/* Characteristics Section */}
+                <div className="space-y-2 sm:space-y-2.5">
                   {isClothingProduct ? (
                     // Характеристики для одежды
                     <>
@@ -454,80 +526,64 @@ const ProductPage: React.FC = () => {
                     </>
                   )}
                 </div>
-              </div>
 
-              {/* Dimensions - только для ковриков */}
-              {!isClothingProduct && (
-                <div className="panel">
-                  <h3 className="text-white font-manrope font-semibold text-base sm:text-lg md:text-xl mb-2 sm:mb-3">Размеры</h3>
-                  <div className="w-16 sm:w-20 md:w-24 h-px bg-gradient-to-r from-white/10 to-transparent mb-3 sm:mb-4"></div>
-                  <div className="space-y-2 sm:space-y-2.5">
-                    <div className="flex flex-col sm:flex-row justify-between gap-1">
-                      <span className="text-white font-manrope font-medium text-xs sm:text-sm">Толщина</span>
-                      <span className="text-white/80 font-manrope font-normal text-xs sm:text-sm">{isProMousepadProduct ? '3.5 мм' : '4 мм'}</span>
+                {/* Dimensions Section - только для ковриков */}
+                {!isClothingProduct && (
+                  <>
+                    <div className="w-full h-px bg-gradient-to-r from-white/20 via-white/10 to-transparent my-4"></div>
+                    <div className="space-y-2 sm:space-y-2.5">
+                      <div className="flex flex-col sm:flex-row justify-between gap-1">
+                        <span className="text-white font-manrope font-medium text-xs sm:text-sm">Толщина</span>
+                        <span className="text-white/80 font-manrope font-normal text-xs sm:text-sm">{isProMousepadProduct ? '3.5 мм' : '4 мм'}</span>
+                      </div>
+                      <div className="flex flex-col sm:flex-row justify-between gap-1">
+                        <span className="text-white font-manrope font-medium text-xs sm:text-sm">Длина</span>
+                        <span className="text-white/80 font-manrope font-normal text-xs sm:text-sm">{isProMousepadProduct ? '500 мм' : MOUSEPAD_DIMENSIONS[selectedSize as keyof typeof MOUSEPAD_DIMENSIONS].length}</span>
+                      </div>
+                      <div className="flex flex-col sm:flex-row justify-between gap-1">
+                        <span className="text-white font-manrope font-medium text-xs sm:text-sm">Ширина</span>
+                        <span className="text-white/80 font-manrope font-normal text-xs sm:text-sm">{isProMousepadProduct ? '430 мм' : MOUSEPAD_DIMENSIONS[selectedSize as keyof typeof MOUSEPAD_DIMENSIONS].width}</span>
+                      </div>
                     </div>
-                    <div className="flex flex-col sm:flex-row justify-between gap-1">
-                      <span className="text-white font-manrope font-medium text-xs sm:text-sm">Длина</span>
-                      <span className="text-white/80 font-manrope font-normal text-xs sm:text-sm">{isProMousepadProduct ? '500 мм' : MOUSEPAD_DIMENSIONS[selectedSize as keyof typeof MOUSEPAD_DIMENSIONS].length}</span>
-                    </div>
-                    <div className="flex flex-col sm:flex-row justify-between gap-1">
-                      <span className="text-white font-manrope font-medium text-xs sm:text-sm">Ширина</span>
-                      <span className="text-white/80 font-manrope font-normal text-xs sm:text-sm">{isProMousepadProduct ? '430 мм' : MOUSEPAD_DIMENSIONS[selectedSize as keyof typeof MOUSEPAD_DIMENSIONS].width}</span>
-                    </div>
-                  </div>
-                </div>
-              )}
+                  </>
+                )}
+              </div>
             </div>
           </div>
 
           {/* Reviews */}
-          <div className="panel">
+          <div className="panel p-6 sm:p-8 md:p-10">
             <h3 className="text-white font-manrope font-bold text-lg sm:text-xl md:text-2xl mb-4 sm:mb-5 text-center">Отзывы</h3>
 
             <div className="space-y-3 sm:space-y-4">
-              {/* Review 1 */}
-              <div className="bg-black/40 p-3 sm:p-4 md:p-5 rounded-lg sm:rounded-xl border-b border-white/20">
-                <div className="flex justify-between items-center mb-2 sm:mb-3">
-                  <h4 className="text-white font-manrope font-semibold text-sm sm:text-base">Никита Литвиненко</h4>
-                  <StarRating rating={5} />
-                </div>
-                <p className="text-white/90 font-manrope font-normal text-xs sm:text-sm mb-3 leading-relaxed">
-                  приехал быстро (буквально 3-4 дня с учетом праздников), коврик огромен, даже неожиданно огромен, качество 15/10, исполнение принта 25/10, за такую цену чуть ли не лучшее предложение на рынке ковров, спасибо за такое прекрасное исполнение!
-                </p>
-                <div className="flex justify-between items-end">
-                  <div className="flex gap-1.5 sm:gap-2">
-                    <div className="w-12 h-12 sm:w-14 sm:h-14 bg-blue-100 rounded-lg"></div>
-                    <div className="w-12 h-12 sm:w-14 sm:h-14 bg-green-100 rounded-lg"></div>
-                    <div className="w-12 h-12 sm:w-14 sm:h-14 bg-red-100 rounded-lg"></div>
-                  </div>
-                  <span className="text-white/70 font-manrope font-normal text-xs sm:text-sm">09.11.2025</span>
-                </div>
-              </div>
-
-              {/* Review 2 */}
-              <div className="bg-black/40 p-3 sm:p-4 md:p-5 rounded-lg sm:rounded-xl">
-                <div className="flex justify-between items-center mb-2 sm:mb-3">
-                  <h4 className="text-white font-manrope font-semibold text-sm sm:text-base">Даниилс Ушаковс</h4>
-                  <StarRating rating={5} />
-                </div>
-                <p className="text-white/90 font-manrope font-normal text-xs sm:text-sm mb-3 leading-relaxed">
-                  Коврик - огонь! Единственный вопрос, не нашел нигде, как его правильно стирать, чтобы не повредить поверхность?
-                </p>
-                <div className="flex justify-between items-end">
-                  <div className="flex gap-1.5 sm:gap-2">
-                    <div className="w-12 h-12 sm:w-14 sm:h-14 bg-blue-100 rounded-lg"></div>
-                    <div className="w-12 h-12 sm:w-14 sm:h-14 bg-green-100 rounded-lg"></div>
-                    <div className="w-12 h-12 sm:w-14 sm:h-14 bg-red-100 rounded-lg"></div>
-                  </div>
-                  <span className="text-white/70 font-manrope font-normal text-xs sm:text-sm">09.11.2025</span>
-                </div>
-              </div>
+              {displayedReviews.map((review) => (
+                <ReviewCard 
+                  key={review.id} 
+                  review={review}
+                  onPhotoClick={(photos, index) => openGallery(photos, index)}
+                />
+              ))}
             </div>
+
+            {/* Load More Button */}
+            {showMoreReviews && (
+              <div className="mt-6 flex justify-center">
+                <button
+                  onClick={handleLoadMoreReviews}
+                  className="bg-white/5 hover:bg-white/10 border border-white/20 text-white font-manrope font-medium py-3 px-6 rounded-lg text-sm sm:text-base transition-all duration-300 flex items-center gap-2 group"
+                >
+                  <span>Показать еще</span>
+                  <svg className="w-4 h-4 transition-transform group-hover:translate-y-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+              </div>
+            )}
           </div>
 
           {/* Similar Products Section */}
           {similarProducts.length > 0 && (
-            <div className="panel mt-3 sm:mt-5 md:mt-7">
+            <div className="panel p-6 sm:p-8 md:p-10 mt-3 sm:mt-5 md:mt-7">
               <div className="mb-4 sm:mb-5">
                 <h3 className="text-white font-manrope font-bold text-lg sm:text-xl md:text-2xl mb-2 sm:mb-3">
                   Похожие товары
@@ -581,7 +637,7 @@ const ProductPage: React.FC = () => {
             {/* Size Chart Image */}
             <div className="bg-white/5 rounded-xl overflow-hidden border border-white/10">
               <Img
-                src="/images/size-chart.webp"
+                src="/images/size-chart.png"
                 alt="Таблица размеров одежды"
                 className="w-full h-auto"
                 onError={(e) => {
@@ -626,6 +682,15 @@ const ProductPage: React.FC = () => {
             </div>
           </div>
         </Modal>
+
+        {/* Image Gallery Modal */}
+        <ImageGalleryModal
+          images={galleryImages}
+          initialIndex={galleryInitialIndex}
+          isOpen={isGalleryOpen}
+          onClose={closeGallery}
+          altPrefix="Изображение товара"
+        />
       </div>
     </div>
   );

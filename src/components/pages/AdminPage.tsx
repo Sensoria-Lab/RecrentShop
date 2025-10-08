@@ -4,7 +4,7 @@ import PageContainer from '../shared/PageContainer';
 import { Product } from '../../types/product';
 import { Pencil, Trash2, Plus, Save, X, LogOut, Eye } from 'lucide-react';
 import { isAuthenticated, logout, getAuthToken, getCurrentUser } from '../../utils/auth';
-import { API_CONFIG } from '../../config/constants';
+import { API_CONFIG } from '../../constants/config';
 
 /**
  * Admin Panel Page

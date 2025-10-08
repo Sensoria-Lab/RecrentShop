@@ -2,7 +2,7 @@
  * Authentication utilities
  */
 
-import { API_CONFIG, AUTH_CONFIG } from '../config/constants';
+import { API_CONFIG, AUTH_CONFIG } from '../constants/config';
 
 /**
  * Check if user is authenticated

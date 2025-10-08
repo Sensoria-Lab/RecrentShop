@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PageLayout from '../shared/PageLayout';
 import { Lock, User } from 'lucide-react';
-import { API_CONFIG, AUTH_CONFIG } from '../../config/constants';
+import { API_CONFIG, AUTH_CONFIG } from '../../constants/config';
 
 /**
  * Admin Login Page

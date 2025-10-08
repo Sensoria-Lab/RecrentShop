@@ -68,11 +68,13 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
   const deltaXRef = useRef(0);
   const isDraggingRef = useRef(false);
   const [dragOffset, setDragOffset] = useState(0);
+  const [isClickDisabled, setIsClickDisabled] = useState(false);
 
   const onPointerDown = (e: React.PointerEvent) => {
     startXRef.current = e.clientX;
     deltaXRef.current = 0;
     isDraggingRef.current = true;
+    setIsClickDisabled(false);
     if (carouselRef.current) {
       (e.target as HTMLElement).setPointerCapture(e.pointerId);
     }
@@ -81,6 +83,12 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
   const onPointerMove = (e: React.PointerEvent) => {
     if (startXRef.current == null || !isDraggingRef.current) return;
     deltaXRef.current = e.clientX - startXRef.current;
+    
+    // Disable clicks if moved more than 5px
+    if (Math.abs(deltaXRef.current) > 5) {
+      setIsClickDisabled(true);
+    }
+    
     setDragOffset(deltaXRef.current);
   };
 
@@ -106,6 +114,11 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
     startXRef.current = null;
     deltaXRef.current = 0;
     setDragOffset(0);
+    
+    // Re-enable clicks after a short delay
+    setTimeout(() => {
+      setIsClickDisabled(false);
+    }, 150);
   };
 
   useEffect(() => {
@@ -170,7 +183,7 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
           {extendedChildren.map((child, index) => (
             <div
               key={index}
-              className="flex-shrink-0 flex items-center justify-center"
+              className={`flex-shrink-0 flex items-center justify-center ${isClickDisabled ? 'pointer-events-none' : ''}`}
               style={{ width: `${cardWidth}px` }}
             >
               {child}

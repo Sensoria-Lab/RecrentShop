@@ -21,7 +21,7 @@ const CartPage: React.FC = () => {
       <div className="min-h-screen px-4 sm:px-6 md:px-8">
         <div className="max-w-7xl mx-auto">
           {/* Background container */}
-          <div className="panel panel-strong">
+          <div className="panel panel-strong pt-8 sm:pt-12 md:pt-16">
             {/* Page Title */}
             <div className="text-center mb-8 sm:mb-12 md:mb-16">
               <h1 className="text-white font-manrope font-bold text-3xl sm:text-4xl md:text-5xl lg:text-6xl mb-3 sm:mb-4 drop-shadow-[0_4px_12px_rgba(0,0,0,0.9)]">

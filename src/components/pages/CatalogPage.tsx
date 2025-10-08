@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import ProductCard from '../ui/ProductCard';
 import PageContainer from '../shared/PageContainer';
 import { useProductFilters, useProductNavigation } from '../../hooks';
-import { API_CONFIG } from '../../config/constants';
+import { API_CONFIG } from '../../constants/config';
 import { ALL_PRODUCTS } from '../../data/products';
 import type {
   SortOption,
@@ -229,10 +229,11 @@ const CatalogPage: React.FC = () => {
                       </span>
                     </label>
 
-                    {/* Size options container - use relative/absolute positioning to prevent layout shift */}
-                    <div className="relative min-h-[240px]">
+                    {/* Size options container */}
+                    <div className="mt-3">
                       {/* Mousepad sizes */}
-                      <div className={`${categoryFilter === 'clothing' ? 'opacity-0 pointer-events-none absolute inset-0' : 'opacity-100 relative'} transition-opacity duration-200`}>
+                      {categoryFilter !== 'clothing' && (
+                        <div className="transition-opacity duration-200">
                         <p className="text-white/60 font-manrope text-xs mb-2 uppercase tracking-wider">Коврики для мыши:</p>
                         <div className="space-y-2 pl-2">
                           {[
@@ -255,10 +256,12 @@ const CatalogPage: React.FC = () => {
                             </label>
                           ))}
                         </div>
-                      </div>
+                        </div>
+                      )}
 
                       {/* Clothing sizes */}
-                      <div className={`${categoryFilter === 'mousepads' ? 'opacity-0 pointer-events-none absolute inset-0' : 'opacity-100 relative'} transition-opacity duration-200`}>
+                      {categoryFilter !== 'mousepads' && (
+                        <div className="transition-opacity duration-200">
                         <p className="text-white/60 font-manrope text-xs mb-2 uppercase tracking-wider">Одежда:</p>
                         <div className="space-y-2 pl-2">
                           {[
@@ -284,7 +287,8 @@ const CatalogPage: React.FC = () => {
                             </label>
                           ))}
                         </div>
-                      </div>
+                        </div>
+                      )}
                     </div>
                   </div>
 

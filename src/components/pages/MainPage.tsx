@@ -7,7 +7,7 @@ import SectionHeader from '../ui/SectionHeader';
 import Footer from '../shared/Footer';
 import { useProductNavigation } from '../../hooks';
 import { ROUTES } from '../../constants/routes';
-import { API_CONFIG } from '../../config/constants';
+import { API_CONFIG } from '../../constants/config';
 import { ALL_PRODUCTS } from '../../data/products';
 import type { Product } from '../../types/product';
 
