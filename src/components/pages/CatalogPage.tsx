@@ -134,7 +134,7 @@ const CatalogPage: React.FC = () => {
 
             {/* Category Filter - moved here */}
             <div className="mb-6 sm:mb-8 flex justify-center scroll-fade-in scroll-fade-in-delay-1">
-              <div className="relative inline-flex gap-2 sm:gap-3 bg-black/40 backdrop-blur-md border border-white/20 rounded-xl p-2">
+              <div className="relative inline-flex gap-2 sm:gap-3 bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-2">
                 {/* Animated background indicator */}
                 <div
                   className="absolute bg-white rounded-lg shadow-lg transition-all duration-300 ease-out z-0"
@@ -171,7 +171,7 @@ const CatalogPage: React.FC = () => {
             <div className="lg:hidden mb-3 sm:mb-4">
               <button
                 onClick={() => setFiltersOpen(!filtersOpen)}
-                className="w-full bg-black/40 backdrop-blur text-white font-manrope font-semibold px-4 sm:px-6 py-2.5 sm:py-3 rounded-lg sm:rounded-xl border border-white/20 hover:bg-black/60 transition-all flex items-center justify-between text-sm sm:text-base"
+                className="w-full bg-white/5 backdrop-blur-sm text-white font-manrope font-semibold px-4 sm:px-6 py-2.5 sm:py-3 rounded-lg sm:rounded-xl border border-white/10 hover:bg-white/8 transition-all flex items-center justify-between text-sm sm:text-base"
               >
                 <span>Фильтры</span>
                 <svg 

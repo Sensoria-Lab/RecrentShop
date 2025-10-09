@@ -151,18 +151,68 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
     );
   }
 
+  // Calculate scrollbar position and width
+  const scrollbarRef = useRef<HTMLDivElement>(null);
+  const [isDraggingScrollbar, setIsDraggingScrollbar] = useState(false);
+  
+  // Normalize current index for scrollbar (handle negative indices from infinite scroll)
+  const normalizedIndex = ((currentIndex % totalItems) + totalItems) % totalItems;
+  const scrollbarWidth = totalItems > 0 ? Math.min(100, (responsiveItemsPerView / totalItems) * 100) : 100;
+  const maxScrollPosition = Math.max(0, 100 - scrollbarWidth);
+  const scrollbarPosition = totalItems > responsiveItemsPerView 
+    ? (normalizedIndex / (totalItems - responsiveItemsPerView)) * maxScrollPosition
+    : 0;
+
+  // Handle scrollbar drag
+  const handleScrollbarPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDraggingScrollbar(true);
+    
+    const scrollbarTrack = scrollbarRef.current?.parentElement;
+    if (!scrollbarTrack) return;
+    
+    const rect = scrollbarTrack.getBoundingClientRect();
+    const clickPosition = (e.clientX - rect.left) / rect.width;
+    const targetIndex = Math.round(clickPosition * totalItems) - Math.floor(responsiveItemsPerView / 2);
+    const clampedIndex = Math.max(0, Math.min(totalItems - responsiveItemsPerView, targetIndex));
+    
+    setCurrentIndex(clampedIndex);
+    (e.target as HTMLElement).setPointerCapture(e.pointerId);
+  };
+
+  const handleScrollbarPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!isDraggingScrollbar) return;
+    e.preventDefault();
+    
+    const scrollbarTrack = scrollbarRef.current?.parentElement;
+    if (!scrollbarTrack) return;
+    
+    const rect = scrollbarTrack.getBoundingClientRect();
+    const clickPosition = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+    const targetIndex = Math.round(clickPosition * totalItems) - Math.floor(responsiveItemsPerView / 2);
+    const clampedIndex = Math.max(0, Math.min(totalItems - responsiveItemsPerView, targetIndex));
+    
+    setCurrentIndex(clampedIndex);
+  };
+
+  const handleScrollbarPointerUp = () => {
+    setIsDraggingScrollbar(false);
+  };
+
   return (
-    <div className="relative flex items-center gap-4">
-      {/* Left Arrow */}
-      <button
-        onClick={handlePrev}
-        className="flex-shrink-0 bg-black/70 hover:bg-black/90 text-white p-3 rounded-full transition-all duration-200 hover:scale-110 active:scale-95 z-10"
-        aria-label="Previous"
-      >
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <path d="M15 18l-6-6 6-6"/>
-        </svg>
-      </button>
+    <div className="relative flex flex-col gap-4">
+      <div className="flex items-center gap-4">
+        {/* Left Arrow */}
+        <button
+          onClick={handlePrev}
+          className="flex-shrink-0 bg-black/70 hover:bg-black/90 text-white p-3 rounded-full transition-all duration-200 hover:scale-110 active:scale-95 z-10"
+          aria-label="Previous"
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d="M15 18l-6-6 6-6"/>
+          </svg>
+        </button>
 
       {/* Carousel Container */}
       <div
@@ -192,16 +242,45 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
         </div>
       </div>
 
-      {/* Right Arrow */}
-      <button
-        onClick={handleNext}
-        className="flex-shrink-0 bg-black/70 hover:bg-black/90 text-white p-3 rounded-full transition-all duration-200 hover:scale-110 active:scale-95 z-10"
-        aria-label="Next"
-      >
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <path d="M9 18l6-6-6-6"/>
-        </svg>
-      </button>
+        {/* Right Arrow */}
+        <button
+          onClick={handleNext}
+          className="flex-shrink-0 bg-black/70 hover:bg-black/90 text-white p-3 rounded-full transition-all duration-200 hover:scale-110 active:scale-95 z-10"
+          aria-label="Next"
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d="M9 18l6-6-6-6"/>
+          </svg>
+        </button>
+      </div>
+
+      {/* Custom Scrollbar */}
+      <div className="relative w-full h-2 px-12">
+        {/* Track */}
+        <div 
+          className="absolute inset-0 bg-white/10 rounded-full backdrop-blur-sm cursor-pointer"
+          onPointerDown={handleScrollbarPointerDown}
+          onPointerMove={handleScrollbarPointerMove}
+          onPointerUp={handleScrollbarPointerUp}
+          onPointerLeave={handleScrollbarPointerUp}
+        >
+          {/* Thumb */}
+          <div
+            ref={scrollbarRef}
+            className="absolute top-0 h-full bg-white/90 hover:bg-white rounded-full cursor-grab active:cursor-grabbing shadow-lg hover:shadow-white/30"
+            style={{
+              width: `${scrollbarWidth}%`,
+              left: `${scrollbarPosition}%`,
+              transition: (isDraggingScrollbar || isDraggingRef.current || Math.abs(dragOffset) > 0)
+                ? 'none' 
+                : 'left 0.4s cubic-bezier(0.25, 0.1, 0.25, 1), width 0.3s ease, background-color 0.2s ease'
+            }}
+          >
+            {/* Shine effect on thumb */}
+            <div className="absolute inset-0 bg-gradient-to-r from-white/40 via-white/60 to-transparent rounded-full opacity-50" />
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

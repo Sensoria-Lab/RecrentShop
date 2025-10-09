@@ -17,6 +17,14 @@ const MainPage: React.FC = () => {
   const containerRef = React.useRef<HTMLDivElement>(null);
   const [products, setProducts] = React.useState<Product[]>([]);
 
+  // Enable scroll snapping on main page
+  React.useEffect(() => {
+    document.documentElement.classList.add('snap-scroll');
+    return () => {
+      document.documentElement.classList.remove('snap-scroll');
+    };
+  }, []);
+
   // Fetch products from API or use static data
   React.useEffect(() => {
     const fetchProducts = async () => {
@@ -69,9 +77,9 @@ const MainPage: React.FC = () => {
 
   return (
     <PageContainer isMainPage={true}>
-  <div ref={containerRef} className="h-screen overflow-y-auto scroll-smooth snap-y snap-mandatory">
+      <div ref={containerRef}>
         {/* Hero section - centered with full viewport height */}
-  <section id="hero" className="h-screen snap-center flex flex-col items-center justify-center px-4 sm:px-6 md:px-8 py-8 sm:py-12 md:py-16">
+        <section id="hero" className="h-screen snap-start flex flex-col items-center justify-center px-4 sm:px-6 md:px-8 py-8 sm:py-12 md:py-16">
             <div className="max-w-4xl w-full text-center space-y-8 sm:space-y-12">
 
             {/* Logo or Brand Name */}
@@ -109,7 +117,7 @@ const MainPage: React.FC = () => {
         </section>
 
         {/* Mousepads Section */}
-  <section id="mousepads" className="min-h-[55vh] lg:min-h-[65vh] snap-center px-8 md:px-12 lg:px-16 xl:px-20 2xl:px-24 py-8 md:py-10 lg:py-12 flex items-center">
+        <section id="mousepads" className="min-h-screen snap-start px-8 md:px-12 lg:px-16 xl:px-20 2xl:px-24 py-8 md:py-10 lg:py-12 flex items-center">
           <div className="w-full max-w-[1400px] mx-auto">
             <div className="panel">
               <SectionHeader
@@ -145,7 +153,7 @@ const MainPage: React.FC = () => {
         </section>
 
         {/* Clothing Section */}
-  <section id="clothing" className="min-h-[55vh] lg:min-h-[65vh] snap-center px-8 md:px-12 lg:px-16 xl:px-20 2xl:px-24 py-8 md:py-10 lg:py-12 flex flex-col">
+        <section id="clothing" className="min-h-screen snap-start px-8 md:px-12 lg:px-16 xl:px-20 2xl:px-24 py-8 md:py-10 lg:py-12 flex flex-col">
           <div className="w-full max-w-[1400px] mx-auto flex-shrink-0">
             <div className="panel">
               <SectionHeader

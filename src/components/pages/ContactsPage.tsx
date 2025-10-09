@@ -13,7 +13,7 @@ interface ContactCardProps {
 
 const ContactCard: React.FC<ContactCardProps> = ({ title, onClick, icon, preview }) => (
   <div
-    className="relative rounded-lg sm:rounded-xl md:rounded-2xl cursor-pointer group bg-gradient-to-br from-zinc-800/40 via-zinc-900/60 to-black/80 backdrop-blur-sm border border-white/10 hover:border-white/30 transition-all duration-300"
+    className="relative rounded-lg sm:rounded-xl md:rounded-2xl cursor-pointer group bg-white/5 backdrop-blur-sm border border-white/10 hover:border-white/30 transition-all duration-300"
     onClick={onClick}
   >
     {/* Shine effect on hover */}
@@ -310,7 +310,7 @@ const ContactsPage: React.FC = () => {
     <PageLayout>
       <div className="max-w-6xl mx-auto">
         {/* Background container for title and cards */}
-        <div className="bg-black/40 backdrop-blur rounded-lg sm:rounded-xl md:rounded-2xl p-6 sm:p-8 md:p-12 lg:p-16 xl:p-20">
+        <div className="bg-white/5 backdrop-blur-sm rounded-lg sm:rounded-xl md:rounded-2xl p-6 sm:p-8 md:p-12 lg:p-16 xl:p-20 border border-white/10">
           {/* Page title */}
           <div className="text-center mb-8 sm:mb-12 md:mb-16 lg:mb-20 scroll-fade-in">
             <h1 className="text-white font-manrope font-bold text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl mb-3 sm:mb-4 md:mb-6 drop-shadow-[0_4px_12px_rgba(0,0,0,0.9)]">

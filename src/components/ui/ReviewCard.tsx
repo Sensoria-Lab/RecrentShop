@@ -10,7 +10,7 @@ interface ReviewCardProps {
 
 const ReviewCard: React.FC<ReviewCardProps> = ({ review, onPhotoClick }) => {
   return (
-    <div className="bg-black/40 p-3 sm:p-4 md:p-5 rounded-lg sm:rounded-xl border-b border-white/20">
+    <div className="bg-white/5 backdrop-blur-sm p-3 sm:p-4 md:p-5 rounded-lg sm:rounded-xl border border-white/10">
       <div className="flex justify-between items-center mb-2 sm:mb-3">
         <h4 className="text-white font-manrope font-semibold text-sm sm:text-base">
           {review.author}

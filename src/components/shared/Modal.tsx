@@ -44,7 +44,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children }) => {
       />
 
       {/* Modal */}
-      <div className="relative w-full max-w-4xl max-h-[75vh] bg-gradient-to-br from-zinc-900/95 to-zinc-950/95 rounded-lg sm:rounded-xl md:rounded-2xl shadow-2xl border border-white/10 flex flex-col overflow-hidden">
+      <div className="relative w-full max-w-4xl max-h-[75vh] bg-white/5 backdrop-blur-sm rounded-lg sm:rounded-xl md:rounded-2xl shadow-2xl border border-white/10 flex flex-col overflow-hidden">
         {/* Header with close button */}
         {title ? (
           <div className="flex items-center justify-between p-3 sm:p-4 md:p-6 border-b border-white/10">

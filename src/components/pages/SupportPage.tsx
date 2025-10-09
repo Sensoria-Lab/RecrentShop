@@ -6,7 +6,7 @@ import { SITE_CONFIG, SOCIAL_LINKS, TEXTS } from '../../constants/config';
 
 const Card: React.FC<{ title: string; icon: React.ReactNode; preview?: string; onClick: () => void }> = ({ title, icon, preview, onClick }) => (
   <div
-    className="relative rounded-lg sm:rounded-xl md:rounded-2xl cursor-pointer group bg-gradient-to-br from-zinc-800/40 via-zinc-900/60 to-black/80 backdrop-blur-sm border border-white/10 hover:border-white/30 transition-all duration-300"
+    className="relative rounded-lg sm:rounded-xl md:rounded-2xl cursor-pointer group bg-white/5 backdrop-blur-sm border border-white/10 hover:border-white/30 transition-all duration-300"
     onClick={onClick}
   >
     <div className="relative p-3 sm:p-4 md:p-6 lg:p-7 flex items-center gap-2 sm:gap-3 md:gap-5 lg:gap-6">

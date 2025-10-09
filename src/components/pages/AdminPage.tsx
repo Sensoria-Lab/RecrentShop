@@ -177,7 +177,7 @@ const AdminPage: React.FC = () => {
   return (
     <PageContainer>
       <div className="max-w-7xl mx-auto">
-        <div className="bg-black/40 backdrop-blur rounded-xl p-8">
+        <div className="bg-white/5 backdrop-blur-sm rounded-xl p-8 border border-white/10">
           {/* Header */}
           <div className="flex justify-between items-center mb-8">
             <div>

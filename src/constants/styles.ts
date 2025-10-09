@@ -9,7 +9,7 @@ export const GLASS_BG_DARK = 'bg-black/80 backdrop-blur-md';
 export const GLASS_BG_LIGHT = 'bg-black/20 backdrop-blur-sm';
 
 // Карточки с градиентами
-export const CARD_GRADIENT = 'bg-gradient-to-br from-zinc-800/40 via-zinc-900/60 to-black/80 backdrop-blur-sm';
+export const CARD_GRADIENT = 'bg-white/5 backdrop-blur-sm';
 export const CARD_BORDER = 'border border-white/10 hover:border-white/30';
 export const CARD_BASE = `${CARD_GRADIENT} ${CARD_BORDER} transition-all duration-300`;
 

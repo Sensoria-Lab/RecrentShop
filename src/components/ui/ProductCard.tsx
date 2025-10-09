@@ -1,6 +1,7 @@
 import React from 'react';
 import StarRating from '../shared/StarRating';
 import { useCart } from '../../context/CartContext';
+import { useToast } from '../../context/ToastContext';
 import Img from '../shared/Img';
 
 export interface ProductCardProps {
@@ -46,6 +47,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
   stretch = false
 }) => {
   const { addItem } = useCart();
+  const { success, info } = useToast();
   
   const sizeClasses = {
     small: {
@@ -132,14 +134,18 @@ const ProductCard: React.FC<ProductCardProps> = ({
       selectedSize: productSize,
       selectedColor: productColor
     });
+    
+    // Show success toast
+    const productName = subtitle ? `${title} ${subtitle}` : title;
+    success(`${productName} добавлен в корзину! 🛒`);
   };
 
   // Различные стили для каталога и других страниц
   const minHeightClasses = stretch ? 'lg:min-h-[420px] xl:min-h-[480px]' : '';
 
   const cardStyles = size === 'small-catalog'
-    ? `relative rounded-lg sm:rounded-xl md:rounded-2xl p-2 sm:p-3 md:p-4 lg:p-5 xl:p-6 ${containerBase} flex flex-col h-full ${minHeightClasses} cursor-pointer group bg-gradient-to-br from-zinc-800/40 via-zinc-900/60 to-black/80 backdrop-blur-sm border border-white/10 hover:border-white/30 transition-all duration-300`
-    : `bg-black/90 backdrop-blur-sm rounded-lg sm:rounded-xl p-2 sm:p-3 md:p-4 lg:p-5 xl:p-6 ${containerBase} flex flex-col h-full ${minHeightClasses} border border-white/20 shadow-2xl hover:shadow-white/10 hover:border-white/30 transition-all duration-300 hover:transform hover:scale-105 ${onProductClick ? 'cursor-pointer' : ''}`;
+    ? `relative rounded-lg sm:rounded-xl md:rounded-2xl p-2 sm:p-3 md:p-4 lg:p-5 xl:p-6 ${containerBase} flex flex-col h-full ${minHeightClasses} cursor-pointer group bg-white/5 backdrop-blur-sm border border-white/10 hover:border-white/30 transition-all duration-300 hover-lift`
+    : `bg-white/5 backdrop-blur-sm rounded-lg sm:rounded-xl p-2 sm:p-3 md:p-4 lg:p-5 xl:p-6 ${containerBase} flex flex-col h-full ${minHeightClasses} border border-white/10 shadow-2xl hover:shadow-white/10 hover:border-white/30 transition-all duration-300 hover:transform hover:scale-105 hover-lift ${onProductClick ? 'cursor-pointer' : ''}`;
 
 
   return (

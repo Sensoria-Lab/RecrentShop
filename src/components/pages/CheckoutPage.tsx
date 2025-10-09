@@ -350,7 +350,7 @@ const CheckoutPage: React.FC = () => {
               ) : (
                 // Шаг 2: Способ доставки
                 <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5 md:space-y-6">
-                  <div className="bg-black/40 backdrop-blur rounded-xl sm:rounded-2xl p-5 sm:p-6 md:p-7 lg:p-9">
+                  <div className="bg-white/5 backdrop-blur-sm rounded-xl sm:rounded-2xl p-5 sm:p-6 md:p-7 lg:p-9 border border-white/10">
                     <div className="flex items-center gap-3 sm:gap-4 mb-6 sm:mb-7 md:mb-8">
                       <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-br from-white/20 to-white/10 flex items-center justify-center">
                         <svg className="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -508,7 +508,7 @@ const CheckoutPage: React.FC = () => {
 
             {/* Правая колонка - Сводка заказа */}
             <div className="lg:sticky lg:top-28 h-fit">
-              <div className="bg-black/40 backdrop-blur rounded-xl sm:rounded-2xl p-5 sm:p-6 md:p-7">
+              <div className="bg-white/5 backdrop-blur-sm rounded-xl sm:rounded-2xl p-5 sm:p-6 md:p-7 border border-white/10">
                 <div className="flex items-center gap-3 mb-5 sm:mb-6">
                   <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-gradient-to-br from-white/20 to-white/10 flex items-center justify-center">
                     <svg className="w-4 h-4 sm:w-5 sm:h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">

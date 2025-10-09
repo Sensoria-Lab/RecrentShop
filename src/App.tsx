@@ -2,7 +2,9 @@ import React, { useEffect, Suspense, lazy } from 'react';
 import { useLocation, Routes, Route } from 'react-router-dom';
 import './index.css';
 import LoadingSkeleton from './components/shared/LoadingSkeleton';
+import ScrollProgress from './components/shared/ScrollProgress';
 import { CartProvider } from './context/CartContext';
+import { ToastProvider } from './context/ToastContext';
 import BackgroundBeams from './components/shared/BackgroundBeams';
 
 // Lazy load all pages for better performance
@@ -30,10 +32,14 @@ function App() {
   }, [location.pathname]);
 
   return (
-    <CartProvider>
-  <div className="relative min-h-screen bg-black">
-      {/* Pixel Blast Background Effect */}
-      <BackgroundBeams />
+    <ToastProvider>
+        <CartProvider>
+          <div className="relative min-h-screen bg-black">
+          {/* Scroll Progress Bar */}
+          <ScrollProgress />
+          
+          {/* Pixel Blast Background Effect */}
+          <BackgroundBeams />
 
       {/* Routes container */}
       <div className="min-h-screen relative z-20">
@@ -43,6 +49,7 @@ function App() {
             <Route path="/catalog" element={<CatalogPage />} />
             <Route path="/support" element={<SupportPage />} />
             <Route path="/product" element={<ProductPage />} />
+            <Route path="/product/:id" element={<ProductPage />} />
             <Route path="/cart" element={<CartPage />} />
             <Route path="/checkout" element={<CheckoutPage />} />
             <Route path="/account" element={<AccountPage />} />
@@ -53,10 +60,11 @@ function App() {
         </Suspense>
       </div>
 
-      {/* Subtle noise texture */}
-      <div className="noise-overlay" />
-    </div>
-    </CartProvider>
+            {/* Subtle noise texture */}
+            <div className="noise-overlay" />
+          </div>
+        </CartProvider>
+    </ToastProvider>
   );
 }
 

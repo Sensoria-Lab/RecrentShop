@@ -78,7 +78,7 @@ const CartPage: React.FC = () => {
                 {items.map((item) => (
                   <div
                     key={item.id}
-                    className="relative rounded-2xl bg-gradient-to-br from-zinc-800/40 via-zinc-900/60 to-black/80 backdrop-blur-sm border border-white/10 transition-all duration-300"
+                    className="relative rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10 transition-all duration-300"
                   >
                     {/* Shine effect on hover */}
                     <div className="absolute inset-0 opacity-0 hover:opacity-100 transition-opacity duration-500 overflow-hidden rounded-2xl pointer-events-none">
@@ -179,7 +179,7 @@ const CartPage: React.FC = () => {
 
               {/* Order Summary - Right Column */}
               <div className="lg:col-span-1">
-                <div className="relative rounded-2xl sticky top-24 bg-gradient-to-br from-zinc-800/40 via-zinc-900/60 to-black/80 backdrop-blur-sm border border-white/10">
+                <div className="relative rounded-2xl sticky top-24 bg-white/5 backdrop-blur-sm border border-white/10">
                   {/* Shine effect */}
                   <div className="absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-transparent pointer-events-none" />
 
