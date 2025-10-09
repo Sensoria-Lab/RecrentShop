@@ -1,10 +1,10 @@
 {
   "files": {
-    "main.css": "/RecrentShop/static/css/main.71e5a6d9.css",
-    "main.js": "/RecrentShop/static/js/main.9d05469e.js",
+    "main.css": "/RecrentShop/static/css/main.fba3c115.css",
+    "main.js": "/RecrentShop/static/js/main.f76d8584.js",
     "static/js/737.bcb3de99.chunk.js": "/RecrentShop/static/js/737.bcb3de99.chunk.js",
     "static/js/508.173a2f72.chunk.js": "/RecrentShop/static/js/508.173a2f72.chunk.js",
-    "static/js/344.40c2692b.chunk.js": "/RecrentShop/static/js/344.40c2692b.chunk.js",
+    "static/js/185.55f2f7db.chunk.js": "/RecrentShop/static/js/185.55f2f7db.chunk.js",
     "static/js/726.55bf65a0.chunk.js": "/RecrentShop/static/js/726.55bf65a0.chunk.js",
     "static/js/85.c9350b8f.chunk.js": "/RecrentShop/static/js/85.c9350b8f.chunk.js",
     "static/js/607.139319aa.chunk.js": "/RecrentShop/static/js/607.139319aa.chunk.js",
@@ -14,13 +14,13 @@
     "static/js/286.55e1c19c.chunk.js": "/RecrentShop/static/js/286.55e1c19c.chunk.js",
     "static/js/637.dba34a43.chunk.js": "/RecrentShop/static/js/637.dba34a43.chunk.js",
     "static/js/120.89c534c0.chunk.js": "/RecrentShop/static/js/120.89c534c0.chunk.js",
-    "static/js/894.612daeaa.chunk.js": "/RecrentShop/static/js/894.612daeaa.chunk.js",
+    "static/js/894.a39036d1.chunk.js": "/RecrentShop/static/js/894.a39036d1.chunk.js",
     "index.html": "/RecrentShop/index.html",
-    "main.71e5a6d9.css.map": "/RecrentShop/static/css/main.71e5a6d9.css.map",
-    "main.9d05469e.js.map": "/RecrentShop/static/js/main.9d05469e.js.map",
+    "main.fba3c115.css.map": "/RecrentShop/static/css/main.fba3c115.css.map",
+    "main.f76d8584.js.map": "/RecrentShop/static/js/main.f76d8584.js.map",
     "737.bcb3de99.chunk.js.map": "/RecrentShop/static/js/737.bcb3de99.chunk.js.map",
     "508.173a2f72.chunk.js.map": "/RecrentShop/static/js/508.173a2f72.chunk.js.map",
-    "344.40c2692b.chunk.js.map": "/RecrentShop/static/js/344.40c2692b.chunk.js.map",
+    "185.55f2f7db.chunk.js.map": "/RecrentShop/static/js/185.55f2f7db.chunk.js.map",
     "726.55bf65a0.chunk.js.map": "/RecrentShop/static/js/726.55bf65a0.chunk.js.map",
     "85.c9350b8f.chunk.js.map": "/RecrentShop/static/js/85.c9350b8f.chunk.js.map",
     "607.139319aa.chunk.js.map": "/RecrentShop/static/js/607.139319aa.chunk.js.map",
@@ -30,10 +30,10 @@
     "286.55e1c19c.chunk.js.map": "/RecrentShop/static/js/286.55e1c19c.chunk.js.map",
     "637.dba34a43.chunk.js.map": "/RecrentShop/static/js/637.dba34a43.chunk.js.map",
     "120.89c534c0.chunk.js.map": "/RecrentShop/static/js/120.89c534c0.chunk.js.map",
-    "894.612daeaa.chunk.js.map": "/RecrentShop/static/js/894.612daeaa.chunk.js.map"
+    "894.a39036d1.chunk.js.map": "/RecrentShop/static/js/894.a39036d1.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.71e5a6d9.css",
-    "static/js/main.9d05469e.js"
+    "static/css/main.fba3c115.css",
+    "static/js/main.f76d8584.js"
   ]
 }
