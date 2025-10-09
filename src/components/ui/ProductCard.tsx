@@ -143,19 +143,12 @@ const ProductCard: React.FC<ProductCardProps> = ({
   };
 
   // Различные стили для каталога и других страниц
-  // Устанавливаем минимальные высоты для предотвращения сдвигов при загрузке
-  const minHeightClasses = stretch 
-    ? 'lg:min-h-[420px] xl:min-h-[480px]' 
-    : size === 'small-catalog'
-    ? 'min-h-[380px] sm:min-h-[420px] md:min-h-[460px] lg:min-h-[500px]'
-    : 'min-h-[350px] sm:min-h-[400px] md:min-h-[450px] lg:min-h-[500px]';
-  
   // Добавляем stagger animation class
   const staggerClass = staggerIndex > 0 && staggerIndex <= 8 ? `card-stagger card-stagger-${staggerIndex}` : '';
 
   const cardStyles = size === 'small-catalog'
-    ? `relative rounded-lg sm:rounded-xl md:rounded-2xl p-2 sm:p-3 md:p-4 lg:p-5 xl:p-6 ${containerBase} flex flex-col ${minHeightClasses} cursor-pointer group bg-white/5 backdrop-blur-sm border border-white/10 hover:border-white/30 transition-all duration-300 hover-lift ${staggerClass}`
-    : `bg-white/5 backdrop-blur-sm rounded-lg sm:rounded-xl p-2 sm:p-3 md:p-4 lg:p-5 xl:p-6 ${containerBase} flex flex-col ${minHeightClasses} border border-white/10 shadow-2xl hover:shadow-white/10 hover:border-white/30 transition-all duration-300 hover:transform hover:scale-105 hover-lift ${onProductClick ? 'cursor-pointer' : ''} ${staggerClass}`;
+    ? `relative rounded-lg sm:rounded-xl md:rounded-2xl p-2 sm:p-3 md:p-4 lg:p-5 xl:p-6 ${containerBase} flex flex-col cursor-pointer group bg-white/5 backdrop-blur-sm border border-white/10 hover:border-white/30 transition-all duration-300 hover-lift ${staggerClass}`
+    : `bg-white/5 backdrop-blur-sm rounded-lg sm:rounded-xl p-2 sm:p-3 md:p-4 lg:p-5 xl:p-6 ${containerBase} flex flex-col border border-white/10 shadow-2xl hover:shadow-white/10 hover:border-white/30 transition-all duration-300 hover:transform hover:scale-105 hover-lift ${onProductClick ? 'cursor-pointer' : ''} ${staggerClass}`;
 
 
   return (
@@ -169,19 +162,13 @@ const ProductCard: React.FC<ProductCardProps> = ({
       
       {/* Content wrapper with relative positioning */}
       <div className="relative z-10">
-        {/* Product Image - with fixed aspect ratio to prevent layout shift */}
-        <div className={`${classes.image} relative rounded-lg sm:rounded-xl mx-auto ${classes.imageContainer} ${size === 'small-catalog' ? 'bg-white/5 p-2 sm:p-3 md:p-4 transition-all duration-500' : 'rounded-lg overflow-hidden'} group/image`}>
-          {/* Skeleton placeholder - shows while image loads */}
-          <div className="w-full h-full absolute inset-0 bg-white/5 skeleton-shimmer" />
-          
-          {/* Actual image */}
-          <div className="w-full h-full relative z-10">
-            <Img
-              src={image}
-              alt={title}
-              className="w-full h-full object-contain"
-            />
-          </div>
+        {/* Product Image */}
+        <div className={`${classes.image} rounded-lg sm:rounded-xl mx-auto ${classes.imageContainer} ${size === 'small-catalog' ? 'bg-white/5 p-2 sm:p-3 md:p-4 transition-all duration-500' : 'rounded-lg overflow-hidden'} group/image`}>
+          <Img
+            src={image}
+            alt={title}
+            className="w-full h-full object-contain"
+          />
         </div>
 
         {/* Product Title */}
