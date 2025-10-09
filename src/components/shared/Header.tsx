@@ -86,6 +86,37 @@ const Header: React.FC<HeaderProps> = ({ className = '', onNavigate }) => {
           <div className="w-px h-6 bg-white/20 mx-2" />
 
           <button
+            onClick={() => navigate(ROUTES.ACCOUNT)}
+            className={`relative flex items-center justify-center w-9 h-9 lg:w-10 lg:h-10 rounded-full transition-all duration-200 focus:outline-none group ${
+              isActive('/account')
+                ? 'bg-white/20'
+                : 'bg-white/5 hover:bg-white/10'
+            }`}
+            title="Профиль"
+          >
+            <svg 
+              width="20" 
+              height="20" 
+              viewBox="0 0 24 24" 
+              fill="none" 
+              stroke="currentColor" 
+              strokeWidth="2" 
+              strokeLinecap="round" 
+              strokeLinejoin="round"
+              className={`transition-colors ${
+                isActive('/account')
+                  ? 'text-white'
+                  : 'text-white/70 group-hover:text-white'
+              }`}
+            >
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+              <circle cx="12" cy="7" r="4"/>
+            </svg>
+          </button>
+
+          <div className="w-px h-6 bg-white/20 mx-2" />
+
+          <button
             id="cart-button"
             onClick={() => navigate(ROUTES.CART)}
             className={`font-manrope font-medium text-sm lg:text-base px-4 lg:px-5 py-2 transition-all duration-200 focus:outline-none whitespace-nowrap flex items-center gap-2 ${
@@ -103,8 +134,29 @@ const Header: React.FC<HeaderProps> = ({ className = '', onNavigate }) => {
           </button>
         </div>
 
-        {/* Mobile cart */}
-        <div className="md:hidden flex justify-end">
+        {/* Mobile account & cart */}
+        <div className="md:hidden flex items-center gap-2">
+          <button
+            onClick={() => navigate(ROUTES.ACCOUNT)}
+            className="relative w-10 h-10 flex items-center justify-center cursor-pointer hover:scale-110 transition-all focus:outline-none rounded-lg group"
+          >
+            <div className="absolute inset-0 bg-white/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity" />
+            <svg 
+              width="22" 
+              height="22" 
+              viewBox="0 0 24 24" 
+              fill="none" 
+              stroke="currentColor" 
+              strokeWidth="2" 
+              strokeLinecap="round" 
+              strokeLinejoin="round"
+              className="relative text-white/80 drop-shadow-[0_0_6px_rgba(255,255,255,0.2)]"
+            >
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+              <circle cx="12" cy="7" r="4"/>
+            </svg>
+          </button>
+
           <button
             id="cart-button-mobile"
             onClick={() => navigate(ROUTES.CART)}

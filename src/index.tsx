@@ -10,7 +10,7 @@ const root = ReactDOM.createRoot(
 
 root.render(
   <React.StrictMode>
-    <BrowserRouter basename={process.env.PUBLIC_URL}>
+    <BrowserRouter basename={process.env.NODE_ENV === 'production' ? '/RecrentShop' : '/'}>
       <App />
     </BrowserRouter>
   </React.StrictMode>

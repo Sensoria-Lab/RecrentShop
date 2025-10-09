@@ -9,6 +9,7 @@ export const ROUTES = {
   PRODUCT: '/product',
   CART: '/cart',
   CHECKOUT: '/checkout',
+  ACCOUNT: '/account',
   NOT_FOUND: '*'
 } as const;
 
@@ -28,5 +29,6 @@ export const NAV_ITEMS = [
  */
 export const MOBILE_NAV_ITEMS = [
   { path: ROUTES.CATALOG, label: 'Каталог' },
-  { path: ROUTES.SUPPORT, label: 'Поддержка и информация' }
+  { path: ROUTES.SUPPORT, label: 'Поддержка и информация' },
+  { path: ROUTES.ACCOUNT, label: 'Профиль' }
 ] as const;
