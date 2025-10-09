@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import ProductCard from '../ui/ProductCard';
-import QuickViewModal, { QuickViewProduct } from '../ui/QuickViewModal';
 import Breadcrumbs from '../shared/Breadcrumbs';
 import PageContainer from '../shared/PageContainer';
 import { useProductFilters, useProductNavigation } from '../../hooks';
@@ -32,10 +31,6 @@ const CatalogPage: React.FC = () => {
   const [clothingTypeFilter, setClothingTypeFilter] = useState<ClothingTypeFilter>('all');
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 10000]);
   const [minRating, setMinRating] = useState<number>(0);
-  
-  // Quick View modal state
-  const [quickViewProduct, setQuickViewProduct] = useState<QuickViewProduct | null>(null);
-  const [isQuickViewOpen, setIsQuickViewOpen] = useState(false);
 
   // Fetch products from API or use static data
   useEffect(() => {
@@ -82,27 +77,6 @@ const CatalogPage: React.FC = () => {
     const fullProduct = products.find(p => p.id === productData.id);
     if (fullProduct) {
       navigateToProduct(fullProduct);
-    }
-  };
-
-  // Handler for Quick View
-  const handleQuickView = (productData: any) => {
-    const fullProduct = products.find(p => p.id === productData.id);
-    if (fullProduct) {
-      setQuickViewProduct({
-        id: fullProduct.id,
-        image: fullProduct.image,
-        images: fullProduct.images,
-        title: fullProduct.title,
-        subtitle: fullProduct.subtitle,
-        price: fullProduct.price,
-        priceNumeric: fullProduct.priceNumeric,
-        rating: fullProduct.rating,
-        reviewCount: fullProduct.reviewCount,
-        category: fullProduct.category,
-        color: fullProduct.color,
-      });
-      setIsQuickViewOpen(true);
     }
   };
 
@@ -414,7 +388,6 @@ const CatalogPage: React.FC = () => {
                               staggerIndex={(index % 8) + 1}
                               onAddToCart={() => {}}
                               onProductClick={handleProductClick}
-                              onQuickView={handleQuickView}
                             />
                           </div>
                         );
@@ -446,13 +419,6 @@ const CatalogPage: React.FC = () => {
             </div>
             </div>
           </div>
-          
-          {/* Quick View Modal */}
-          <QuickViewModal
-            product={quickViewProduct}
-            isOpen={isQuickViewOpen}
-            onClose={() => setIsQuickViewOpen(false)}
-          />
     </PageContainer>
   );
 };
