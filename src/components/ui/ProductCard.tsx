@@ -162,8 +162,8 @@ const ProductCard: React.FC<ProductCardProps> = ({
       
       {/* Content wrapper with relative positioning */}
       <div className="relative z-10">
-        {/* Product Image */}
-        <div className={`${classes.image} rounded-lg sm:rounded-xl mx-auto ${classes.imageContainer} ${size === 'small-catalog' ? 'bg-white/5 p-2 sm:p-3 md:p-4 transition-all duration-500' : 'rounded-lg overflow-hidden'} group/image`}>
+        {/* Product Image - with fixed height to prevent layout shift */}
+        <div className={`${classes.image} rounded-lg sm:rounded-xl mx-auto ${classes.imageContainer} ${size === 'small-catalog' ? 'bg-white/5 p-2 sm:p-3 md:p-4 transition-all duration-500' : 'rounded-lg overflow-hidden'} group/image min-h-[200px] sm:min-h-[220px] md:min-h-[240px] lg:min-h-[260px] flex items-center justify-center`}>
           <Img
             src={image}
             alt={title}
