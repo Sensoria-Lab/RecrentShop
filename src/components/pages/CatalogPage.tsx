@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import ProductCard from '../ui/ProductCard';
+import QuickViewModal, { QuickViewProduct } from '../ui/QuickViewModal';
+import Breadcrumbs from '../shared/Breadcrumbs';
 import PageContainer from '../shared/PageContainer';
 import { useProductFilters, useProductNavigation } from '../../hooks';
 import { API_CONFIG } from '../../constants/config';
@@ -30,6 +32,10 @@ const CatalogPage: React.FC = () => {
   const [clothingTypeFilter, setClothingTypeFilter] = useState<ClothingTypeFilter>('all');
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 10000]);
   const [minRating, setMinRating] = useState<number>(0);
+  
+  // Quick View modal state
+  const [quickViewProduct, setQuickViewProduct] = useState<QuickViewProduct | null>(null);
+  const [isQuickViewOpen, setIsQuickViewOpen] = useState(false);
 
   // Fetch products from API or use static data
   useEffect(() => {
@@ -79,6 +85,27 @@ const CatalogPage: React.FC = () => {
     }
   };
 
+  // Handler for Quick View
+  const handleQuickView = (productData: any) => {
+    const fullProduct = products.find(p => p.id === productData.id);
+    if (fullProduct) {
+      setQuickViewProduct({
+        id: fullProduct.id,
+        image: fullProduct.image,
+        images: fullProduct.images,
+        title: fullProduct.title,
+        subtitle: fullProduct.subtitle,
+        price: fullProduct.price,
+        priceNumeric: fullProduct.priceNumeric,
+        rating: fullProduct.rating,
+        reviewCount: fullProduct.reviewCount,
+        category: fullProduct.category,
+        color: fullProduct.color,
+      });
+      setIsQuickViewOpen(true);
+    }
+  };
+
   // Setup Intersection Observer for scroll animations
   useEffect(() => {
     observerRef.current = new IntersectionObserver(
@@ -124,6 +151,11 @@ const CatalogPage: React.FC = () => {
           <div className="max-w-[1800px] mx-auto">
             {/* Background container */}
             <div className="panel">
+            {/* Breadcrumbs */}
+            <div className="pt-6 px-4 sm:px-6 md:px-8">
+              <Breadcrumbs />
+            </div>
+            
             {/* Page Title */}
               <div className="text-center mb-6 sm:mb-8 md:mb-10 pt-6 scroll-fade-in">
               <h1 className="text-white font-manrope font-bold text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl mb-3 sm:mb-4 md:mb-6 drop-shadow-[0_4px_12px_rgba(0,0,0,0.9)]">
@@ -379,8 +411,10 @@ const CatalogPage: React.FC = () => {
                               clothingType={product.clothingType}
                               size="small-catalog"
                               stretch={false}
+                              staggerIndex={(index % 8) + 1}
                               onAddToCart={() => {}}
                               onProductClick={handleProductClick}
+                              onQuickView={handleQuickView}
                             />
                           </div>
                         );
@@ -412,6 +446,13 @@ const CatalogPage: React.FC = () => {
             </div>
             </div>
           </div>
+          
+          {/* Quick View Modal */}
+          <QuickViewModal
+            product={quickViewProduct}
+            isOpen={isQuickViewOpen}
+            onClose={() => setIsQuickViewOpen(false)}
+          />
     </PageContainer>
   );
 };

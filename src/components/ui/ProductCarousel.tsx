@@ -51,6 +51,17 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
   
   const cardWidth = containerWidth > 0 ? (containerWidth - gap * (responsiveItemsPerView - 1)) / responsiveItemsPerView : 340;
 
+  // Touch / pointer swipe support with drag
+  const startXRef = useRef<number | null>(null);
+  const deltaXRef = useRef(0);
+  const isDraggingRef = useRef(false);
+  const [dragOffset, setDragOffset] = useState(0);
+  const [isClickDisabled, setIsClickDisabled] = useState(false);
+
+  // Scrollbar refs and state (must be before early returns)
+  const scrollbarRef = useRef<HTMLDivElement>(null);
+  const [isDraggingScrollbar, setIsDraggingScrollbar] = useState(false);
+
   const handlePrev = () => {
     if (isTransitioning) return;
     setIsTransitioning(true);
@@ -62,13 +73,6 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
     setIsTransitioning(true);
     setCurrentIndex((prev) => prev + 1);
   };
-
-  // Touch / pointer swipe support with drag
-  const startXRef = useRef<number | null>(null);
-  const deltaXRef = useRef(0);
-  const isDraggingRef = useRef(false);
-  const [dragOffset, setDragOffset] = useState(0);
-  const [isClickDisabled, setIsClickDisabled] = useState(false);
 
   const onPointerDown = (e: React.PointerEvent) => {
     startXRef.current = e.clientX;
@@ -152,9 +156,6 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
   }
 
   // Calculate scrollbar position and width
-  const scrollbarRef = useRef<HTMLDivElement>(null);
-  const [isDraggingScrollbar, setIsDraggingScrollbar] = useState(false);
-  
   // Normalize current index for scrollbar (handle negative indices from infinite scroll)
   const normalizedIndex = ((currentIndex % totalItems) + totalItems) % totalItems;
   const scrollbarWidth = totalItems > 0 ? Math.min(100, (responsiveItemsPerView / totalItems) * 100) : 100;

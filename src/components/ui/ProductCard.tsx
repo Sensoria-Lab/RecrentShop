@@ -22,8 +22,10 @@ export interface ProductCardProps {
   size?: 'small' | 'medium' | 'large' | 'small-catalog';
   onAddToCart?: () => void;
   onProductClick?: (productData: ProductCardProps) => void;
+  onQuickView?: (productData: ProductCardProps) => void;
   /** Если true — карточка растягивается по высоте родителя и убирает max-width ограничения */
   stretch?: boolean;
+  staggerIndex?: number; // Index for stagger animation
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({
@@ -44,7 +46,9 @@ const ProductCard: React.FC<ProductCardProps> = ({
   size = 'medium',
   onAddToCart,
   onProductClick,
-  stretch = false
+  onQuickView,
+  stretch = false,
+  staggerIndex = 0
 }) => {
   const { addItem } = useCart();
   const { success, info } = useToast();
@@ -140,12 +144,38 @@ const ProductCard: React.FC<ProductCardProps> = ({
     success(`${productName} добавлен в корзину! 🛒`);
   };
 
+  const handleQuickView = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (onQuickView) {
+      onQuickView({
+        id,
+        image,
+        images,
+        title,
+        subtitle,
+        productSize,
+        productColor,
+        price,
+        priceNumeric,
+        rating,
+        reviewCount,
+        color,
+        category,
+        clothingType,
+        size,
+      });
+    }
+  };
+
   // Различные стили для каталога и других страниц
   const minHeightClasses = stretch ? 'lg:min-h-[420px] xl:min-h-[480px]' : '';
+  
+  // Добавляем stagger animation class
+  const staggerClass = staggerIndex > 0 && staggerIndex <= 8 ? `card-stagger card-stagger-${staggerIndex}` : '';
 
   const cardStyles = size === 'small-catalog'
-    ? `relative rounded-lg sm:rounded-xl md:rounded-2xl p-2 sm:p-3 md:p-4 lg:p-5 xl:p-6 ${containerBase} flex flex-col h-full ${minHeightClasses} cursor-pointer group bg-white/5 backdrop-blur-sm border border-white/10 hover:border-white/30 transition-all duration-300 hover-lift`
-    : `bg-white/5 backdrop-blur-sm rounded-lg sm:rounded-xl p-2 sm:p-3 md:p-4 lg:p-5 xl:p-6 ${containerBase} flex flex-col h-full ${minHeightClasses} border border-white/10 shadow-2xl hover:shadow-white/10 hover:border-white/30 transition-all duration-300 hover:transform hover:scale-105 hover-lift ${onProductClick ? 'cursor-pointer' : ''}`;
+    ? `relative rounded-lg sm:rounded-xl md:rounded-2xl p-2 sm:p-3 md:p-4 lg:p-5 xl:p-6 ${containerBase} flex flex-col h-full ${minHeightClasses} cursor-pointer group bg-white/5 backdrop-blur-sm border border-white/10 hover:border-white/30 transition-all duration-300 hover-lift ${staggerClass}`
+    : `bg-white/5 backdrop-blur-sm rounded-lg sm:rounded-xl p-2 sm:p-3 md:p-4 lg:p-5 xl:p-6 ${containerBase} flex flex-col h-full ${minHeightClasses} border border-white/10 shadow-2xl hover:shadow-white/10 hover:border-white/30 transition-all duration-300 hover:transform hover:scale-105 hover-lift ${onProductClick ? 'cursor-pointer' : ''} ${staggerClass}`;
 
 
   return (
@@ -160,12 +190,22 @@ const ProductCard: React.FC<ProductCardProps> = ({
       {/* Content wrapper with relative positioning */}
       <div className="relative z-10">
         {/* Product Image */}
-        <div className={`${classes.image} relative rounded-lg sm:rounded-xl mx-auto ${classes.imageContainer} ${size === 'small-catalog' ? 'bg-white/5 p-2 sm:p-3 md:p-4 transition-all duration-500' : 'rounded-lg overflow-hidden'}`}>
+        <div className={`${classes.image} relative rounded-lg sm:rounded-xl mx-auto ${classes.imageContainer} ${size === 'small-catalog' ? 'bg-white/5 p-2 sm:p-3 md:p-4 transition-all duration-500' : 'rounded-lg overflow-hidden'} group/image`}>
           <Img
             src={image}
             alt={title}
             className="w-full h-full object-contain"
           />
+          
+          {/* Quick View button - shows on hover */}
+          {onQuickView && (
+            <button
+              onClick={handleQuickView}
+              className="absolute inset-x-0 bottom-4 mx-auto w-[calc(100%-2rem)] py-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white text-sm font-semibold rounded-lg opacity-0 group-hover/image:opacity-100 transform translate-y-4 group-hover/image:translate-y-0 transition-all duration-300 shadow-lg hover:shadow-blue-500/50 hover:scale-105 z-20 ripple-button"
+            >
+              Быстрый просмотр
+            </button>
+          )}
         </div>
 
         {/* Product Title */}
