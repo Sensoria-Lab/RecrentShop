@@ -2,7 +2,6 @@ import React, { useEffect, Suspense, lazy } from 'react';
 import { useLocation, Routes, Route } from 'react-router-dom';
 import './index.css';
 import LoadingSkeleton from './components/shared/LoadingSkeleton';
-import ScrollProgress from './components/shared/ScrollProgress';
 import { CartProvider } from './context/CartContext';
 import { ToastProvider } from './context/ToastContext';
 import BackgroundBeams from './components/shared/BackgroundBeams';
@@ -35,9 +34,6 @@ function App() {
     <ToastProvider>
         <CartProvider>
           <div className="relative min-h-screen bg-black">
-          {/* Scroll Progress Bar */}
-          <ScrollProgress />
-          
           {/* Pixel Blast Background Effect */}
           <BackgroundBeams />
 

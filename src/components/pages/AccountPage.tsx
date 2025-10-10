@@ -128,7 +128,7 @@ const AccountPage: React.FC = () => {
           {/* Background panel with blur */}
           <div className="panel panel-strong pt-8 sm:pt-10 md:pt-12 pb-8 sm:pb-10 md:pb-12 px-6 sm:px-8 md:px-10 lg:px-12">
             {/* Page Header */}
-            <div className="text-center mb-8 md:mb-12">
+            <div className="text-center mb-8 md:mb-12 scroll-fade-in">
               <h1 className="text-white font-manrope font-bold text-3xl sm:text-4xl md:text-5xl lg:text-6xl mb-4 drop-shadow-[0_4px_12px_rgba(0,0,0,0.9)]">
                 Личный кабинет
               </h1>
@@ -138,7 +138,7 @@ const AccountPage: React.FC = () => {
             {/* Main Content */}
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8">
               {/* Sidebar Navigation */}
-              <div className="lg:col-span-3">
+              <div className="lg:col-span-3 scroll-fade-in scroll-fade-in-delay-1">
                 <div className="bg-white/5 border border-white/10 rounded-2xl p-4 md:p-6">
                   <div className="flex items-center gap-4 mb-6 pb-6 border-b border-white/10">
                   <div className="w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
@@ -226,7 +226,7 @@ const AccountPage: React.FC = () => {
               </div>
 
               {/* Main Content Area */}
-              <div className="lg:col-span-9">
+              <div className="lg:col-span-9 scroll-fade-in scroll-fade-in-delay-2">
                 <div className="bg-white/5 border border-white/10 rounded-2xl p-6 md:p-8">
                 {/* Profile Tab */}
                 {activeTab === 'profile' && (

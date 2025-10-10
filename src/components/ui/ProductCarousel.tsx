@@ -10,19 +10,11 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
   itemsPerView = 3 
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [isTransitioning, setIsTransitioning] = useState(false);
   const carouselRef = useRef<HTMLDivElement>(null);
   const [responsiveItemsPerView, setResponsiveItemsPerView] = useState(itemsPerView);
 
-  // Create infinite loop by duplicating items
-  const extendedChildren = [
-    ...children.slice(-responsiveItemsPerView),
-    ...children,
-    ...children.slice(0, responsiveItemsPerView)
-  ];
-
+  // No infinite loop - just use original children
   const totalItems = children.length;
-  const actualIndex = currentIndex + responsiveItemsPerView;
   const [containerWidth, setContainerWidth] = useState(0);
   const gap = 16; // 16px gap between items (gap-4)
   
@@ -51,27 +43,27 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
   
   const cardWidth = containerWidth > 0 ? (containerWidth - gap * (responsiveItemsPerView - 1)) / responsiveItemsPerView : 340;
 
-  // Touch / pointer swipe support with drag
+  // Touch / pointer swipe support with smooth drag
   const startXRef = useRef<number | null>(null);
   const deltaXRef = useRef(0);
   const isDraggingRef = useRef(false);
   const [dragOffset, setDragOffset] = useState(0);
   const [isClickDisabled, setIsClickDisabled] = useState(false);
 
-  // Scrollbar refs and state (must be before early returns)
+  // Scrollbar refs and state
   const scrollbarRef = useRef<HTMLDivElement>(null);
+  const scrollbarTrackRef = useRef<HTMLDivElement>(null);
   const [isDraggingScrollbar, setIsDraggingScrollbar] = useState(false);
 
+  // Calculate max index (don't scroll past the last item)
+  const maxIndex = Math.max(0, totalItems - responsiveItemsPerView);
+
   const handlePrev = () => {
-    if (isTransitioning) return;
-    setIsTransitioning(true);
-    setCurrentIndex((prev) => prev - 1);
+    setCurrentIndex((prev) => Math.max(0, prev - 1));
   };
 
   const handleNext = () => {
-    if (isTransitioning) return;
-    setIsTransitioning(true);
-    setCurrentIndex((prev) => prev + 1);
+    setCurrentIndex((prev) => Math.min(maxIndex, prev + 1));
   };
 
   const onPointerDown = (e: React.PointerEvent) => {
@@ -93,7 +85,23 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
       setIsClickDisabled(true);
     }
     
-    setDragOffset(deltaXRef.current);
+    // Apply drag with resistance at edges
+    const itemWidth = cardWidth + gap;
+    const maxOffset = maxIndex * itemWidth;
+    const proposedOffset = -(currentIndex * itemWidth) + deltaXRef.current;
+    
+    // Add resistance at edges
+    let finalOffset = proposedOffset;
+    if (proposedOffset > 0) {
+      // Resistance at start
+      finalOffset = proposedOffset * 0.3;
+    } else if (Math.abs(proposedOffset) > maxOffset) {
+      // Resistance at end
+      const excess = Math.abs(proposedOffset) - maxOffset;
+      finalOffset = -(maxOffset + excess * 0.3);
+    }
+    
+    setDragOffset(finalOffset + (currentIndex * itemWidth));
   };
 
   const onPointerUp = () => {
@@ -106,13 +114,11 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
     const itemsMoved = Math.round(Math.abs(deltaXRef.current) / itemWidth);
 
     if (deltaXRef.current > threshold) {
-      for (let i = 0; i < Math.max(1, itemsMoved); i++) {
-        if (!isTransitioning) handlePrev();
-      }
+      const newIndex = Math.max(0, currentIndex - Math.max(1, itemsMoved));
+      setCurrentIndex(newIndex);
     } else if (deltaXRef.current < -threshold) {
-      for (let i = 0; i < Math.max(1, itemsMoved); i++) {
-        if (!isTransitioning) handleNext();
-      }
+      const newIndex = Math.min(maxIndex, currentIndex + Math.max(1, itemsMoved));
+      setCurrentIndex(newIndex);
     }
 
     startXRef.current = null;
@@ -125,24 +131,11 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
     }, 150);
   };
 
-  useEffect(() => {
-    if (!isTransitioning) return;
+  const translateX = dragOffset !== 0 ? dragOffset : -(currentIndex * (cardWidth + gap));
 
-    const timer = setTimeout(() => {
-      setIsTransitioning(false);
-
-      // Reset to actual position for infinite loop
-      if (currentIndex >= totalItems) {
-        setCurrentIndex(0);
-      } else if (currentIndex < 0) {
-        setCurrentIndex(totalItems - 1);
-      }
-  }, 280); // Match accelerated transition duration
-
-    return () => clearTimeout(timer);
-  }, [currentIndex, isTransitioning, totalItems]);
-
-  const translateX = -(actualIndex * (cardWidth + gap)) + dragOffset;
+  // Disable prev/next buttons at edges
+  const canGoPrev = currentIndex > 0;
+  const canGoNext = currentIndex < maxIndex;
 
   // If only one item, show it centered without arrows
   if (totalItems === 1) {
@@ -155,28 +148,26 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
     );
   }
 
-  // Calculate scrollbar position and width
-  // Normalize current index for scrollbar (handle negative indices from infinite scroll)
-  const normalizedIndex = ((currentIndex % totalItems) + totalItems) % totalItems;
-  const scrollbarWidth = totalItems > 0 ? Math.min(100, (responsiveItemsPerView / totalItems) * 100) : 100;
-  const maxScrollPosition = Math.max(0, 100 - scrollbarWidth);
-  const scrollbarPosition = totalItems > responsiveItemsPerView 
-    ? (normalizedIndex / (totalItems - responsiveItemsPerView)) * maxScrollPosition
+    // Calculate progress indicator size and position
+  const indicatorWidth = totalItems > 0 ? (responsiveItemsPerView / totalItems) * 100 : 100;
+  const maxIndicatorPosition = 100 - indicatorWidth;
+  const indicatorPosition = maxIndex > 0 
+    ? (currentIndex / maxIndex) * maxIndicatorPosition
     : 0;
 
-  // Handle scrollbar drag
+  // Handle scrollbar interaction
   const handleScrollbarPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
     e.preventDefault();
     e.stopPropagation();
     setIsDraggingScrollbar(true);
     
-    const scrollbarTrack = scrollbarRef.current?.parentElement;
-    if (!scrollbarTrack) return;
+    const track = scrollbarTrackRef.current;
+    if (!track) return;
     
-    const rect = scrollbarTrack.getBoundingClientRect();
+    const rect = track.getBoundingClientRect();
     const clickPosition = (e.clientX - rect.left) / rect.width;
-    const targetIndex = Math.round(clickPosition * totalItems) - Math.floor(responsiveItemsPerView / 2);
-    const clampedIndex = Math.max(0, Math.min(totalItems - responsiveItemsPerView, targetIndex));
+    const targetIndex = Math.round(clickPosition * maxIndex);
+    const clampedIndex = Math.max(0, Math.min(maxIndex, targetIndex));
     
     setCurrentIndex(clampedIndex);
     (e.target as HTMLElement).setPointerCapture(e.pointerId);
@@ -186,13 +177,13 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
     if (!isDraggingScrollbar) return;
     e.preventDefault();
     
-    const scrollbarTrack = scrollbarRef.current?.parentElement;
-    if (!scrollbarTrack) return;
+    const track = scrollbarTrackRef.current;
+    if (!track) return;
     
-    const rect = scrollbarTrack.getBoundingClientRect();
+    const rect = track.getBoundingClientRect();
     const clickPosition = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
-    const targetIndex = Math.round(clickPosition * totalItems) - Math.floor(responsiveItemsPerView / 2);
-    const clampedIndex = Math.max(0, Math.min(totalItems - responsiveItemsPerView, targetIndex));
+    const targetIndex = Math.round(clickPosition * maxIndex);
+    const clampedIndex = Math.max(0, Math.min(maxIndex, targetIndex));
     
     setCurrentIndex(clampedIndex);
   };
@@ -207,7 +198,12 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
         {/* Left Arrow */}
         <button
           onClick={handlePrev}
-          className="flex-shrink-0 bg-black/70 hover:bg-black/90 text-white p-3 rounded-full transition-all duration-200 hover:scale-110 active:scale-95 z-10"
+          disabled={!canGoPrev}
+          className={`flex-shrink-0 p-3 rounded-full transition-all duration-200 z-10 ${
+            canGoPrev 
+              ? 'bg-black/70 hover:bg-black/90 text-white hover:scale-110 active:scale-95 cursor-pointer' 
+              : 'bg-black/30 text-white/30 cursor-not-allowed'
+          }`}
           aria-label="Previous"
         >
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -228,10 +224,10 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
           className="flex gap-4 items-center"
           style={{
             transform: `translateX(${translateX}px)`,
-            transition: isTransitioning || dragOffset === 0 ? 'transform 0.28s cubic-bezier(0.4, 0.1, 0.2, 1)' : 'none',
+            transition: dragOffset === 0 ? 'transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1)' : 'none',
           }}
         >
-          {extendedChildren.map((child, index) => (
+          {children.map((child, index) => (
             <div
               key={index}
               className={`flex-shrink-0 flex items-center justify-center ${isClickDisabled ? 'pointer-events-none' : ''}`}
@@ -246,7 +242,12 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
         {/* Right Arrow */}
         <button
           onClick={handleNext}
-          className="flex-shrink-0 bg-black/70 hover:bg-black/90 text-white p-3 rounded-full transition-all duration-200 hover:scale-110 active:scale-95 z-10"
+          disabled={!canGoNext}
+          className={`flex-shrink-0 p-3 rounded-full transition-all duration-200 z-10 ${
+            canGoNext 
+              ? 'bg-black/70 hover:bg-black/90 text-white hover:scale-110 active:scale-95 cursor-pointer' 
+              : 'bg-black/30 text-white/30 cursor-not-allowed'
+          }`}
           aria-label="Next"
         >
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -255,33 +256,35 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
         </button>
       </div>
 
-      {/* Custom Scrollbar */}
-      <div className="relative w-full h-2 px-12">
-        {/* Track */}
-        <div 
-          className="absolute inset-0 bg-white/10 rounded-full backdrop-blur-sm cursor-pointer"
-          onPointerDown={handleScrollbarPointerDown}
-          onPointerMove={handleScrollbarPointerMove}
-          onPointerUp={handleScrollbarPointerUp}
-          onPointerLeave={handleScrollbarPointerUp}
-        >
-          {/* Thumb */}
-          <div
-            ref={scrollbarRef}
-            className="absolute top-0 h-full bg-white/90 hover:bg-white rounded-full cursor-grab active:cursor-grabbing shadow-lg hover:shadow-white/30"
-            style={{
-              width: `${scrollbarWidth}%`,
-              left: `${scrollbarPosition}%`,
-              transition: (isDraggingScrollbar || isDraggingRef.current || Math.abs(dragOffset) > 0)
-                ? 'none' 
-                : 'left 0.4s cubic-bezier(0.25, 0.1, 0.25, 1), width 0.3s ease, background-color 0.2s ease'
-            }}
+      {/* Progress Indicator */}
+      {totalItems > responsiveItemsPerView && (
+        <div className="flex justify-center w-full py-2">
+          <div 
+            ref={scrollbarTrackRef}
+            className="relative w-48 h-1 bg-white/10 rounded-full overflow-hidden cursor-pointer"
+            onPointerDown={handleScrollbarPointerDown}
+            onPointerMove={handleScrollbarPointerMove}
+            onPointerUp={handleScrollbarPointerUp}
+            onPointerLeave={handleScrollbarPointerUp}
           >
-            {/* Shine effect on thumb */}
-            <div className="absolute inset-0 bg-gradient-to-r from-white/40 via-white/60 to-transparent rounded-full opacity-50" />
+            {/* Progress bar */}
+            <div
+              ref={scrollbarRef}
+              className="absolute top-0 left-0 h-full bg-white/80 rounded-full cursor-grab active:cursor-grabbing transition-opacity hover:bg-white"
+              style={{
+                width: `${indicatorWidth}%`,
+                left: `${indicatorPosition}%`,
+                transition: (isDraggingScrollbar || isDraggingRef.current || Math.abs(dragOffset) > 0)
+                  ? 'none' 
+                  : 'left 0.4s cubic-bezier(0.25, 0.1, 0.25, 1), width 0.3s ease'
+              }}
+            >
+              {/* Shine effect */}
+              <div className="absolute inset-0 bg-gradient-to-r from-white/40 via-white/80 to-transparent rounded-full opacity-70" />
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };

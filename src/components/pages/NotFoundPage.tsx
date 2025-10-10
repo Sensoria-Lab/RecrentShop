@@ -8,11 +8,11 @@ const NotFoundPage: React.FC = () => {
     <PageLayout>
           <div className="max-w-4xl mx-auto">
             {/* Page title */}
-            <div className="text-center mb-16">
+            <div className="text-center mb-16 scroll-fade-in">
               <h1 className="text-white font-manrope font-bold text-5xl lg:text-6xl mb-4 drop-shadow-[0_4px_12px_rgba(0,0,0,0.9)]">404</h1>
               <div className="w-32 h-1 bg-white/40 mx-auto"></div>
             </div>
-            <div className="flex justify-center">
+            <div className="flex justify-center scroll-fade-in scroll-fade-in-delay-1">
               <div className="panel panel-strong p-16 max-w-4xl w-full text-center overflow-hidden">
                 <div className="space-y-10">
                   <p className="text-white/80 font-manrope font-medium text-2xl leading-relaxed max-w-2xl mx-auto">

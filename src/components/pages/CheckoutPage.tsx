@@ -154,7 +154,7 @@ const CheckoutPage: React.FC = () => {
         <main className="flex-1 px-3 sm:px-4 md:px-6 lg:px-8 py-6 sm:py-8 md:py-12">
           <div className="max-w-7xl mx-auto">
             {/* Background container */}
-            <div className="panel panel-strong">
+            <div className="panel panel-strong scroll-fade-in">
               {/* Page title */}
               <div className="text-center mb-6 sm:mb-8 md:mb-10 lg:mb-12">
                 <h1 className="text-white font-manrope font-bold text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl mb-3 sm:mb-4 md:mb-6 drop-shadow-[0_4px_12px_rgba(0,0,0,0.9)]">

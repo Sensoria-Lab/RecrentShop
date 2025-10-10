@@ -184,7 +184,7 @@ const ProductPage: React.FC = () => {
         {/* Main content with increased padding */}
         <main className="flex-1 px-3 sm:px-6 md:px-10 lg:px-20 py-4 sm:py-6 md:py-10 max-w-[1400px] mx-auto w-full">
           {/* Product section */}
-          <div className="panel panel-strong mb-4 sm:mb-6 md:mb-10 p-6 sm:p-8 md:p-10 lg:p-12">
+          <div className="panel panel-strong mb-4 sm:mb-6 md:mb-10 p-6 sm:p-8 md:p-10 lg:p-12 scroll-fade-in">
             <div className="flex flex-col lg:flex-row gap-4 sm:gap-6 md:gap-10 lg:gap-14 items-start justify-between">
               {/* Product images - top on mobile, right on desktop */}
               <div className="flex-shrink-0 w-full lg:w-[580px] lg:order-2 lg:h-full">
@@ -552,7 +552,7 @@ const ProductPage: React.FC = () => {
           </div>
 
           {/* Reviews */}
-          <div className="panel p-6 sm:p-8 md:p-10">
+          <div className="panel p-6 sm:p-8 md:p-10 scroll-fade-in scroll-fade-in-delay-1">
             <h3 className="text-white font-manrope font-bold text-lg sm:text-xl md:text-2xl mb-4 sm:mb-5 text-center">Отзывы</h3>
 
             <div className="space-y-3 sm:space-y-4">
@@ -583,7 +583,7 @@ const ProductPage: React.FC = () => {
 
           {/* Similar Products Section */}
           {similarProducts.length > 0 && (
-            <div className="panel p-6 sm:p-8 md:p-10 mt-3 sm:mt-5 md:mt-7">
+            <div className="panel p-6 sm:p-8 md:p-10 mt-3 sm:mt-5 md:mt-7 scroll-fade-in scroll-fade-in-delay-2">
               <div className="mb-4 sm:mb-5">
                 <h3 className="text-white font-manrope font-bold text-lg sm:text-xl md:text-2xl mb-2 sm:mb-3">
                   Похожие товары

@@ -23,7 +23,7 @@ const CartPage: React.FC = () => {
           {/* Background container */}
           <div className="panel panel-strong pt-8 sm:pt-12 md:pt-16">
             {/* Page Title */}
-            <div className="text-center mb-8 sm:mb-12 md:mb-16">
+            <div className="text-center mb-8 sm:mb-12 md:mb-16 scroll-fade-in">
               <h1 className="text-white font-manrope font-bold text-3xl sm:text-4xl md:text-5xl lg:text-6xl mb-3 sm:mb-4 drop-shadow-[0_4px_12px_rgba(0,0,0,0.9)]">
                 Корзина
               </h1>
@@ -37,7 +37,7 @@ const CartPage: React.FC = () => {
 
           {items.length === 0 ? (
             /* Empty Cart State */
-            <div className="flex flex-col items-center justify-center py-10 sm:py-16 md:py-20">
+            <div className="flex flex-col items-center justify-center py-10 sm:py-16 md:py-20 scroll-fade-in scroll-fade-in-delay-1">
                 <div className="panel panel-strong max-w-2xl text-center w-full">
                 {/* Shine effect */}
                 <div className="absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-transparent pointer-events-none" />
@@ -74,7 +74,7 @@ const CartPage: React.FC = () => {
             /* Cart with Items */
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
               {/* Cart Items - Left Column */}
-              <div className="lg:col-span-2 space-y-4">
+              <div className="lg:col-span-2 space-y-4 scroll-fade-in scroll-fade-in-delay-1">
                 {items.map((item) => (
                   <div
                     key={item.id}
@@ -178,7 +178,7 @@ const CartPage: React.FC = () => {
               </div>
 
               {/* Order Summary - Right Column */}
-              <div className="lg:col-span-1">
+              <div className="lg:col-span-1 scroll-fade-in scroll-fade-in-delay-2">
                 <div className="relative rounded-2xl sticky top-24 bg-white/5 backdrop-blur-sm border border-white/10">
                   {/* Shine effect */}
                   <div className="absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-transparent pointer-events-none" />

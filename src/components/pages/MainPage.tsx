@@ -4,8 +4,6 @@ import PageContainer from '../shared/PageContainer';
 import ProductCard from '../ui/ProductCard';
 import ProductCarousel from '../ui/ProductCarousel';
 import SectionHeader from '../ui/SectionHeader';
-import CategoryCard from '../ui/CategoryCard';
-import FeatureItem from '../ui/FeatureItem';
 import HeroImageShowcase from '../ui/HeroImageShowcase';
 import Footer from '../shared/Footer';
 import { useProductNavigation } from '../../hooks';
@@ -75,49 +73,63 @@ const MainPage: React.FC = () => {
   return (
     <PageContainer isMainPage={true}>
       <div ref={containerRef}>
-        {/* Hero section with showcase */}
-        <section id="hero" className="min-h-[80vh] snap-start flex items-center px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 py-12 sm:py-16 md:py-20 relative overflow-hidden">
-          <div className="w-full max-w-[1400px] mx-auto">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
-              {/* Left side - Title and Button */}
-              <div className="flex flex-col justify-center space-y-8">
-                <div className="animate-fade-in-up">
-                  <h1 className="text-white font-manrope font-bold text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl tracking-tight drop-shadow-[0_6px_20px_rgba(0,0,0,1)] leading-tight blur-text text-left">
-                    RECRENT SHOP
-                  </h1>
-                </div>
+        {/* Hero section with split layout */}
+        <section id="hero" className="min-h-screen snap-start relative overflow-hidden">
+          {/* White background panel on the right */}
+          <div className="hidden lg:block absolute top-0 right-0 bottom-0 w-[45%] bg-white"></div>
 
-                {/* CTA Button */}
-                <div>
-                  <button
-                    onClick={navigateToCatalog}
-                    className="group relative inline-flex items-center justify-center gap-3 px-8 py-4 bg-black/70 hover:bg-black/80 border-2 border-white/60 hover:border-white rounded-xl transition-all duration-300 backdrop-blur-md shadow-[0_8px_32px_rgba(0,0,0,1)] hover:shadow-[0_12px_40px_rgba(0,0,0,1)] active:scale-95 ripple-button"
-                  >
-                    <span className="text-white font-manrope font-semibold text-base md:text-lg drop-shadow-[0_4px_16px_rgba(0,0,0,1)] whitespace-nowrap">
-                      Перейти в каталог
-                    </span>
-                    <svg
-                      width="20"
-                      height="20"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2.5"
-                      className="text-white group-hover:translate-x-1 transition-transform duration-300"
+          {/* Content */}
+          <div className="relative h-screen flex items-center px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16">
+            <div className="w-full max-w-[1400px] mx-auto">
+              <div className="flex items-center gap-12">
+                {/* Left side - Title and Button (55% width) */}
+                <div className="w-full lg:w-[55%] flex flex-col justify-center space-y-8">
+                  <div className="scroll-fade-in">
+                    <h1 className="font-manrope font-black text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl tracking-tight leading-tight text-white blur-text
+                      drop-shadow-[0_4px_20px_rgba(0,0,0,0.9)]">
+                      RECRENT SHOP
+                    </h1>
+                    <p className="mt-4 text-white/70 font-inter font-medium text-lg md:text-xl lg:text-2xl tracking-wide">
+                      Официальный мерч
+                    </p>
+                  </div>
+
+                  {/* CTA Button */}
+                  <div className="scroll-fade-in scroll-fade-in-delay-1">
+                    <button
+                      onClick={navigateToCatalog}
+                      className="group relative inline-flex items-center justify-center gap-3 px-8 py-4 bg-transparent border-2 border-white hover:bg-white hover:text-black rounded-xl transition-all duration-300 active:scale-95 ripple-button"
                     >
-                      <path d="M5 12h14M12 5l7 7-7 7"/>
-                    </svg>
-                  </button>
+                      <span className="text-white group-hover:text-black font-manrope font-semibold text-base md:text-lg whitespace-nowrap transition-colors duration-300">
+                        К каталогу
+                      </span>
+                      <svg
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2.5"
+                        className="text-white group-hover:text-black group-hover:translate-x-1 transition-all duration-300"
+                      >
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                      </svg>
+                    </button>
+                  </div>
                 </div>
-              </div>
 
-              {/* Right side - Product showcase */}
-              <div className="flex items-center justify-center lg:justify-end">
-                <div className="w-full max-w-[500px]">
-                  <HeroImageShowcase 
-                    products={sortedProducts.slice(0, 5)} 
-                    onProductClick={handleProductClick}
-                  />
+                {/* Right side - Product image on white background (45% width) */}
+                <div className="hidden lg:flex w-[45%] items-center justify-center scroll-fade-in scroll-fade-in-delay-2">
+                  <div className="w-full max-w-[500px] aspect-square">
+                    {sortedProducts.length > 0 && sortedProducts[0].image && (
+                      <img 
+                        src={sortedProducts[0].image} 
+                        alt={sortedProducts[0].title}
+                        className="w-full h-full object-contain cursor-pointer hover:scale-105 transition-transform duration-300"
+                        onClick={() => handleProductClick(sortedProducts[0])}
+                      />
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
@@ -127,7 +139,7 @@ const MainPage: React.FC = () => {
         {/* New Products Section */}
         <section id="new-products" className="snap-start px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 py-12 md:py-16">
           <div className="w-full max-w-[1400px] mx-auto">
-            <div className="panel glass-shadow">
+            <div className="panel glass-shadow scroll-fade-in">
               <SectionHeader
                 title="Новинки"
                 onShowAll={navigateToCatalog}
@@ -163,70 +175,41 @@ const MainPage: React.FC = () => {
           </div>
         </section>
 
-        {/* Categories Section */}
-        <section id="categories" className="snap-start px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 py-12 md:py-16">
+        {/* Best Sellers Section */}
+        <section id="best-sellers" className="snap-start px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 py-12 md:py-16">
           <div className="w-full max-w-[1400px] mx-auto">
-            <h2 className="text-white font-manrope font-bold text-3xl md:text-4xl mb-8 text-center">
-              Категории товаров
-            </h2>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
-              <CategoryCard
-                title="Коврики для мыши"
-                description="Большой выбор игровых ковриков разных размеров"
-                icon="🖱️"
-                route={ROUTES.CATALOG}
-                gradient="bg-gradient-to-br from-blue-500/20 to-purple-500/20"
+            <div className="panel glass-shadow scroll-fade-in">
+              <SectionHeader
+                title="Популярное"
+                onShowAll={navigateToCatalog}
               />
-              
-              <CategoryCard
-                title="Одежда"
-                description="Стильные футболки и худи с уникальными принтами"
-                icon="👕"
-                route={ROUTES.CATALOG}
-                gradient="bg-gradient-to-br from-pink-500/20 to-orange-500/20"
-              />
-            </div>
-          </div>
-        </section>
-
-        {/* Features Section */}
-        <section id="features" className="snap-start px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 py-12 md:py-16">
-          <div className="w-full max-w-[1400px] mx-auto">
-            <h2 className="text-white font-manrope font-bold text-3xl md:text-4xl mb-8 text-center">
-              Почему выбирают нас
-            </h2>
-            
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
-              <FeatureItem
-                icon={
-                  <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
-                }
-                title="Качество"
-                description="Только проверенные материалы и надёжные производители"
-              />
-              
-              <FeatureItem
-                icon={
-                  <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                  </svg>
-                }
-                title="Быстрая доставка"
-                description="Отправка заказов в течение 1-2 рабочих дней"
-              />
-              
-              <FeatureItem
-                icon={
-                  <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                }
-                title="Доступные цены"
-                description="Лучшее соотношение цены и качества на рынке"
-              />
+              <div className="px-3 md:px-4 lg:px-5 pt-3 md:pt-4 lg:pt-5 pb-2 md:pb-3 lg:pb-4">
+                <ProductCarousel itemsPerView={3}>
+                  {sortedProducts.slice(0, 6).map((product, index) => (
+                    <ProductCard
+                      key={product.id}
+                      id={product.id}
+                      image={product.image}
+                      images={product.images}
+                      title={product.title}
+                      subtitle={product.subtitle}
+                      productSize={product.productSize}
+                      productColor={product.productColor}
+                      price={product.price}
+                      priceNumeric={product.priceNumeric}
+                      rating={product.rating}
+                      reviewCount={product.reviewCount}
+                      color={product.color}
+                      category={product.category}
+                      clothingType={product.clothingType}
+                      size="small-catalog"
+                      staggerIndex={index + 1}
+                      onAddToCart={() => {}}
+                      onProductClick={handleProductClick}
+                    />
+                  ))}
+                </ProductCarousel>
+              </div>
             </div>
           </div>
         </section>

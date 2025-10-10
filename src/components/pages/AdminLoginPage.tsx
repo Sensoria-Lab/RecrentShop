@@ -60,7 +60,7 @@ const AdminLoginPage: React.FC = () => {
   return (
     <PageLayout>
       <div className="min-h-screen bg-black text-white flex items-center justify-center py-12 px-4">
-        <div className="max-w-md w-full">
+        <div className="max-w-md w-full scroll-fade-in">
           {/* Login Card */}
           <div className="border border-gray-800 rounded-lg bg-gray-900/50 backdrop-blur-sm p-8">
             {/* Header */}
