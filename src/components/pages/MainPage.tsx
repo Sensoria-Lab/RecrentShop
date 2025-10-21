@@ -2,6 +2,8 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import PageContainer from '../shared/PageContainer';
 import Img from '../shared/Img';
+import SEO from '../shared/SEO';
+import { OrganizationStructuredData, WebsiteStructuredData } from '../shared/StructuredData';
 import { ROUTES } from '../../constants/routes';
 
 const MainPage: React.FC = () => {
@@ -13,6 +15,13 @@ const MainPage: React.FC = () => {
 
   return (
     <PageContainer isMainPage={true}>
+      <SEO
+        title="Главная"
+        description="Премиальные игровые коврики для мыши и стильная одежда от RECRENT. Высокое качество, уникальный дизайн, быстрая доставка по России."
+        keywords="коврик для мыши, gaming mousepad, игровой коврик, коврик xl, коврик l, recrent, одежда, худи, футболки"
+      />
+      <OrganizationStructuredData />
+      <WebsiteStructuredData />
       {/* Hero section with RECRENT SHOP design */}
       <section className="min-h-screen relative flex items-center">
         {/* Content */}

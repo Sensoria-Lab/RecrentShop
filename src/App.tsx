@@ -2,6 +2,7 @@ import React, { useEffect, Suspense, lazy } from 'react';
 import { useLocation, Routes, Route } from 'react-router-dom';
 import './index.css';
 import LoadingSkeleton from './components/shared/LoadingSkeleton';
+import ErrorBoundary from './components/shared/ErrorBoundary';
 import { CartProvider } from './context/CartContext';
 import { ToastProvider } from './context/ToastContext';
 import BackgroundBeams from './components/shared/BackgroundBeams';
@@ -41,37 +42,39 @@ function App() {
   }, [location.pathname]);
 
   return (
-    <ToastProvider>
+    <ErrorBoundary>
+      <ToastProvider>
         <CartProvider>
           <div className="relative min-h-screen bg-black">
-          {/* Pixel Blast Background Effect */}
-          <BackgroundBeams />
+            {/* Pixel Blast Background Effect */}
+            <BackgroundBeams />
 
-      {/* Routes container */}
-      <div className="min-h-screen relative z-20">
-        <Suspense fallback={<LoadingSkeleton />}>
-          <Routes location={location}>
-            <Route path="/" element={<MainPage />} />
-            <Route path="/recrent-shop" element={<RecrentShopPage />} />
-            <Route path="/catalog" element={<CatalogPage />} />
-            <Route path="/support" element={<SupportPage />} />
-            <Route path="/product" element={<ProductPage />} />
-            <Route path="/product/:id" element={<ProductPage />} />
-            <Route path="/cart" element={<CartPage />} />
-            <Route path="/checkout" element={<CheckoutPage />} />
-            <Route path="/account" element={<AccountPage />} />
-            <Route path="/admin/login" element={<AdminLoginPage />} />
-            <Route path="/admin" element={<AdminPage />} />
-            <Route path="*" element={<NotFoundPage />} />
-          </Routes>
-        </Suspense>
-      </div>
+            {/* Routes container */}
+            <div className="min-h-screen relative z-20">
+              <Suspense fallback={<LoadingSkeleton />}>
+                <Routes location={location}>
+                  <Route path="/" element={<MainPage />} />
+                  <Route path="/recrent-shop" element={<RecrentShopPage />} />
+                  <Route path="/catalog" element={<CatalogPage />} />
+                  <Route path="/support" element={<SupportPage />} />
+                  <Route path="/product" element={<ProductPage />} />
+                  <Route path="/product/:id" element={<ProductPage />} />
+                  <Route path="/cart" element={<CartPage />} />
+                  <Route path="/checkout" element={<CheckoutPage />} />
+                  <Route path="/account" element={<AccountPage />} />
+                  <Route path="/admin/login" element={<AdminLoginPage />} />
+                  <Route path="/admin" element={<AdminPage />} />
+                  <Route path="*" element={<NotFoundPage />} />
+                </Routes>
+              </Suspense>
+            </div>
 
             {/* Subtle noise texture */}
             <div className="noise-overlay" />
           </div>
         </CartProvider>
-    </ToastProvider>
+      </ToastProvider>
+    </ErrorBoundary>
   );
 }
 
