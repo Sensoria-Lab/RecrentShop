@@ -1,6 +1,6 @@
 {
   "files": {
-    "main.css": "/RecrentShop/static/css/main.309e9472.css",
+    "main.css": "/RecrentShop/static/css/main.0c57c22b.css",
     "main.js": "/RecrentShop/static/js/main.0b53e6da.js",
     "static/js/480.1ef8bdb8.chunk.js": "/RecrentShop/static/js/480.1ef8bdb8.chunk.js",
     "static/js/285.35936a0f.chunk.js": "/RecrentShop/static/js/285.35936a0f.chunk.js",
@@ -17,7 +17,7 @@
     "static/js/120.5e933149.chunk.js": "/RecrentShop/static/js/120.5e933149.chunk.js",
     "static/js/596.e182095c.chunk.js": "/RecrentShop/static/js/596.e182095c.chunk.js",
     "index.html": "/RecrentShop/index.html",
-    "main.309e9472.css.map": "/RecrentShop/static/css/main.309e9472.css.map",
+    "main.0c57c22b.css.map": "/RecrentShop/static/css/main.0c57c22b.css.map",
     "main.0b53e6da.js.map": "/RecrentShop/static/js/main.0b53e6da.js.map",
     "480.1ef8bdb8.chunk.js.map": "/RecrentShop/static/js/480.1ef8bdb8.chunk.js.map",
     "285.35936a0f.chunk.js.map": "/RecrentShop/static/js/285.35936a0f.chunk.js.map",
@@ -35,7 +35,7 @@
     "596.e182095c.chunk.js.map": "/RecrentShop/static/js/596.e182095c.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.309e9472.css",
+    "static/css/main.0c57c22b.css",
     "static/js/main.0b53e6da.js"
   ]
 }
