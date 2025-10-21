@@ -6,3 +6,4 @@ export { useProductFilters } from './useProductFilters';
 export { useProductNavigation } from './useProductNavigation';
 export { useLocalStorage } from './useLocalStorage';
 export { useDebounce } from './useDebounce';
+export { useIntersectionObserver, useIsVisible } from './useIntersectionObserver';

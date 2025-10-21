@@ -19,6 +19,15 @@ const AdminLoginPage = lazy(() => import('./components/pages/AdminLoginPage'));
 const NotFoundPage = lazy(() => import('./components/pages/NotFoundPage'));
 const RecrentShopPage = lazy(() => import('./components/pages/RecrentShopPage'));
 
+// Preload critical routes for faster navigation (ready for future use)
+// Usage: add onMouseEnter={preloadCatalog} to navigation links for instant page loads
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const preloadCatalog = () => import('./components/pages/CatalogPage');
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const preloadProduct = () => import('./components/pages/ProductPage');
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const preloadCart = () => import('./components/pages/CartPage');
+
 /**
  * Main App Component
  * Handles routing, lazy loading, and global background effects

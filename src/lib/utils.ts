@@ -31,16 +31,52 @@ export const getImageUrl = (imagePath: string): string => {
  */
 export const fixImagePath = (path: string): string => {
   if (!path) return path;
-  
+
   // If path already includes PUBLIC_URL, return as is
   if (path.includes(process.env.PUBLIC_URL || '')) {
     return path;
   }
-  
+
   // If path starts with /, it's an absolute path
   if (path.startsWith('/')) {
     return getPublicUrl(path);
   }
-  
+
   return path;
 };
+
+/**
+ * Conditionally join classNames together
+ * Filters out falsy values and joins with space
+ *
+ * @example
+ * cn('btn', isActive && 'active', 'text-white') // 'btn active text-white'
+ */
+export function cn(...classes: (string | boolean | undefined | null)[]): string {
+  return classes.filter(Boolean).join(' ');
+}
+
+/**
+ * Throttle function to limit execution rate
+ * Useful for scroll/resize event handlers
+ */
+export function throttle<T extends (...args: any[]) => any>(
+  func: T,
+  delay: number
+): (...args: Parameters<T>) => void {
+  let lastCall = 0;
+  return (...args: Parameters<T>) => {
+    const now = Date.now();
+    if (now - lastCall >= delay) {
+      lastCall = now;
+      func(...args);
+    }
+  };
+}
+
+/**
+ * Clamp a number between min and max values
+ */
+export function clamp(value: number, min: number, max: number): number {
+  return Math.min(Math.max(value, min), max);
+}
