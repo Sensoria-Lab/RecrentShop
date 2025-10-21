@@ -21,7 +21,7 @@ const Header: React.FC<HeaderProps> = ({ className = '', onNavigate }) => {
   };
 
   const path = location.pathname;
-  const isActive = (target: string) => (target === '/' ? path === '/' : path.startsWith(target));
+  const isActive = (target: string) => path.startsWith(target); // Удалено подчеркивание текущей страницы
 
   return (
     <header className={`relative responsive-header ${className}`}>
@@ -73,7 +73,7 @@ const Header: React.FC<HeaderProps> = ({ className = '', onNavigate }) => {
           >
             <span className="relative z-10">Каталог</span>
             {isActive('/catalog') && (
-              <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-3/4 h-0.5 bg-gradient-to-r from-transparent via-white to-transparent" />
+              <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-3/4 h-0.5 bg-gradient-to-r from-transparent via-white to-transparent hidden" />
             )}
           </button>
 
@@ -89,7 +89,7 @@ const Header: React.FC<HeaderProps> = ({ className = '', onNavigate }) => {
           >
             <span className="relative z-10">Информация</span>
             {isActive('/support') && (
-              <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-3/4 h-0.5 bg-gradient-to-r from-transparent via-white to-transparent" />
+              <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-3/4 h-0.5 bg-gradient-to-r from-transparent via-white to-transparent hidden" />
             )}
           </button>
 
@@ -105,7 +105,7 @@ const Header: React.FC<HeaderProps> = ({ className = '', onNavigate }) => {
           >
             <span className="relative z-10">Аккаунт</span>
             {isActive('/account') && (
-              <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-3/4 h-0.5 bg-gradient-to-r from-transparent via-white to-transparent" />
+              <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-3/4 h-0.5 bg-gradient-to-r from-transparent via-white to-transparent hidden" />
             )}
           </button>
 
@@ -125,9 +125,6 @@ const Header: React.FC<HeaderProps> = ({ className = '', onNavigate }) => {
               <span className="min-w-[18px] md:min-w-[20px] h-4 md:h-5 px-1 md:px-1.5 bg-gradient-to-br from-blue-500 to-blue-600 text-white text-[10px] md:text-xs font-semibold rounded-full inline-flex items-center justify-center shadow-lg shadow-blue-500/30 border border-white/20 animate-pulse">
                 {getTotalItems > 99 ? '99+' : getTotalItems}
               </span>
-            )}
-            {isActive('/cart') && (
-              <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-3/4 h-0.5 bg-gradient-to-r from-transparent via-white to-transparent" />
             )}
           </button>
         </div>

@@ -1,38 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PageLayout from '../shared/PageLayout';
-import Modal from '../shared/Modal';
 import { offerContent } from '../../data/offerContent';
 import { SITE_CONFIG, SOCIAL_LINKS, TEXTS } from '../../constants/config';
-
-const Card: React.FC<{ title: string; icon: React.ReactNode; preview?: string; onClick: () => void }> = ({ title, icon, preview, onClick }) => (
-  <div
-    className="relative rounded-lg sm:rounded-xl md:rounded-2xl cursor-pointer group bg-black/40 border border-white/10 hover:border-white/30 transition-all duration-300"
-    onClick={onClick}
-  >
-    <div className="relative p-3 sm:p-4 md:p-6 lg:p-7 flex items-center gap-2 sm:gap-3 md:gap-5 lg:gap-6">
-      <div className="flex-shrink-0 w-9 h-9 sm:w-10 sm:h-10 md:w-12 md:h-12 lg:w-14 lg:h-14 rounded-md sm:rounded-lg md:rounded-xl bg-gradient-to-br from-white/10 to-white/5 flex items-center justify-center border border-white/10 group-hover:scale-110 group-hover:border-white/20 transition-all duration-300">
-        <div className="text-white/90 group-hover:text-white transition-colors scale-75 sm:scale-90 md:scale-100">{icon}</div>
-      </div>
-
-      <div className="flex-1 min-w-0">
-        <h3 className="text-white font-manrope font-semibold text-sm sm:text-base md:text-lg lg:text-xl group-hover:text-white/90 transition-colors drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)] truncate">{title}</h3>
-        {preview && <p className="text-white/60 text-[10px] sm:text-xs md:text-sm mt-0.5 sm:mt-1 truncate">{preview}</p>}
-      </div>
-
-      <div className="flex-shrink-0 transform group-hover:translate-x-1 transition-transform duration-300">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="text-white/40 group-hover:text-white/80 sm:w-4 sm:h-4 md:w-5 md:h-5">
-          <path d="M9 6l6 6-6 6"/>
-        </svg>
-      </div>
-    </div>
-  </div>
-);
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '../../shared/ui';
 
 const SupportPage: React.FC = () => {
-  const [modalContent, setModalContent] = useState<{ title: string; content: React.ReactNode } | null>(null);
-
-  const openModal = (title: string, content: React.ReactNode) => setModalContent({ title, content });
-  const closeModal = () => setModalContent(null);
 
   const items = [
     {
@@ -309,25 +281,36 @@ const SupportPage: React.FC = () => {
       <div className="max-w-6xl mx-auto">
         <div className="bg-black/40 border border-white/20 rounded-lg sm:rounded-xl pb-8 sm:pb-10 md:pb-12 px-8 sm:px-10 md:px-12 pt-8 sm:pt-10 md:pt-12">
           <div className="text-center mb-10 sm:mb-14 md:mb-18 lg:mb-24 scroll-fade-in">
-            <h1 className="text-white font-manrope font-bold text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl mb-3 sm:mb-4 md:mb-6 drop-shadow-[0_4px_12px_rgba(0,0,0,0.9)]">Поддержка</h1>
+            <h1 className="text-white font-manrope font-bold text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl mb-3 sm:mb-4 md:mb-6 drop-shadow-[0_4px_12px_rgba(0,0,0,0.9)]">Информация</h1>
             <div className="w-20 sm:w-24 md:w-32 h-0.5 sm:h-1 bg-white/40 mx-auto"></div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 md:gap-8 lg:gap-10">
+          <Accordion type="single" collapsible className="w-full space-y-4 sm:space-y-5 md:space-y-6">
             {items.map((item, index) => (
-              <div key={item.id} className={`scroll-fade-in scroll-fade-in-delay-${Math.min(index % 4 + 1, 4)}`}>
-                <Card title={item.title} icon={item.icon} preview={item.preview as string | undefined} onClick={() => openModal(item.title, item.content)} />
-              </div>
+              <AccordionItem
+                value={item.id}
+                key={item.id}
+                className={`border-white/20 bg-black/20 rounded-lg sm:rounded-xl md:rounded-2xl px-3 sm:px-4 md:px-5 lg:px-6 scroll-fade-in scroll-fade-in-delay-${Math.min(index % 4 + 1, 4)}`}
+              >
+                <AccordionTrigger className="text-white hover:text-white/80 py-4 sm:py-5 md:py-6 lg:py-7 hover:no-underline">
+                  <div className="flex items-center gap-2 sm:gap-3 md:gap-5 lg:gap-6 w-full">
+                    <div className="flex-shrink-0 w-9 h-9 sm:w-10 sm:h-10 md:w-12 md:h-12 lg:w-14 lg:h-14 rounded-md sm:rounded-lg md:rounded-xl bg-gradient-to-br from-white/10 to-white/5 flex items-center justify-center border border-white/10">
+                      <div className="text-white/90 scale-75 sm:scale-90 md:scale-100">{item.icon}</div>
+                    </div>
+                    <div className="text-left flex-1 min-w-0">
+                      <h3 className="font-manrope font-semibold text-sm sm:text-base md:text-lg lg:text-xl truncate">{item.title}</h3>
+                      {item.preview && <p className="text-white/60 text-[10px] sm:text-xs md:text-sm mt-0.5 sm:mt-1 truncate">{item.preview}</p>}
+                    </div>
+                  </div>
+                </AccordionTrigger>
+                <AccordionContent className="text-gray-300 pb-4 sm:pb-5 md:pb-6 lg:pb-7 pt-0">
+                  {item.content}
+                </AccordionContent>
+              </AccordionItem>
             ))}
-          </div>
+          </Accordion>
         </div>
       </div>
-
-      {modalContent && (
-        <Modal isOpen={!!modalContent} onClose={closeModal} title={modalContent.title}>
-          <div className="whitespace-pre-line">{modalContent.content}</div>
-        </Modal>
-      )}
     </PageLayout>
   );
 };

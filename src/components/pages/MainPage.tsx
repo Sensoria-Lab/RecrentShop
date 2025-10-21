@@ -8,6 +8,7 @@ import { ROUTES } from '../../constants/routes';
 import ProductCard from '../ui/ProductCard';
 import { ALL_PRODUCTS } from '../../data/products';
 import StarRating from '../shared/StarRating';
+import Footer from '../shared/Footer';
 
 const MainPage: React.FC = () => {
   const navigate = useNavigate();
@@ -81,7 +82,7 @@ const MainPage: React.FC = () => {
                   </div>
 
                   {/* Stats */}
-                  <div className="flex flex-wrap gap-6 sm:gap-8">
+                  <div className="flex flex-wrap gap-6 sm:gap-8 mt-auto">
                     <div className="space-y-1">
                       <div className="text-2xl sm:text-3xl font-black text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]">500+</div>
                       <div className="text-sm text-white/70">Довольных клиентов</div>
@@ -101,7 +102,7 @@ const MainPage: React.FC = () => {
                 </div>
 
                 {/* CTA Button - moved to bottom to align with image bottom */}
-                <div className="mt-auto">
+                <div className="mt-6">
                     <button
                       onClick={navigateToCatalog}
                       className="group relative inline-flex items-center justify-center gap-3 px-8 sm:px-10 md:px-12 py-4 sm:py-5 bg-white/8 backdrop-blur-sm border-2 border-white/80 hover:border-white hover:bg-white rounded-xl transition-all duration-250 active:scale-95 shadow-[0_0_24px_rgba(255,255,255,0.15)] hover:shadow-[0_0_40px_rgba(255,255,255,0.4)] overflow-hidden"
@@ -133,7 +134,7 @@ const MainPage: React.FC = () => {
               </div>
 
               {/* Right side - Image Gallery */}
-              <div className="lg:col-span-7 flex items-start">
+              <div className="lg:col-span-7 flex items-start" style={{ transform: 'translateX(80px)' }}>
                 <div className="relative max-w-[650px] mx-auto lg:ml-auto">
                   {/* Layout: 2 small squares on left, 1 tall vertical rectangle on right */}
                   <div className="flex gap-3 sm:gap-4 lg:gap-5" style={{ height: '600px' }}>
@@ -141,20 +142,20 @@ const MainPage: React.FC = () => {
                     {/* Left column: 2 stacked square images */}
                     <div className="flex-1 flex flex-col gap-3 sm:gap-4 lg:gap-5">
                       {/* Top - White sleeve with tattoo */}
-                      <div className="relative flex-1 bg-gray-800 rounded-xl sm:rounded-2xl overflow-hidden shadow-2xl group hover:scale-[1.02] transition-transform duration-300">
+                      <div className="relative flex-1 rounded-xl sm:rounded-2xl overflow-hidden shadow-2xl group hover:scale-[1.02] transition-transform duration-300">
                         <Img
-                          src="/images/products/clothing/sleeves/white_sleeve/rukav_geoid_white_01.webp"
+                          src={`${process.env.PUBLIC_URL}/images/products/clothing/sleeves/white_sleeve/rukav_geoid_white_01.webp`}
                           alt="White sleeve with tattoo"
                           className="w-full h-full object-cover object-center"
                         />
                       </div>
 
                       {/* Bottom - White geoid pattern mousepad */}
-                      <div className="relative flex-1 bg-gray-900 rounded-xl sm:rounded-2xl overflow-hidden shadow-2xl hover:scale-[1.02] transition-transform duration-300">
+                      <div className="relative flex-1 rounded-xl sm:rounded-2xl overflow-hidden shadow-2xl hover:scale-[1.02] transition-transform duration-300">
                         <Img
-                          src="/images/products/mousepads/l/l_white_geoid/011_l_white_01.webp"
+                          src={`${process.env.PUBLIC_URL}/images/products/mousepads/l/l_white_geoid/011_l_white_01.webp`}
                           alt="White geoid mousepad"
-                          className="w-full h-full object-contain object-center"
+                          className="w-full h-full object-contain object-center scale-[1.1]"
                         />
                       </div>
                     </div>
@@ -162,12 +163,12 @@ const MainPage: React.FC = () => {
                     {/* Right column: 1 tall vertical image */}
                     <div className="flex-1 flex flex-col">
                       {/* Tall vertical - Black geoid XL mousepad */}
-                      <div className="relative h-full bg-black rounded-xl sm:rounded-2xl overflow-hidden shadow-2xl group hover:scale-[1.02] transition-transform duration-300">
+                      <div className="relative h-full rounded-xl sm:rounded-2xl overflow-hidden shadow-2xl group hover:scale-[1.02] transition-transform duration-300">
                         <div className="w-full h-full flex items-center justify-center">
                           <Img
-                            src="/images/products/mousepads/xl/xl_black_geoid/114_001.webp"
+                            src={`${process.env.PUBLIC_URL}/images/products/mousepads/xl/xl_black_geoid/114_001.webp`}
                             alt="Black XL geoid mousepad"
-                            className="min-h-full min-w-full object-cover rotate-90 scale-[1.67]"
+                            className="w-full h-full object-contain rotate-90 scale-[1.95]"
                             style={{ transformOrigin: 'center center' }}
                           />
                         </div>
@@ -253,7 +254,7 @@ const MainPage: React.FC = () => {
               <div id="dragons" className="group relative bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl overflow-hidden hover:border-white/30 transition-all duration-300 cursor-pointer hover-lift">
                 <div className="aspect-[4/5] relative overflow-hidden">
                   <Img
-                    src="/images/products/mousepads/xl/xl_dragon_red/009_xl_logo-red_dragon_02.webp"
+                    src={`${process.env.PUBLIC_URL}/images/products/mousepads/xl/xl_dragon_red/009_xl_logo-red_dragon_02.webp`}
                     alt="Dragons Collection"
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                   />
@@ -280,7 +281,7 @@ const MainPage: React.FC = () => {
               <div id="serpents" className="group relative bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl overflow-hidden hover:border-white/30 transition-all duration-300 cursor-pointer hover-lift">
                 <div className="aspect-[4/5] relative overflow-hidden">
                   <Img
-                    src="/images/products/mousepads/l/l_black_serpent/003_l_black_serpent_01.webp"
+                    src={`${process.env.PUBLIC_URL}/images/products/mousepads/l/l_black_serpent/003_l_black_serpent_01.webp`}
                     alt="Serpents Collection"
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                   />
@@ -307,7 +308,7 @@ const MainPage: React.FC = () => {
               <div id="geoid" className="group relative bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl overflow-hidden hover:border-white/30 transition-all duration-300 cursor-pointer hover-lift">
                 <div className="aspect-[4/5] relative overflow-hidden">
                   <Img
-                    src="/images/products/mousepads/xl/xl_white_geoid/11.webp"
+                    src={`${process.env.PUBLIC_URL}/images/products/mousepads/xl/xl_white_geoid/11.webp`}
                     alt="Geoid Collection"
                     className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-500 bg-white/5"
                   />
@@ -379,6 +380,9 @@ const MainPage: React.FC = () => {
           </div>
         </div>
       </section>
+
+      {/* Footer */}
+      <Footer />
     </PageContainer>
   );
 };

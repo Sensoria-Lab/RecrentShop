@@ -50,18 +50,6 @@ const Footer: React.FC = () => {
                     Поддержка
                   </button>
                   <button
-                    onClick={() => navigate('/contacts')}
-                    className="text-white/50 hover:text-white/80 font-manrope text-xs sm:text-sm transition-colors text-left"
-                  >
-                    Контакты
-                  </button>
-                  <button
-                    onClick={() => navigate('/info')}
-                    className="text-white/50 hover:text-white/80 font-manrope text-xs sm:text-sm transition-colors text-left"
-                  >
-                    Информация
-                  </button>
-                  <button
                     onClick={() => navigate('/account')}
                     className="text-white/50 hover:text-white/80 font-manrope text-xs sm:text-sm transition-colors text-left"
                   >
@@ -79,17 +67,8 @@ const Footer: React.FC = () => {
                   <a href="#delivery" className="text-white/50 hover:text-white/80 font-manrope text-xs sm:text-sm transition-colors">
                     Доставка и оплата
                   </a>
-                  <a href="#sizes" className="text-white/50 hover:text-white/80 font-manrope text-xs sm:text-sm transition-colors">
-                    Размеры
-                  </a>
                   <a href="#return" className="text-white/50 hover:text-white/80 font-manrope text-xs sm:text-sm transition-colors">
                     Возврат и обмен
-                  </a>
-                  <a href="#offer" className="text-white/50 hover:text-white/80 font-manrope text-xs sm:text-sm transition-colors">
-                    Оферта
-                  </a>
-                  <a href="#faq" className="text-white/50 hover:text-white/80 font-manrope text-xs sm:text-sm transition-colors">
-                    FAQ
                   </a>
                 </nav>
               </div>

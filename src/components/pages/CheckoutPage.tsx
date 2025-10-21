@@ -4,7 +4,8 @@ import { useCart } from '../../context/CartContext';
 import Header from '../shared/Header';
 import Footer from '../shared/Footer';
 import Img from '../shared/Img';
-import { Button } from '../../shared/ui';
+import { Button, RadioGroup, RadioGroupItem, Checkbox } from '../../shared/ui';
+import { z } from 'zod';
 
 type DeliveryMethod = 'russian-post' | 'cdek' | 'home-delivery';
 
@@ -24,11 +25,30 @@ interface DeliveryFormData {
   withInsurance: boolean;
 }
 
+// Zod validation schemas
+const contactSchema = z.object({
+  fullName: z.string().min(2, 'ФИО должно содержать минимум 2 символа'),
+  phone: z.string().min(10, 'Введите корректный номер телефона'),
+  email: z.string().email('Введите корректный email'),
+  vkLink: z.string().optional(),
+  additionalInfo: z.string().optional(),
+});
+
+const deliverySchema = z.object({
+  method: z.string(),
+  address: z.string().min(5, 'Адрес должен содержать минимум 5 символов'),
+  city: z.string().min(2, 'Город должен содержать минимум 2 символа'),
+  postalCode: z.string().min(6, 'Введите корректный индекс'),
+  withInsurance: z.boolean(),
+});
+
 const CheckoutPage: React.FC = () => {
   const navigate = useNavigate();
   const { items: cart, getTotalPrice } = useCart();
   const [step, setStep] = useState<'contacts' | 'delivery'>('contacts');
   const [agreeToPolicy, setAgreeToPolicy] = useState(false);
+  const [contactErrors, setContactErrors] = useState<Record<string, string>>({});
+  const [deliveryErrors, setDeliveryErrors] = useState<Record<string, string>>({});
 
   const [contactForm, setContactForm] = useState<ContactFormData>({
     fullName: '',
@@ -95,8 +115,24 @@ const CheckoutPage: React.FC = () => {
   };
 
   const handleNextStep = () => {
-    if (isContactFormValid) {
+    const result = contactSchema.safeParse(contactForm);
+
+    if (!agreeToPolicy) {
+      alert('Необходимо согласие с политикой конфиденциальности');
+      return;
+    }
+
+    if (result.success) {
+      setContactErrors({});
       setStep('delivery');
+    } else {
+      const errors: Record<string, string> = {};
+      result.error.issues.forEach((issue) => {
+        if (issue.path[0]) {
+          errors[issue.path[0].toString()] = issue.message;
+        }
+      });
+      setContactErrors(errors);
     }
   };
 
@@ -106,10 +142,21 @@ const CheckoutPage: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (isDeliveryFormValid()) {
+    const result = deliverySchema.safeParse(deliveryForm);
+
+    if (result.success) {
+      setDeliveryErrors({});
       console.log('Order submitted:', { contactForm, deliveryForm, cart });
       alert('Заказ успешно оформлен!');
       navigate('/');
+    } else {
+      const errors: Record<string, string> = {};
+      result.error.issues.forEach((issue) => {
+        if (issue.path[0]) {
+          errors[issue.path[0].toString()] = issue.message;
+        }
+      });
+      setDeliveryErrors(errors);
     }
   };
 
@@ -260,10 +307,12 @@ const CheckoutPage: React.FC = () => {
                           name="fullName"
                           value={contactForm.fullName}
                           onChange={handleContactInputChange}
-                          className="w-full form-control"
+                          className={`w-full form-control ${contactErrors.fullName ? 'border-red-400' : ''}`}
                           placeholder="Иванов Иван Иванович"
-                          required
                         />
+                        {contactErrors.fullName && (
+                          <p className="text-red-400 text-xs sm:text-sm mt-1">{contactErrors.fullName}</p>
+                        )}
                       </div>
 
                       <div>
@@ -275,10 +324,12 @@ const CheckoutPage: React.FC = () => {
                           name="phone"
                           value={contactForm.phone}
                           onChange={handleContactInputChange}
-                          className="w-full form-control"
+                          className={`w-full form-control ${contactErrors.phone ? 'border-red-400' : ''}`}
                           placeholder="+7 (999) 123-45-67"
-                          required
                         />
+                        {contactErrors.phone && (
+                          <p className="text-red-400 text-xs sm:text-sm mt-1">{contactErrors.phone}</p>
+                        )}
                       </div>
 
                       <div>
@@ -290,10 +341,12 @@ const CheckoutPage: React.FC = () => {
                           name="email"
                           value={contactForm.email}
                           onChange={handleContactInputChange}
-                          className="w-full form-control"
+                          className={`w-full form-control ${contactErrors.email ? 'border-red-400' : ''}`}
                           placeholder="email@example.com"
-                          required
                         />
+                        {contactErrors.email && (
+                          <p className="text-red-400 text-xs sm:text-sm mt-1">{contactErrors.email}</p>
+                        )}
                       </div>
 
                       <div>
@@ -325,18 +378,16 @@ const CheckoutPage: React.FC = () => {
                       </div>
 
                       <div className="flex items-start gap-2 sm:gap-3">
-                        <input
-                          type="checkbox"
+                        <Checkbox
                           id="agreeToPolicy"
                           checked={agreeToPolicy}
-                          onChange={(e) => setAgreeToPolicy(e.target.checked)}
-                          className="mt-1 w-4 h-4 sm:w-5 sm:h-5 accent-white"
-                          required
+                          onCheckedChange={(checked) => setAgreeToPolicy(checked === true)}
+                          className="mt-1 data-[state=checked]:bg-white data-[state=checked]:text-black border-white/30"
                         />
-                        <label htmlFor="agreeToPolicy" className="text-xs sm:text-sm md:text-base text-gray-300">
+                        <label htmlFor="agreeToPolicy" className="text-xs sm:text-sm md:text-base text-gray-300 cursor-pointer">
                           Я согласен с{' '}
-                          <Link 
-                            to="/info" 
+                          <Link
+                            to="/info"
                             className="text-white hover:underline"
                             target="_blank"
                           >
@@ -363,7 +414,11 @@ const CheckoutPage: React.FC = () => {
                       </h2>
                     </div>
 
-                    <div className="space-y-3 sm:space-y-4">
+                    <RadioGroup
+                      value={deliveryForm.method}
+                      onValueChange={(value) => handleDeliveryMethodChange(value as DeliveryMethod)}
+                      className="space-y-3 sm:space-y-4"
+                    >
                       {deliveryMethods.map((method) => {
                         const icons: Record<DeliveryMethod, JSX.Element> = {
                           'russian-post': (
@@ -394,31 +449,34 @@ const CheckoutPage: React.FC = () => {
                             }`}
                           >
                             <div className="flex items-start gap-4">
-                              <input
-                                type="radio"
-                                name="deliveryMethod"
-                                checked={deliveryForm.method === method.id}
-                                onChange={() => handleDeliveryMethodChange(method.id)}
-                                className="mt-1.5 w-5 h-5 accent-white flex-shrink-0"
+                              <RadioGroupItem
+                                value={method.id}
+                                id={`delivery-${method.id}`}
+                                className="mt-1.5 flex-shrink-0"
                               />
                               <div className="flex-1 min-w-0">
-                                <div className="flex items-center justify-between gap-3 mb-2">
-                                  <div className="flex items-center gap-3">
-                                    <div className={`transition-colors ${
-                                      deliveryForm.method === method.id ? 'text-white' : 'text-gray-400 group-hover:text-gray-300'
-                                    }`}>
-                                      {icons[method.id]}
-                                    </div>
-                                    <div className={`text-base sm:text-lg md:text-xl font-semibold transition-colors ${
-                                      deliveryForm.method === method.id ? 'text-white' : 'text-gray-200 group-hover:text-white'
-                                    }`}>
-                                      {method.name}
+                                <label
+                                  htmlFor={`delivery-${method.id}`}
+                                  className="cursor-pointer"
+                                >
+                                  <div className="flex items-center justify-between gap-3 mb-2">
+                                    <div className="flex items-center gap-3">
+                                      <div className={`transition-colors ${
+                                        deliveryForm.method === method.id ? 'text-white' : 'text-gray-400 group-hover:text-gray-300'
+                                      }`}>
+                                        {icons[method.id]}
+                                      </div>
+                                      <div className={`text-base sm:text-lg md:text-xl font-semibold transition-colors ${
+                                        deliveryForm.method === method.id ? 'text-white' : 'text-gray-200 group-hover:text-white'
+                                      }`}>
+                                        {method.name}
+                                      </div>
                                     </div>
                                   </div>
-                                </div>
-                                <div className="text-xs sm:text-sm text-gray-400 leading-relaxed mb-3">
-                                  {method.description}
-                                </div>
+                                  <div className="text-xs sm:text-sm text-gray-400 leading-relaxed mb-3">
+                                    {method.description}
+                                  </div>
+                                </label>
                                 {deliveryForm.method === method.id && (
                                   <div className="mt-4 pt-4 border-t border-white/10">
                                     <div className="flex items-start gap-3">
@@ -433,15 +491,15 @@ const CheckoutPage: React.FC = () => {
                                         onClick={(e) => e.stopPropagation()}
                                         className="mt-1 w-4 h-4 sm:w-5 sm:h-5 accent-white flex-shrink-0"
                                       />
-                                      <label 
-                                        htmlFor={`insurance-${method.id}`} 
+                                      <label
+                                        htmlFor={`insurance-${method.id}`}
                                         className="text-xs sm:text-sm text-gray-300 cursor-pointer flex-1"
                                         onClick={(e) => e.stopPropagation()}
                                       >
                                         Страховка ({deliveryForm.withInsurance ? method.priceWithInsurance : method.priceWithoutInsurance} ₽)
                                         <span className="block text-gray-500 mt-1">
-                                          {deliveryForm.withInsurance 
-                                            ? 'Посылка застрахована' 
+                                          {deliveryForm.withInsurance
+                                            ? 'Посылка застрахована'
                                             : 'Без страховки'}
                                         </span>
                                       </label>
@@ -453,7 +511,7 @@ const CheckoutPage: React.FC = () => {
                           </div>
                         );
                       })}
-                    </div>
+                    </RadioGroup>
 
                     {/* Поля адреса */}
                     <div className="mt-5 sm:mt-6 space-y-3 sm:space-y-4 md:space-y-5">

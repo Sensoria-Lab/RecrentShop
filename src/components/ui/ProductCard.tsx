@@ -1,7 +1,7 @@
 import React from 'react';
 import StarRating from '../shared/StarRating';
 import { useCart } from '../../context/CartContext';
-import { useToast } from '../../context/ToastContext';
+import { toast } from 'sonner';
 import Img from '../shared/Img';
 import { Button } from '../../shared/ui';
 
@@ -50,7 +50,6 @@ const ProductCard: React.FC<ProductCardProps> = ({
   staggerIndex = 0
 }) => {
   const { addItem } = useCart();
-  const { success } = useToast();
   
   const sizeClasses = {
     small: {
@@ -140,7 +139,9 @@ const ProductCard: React.FC<ProductCardProps> = ({
     
     // Show success toast
     const productName = subtitle ? `${title} ${subtitle}` : title;
-    success(`${productName} добавлен в корзину! 🛒`);
+    toast.success(`${productName} добавлен в корзину!`, {
+      description: `Количество: 1 шт.`,
+    });
   };
 
   // Различные стили для каталога и других страниц

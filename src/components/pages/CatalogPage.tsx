@@ -4,6 +4,7 @@ import PageContainer from '../shared/PageContainer';
 import { useProductFilters, useProductNavigation } from '../../hooks';
 import { API_CONFIG } from '../../constants/config';
 import { ALL_PRODUCTS } from '../../data/products';
+import { RadioGroup, RadioGroupItem } from '../../shared/ui';
 import type {
   SortOption,
   CategoryFilter,
@@ -213,83 +214,77 @@ const CatalogPage: React.FC = () => {
                   {/* Size Filter */}
                   <div className="mb-4 sm:mb-6">
                     <label className="text-white/80 font-manrope text-xs sm:text-sm mb-2 block">Размер</label>
-                    
-                    {/* All sizes option */}
-                    <label className="flex items-center gap-2 cursor-pointer group mb-3">
-                      <input
-                        type="radio"
-                        name="size-filter"
-                        value="all"
-                        checked={sizeFilter === 'all'}
-                        onChange={(e) => setSizeFilter(e.target.value as SizeFilter)}
-                        className="w-4 h-4 accent-white"
-                      />
-                      <span className="text-white/70 font-manrope text-sm sm:text-base group-hover:text-white transition-colors font-semibold">
-                        Все размеры
-                      </span>
-                    </label>
 
-                    {/* Size options container */}
-                    <div className="mt-3">
-                      {/* Mousepad sizes */}
-                      {categoryFilter !== 'clothing' && (
-                        <div className="transition-opacity duration-200">
-                        <p className="text-white/60 font-manrope text-xs mb-2 uppercase tracking-wider">Коврики для мыши:</p>
-                        <div className="space-y-2 pl-2">
-                          {[
-                            { value: 'L-pad', label: 'L', desc: '450x400 мм' },
-                            { value: 'XL-pad', label: 'XL', desc: '900x400 мм' }
-                          ].map(option => (
-                            <label key={option.value} className="flex items-center gap-2 cursor-pointer group">
-                              <input
-                                type="radio"
-                                name="size-filter"
-                                value={option.value}
-                                checked={sizeFilter === option.value}
-                                onChange={(e) => setSizeFilter(e.target.value as SizeFilter)}
-                                className="w-4 h-4 accent-white"
-                              />
-                              <span className="text-white/70 font-manrope text-sm group-hover:text-white transition-colors">
-                                <span className="font-semibold">{option.label}</span>
-                                <span className="text-xs text-white/50 ml-2">({option.desc})</span>
-                              </span>
-                            </label>
-                          ))}
-                        </div>
-                        </div>
-                      )}
+                    <RadioGroup
+                      value={sizeFilter}
+                      onValueChange={(value) => setSizeFilter(value as SizeFilter)}
+                      className="space-y-3"
+                    >
+                      {/* All sizes option */}
+                      <div className="flex items-center gap-2">
+                        <RadioGroupItem value="all" id="size-all" />
+                        <label
+                          htmlFor="size-all"
+                          className="text-white/70 font-manrope text-sm sm:text-base hover:text-white transition-colors font-semibold cursor-pointer"
+                        >
+                          Все размеры
+                        </label>
+                      </div>
 
-                      {/* Clothing sizes */}
-                      {categoryFilter !== 'mousepads' && (
-                        <div className="transition-opacity duration-200">
-                        <p className="text-white/60 font-manrope text-xs mb-2 uppercase tracking-wider">Одежда:</p>
-                        <div className="space-y-2 pl-2">
-                          {[
-                            { value: 'XS-cloth', label: 'XS' },
-                            { value: 'S-cloth', label: 'S' },
-                            { value: 'M-cloth', label: 'M' },
-                            { value: 'L-cloth', label: 'L' },
-                            { value: 'XL-cloth', label: 'XL' },
-                            { value: '2XL-cloth', label: '2XL' }
-                          ].map(option => (
-                            <label key={option.value} className="flex items-center gap-2 cursor-pointer group">
-                              <input
-                                type="radio"
-                                name="size-filter"
-                                value={option.value}
-                                checked={sizeFilter === option.value}
-                                onChange={(e) => setSizeFilter(e.target.value as SizeFilter)}
-                                className="w-4 h-4 accent-white"
-                              />
-                              <span className="text-white/70 font-manrope text-sm group-hover:text-white transition-colors">
-                                {option.label}
-                              </span>
-                            </label>
-                          ))}
-                        </div>
-                        </div>
-                      )}
-                    </div>
+                      {/* Size options container */}
+                      <div className="mt-3 space-y-4">
+                        {/* Mousepad sizes */}
+                        {categoryFilter !== 'clothing' && (
+                          <div className="transition-opacity duration-200">
+                            <p className="text-white/60 font-manrope text-xs mb-2 uppercase tracking-wider">Коврики для мыши:</p>
+                            <div className="space-y-2 pl-2">
+                              {[
+                                { value: 'L-pad', label: 'L', desc: '450x400 мм' },
+                                { value: 'XL-pad', label: 'XL', desc: '900x400 мм' }
+                              ].map(option => (
+                                <div key={option.value} className="flex items-center gap-2">
+                                  <RadioGroupItem value={option.value} id={`size-${option.value}`} />
+                                  <label
+                                    htmlFor={`size-${option.value}`}
+                                    className="text-white/70 font-manrope text-sm hover:text-white transition-colors cursor-pointer"
+                                  >
+                                    <span className="font-semibold">{option.label}</span>
+                                    <span className="text-xs text-white/50 ml-2">({option.desc})</span>
+                                  </label>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Clothing sizes */}
+                        {categoryFilter !== 'mousepads' && (
+                          <div className="transition-opacity duration-200">
+                            <p className="text-white/60 font-manrope text-xs mb-2 uppercase tracking-wider">Одежда:</p>
+                            <div className="space-y-2 pl-2">
+                              {[
+                                { value: 'XS-cloth', label: 'XS' },
+                                { value: 'S-cloth', label: 'S' },
+                                { value: 'M-cloth', label: 'M' },
+                                { value: 'L-cloth', label: 'L' },
+                                { value: 'XL-cloth', label: 'XL' },
+                                { value: '2XL-cloth', label: '2XL' }
+                              ].map(option => (
+                                <div key={option.value} className="flex items-center gap-2">
+                                  <RadioGroupItem value={option.value} id={`size-${option.value}`} />
+                                  <label
+                                    htmlFor={`size-${option.value}`}
+                                    className="text-white/70 font-manrope text-sm hover:text-white transition-colors cursor-pointer"
+                                  >
+                                    {option.label}
+                                  </label>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </RadioGroup>
                   </div>
 
                   {/* Price Range */}

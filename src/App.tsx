@@ -7,6 +7,7 @@ import BottomNavigation from './components/shared/BottomNavigation';
 import { CartProvider } from './context/CartContext';
 import { ToastProvider } from './context/ToastContext';
 import ShadcnBubble from './components/shared/ShadcnBubble';
+import { Toaster } from './shared/ui';
 
 const MainPage = lazy(() => import('./components/pages/MainPage'));
 const ProductPage = lazy(() => import('./components/pages/ProductPage'));
@@ -53,6 +54,9 @@ function App() {
 
             {/* Mobile Bottom Navigation */}
             <BottomNavigation />
+
+            {/* Sonner Toaster */}
+            <Toaster />
           </div>
         </CartProvider>
       </ToastProvider>

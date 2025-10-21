@@ -3,6 +3,7 @@ import PageContainer from '../shared/PageContainer';
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '../../constants/routes';
 import type { Review } from '../../data/reviews';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../shared/ui';
 
 /**
  * Account Page Component
@@ -10,7 +11,6 @@ import type { Review } from '../../data/reviews';
  */
 const AccountPage: React.FC = () => {
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState<'profile' | 'orders' | 'reviews' | 'settings'>('orders');
   const [editingReview, setEditingReview] = useState<string | null>(null);
 
   // Mock user data - replace with real auth context
@@ -135,102 +135,86 @@ const AccountPage: React.FC = () => {
               <div className="w-24 sm:w-32 h-0.5 sm:h-1 bg-white/40 mx-auto"></div>
             </div>
 
-            {/* Main Content */}
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8">
+            {/* Main Content with Tabs */}
+            <Tabs defaultValue="orders" className="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8">
               {/* Sidebar Navigation */}
               <div className="lg:col-span-3 scroll-fade-in scroll-fade-in-delay-1">
                 <div className="bg-black/40 border border-white/10 rounded-2xl p-4 md:p-6">
                   <div className="flex items-center gap-4 mb-6 pb-6 border-b border-white/10">
-                  <div className="w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
-                    <svg 
-                      width="32" 
-                      height="32" 
-                      viewBox="0 0 24 24" 
-                      fill="none" 
-                      stroke="white" 
-                      strokeWidth="2" 
-                      strokeLinecap="round" 
-                      strokeLinejoin="round"
+                    <div className="w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
+                      <svg
+                        width="32"
+                        height="32"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="white"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                        <circle cx="12" cy="7" r="4"/>
+                      </svg>
+                    </div>
+                    <div>
+                      <h2 className="text-white font-manrope font-bold text-lg">{user.name}</h2>
+                      <p className="text-white/60 text-sm">{user.email}</p>
+                    </div>
+                  </div>
+
+                  <TabsList className="flex flex-col space-y-2 bg-transparent h-auto p-0">
+                    <TabsTrigger
+                      value="profile"
+                      className="w-full justify-start data-[state=active]:bg-white/10 data-[state=active]:text-white text-white/60 hover:text-white hover:bg-white/5 font-manrope font-medium text-sm px-4 py-3 rounded-xl transition-all duration-300"
                     >
-                      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-                      <circle cx="12" cy="7" r="4"/>
-                    </svg>
-                  </div>
-                  <div>
-                    <h2 className="text-white font-manrope font-bold text-lg">{user.name}</h2>
-                    <p className="text-white/60 text-sm">{user.email}</p>
-                  </div>
-                </div>
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="mr-3">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                        <circle cx="12" cy="7" r="4"/>
+                      </svg>
+                      Профиль
+                    </TabsTrigger>
 
-                <nav className="space-y-2">
-                  <button
-                    onClick={() => setActiveTab('profile')}
-                    className={`w-full text-left font-manrope font-medium text-sm px-4 py-3 rounded-xl transition-all duration-300 focus:outline-none flex items-center gap-3 ${
-                      activeTab === 'profile'
-                        ? 'text-white bg-white/10'
-                        : 'text-white/60 hover:text-white hover:bg-white/5'
-                    }`}
-                  >
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-                      <circle cx="12" cy="7" r="4"/>
-                    </svg>
-                    Профиль
-                  </button>
+                    <TabsTrigger
+                      value="orders"
+                      className="w-full justify-start data-[state=active]:bg-white/10 data-[state=active]:text-white text-white/60 hover:text-white hover:bg-white/5 font-manrope font-medium text-sm px-4 py-3 rounded-xl transition-all duration-300"
+                    >
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="mr-3">
+                        <rect x="3" y="3" width="18" height="18" rx="2"/>
+                        <path d="M9 3v18M3 9h18M3 15h18"/>
+                      </svg>
+                      Заказы
+                    </TabsTrigger>
 
-                  <button
-                    onClick={() => setActiveTab('orders')}
-                    className={`w-full text-left font-manrope font-medium text-sm px-4 py-3 rounded-xl transition-all duration-300 focus:outline-none flex items-center gap-3 ${
-                      activeTab === 'orders'
-                        ? 'text-white bg-white/10'
-                        : 'text-white/60 hover:text-white hover:bg-white/5'
-                    }`}
-                  >
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <rect x="3" y="3" width="18" height="18" rx="2"/>
-                      <path d="M9 3v18M3 9h18M3 15h18"/>
-                    </svg>
-                    Заказы
-                  </button>
+                    <TabsTrigger
+                      value="reviews"
+                      className="w-full justify-start data-[state=active]:bg-white/10 data-[state=active]:text-white text-white/60 hover:text-white hover:bg-white/5 font-manrope font-medium text-sm px-4 py-3 rounded-xl transition-all duration-300"
+                    >
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="mr-3">
+                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                      </svg>
+                      Отзывы
+                    </TabsTrigger>
 
-                  <button
-                    onClick={() => setActiveTab('reviews')}
-                    className={`w-full text-left font-manrope font-medium text-sm px-4 py-3 rounded-xl transition-all duration-300 focus:outline-none flex items-center gap-3 ${
-                      activeTab === 'reviews'
-                        ? 'text-white bg-white/10'
-                        : 'text-white/60 hover:text-white hover:bg-white/5'
-                    }`}
-                  >
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
-                    </svg>
-                    Отзывы
-                  </button>
-
-                  <button
-                    onClick={() => setActiveTab('settings')}
-                    className={`w-full text-left font-manrope font-medium text-sm px-4 py-3 rounded-xl transition-all duration-300 focus:outline-none flex items-center gap-3 ${
-                      activeTab === 'settings'
-                        ? 'text-white bg-white/10'
-                        : 'text-white/60 hover:text-white hover:bg-white/5'
-                    }`}
-                  >
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <circle cx="12" cy="12" r="3"/>
-                      <path d="M12 1v6m0 6v6M5.6 5.6l4.2 4.2m4.2 4.2l4.2 4.2M1 12h6m6 0h6M5.6 18.4l4.2-4.2m4.2-4.2l4.2-4.2"/>
-                    </svg>
-                    Настройки
-                  </button>
-                  </nav>
+                    <TabsTrigger
+                      value="settings"
+                      className="w-full justify-start data-[state=active]:bg-white/10 data-[state=active]:text-white text-white/60 hover:text-white hover:bg-white/5 font-manrope font-medium text-sm px-4 py-3 rounded-xl transition-all duration-300"
+                    >
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="mr-3">
+                        <circle cx="12" cy="12" r="3"/>
+                        <path d="M12 1v6m0 6v6M5.6 5.6l4.2 4.2m4.2 4.2l4.2 4.2M1 12h6m6 0h6M5.6 18.4l4.2-4.2m4.2-4.2l4.2-4.2"/>
+                      </svg>
+                      Настройки
+                    </TabsTrigger>
+                  </TabsList>
                 </div>
               </div>
 
               {/* Main Content Area */}
               <div className="lg:col-span-9 scroll-fade-in scroll-fade-in-delay-2">
                 <div className="bg-black/40 border border-white/10 rounded-2xl p-6 md:p-8">
-                {/* Profile Tab */}
-                {activeTab === 'profile' && (
-                  <div className="space-y-6">
+                  {/* Profile Tab Content */}
+                  <TabsContent value="profile" className="mt-0">
+                    <div className="space-y-6">
                     <h2 className="text-white font-manrope font-bold text-2xl md:text-3xl mb-6">
                       Личные данные
                     </h2>
@@ -285,12 +269,12 @@ const AccountPage: React.FC = () => {
                         Отмена
                       </button>
                     </div>
-                  </div>
-                )}
+                    </div>
+                  </TabsContent>
 
-                {/* Orders Tab */}
-                {activeTab === 'orders' && (
-                  <div className="space-y-6">
+                  {/* Orders Tab Content */}
+                  <TabsContent value="orders" className="mt-0">
+                    <div className="space-y-6">
                     <h2 className="text-white font-manrope font-bold text-2xl md:text-3xl mb-6">
                       Мои заказы
                     </h2>
@@ -397,12 +381,12 @@ const AccountPage: React.FC = () => {
                         </button>
                       </div>
                     )}
-                  </div>
-                )}
+                    </div>
+                  </TabsContent>
 
-                {/* Reviews Tab */}
-                {activeTab === 'reviews' && (
-                  <div className="space-y-6">
+                  {/* Reviews Tab Content */}
+                  <TabsContent value="reviews" className="mt-0">
+                    <div className="space-y-6">
                     <h2 className="text-white font-manrope font-bold text-2xl md:text-3xl mb-6">
                       Мои отзывы
                     </h2>
@@ -541,20 +525,19 @@ const AccountPage: React.FC = () => {
                         <p className="text-white/40 text-sm mb-6">
                           Оставьте отзыв на товар, который вы приобрели
                         </p>
-                        <button
-                          onClick={() => setActiveTab('orders')}
-                          className="btn-primary hover:scale-105 transition-transform"
-                        >
-                          Посмотреть заказы
-                        </button>
+                        <TabsTrigger value="orders" asChild>
+                          <button className="btn-primary hover:scale-105 transition-transform">
+                            Посмотреть заказы
+                          </button>
+                        </TabsTrigger>
                       </div>
                     )}
-                  </div>
-                )}
+                    </div>
+                  </TabsContent>
 
-                {/* Settings Tab */}
-                {activeTab === 'settings' && (
-                  <div className="space-y-6">
+                  {/* Settings Tab Content */}
+                  <TabsContent value="settings" className="mt-0">
+                    <div className="space-y-6">
                     <h2 className="text-white font-manrope font-bold text-2xl md:text-3xl mb-6">
                       Настройки
                     </h2>
@@ -612,11 +595,11 @@ const AccountPage: React.FC = () => {
                         </button>
                       </div>
                     </div>
-                  </div>
-                  )}
+                    </div>
+                  </TabsContent>
                 </div>
               </div>
-            </div>
+            </Tabs>
           </div>
         </div>
       </div>
