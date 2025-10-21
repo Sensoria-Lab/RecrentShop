@@ -14,7 +14,6 @@ import {
   ProductCreateRequest,
   ProductUpdateRequest
 } from '../types/content';
-import { Product } from '../types/product';
 import {
   SITE_CONTENT,
   getAllProducts,
@@ -33,6 +32,7 @@ const API_CONFIG = {
 /**
  * Базовый HTTP клиент (для будущего использования)
  */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 class ApiClient {
   private baseUrl: string;
 
@@ -127,7 +127,8 @@ class ApiClient {
   }
 }
 
-const apiClient = new ApiClient(API_CONFIG.baseUrl);
+// apiClient is reserved for future real HTTP requests (kept for reference)
+// const apiClient = new ApiClient(API_CONFIG.baseUrl);
 
 /**
  * Products API

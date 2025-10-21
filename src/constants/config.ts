@@ -1,7 +1,4 @@
-﻿/**
- * Application Configuration
- */
-
+/* Application Configuration (clean file without BOM) */
 export const SITE_CONFIG = {
   name: 'RECRENT SHOP',
   description: 'Коврики для мыши и одежда премиум качества',

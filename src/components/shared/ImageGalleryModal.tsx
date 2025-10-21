@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Img from '../shared/Img';
 
 interface ImageGalleryModalProps {
@@ -22,12 +22,24 @@ const ImageGalleryModal: React.FC<ImageGalleryModalProps> = ({
     setCurrentIndex(initialIndex);
   }, [initialIndex, isOpen]);
 
+  const goToNext = useCallback(() => {
+    setCurrentIndex((prev) => (prev + 1) % images.length);
+  }, [images.length]);
+
+  const goToPrevious = useCallback(() => {
+    setCurrentIndex((prev) => (prev - 1 + images.length) % images.length);
+  }, [images.length]);
+
+  const handleClose = useCallback(() => {
+    onClose();
+  }, [onClose]);
+
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (!isOpen) return;
-      
+
       if (e.key === 'Escape') {
-        onClose();
+        handleClose();
       } else if (e.key === 'ArrowLeft') {
         goToPrevious();
       } else if (e.key === 'ArrowRight') {
@@ -37,15 +49,9 @@ const ImageGalleryModal: React.FC<ImageGalleryModalProps> = ({
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen, currentIndex]);
+  }, [isOpen, goToNext, goToPrevious, handleClose]);
 
-  const goToNext = () => {
-    setCurrentIndex((prev) => (prev + 1) % images.length);
-  };
-
-  const goToPrevious = () => {
-    setCurrentIndex((prev) => (prev - 1 + images.length) % images.length);
-  };
+  // Handlers defined above with stable identity (useCallback)
 
   if (!isOpen) return null;
 

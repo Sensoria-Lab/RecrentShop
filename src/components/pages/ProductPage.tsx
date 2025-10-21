@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom';
 import SelectorGroup from '../ui/SelectorGroup';
 import Header from '../shared/Header';
 import Footer from '../shared/Footer';
+import Breadcrumbs from '../shared/Breadcrumbs';
 import DecryptedText from '../shared/DecryptedText';
 import Img from '../shared/Img';
 import StarRating from '../shared/StarRating';
@@ -174,21 +175,32 @@ const ProductPage: React.FC = () => {
     <div className="relative min-h-screen w-full overflow-hidden">
       {/* Main layout container */}
       <div className="relative z-10 min-h-screen flex flex-col">
-        {/* Header */}
-        <div className="flex justify-center px-4 sm:px-8 md:px-12 py-4 sticky top-0 z-50">
-          <div className="max-w-[900px] w-full">
-            <Header />
+        {/* Header - absolute at top */}
+        <div className="absolute top-0 left-0 right-0 z-[9999]">
+          <div className="relative">
+            {/* Glow effect behind header */}
+            <div className="absolute inset-0 bg-gradient-to-b from-white/10 via-purple-500/5 to-transparent blur-3xl" />
+
+            <div className="relative">
+              <Header />
+            </div>
           </div>
         </div>
 
         {/* Main content with increased padding */}
-        <main className="flex-1 px-3 sm:px-6 md:px-10 lg:px-20 py-4 sm:py-6 md:py-10 max-w-[1400px] mx-auto w-full">
+        <main className="flex-1 px-3 sm:px-6 md:px-10 lg:px-20 pt-20 pb-4 sm:pb-6 md:pb-10 max-w-[1400px] mx-auto w-full">
           {/* Product section */}
-          <div className="panel panel-strong mb-4 sm:mb-6 md:mb-10 p-6 sm:p-8 md:p-10 lg:p-12 scroll-fade-in">
-            <div className="flex flex-col lg:flex-row gap-4 sm:gap-6 md:gap-10 lg:gap-14 items-start justify-between">
+          <div className="bg-black/40 border border-white/20 rounded-lg sm:rounded-xl mb-4 sm:mb-6 md:mb-10 scroll-fade-in">
+            {/* Breadcrumbs - aligned with padding */}
+            <div className="px-6 sm:px-8 md:px-10 lg:px-12 pt-6 sm:pt-8 md:pt-10 lg:pt-12 pb-3 sm:pb-4">
+              <Breadcrumbs />
+            </div>
+
+            <div className="px-6 sm:px-8 md:px-10 lg:px-12 pb-6 sm:pb-8 md:pb-10 lg:pb-12">
+              <div className="flex flex-col lg:flex-row gap-4 sm:gap-6 md:gap-10 lg:gap-14 items-start justify-between">
               {/* Product images - top on mobile, right on desktop */}
               <div className="flex-shrink-0 w-full lg:w-[580px] lg:order-2 lg:h-full">
-                <div className="bg-white/5 rounded-lg sm:rounded-xl p-3 sm:p-5 md:p-7 h-full flex flex-col">
+                <div className="bg-black/40 rounded-lg sm:rounded-xl p-3 sm:p-5 md:p-7 h-full flex flex-col border border-white/10">
                   {/* Main image with navigation arrows */}
                   <div className="mb-3 sm:mb-5 md:mb-7 relative flex items-center">
                     {/* Left arrow - outside image */}
@@ -416,12 +428,13 @@ const ProductPage: React.FC = () => {
                 </div>
               </div>
             </div>
+            </div>
           </div>
 
           {/* Specifications */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-5 md:gap-7 mb-3 sm:mb-5 md:mb-7 lg:items-stretch">
             {/* Description */}
-            <div className="panel flex flex-col p-6 sm:p-7 md:p-8 lg:h-[320px]">
+            <div className="bg-black/40 border border-white/20 rounded-lg sm:rounded-xl flex flex-col p-6 sm:p-7 md:p-8 lg:h-[320px]">
               <h3 className="text-white font-manrope font-semibold text-base sm:text-lg md:text-xl mb-2 sm:mb-3">Описание</h3>
               <div className="w-16 sm:w-20 md:w-24 h-px bg-gradient-to-r from-white/10 to-transparent mb-3 sm:mb-4"></div>
               <div 
@@ -463,7 +476,7 @@ const ProductPage: React.FC = () => {
             </div>
 
             {/* Specifications & Dimensions Combined */}
-            <div className="panel p-6 sm:p-7 md:p-8 lg:h-[320px] flex flex-col">
+            <div className="bg-black/40 border border-white/20 rounded-lg sm:rounded-xl p-6 sm:p-7 md:p-8 lg:h-[320px] flex flex-col">
               <h3 className="text-white font-manrope font-semibold text-base sm:text-lg md:text-xl mb-2 sm:mb-3">
                 Характеристики {!isClothingProduct && '& Размеры'}
               </h3>
@@ -552,7 +565,7 @@ const ProductPage: React.FC = () => {
           </div>
 
           {/* Reviews */}
-          <div className="panel p-6 sm:p-8 md:p-10 scroll-fade-in scroll-fade-in-delay-1">
+          <div className="bg-black/40 border border-white/20 rounded-lg sm:rounded-xl p-6 sm:p-8 md:p-10 scroll-fade-in scroll-fade-in-delay-1">
             <h3 className="text-white font-manrope font-bold text-lg sm:text-xl md:text-2xl mb-4 sm:mb-5 text-center">Отзывы</h3>
 
             <div className="space-y-3 sm:space-y-4">
@@ -583,7 +596,7 @@ const ProductPage: React.FC = () => {
 
           {/* Similar Products Section */}
           {similarProducts.length > 0 && (
-            <div className="panel p-6 sm:p-8 md:p-10 mt-3 sm:mt-5 md:mt-7 scroll-fade-in scroll-fade-in-delay-2">
+            <div className="bg-black/40 border border-white/20 rounded-lg sm:rounded-xl p-6 sm:p-8 md:p-10 mt-3 sm:mt-5 md:mt-7 scroll-fade-in scroll-fade-in-delay-2">
               <div className="mb-4 sm:mb-5">
                 <h3 className="text-white font-manrope font-bold text-lg sm:text-xl md:text-2xl mb-2 sm:mb-3">
                   Похожие товары
@@ -635,7 +648,7 @@ const ProductPage: React.FC = () => {
             </h2>
             
             {/* Size Chart Image */}
-            <div className="bg-white/5 rounded-xl overflow-hidden border border-white/10">
+            <div className="bg-black/40 rounded-xl overflow-hidden border border-white/10">
               <Img
                 src="/images/size-chart.png"
                 alt="Таблица размеров одежды"
@@ -675,7 +688,7 @@ const ProductPage: React.FC = () => {
               Описание товара
             </h2>
             
-            <div className="bg-white/5 rounded-xl p-4 sm:p-6 border border-white/10">
+            <div className="bg-black/40 rounded-xl p-4 sm:p-6 border border-white/10">
               <div className="text-white/90 font-manrope font-normal text-sm sm:text-base leading-relaxed space-y-3 whitespace-pre-line">
                 {fullDescription}
               </div>

@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import ProductCard from '../ui/ProductCard';
-import Breadcrumbs from '../shared/Breadcrumbs';
 import PageContainer from '../shared/PageContainer';
 import { useProductFilters, useProductNavigation } from '../../hooks';
 import { API_CONFIG } from '../../constants/config';
@@ -21,7 +20,7 @@ const CatalogPage: React.FC = () => {
   const categoryButtonRefs = useRef<{ [key: string]: HTMLButtonElement | null }>({});
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
-  const [itemsToShow, setItemsToShow] = useState(9); // Show 9 items initially (3x3 grid)
+  const [itemsToShow, setItemsToShow] = useState(12); // Show 12 items initially (3 rows × 4 cols on wide screens)
 
   // Filter states
   const [sortBy, setSortBy] = useState<SortOption>('popularity');
@@ -112,26 +111,21 @@ const CatalogPage: React.FC = () => {
   // Reset visible items and pagination when filters change
   useEffect(() => {
     setVisibleItems(new Set());
-    setItemsToShow(9); // Reset to initial 9 items
+    setItemsToShow(12); // Reset to initial 12 items
   }, [sortBy, categoryFilter, colorFilter, sizeFilter, clothingTypeFilter, priceRange, minRating]);
 
   // Load more items
   const loadMoreItems = () => {
-    setItemsToShow(prev => prev + 9); // Load 9 more items
+    setItemsToShow(prev => prev + 12); // Load 12 more items (3 rows)
   };
 
   return (
     <PageContainer>
           <div className="max-w-[1800px] mx-auto">
-            {/* Background container */}
-            <div className="panel">
-            {/* Breadcrumbs */}
-            <div className="pt-6 px-4 sm:px-6 md:px-8">
-              <Breadcrumbs />
-            </div>
-            
-            {/* Page Title */}
-              <div className="text-center mb-4 sm:mb-6 md:mb-8 lg:mb-10 pt-4 sm:pt-6 scroll-fade-in">
+            {/* Content container without background */}
+            <div className="pt-4 sm:pt-6">
+            {/* Page Title - centered */}
+            <div className="text-center mb-4 sm:mb-6 md:mb-8 lg:mb-10 scroll-fade-in scroll-fade-in-delay-1">
               <h1 className="text-white font-manrope font-bold text-2xl sm:text-3xl md:text-4xl lg:text-5xl mb-2 sm:mb-3 md:mb-4 drop-shadow-[0_4px_12px_rgba(0,0,0,0.9)]">
                 Каталог товаров
               </h1>
@@ -140,7 +134,7 @@ const CatalogPage: React.FC = () => {
 
             {/* Category Filter - moved here */}
             <div className="mb-4 sm:mb-6 md:mb-8 flex justify-center scroll-fade-in scroll-fade-in-delay-1 px-2">
-              <div className="relative inline-flex flex-wrap justify-center gap-1.5 sm:gap-2 md:gap-3 bg-white/5 backdrop-blur-sm border border-white/10 rounded-lg sm:rounded-xl p-1.5 sm:p-2">
+              <div className="relative inline-flex flex-wrap justify-center gap-1.5 sm:gap-2 md:gap-3 bg-white/8 border border-white/20 rounded-lg sm:rounded-xl p-1.5 sm:p-2">
                 {/* Animated background indicator */}
                 <div
                   className="absolute bg-white rounded-lg shadow-lg transition-all duration-300 ease-out z-0"
@@ -177,7 +171,7 @@ const CatalogPage: React.FC = () => {
             <div className="lg:hidden mb-3 sm:mb-4">
               <button
                 onClick={() => setFiltersOpen(!filtersOpen)}
-                className="w-full bg-white/5 backdrop-blur-sm text-white font-manrope font-semibold px-4 sm:px-6 py-2.5 sm:py-3 rounded-lg sm:rounded-xl border border-white/10 hover:bg-white/8 transition-all flex items-center justify-between text-sm sm:text-base"
+                className="w-full bg-black/40 text-white font-manrope font-semibold px-4 sm:px-6 py-2.5 sm:py-3 rounded-lg sm:rounded-xl border border-white/20 hover:bg-black/50 transition-all flex items-center justify-between text-sm sm:text-base"
               >
                 <span>Фильтры</span>
                 <svg 
@@ -197,7 +191,7 @@ const CatalogPage: React.FC = () => {
             <div className="flex flex-col lg:flex-row gap-3 sm:gap-4 md:gap-6 lg:gap-8">
               {/* Filters Sidebar */}
               <aside className={`lg:w-72 xl:w-80 w-full flex-shrink-0 ${filtersOpen ? 'block' : 'hidden lg:block'}`}>
-                <div className="panel lg:sticky lg:top-28 overflow-hidden">
+                <div className="bg-black/40 border border-white/20 rounded-lg sm:rounded-xl p-4 sm:p-5 md:p-6 lg:sticky lg:top-28 overflow-hidden">
                   <h2 className="text-white font-manrope font-bold text-base sm:text-lg md:text-xl mb-3 sm:mb-4 md:mb-6">Фильтры</h2>
                   
                   {/* Sort By */}
@@ -341,7 +335,7 @@ const CatalogPage: React.FC = () => {
                     {Array.from({ length: 9 }).map((_, index) => (
                       <div
                         key={index}
-                        className="bg-white/5 backdrop-blur-sm rounded-lg sm:rounded-xl p-2 sm:p-3 md:p-4 w-full max-w-[260px] sm:max-w-[300px] md:max-w-[320px] lg:max-w-[340px] flex flex-col border border-white/10 skeleton-shimmer"
+                        className="bg-white/8 rounded-lg sm:rounded-xl p-2 sm:p-3 md:p-4 w-full max-w-[260px] sm:max-w-[300px] md:max-w-[320px] lg:max-w-[340px] flex flex-col border border-white/20 skeleton-shimmer"
                       >
                         {/* Image skeleton */}
                         <div className="h-[150px] sm:h-[200px] md:h-[240px] lg:h-[280px] rounded-lg sm:rounded-xl mx-auto w-full bg-white/5 mb-3"></div>
@@ -418,7 +412,7 @@ const CatalogPage: React.FC = () => {
 
                     {/* Load More Button */}
                     {itemsToShow < filteredProducts.length && (
-                      <div className="mt-8 flex justify-center">
+                      <div className="mt-8 mb-16 flex justify-center">
                         <button
                           onClick={loadMoreItems}
                           className="bg-white/10 hover:bg-white/20 border border-white/30 hover:border-white/50 text-white font-manrope font-semibold px-8 py-3 rounded-lg transition-all duration-300 flex items-center gap-2 group"

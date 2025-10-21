@@ -50,45 +50,49 @@ const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ items, className = '' }) => {
 
   return (
     <nav
-      className={`flex items-center gap-2 text-sm font-medium ${className}`}
+      className={`flex items-center gap-2 text-xs sm:text-sm font-medium py-3 sm:py-4 ${className}`}
       aria-label="Breadcrumb"
     >
-      {breadcrumbs.map((crumb, index) => {
-        const isLast = index === breadcrumbs.length - 1;
-        
-        return (
-          <React.Fragment key={crumb.path}>
-            {index > 0 && (
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="text-white/30"
-              >
-                <polyline points="9 18 15 12 9 6" />
-              </svg>
-            )}
-            
-            {isLast ? (
-              <span className="text-white/90 font-semibold">
-                {crumb.label}
-              </span>
-            ) : (
-              <button
-                onClick={() => navigate(crumb.path)}
-                className="text-white/60 hover:text-white transition-colors duration-200 hover:underline decoration-white/40 underline-offset-4"
-              >
-                {crumb.label}
-              </button>
-            )}
-          </React.Fragment>
-        );
-      })}
+      <div className="flex items-center gap-2 flex-wrap">
+        {breadcrumbs.map((crumb, index) => {
+          const isLast = index === breadcrumbs.length - 1;
+
+          return (
+            <React.Fragment key={crumb.path}>
+              {index > 0 && (
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="text-white/30 flex-shrink-0"
+                >
+                  <polyline points="9 18 15 12 9 6" />
+                </svg>
+              )}
+
+              {isLast ? (
+                <span className="text-white font-semibold drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
+                  {crumb.label}
+                </span>
+              ) : (
+                <button
+                  onClick={() => navigate(crumb.path)}
+                  className="text-white/70 hover:text-white transition-colors duration-200 group flex items-center gap-1 drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]"
+                >
+                  <span className="group-hover:underline decoration-white/50 underline-offset-4">
+                    {crumb.label}
+                  </span>
+                </button>
+              )}
+            </React.Fragment>
+          );
+        })}
+      </div>
     </nav>
   );
 };

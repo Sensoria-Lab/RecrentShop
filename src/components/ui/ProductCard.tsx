@@ -79,10 +79,10 @@ const ProductCard: React.FC<ProductCardProps> = ({
     },
     'small-catalog': {
       container: 'w-[260px] sm:w-[300px] md:w-[320px] lg:w-[340px]',
-      image: 'h-[140px] sm:h-[180px] md:h-[220px] lg:h-[260px]',
+      image: 'h-[200px] sm:h-[240px] md:h-[280px] lg:h-[320px]',
       imageContainer: 'w-full',
       title: 'text-sm sm:text-sm md:text-base',
-      price: 'text-base sm:text-base md:text-lg',
+      price: 'text-lg sm:text-xl md:text-2xl',
       button: 'px-3 sm:px-3 md:px-4 py-2 sm:py-2 text-xs sm:text-xs min-h-[44px]'
     }
   };
@@ -148,8 +148,8 @@ const ProductCard: React.FC<ProductCardProps> = ({
   const staggerClass = staggerIndex > 0 && staggerIndex <= 8 ? `card-stagger card-stagger-${staggerIndex}` : '';
 
   const cardStyles = size === 'small-catalog'
-    ? `relative rounded-lg sm:rounded-xl p-2 sm:p-3 md:p-4 ${containerBase} flex flex-col cursor-pointer group bg-white/5 backdrop-blur-sm border border-white/10 hover:border-white/30 transition-all duration-300 hover-lift ${staggerClass}`
-    : `bg-white/5 backdrop-blur-sm rounded-lg sm:rounded-xl p-2 sm:p-3 md:p-4 ${containerBase} flex flex-col border border-white/10 shadow-2xl hover:shadow-white/10 hover:border-white/30 transition-all duration-300 hover:transform hover:scale-105 hover-lift ${onProductClick ? 'cursor-pointer' : ''} ${staggerClass}`;
+    ? `relative rounded-lg sm:rounded-xl p-2 sm:p-3 md:p-4 ${containerBase} flex flex-col cursor-pointer group bg-black/40 border border-white/20 hover:border-white/40 transition-all duration-300 hover-lift ${staggerClass}`
+    : `bg-black/40 rounded-lg sm:rounded-xl p-2 sm:p-3 md:p-4 ${containerBase} flex flex-col border border-white/20 shadow-2xl hover:shadow-white/10 hover:border-white/40 transition-all duration-300 hover:transform hover:scale-105 hover-lift ${onProductClick ? 'cursor-pointer' : ''} ${staggerClass}`;
 
 
   return (
@@ -164,11 +164,11 @@ const ProductCard: React.FC<ProductCardProps> = ({
       {/* Content wrapper with relative positioning */}
       <div className="relative z-10">
         {/* Product Image - with fixed height to prevent layout shift */}
-        <div className={`${classes.image} rounded-lg sm:rounded-xl mx-auto ${classes.imageContainer} ${size === 'small-catalog' ? 'bg-white/5 p-2 sm:p-3 transition-all duration-500' : 'rounded-lg overflow-hidden'} group/image flex items-center justify-center`}>
+  <div className={`${classes.image} rounded-lg sm:rounded-xl mx-auto ${classes.imageContainer} ${size === 'small-catalog' ? 'bg-white/8 p-2 sm:p-3 transition-all duration-500 overflow-hidden' : 'rounded-lg overflow-hidden'} group/image flex items-center justify-center`}>
           <Img
             src={image}
             alt={title}
-            className="w-full h-full object-contain"
+            className="w-full h-full object-contain object-center"
           />
         </div>
 

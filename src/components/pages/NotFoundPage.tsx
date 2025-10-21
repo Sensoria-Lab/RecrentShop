@@ -13,7 +13,7 @@ const NotFoundPage: React.FC = () => {
               <div className="w-32 h-1 bg-white/40 mx-auto"></div>
             </div>
             <div className="flex justify-center scroll-fade-in scroll-fade-in-delay-1">
-              <div className="panel panel-strong p-16 max-w-4xl w-full text-center overflow-hidden">
+              <div className="bg-black/40 border border-white/20 rounded-lg sm:rounded-xl p-16 max-w-4xl w-full text-center overflow-hidden">
                 <div className="space-y-10">
                   <p className="text-white/80 font-manrope font-medium text-2xl leading-relaxed max-w-2xl mx-auto">
                     Страница не найдена или была перемещена. Возможно, вы ошиблись в адресе. Вы можете вернуться назад или перейти на главную.

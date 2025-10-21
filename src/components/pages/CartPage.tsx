@@ -22,7 +22,7 @@ const CartPage: React.FC = () => {
       <div className="min-h-screen px-4 sm:px-6 md:px-8">
         <div className="max-w-7xl mx-auto">
           {/* Background container */}
-          <div className="panel panel-strong pt-8 sm:pt-12 md:pt-16">
+          <div className="bg-black/40 border border-white/20 rounded-lg sm:rounded-xl p-6 sm:p-8 md:p-10">
             {/* Page Title */}
             <div className="text-center mb-8 sm:mb-12 md:mb-16 scroll-fade-in">
               <h1 className="text-white font-manrope font-bold text-3xl sm:text-4xl md:text-5xl lg:text-6xl mb-3 sm:mb-4 drop-shadow-[0_4px_12px_rgba(0,0,0,0.9)]">
@@ -39,7 +39,7 @@ const CartPage: React.FC = () => {
           {items.length === 0 ? (
             /* Empty Cart State */
             <div className="flex flex-col items-center justify-center py-10 sm:py-16 md:py-20 scroll-fade-in scroll-fade-in-delay-1">
-                <div className="panel panel-strong max-w-2xl text-center w-full">
+                <div className="bg-black/40 border border-white/20 rounded-lg sm:rounded-xl p-6 sm:p-8 md:p-10 max-w-2xl text-center w-full">
                 {/* Shine effect */}
                 <div className="absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-transparent pointer-events-none" />
 
@@ -79,7 +79,7 @@ const CartPage: React.FC = () => {
                 {items.map((item) => (
                   <div
                     key={item.id}
-                    className="relative rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10 transition-all duration-300"
+                    className="relative rounded-2xl bg-black/40 border border-white/10 transition-all duration-300"
                   >
                     {/* Shine effect on hover */}
                     <div className="absolute inset-0 opacity-0 hover:opacity-100 transition-opacity duration-500 overflow-hidden rounded-2xl pointer-events-none">
@@ -180,7 +180,7 @@ const CartPage: React.FC = () => {
 
               {/* Order Summary - Right Column */}
               <div className="lg:col-span-1 scroll-fade-in scroll-fade-in-delay-2">
-                <div className="relative rounded-2xl sticky top-24 bg-white/5 backdrop-blur-sm border border-white/10">
+                <div className="relative rounded-2xl sticky top-24 bg-black/40 border border-white/10">
                   {/* Shine effect */}
                   <div className="absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-transparent pointer-events-none" />
 

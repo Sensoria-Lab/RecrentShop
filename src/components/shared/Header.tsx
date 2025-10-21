@@ -24,25 +24,27 @@ const Header: React.FC<HeaderProps> = ({ className = '', onNavigate }) => {
   const isActive = (target: string) => (target === '/' ? path === '/' : path.startsWith(target));
 
   return (
-    <header className={`relative bg-black/40 backdrop-blur-3xl rounded-xl sm:rounded-2xl px-3 sm:px-4 md:px-8 py-2 sm:py-3 md:py-5 shadow-xl shadow-black/30 ${className}`}>
-      <div className="flex items-center justify-between gap-2 sm:gap-3 md:gap-6">
+    <header className={`relative responsive-header ${className}`}>
+      <div className="relative flex items-center justify-between gap-2 sm:gap-3 md:gap-6 px-4 sm:px-8 md:px-12 lg:px-16 xl:px-20 py-0.5">
         {/* Left: Logo */}
         <div className="flex items-center gap-2 sm:gap-3 md:gap-4">
           <button
             onClick={() => navigate('/')}
-            className="relative w-10 h-10 sm:w-11 sm:h-11 md:w-12 md:h-12 cursor-pointer transition-all hover:scale-105 focus:outline-none group flex-shrink-0"
+            className="relative responsive-logo cursor-pointer transition-all duration-300 hover:scale-110 focus:outline-none group flex-shrink-0"
           >
             <Img
               src="/images/ui/logo.svg"
               alt="Logo"
-              className="relative w-full h-full object-contain drop-shadow-[0_0_16px_rgba(255,255,255,0.3)] group-hover:drop-shadow-[0_0_20px_rgba(255,255,255,0.5)] transition-all"
+              className="relative w-full h-full object-contain drop-shadow-[0_0_16px_rgba(255,255,255,0.3)] group-hover:drop-shadow-[0_0_28px_rgba(255,255,255,0.8)] transition-all duration-300"
             />
+            {/* Glow effect on hover */}
+            <div className="absolute inset-0 bg-white/0 group-hover:bg-white/5 rounded-full blur-xl transition-all duration-300" />
           </button>
 
           {/* Mobile menu button */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-lg hover:bg-white/10 transition-all focus:outline-none flex-shrink-0"
+            className="md:hidden flex items-center justify-center responsive-icon-btn rounded-lg hover:bg-white/10 transition-all focus:outline-none flex-shrink-0"
           >
             {mobileMenuOpen ? (
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="text-white/80">
@@ -63,39 +65,48 @@ const Header: React.FC<HeaderProps> = ({ className = '', onNavigate }) => {
         <div className="hidden md:flex items-center gap-0.5 lg:gap-1">
           <button
             onClick={() => go('catalog')}
-            className={`font-manrope font-bold text-xs md:text-sm lg:text-base px-2 md:px-3 lg:px-4 py-1.5 md:py-2 transition-all duration-200 focus:outline-none whitespace-nowrap ${
+            className={`relative font-manrope font-bold text-xs md:text-sm lg:text-base px-2 md:px-3 lg:px-4 py-1.5 md:py-2 rounded-lg transition-all duration-300 focus:outline-none whitespace-nowrap group ${
               isActive('/catalog')
-                ? 'text-white'
-                : 'text-white/90 hover:text-white'
+                ? 'text-white bg-white/10'
+                : 'text-white/70 hover:text-white hover:bg-white/5'
             }`}
           >
-            Каталог
+            <span className="relative z-10">Каталог</span>
+            {isActive('/catalog') && (
+              <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-3/4 h-0.5 bg-gradient-to-r from-transparent via-white to-transparent" />
+            )}
           </button>
 
           <div className="w-1 h-1 rounded-full bg-white/40 mx-0.5 lg:mx-1" />
 
           <button
             onClick={() => go('support')}
-            className={`font-manrope font-bold text-xs md:text-sm lg:text-base px-2 md:px-3 lg:px-4 py-1.5 md:py-2 transition-all duration-200 focus:outline-none whitespace-nowrap ${
+            className={`relative font-manrope font-bold text-xs md:text-sm lg:text-base px-2 md:px-3 lg:px-4 py-1.5 md:py-2 rounded-lg transition-all duration-300 focus:outline-none whitespace-nowrap group ${
               isActive('/support')
-                ? 'text-white'
-                : 'text-white/90 hover:text-white'
+                ? 'text-white bg-white/10'
+                : 'text-white/70 hover:text-white hover:bg-white/5'
             }`}
           >
-            Информация
+            <span className="relative z-10">Информация</span>
+            {isActive('/support') && (
+              <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-3/4 h-0.5 bg-gradient-to-r from-transparent via-white to-transparent" />
+            )}
           </button>
 
           <div className="w-1 h-1 rounded-full bg-white/40 mx-0.5 lg:mx-1" />
 
           <button
             onClick={() => navigate(ROUTES.ACCOUNT)}
-            className={`font-manrope font-bold text-xs md:text-sm lg:text-base px-2 md:px-3 lg:px-4 py-1.5 md:py-2 transition-all duration-200 focus:outline-none whitespace-nowrap ${
+            className={`relative font-manrope font-bold text-xs md:text-sm lg:text-base px-2 md:px-3 lg:px-4 py-1.5 md:py-2 rounded-lg transition-all duration-300 focus:outline-none whitespace-nowrap group ${
               isActive('/account')
-                ? 'text-white'
-                : 'text-white/90 hover:text-white'
+                ? 'text-white bg-white/10'
+                : 'text-white/70 hover:text-white hover:bg-white/5'
             }`}
           >
-            Аккаунт
+            <span className="relative z-10">Аккаунт</span>
+            {isActive('/account') && (
+              <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-3/4 h-0.5 bg-gradient-to-r from-transparent via-white to-transparent" />
+            )}
           </button>
 
           <div className="w-1 h-1 rounded-full bg-white/40 mx-0.5 lg:mx-1" />
@@ -103,17 +114,20 @@ const Header: React.FC<HeaderProps> = ({ className = '', onNavigate }) => {
           <button
             id="cart-button"
             onClick={() => navigate(ROUTES.CART)}
-            className={`font-manrope font-bold text-xs md:text-sm lg:text-base px-2 md:px-3 lg:px-4 py-1.5 md:py-2 transition-all duration-200 focus:outline-none whitespace-nowrap flex items-center gap-1.5 md:gap-2 ${
+            className={`relative font-manrope font-bold text-xs md:text-sm lg:text-base px-2 md:px-3 lg:px-4 py-1.5 md:py-2 rounded-lg transition-all duration-300 focus:outline-none whitespace-nowrap flex items-center gap-1.5 md:gap-2 group ${
               isActive('/cart')
-                ? 'text-white'
-                : 'text-white/90 hover:text-white'
+                ? 'text-white bg-white/10'
+                : 'text-white/70 hover:text-white hover:bg-white/5'
             }`}
           >
-            <span>Корзина</span>
+            <span className="relative z-10">Корзина</span>
             {getTotalItems > 0 && (
-              <span className="min-w-[18px] md:min-w-[20px] h-4 md:h-5 px-1 md:px-1.5 bg-white/20 text-white text-[10px] md:text-xs font-semibold rounded-full inline-flex items-center justify-center">
+              <span className="min-w-[18px] md:min-w-[20px] h-4 md:h-5 px-1 md:px-1.5 bg-gradient-to-br from-blue-500 to-blue-600 text-white text-[10px] md:text-xs font-semibold rounded-full inline-flex items-center justify-center shadow-lg shadow-blue-500/30 border border-white/20 animate-pulse">
                 {getTotalItems > 99 ? '99+' : getTotalItems}
               </span>
+            )}
+            {isActive('/cart') && (
+              <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-3/4 h-0.5 bg-gradient-to-r from-transparent via-white to-transparent" />
             )}
           </button>
         </div>
@@ -153,7 +167,7 @@ const Header: React.FC<HeaderProps> = ({ className = '', onNavigate }) => {
 
       {/* Mobile Navigation Menu */}
       {mobileMenuOpen && (
-        <nav className="md:hidden mt-4 pt-4 border-t border-white/10 space-y-2">
+        <nav className="relative md:hidden mt-4 pt-4 border-t border-white/10 space-y-2 px-4 sm:px-8 md:px-12 lg:px-16 xl:px-20">
           {MOBILE_NAV_ITEMS.map(({ path: targetPath, label }) => {
             const active = isActive(targetPath);
             return (
@@ -164,8 +178,8 @@ const Header: React.FC<HeaderProps> = ({ className = '', onNavigate }) => {
                   setMobileMenuOpen(false);
                 }}
                 className={`w-full text-left font-manrope font-semibold text-base px-4 py-3 rounded-xl transition-all duration-300 focus:outline-none ${
-                  active 
-                    ? 'text-white bg-white/10' 
+                  active
+                    ? 'text-white bg-white/10'
                     : 'text-white/60 hover:text-white hover:bg-white/5'
                 }`}
               >

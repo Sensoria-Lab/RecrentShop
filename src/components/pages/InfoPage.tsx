@@ -12,7 +12,7 @@ interface InfoCardProps {
 
 const InfoCard: React.FC<InfoCardProps> = ({ title, onClick, icon }) => (
   <div
-    className="relative rounded-lg sm:rounded-xl md:rounded-2xl cursor-pointer group bg-white/5 backdrop-blur-sm border border-white/10 hover:border-white/30 transition-all duration-300"
+    className="relative rounded-lg sm:rounded-xl md:rounded-2xl cursor-pointer group bg-black/40 border border-white/10 hover:border-white/30 transition-all duration-300"
     onClick={onClick}
   >
     {/* Shine effect on hover */}
@@ -23,7 +23,7 @@ const InfoCard: React.FC<InfoCardProps> = ({ title, onClick, icon }) => (
     {/* Content */}
     <div className="relative p-3 sm:p-4 md:p-6 lg:p-7 flex items-center gap-2 sm:gap-3 md:gap-5 lg:gap-6">
       {/* Icon container */}
-      <div className="flex-shrink-0 w-9 h-9 sm:w-10 sm:h-10 md:w-12 md:h-12 lg:w-14 lg:h-14 rounded-md sm:rounded-lg md:rounded-xl bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-sm flex items-center justify-center border border-white/10 group-hover:scale-110 group-hover:border-white/20 transition-all duration-300">
+      <div className="flex-shrink-0 w-9 h-9 sm:w-10 sm:h-10 md:w-12 md:h-12 lg:w-14 lg:h-14 rounded-md sm:rounded-lg md:rounded-xl bg-gradient-to-br from-white/10 to-white/5 flex items-center justify-center border border-white/10 group-hover:scale-110 group-hover:border-white/20 transition-all duration-300">
         <div className="text-white/90 group-hover:text-white transition-colors scale-75 sm:scale-90 md:scale-100">
           {icon}
         </div>
@@ -139,7 +139,7 @@ const InfoPage: React.FC = () => {
     <PageLayout>
       <div className="max-w-6xl mx-auto">
         {/* Background container for title and cards */}
-        <div className="bg-white/5 backdrop-blur-sm rounded-lg sm:rounded-xl md:rounded-2xl p-6 sm:p-8 md:p-12 lg:p-16 xl:p-20 border border-white/10">
+        <div className="bg-black/40 border border-white/20 rounded-lg sm:rounded-xl md:rounded-2xl p-6 sm:p-8 md:p-12 lg:p-16 xl:p-20">
           {/* Page title */}
           <div className="text-center mb-8 sm:mb-12 md:mb-16 lg:mb-20 scroll-fade-in">
             <h1 className="text-white font-manrope font-bold text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl mb-3 sm:mb-4 md:mb-6 drop-shadow-[0_4px_12px_rgba(0,0,0,0.9)]">

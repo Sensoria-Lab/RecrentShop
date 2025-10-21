@@ -6,11 +6,11 @@ import { SITE_CONFIG, SOCIAL_LINKS, TEXTS } from '../../constants/config';
 
 const Card: React.FC<{ title: string; icon: React.ReactNode; preview?: string; onClick: () => void }> = ({ title, icon, preview, onClick }) => (
   <div
-    className="relative rounded-lg sm:rounded-xl md:rounded-2xl cursor-pointer group bg-white/5 backdrop-blur-sm border border-white/10 hover:border-white/30 transition-all duration-300"
+    className="relative rounded-lg sm:rounded-xl md:rounded-2xl cursor-pointer group bg-black/40 border border-white/10 hover:border-white/30 transition-all duration-300"
     onClick={onClick}
   >
     <div className="relative p-3 sm:p-4 md:p-6 lg:p-7 flex items-center gap-2 sm:gap-3 md:gap-5 lg:gap-6">
-      <div className="flex-shrink-0 w-9 h-9 sm:w-10 sm:h-10 md:w-12 md:h-12 lg:w-14 lg:h-14 rounded-md sm:rounded-lg md:rounded-xl bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-sm flex items-center justify-center border border-white/10 group-hover:scale-110 group-hover:border-white/20 transition-all duration-300">
+      <div className="flex-shrink-0 w-9 h-9 sm:w-10 sm:h-10 md:w-12 md:h-12 lg:w-14 lg:h-14 rounded-md sm:rounded-lg md:rounded-xl bg-gradient-to-br from-white/10 to-white/5 flex items-center justify-center border border-white/10 group-hover:scale-110 group-hover:border-white/20 transition-all duration-300">
         <div className="text-white/90 group-hover:text-white transition-colors scale-75 sm:scale-90 md:scale-100">{icon}</div>
       </div>
 
@@ -278,18 +278,18 @@ const SupportPage: React.FC = () => {
       ),
       content: (
         <div className="space-y-4 sm:space-y-5 md:space-y-6 text-left">
-          <div className="p-3 sm:p-4 md:p-5 lg:p-6 bg-white/5 rounded-lg sm:rounded-xl border border-white/10">
+          <div className="p-3 sm:p-4 md:p-5 lg:p-6 bg-black/40 rounded-lg sm:rounded-xl border border-white/10">
             <h3 className="text-sm sm:text-base md:text-lg lg:text-xl font-semibold mb-3 sm:mb-4 flex items-center gap-2">Часы работы службы поддержки</h3>
             <p className="text-xs sm:text-sm md:text-base lg:text-lg"><span className="text-white/60">Пн-Пт:</span> <span className="font-semibold">10:00 - 19:00 МСК</span></p>
             <p className="text-xs sm:text-sm md:text-base lg:text-lg"><span className="text-white/60">Сб-Вс:</span> <span className="font-semibold">Выходной</span></p>
           </div>
 
-          <div className="p-3 sm:p-4 md:p-5 lg:p-6 bg-white/5 rounded-lg sm:rounded-xl border border-white/10">
+          <div className="p-3 sm:p-4 md:p-5 lg:p-6 bg-black/40 rounded-lg sm:rounded-xl border border-white/10">
             <h3 className="text-sm sm:text-base md:text-lg lg:text-xl font-semibold mb-3 sm:mb-4 flex items-center gap-2">Среднее время ответа</h3>
             <p className="text-xs sm:text-sm md:text-base lg:text-lg text-white/80">Мы стараемся отвечать на все обращения в течение <span className="font-bold text-white">24 часов</span> в рабочие дни</p>
           </div>
 
-          <div className="p-3 sm:p-4 md:p-5 lg:p-6 bg-white/5 rounded-lg sm:rounded-xl border border-white/10">
+          <div className="p-3 sm:p-4 md:p-5 lg:p-6 bg-black/40 rounded-lg sm:rounded-xl border border-white/10">
             <h3 className="text-sm sm:text-base md:text-lg lg:text-xl font-semibold mb-3 sm:mb-4">Контакты</h3>
             <p className="text-sm sm:text-base md:text-lg">{TEXTS.emailPrompt}</p>
             <a href={`mailto:${SITE_CONFIG.email}`} className="inline-block text-base sm:text-lg md:text-xl font-bold text-white hover:text-white/80 transition-colors underline decoration-white/30 hover:decoration-white/60 break-all">
@@ -307,7 +307,7 @@ const SupportPage: React.FC = () => {
   return (
     <PageLayout>
       <div className="max-w-6xl mx-auto">
-        <div className="panel panel-strong pt-8 sm:pt-10 md:pt-12 pb-8 sm:pb-10 md:pb-12 px-8 sm:px-10 md:px-12">
+        <div className="bg-black/40 border border-white/20 rounded-lg sm:rounded-xl pb-8 sm:pb-10 md:pb-12 px-8 sm:px-10 md:px-12 pt-8 sm:pt-10 md:pt-12">
           <div className="text-center mb-10 sm:mb-14 md:mb-18 lg:mb-24 scroll-fade-in">
             <h1 className="text-white font-manrope font-bold text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl mb-3 sm:mb-4 md:mb-6 drop-shadow-[0_4px_12px_rgba(0,0,0,0.9)]">Поддержка</h1>
             <div className="w-20 sm:w-24 md:w-32 h-0.5 sm:h-1 bg-white/40 mx-auto"></div>
