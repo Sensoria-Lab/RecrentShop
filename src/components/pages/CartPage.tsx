@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import PageLayout from '../shared/PageLayout';
 import { useCart } from '../../context/CartContext';
 import Img from '../shared/Img';
+import { Button } from '../../shared/ui';
 
 const CartPage: React.FC = () => {
   const navigate = useNavigate();
@@ -64,9 +65,9 @@ const CartPage: React.FC = () => {
                   <p className="text-base sm:text-lg md:text-xl text-white/60 mb-6 sm:mb-8">
                     Добавьте товары из каталога, чтобы оформить заказ
                   </p>
-                  <button onClick={handleContinueShopping} className="btn-primary">
+                  <Button onClick={handleContinueShopping} variant="primary" size="lg">
                     Перейти в каталог
-                  </button>
+                  </Button>
                 </div>
               </div>
             </div>
@@ -205,26 +206,32 @@ const CartPage: React.FC = () => {
                     </div>
 
                     <div className="space-y-4">
-                      <button
+                      <Button
                         onClick={handleCheckout}
-                        className="w-full py-4 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-manrope font-semibold text-xl rounded-xl transition-all duration-200 shadow-lg hover:shadow-blue-500/50 hover:scale-105"
+                        variant="primary"
+                        size="xl"
+                        fullWidth
                       >
                         Оформить заказ
-                      </button>
+                      </Button>
 
-                      <button
+                      <Button
                         onClick={handleContinueShopping}
-                        className="w-full py-4 bg-white/5 hover:bg-white/10 text-white font-manrope font-medium text-lg rounded-xl transition-all duration-200 border border-white/10 hover:border-white/20"
+                        variant="secondary"
+                        size="lg"
+                        fullWidth
                       >
                         Продолжить покупки
-                      </button>
+                      </Button>
 
-                      <button
+                      <Button
                         onClick={clearCart}
-                        className="w-full py-3 text-red-400 hover:text-red-300 font-manrope font-medium text-base transition-colors border border-red-400/20 hover:border-red-400/40 rounded-xl hover:bg-red-500/5"
+                        variant="danger"
+                        size="md"
+                        fullWidth
                       >
                         Очистить корзину
-                      </button>
+                      </Button>
                     </div>
                   </div>
                 </div>

@@ -3,6 +3,7 @@ import StarRating from '../shared/StarRating';
 import { useCart } from '../../context/CartContext';
 import { useToast } from '../../context/ToastContext';
 import Img from '../shared/Img';
+import { Button } from '../../shared/ui';
 
 export interface ProductCardProps {
   id?: number;
@@ -210,12 +211,14 @@ const ProductCard: React.FC<ProductCardProps> = ({
           <span className={`text-white font-manrope font-extrabold ${classes.price} tracking-wide drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]`}>
             {price}
           </span>
-          <button
+          <Button
             onClick={handleAddToCart}
-            className={`add-to-cart-button ${classes.button} bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold rounded-md sm:rounded-lg transition-all duration-200 shadow-lg hover:shadow-blue-500/50 hover:scale-105 active:scale-95 whitespace-nowrap`}
+            variant="primary"
+            size={size === 'small' || size === 'small-catalog' ? 'sm' : 'md'}
+            className="add-to-cart-button whitespace-nowrap"
           >
             В корзину
-          </button>
+          </Button>
         </div>
       </div>
     </div>

@@ -4,6 +4,7 @@ import { useCart } from '../../context/CartContext';
 import Header from '../shared/Header';
 import Footer from '../shared/Footer';
 import Img from '../shared/Img';
+import { Button } from '../../shared/ui';
 
 type DeliveryMethod = 'russian-post' | 'cdek' | 'home-delivery';
 
@@ -575,37 +576,45 @@ const CheckoutPage: React.FC = () => {
                 {/* Action Buttons */}
                 {step === 'contacts' ? (
                   <div className="flex flex-col gap-3 mt-5 sm:mt-6">
-                    <button onClick={handleNextStep} disabled={!isContactFormValid} className={`btn-primary ${!isContactFormValid ? 'opacity-60 cursor-not-allowed' : ''}`}>
+                    <Button
+                      onClick={handleNextStep}
+                      disabled={!isContactFormValid}
+                      variant="primary"
+                      size="lg"
+                      fullWidth
+                    >
                       Далее
-                    </button>
-                    <button
+                    </Button>
+                    <Button
                       type="button"
                       onClick={() => navigate('/cart')}
-                      className="w-full px-4 sm:px-6 md:px-8 py-2.5 sm:py-3 md:py-3.5 bg-white/5 backdrop-blur-md border border-white/10 rounded-lg sm:rounded-xl text-sm sm:text-base md:text-lg font-medium text-white hover:bg-white/10 transition-all duration-300"
+                      variant="secondary"
+                      size="lg"
+                      fullWidth
                     >
                       Вернуться в корзину
-                    </button>
+                    </Button>
                   </div>
                 ) : (
                   <div className="flex flex-col gap-3 mt-5 sm:mt-6">
-                    <button
+                    <Button
                       onClick={handleSubmit}
                       disabled={!isDeliveryFormValid()}
-                      className={`w-full px-4 sm:px-6 md:px-8 py-2.5 sm:py-3 md:py-3.5 rounded-lg sm:rounded-xl text-sm sm:text-base md:text-lg font-medium transition-all duration-300 ${
-                        isDeliveryFormValid()
-                          ? 'bg-gradient-to-r from-white/90 to-white/70 text-black hover:from-white hover:to-white/80'
-                          : 'bg-white/5 text-gray-500 cursor-not-allowed border border-white/10'
-                      }`}
+                      variant="success"
+                      size="lg"
+                      fullWidth
                     >
                       Оформить заказ
-                    </button>
-                    <button
+                    </Button>
+                    <Button
                       type="button"
                       onClick={handlePrevStep}
-                      className="w-full px-4 sm:px-6 md:px-8 py-2.5 sm:py-3 md:py-3.5 bg-white/5 backdrop-blur-md border border-white/10 rounded-lg sm:rounded-xl text-sm sm:text-base md:text-lg font-medium text-white hover:bg-white/10 transition-all duration-300"
+                      variant="secondary"
+                      size="lg"
+                      fullWidth
                     >
                       Назад
-                    </button>
+                    </Button>
                   </div>
                 )}
               </div>
