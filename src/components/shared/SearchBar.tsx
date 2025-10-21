@@ -1,7 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDebounce } from '../../hooks/useDebounce';
-import { products } from '../../data/products';
+import { ALL_PRODUCTS } from '../../data/products';
+import { Product } from '../../types/product';
 import { ROUTES } from '../../constants/routes';
 
 interface SearchBarProps {
@@ -18,7 +19,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ className = '', isMobile = false 
 
   // Filter products based on search term
   const searchResults = debouncedSearch.trim().length >= 2
-    ? products.filter(product => {
+    ? ALL_PRODUCTS.filter((product: Product) => {
         const searchLower = debouncedSearch.toLowerCase();
         const titleMatch = product.title.toLowerCase().includes(searchLower);
         const subtitleMatch = product.subtitle?.toLowerCase().includes(searchLower);
@@ -125,7 +126,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ className = '', isMobile = false 
       {isOpen && searchResults.length > 0 && (
         <div className="absolute top-full left-0 right-0 mt-2 bg-black/95 backdrop-blur-xl border border-white/20 rounded-xl shadow-2xl z-50 overflow-hidden animate-fade-in-up">
           <div className="max-h-[400px] overflow-y-auto">
-            {searchResults.map((product, index) => (
+            {searchResults.map((product: Product, index: number) => (
               <button
                 key={product.id}
                 onClick={() => handleProductClick(product.id)}
@@ -169,7 +170,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ className = '', isMobile = false 
               onClick={handleViewAll}
               className="w-full px-4 py-3 bg-white/5 hover:bg-white/10 transition-colors duration-200 font-manrope font-semibold text-sm text-white/90 hover:text-white border-t border-white/10"
             >
-              Показать все результаты ({products.filter(p => {
+              Показать все результаты ({ALL_PRODUCTS.filter((p: Product) => {
                 const s = debouncedSearch.toLowerCase();
                 return p.title.toLowerCase().includes(s) ||
                        p.subtitle?.toLowerCase().includes(s) ||
