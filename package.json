@@ -9,14 +9,17 @@
   "dependencies": {
     "@types/node": "^20.0.0",
     "@types/react-dom": "^18.0.0",
+    "@types/three": "^0.180.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "lucide-react": "^0.544.0",
+    "postprocessing": "^6.37.8",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.23.0",
     "react-scripts": "5.0.1",
     "tailwind-merge": "^3.3.1",
+    "three": "^0.180.0",
     "typescript": "^4.9.0",
     "web-vitals": "^3.0.0"
   },
@@ -25,7 +28,11 @@
     "@types/react": "^18.2.0",
     "autoprefixer": "^10.4.0",
     "gh-pages": "^6.1.1",
+    "imagemin": "^9.0.1",
+    "imagemin-mozjpeg": "^10.0.0",
+    "imagemin-webp": "^8.0.0",
     "postcss": "^8.4.0",
+    "sharp": "^0.34.4",
     "tailwindcss": "^3.3.0"
   },
   "scripts": {
@@ -37,6 +44,7 @@
     "prod": "npm run build",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
+    "optimize-images": "node scripts/optimize-images.js",
     "lint": "eslint src/**/*.{ts,tsx}",
     "format": "prettier --write src/**/*.{ts,tsx,css}",
     "type-check": "tsc --noEmit"
