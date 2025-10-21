@@ -53,36 +53,36 @@ const ProductCard: React.FC<ProductCardProps> = ({
   
   const sizeClasses = {
     small: {
-      container: 'w-full max-w-[280px] sm:max-w-[330px]',
-      image: 'h-[140px] sm:h-[180px] md:h-[220px] lg:h-[280px]',
-      imageContainer: 'w-full max-w-[240px] sm:max-w-[280px]',
-      title: 'text-xs sm:text-sm md:text-base lg:text-lg',
-      price: 'text-sm sm:text-base md:text-lg lg:text-xl',
-      button: 'px-2 sm:px-3 md:px-4 lg:px-6 py-1.5 sm:py-2 text-[10px] sm:text-xs md:text-sm'
+      container: 'w-full max-w-[260px] sm:max-w-[300px] md:max-w-[330px]',
+      image: 'h-[140px] sm:h-[170px] md:h-[200px] lg:h-[240px]',
+      imageContainer: 'w-full',
+      title: 'text-xs sm:text-sm md:text-base',
+      price: 'text-sm sm:text-base md:text-lg',
+      button: 'px-2 sm:px-3 md:px-4 py-1.5 sm:py-2 text-[10px] sm:text-xs'
     },
     medium: {
-      container: 'w-full max-w-[280px] sm:max-w-[340px] md:max-w-[364px]',
-      image: 'h-[160px] sm:h-[200px] md:h-[240px] lg:h-[289px]',
+      container: 'w-full max-w-[280px] sm:max-w-[320px] md:max-w-[364px]',
+      image: 'h-[160px] sm:h-[190px] md:h-[220px] lg:h-[260px]',
       imageContainer: 'w-full',
-      title: 'text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl',
-      price: 'text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl',
-      button: 'px-2 sm:px-3 md:px-4 lg:px-6 py-1.5 sm:py-2 text-[10px] sm:text-xs md:text-sm'
+      title: 'text-xs sm:text-sm md:text-base lg:text-lg',
+      price: 'text-sm sm:text-base md:text-lg lg:text-xl',
+      button: 'px-2 sm:px-3 md:px-4 py-1.5 sm:py-2 text-[10px] sm:text-xs md:text-sm'
     },
     large: {
-      container: 'w-full max-w-[280px] sm:max-w-[340px] md:max-w-[378px]',
-      image: 'h-[180px] sm:h-[240px] md:h-[300px] lg:h-[392px]',
-      imageContainer: 'w-full max-w-[260px] sm:max-w-[300px] md:max-w-[328px]',
-      title: 'text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl',
-      price: 'text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl',
-      button: 'px-2 sm:px-3 md:px-4 lg:px-6 py-1.5 sm:py-2 text-[10px] sm:text-xs md:text-sm'
+      container: 'w-full max-w-[280px] sm:max-w-[320px] md:max-w-[360px]',
+      image: 'h-[180px] sm:h-[220px] md:h-[280px] lg:h-[340px]',
+      imageContainer: 'w-full',
+      title: 'text-xs sm:text-sm md:text-base lg:text-lg',
+      price: 'text-sm sm:text-base md:text-lg lg:text-xl',
+      button: 'px-2 sm:px-3 md:px-4 py-1.5 sm:py-2 text-[10px] sm:text-xs md:text-sm'
     },
     'small-catalog': {
-      container: 'w-[280px] sm:w-[320px] md:w-[340px]',
-      image: 'h-[150px] sm:h-[200px] md:h-[240px] lg:h-[280px]',
-      imageContainer: 'w-full max-w-[250px] sm:max-w-[280px] md:max-w-[300px]',
-      title: 'text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl',
-      price: 'text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl',
-      button: 'px-2 sm:px-3 md:px-4 lg:px-6 py-1.5 sm:py-2 text-[10px] sm:text-xs md:text-sm'
+      container: 'w-[260px] sm:w-[300px] md:w-[320px] lg:w-[340px]',
+      image: 'h-[140px] sm:h-[180px] md:h-[220px] lg:h-[260px]',
+      imageContainer: 'w-full',
+      title: 'text-xs sm:text-sm md:text-base',
+      price: 'text-sm sm:text-base md:text-lg',
+      button: 'px-2 sm:px-3 md:px-4 py-1.5 sm:py-2 text-[10px] sm:text-xs'
     }
   };
 
@@ -147,8 +147,8 @@ const ProductCard: React.FC<ProductCardProps> = ({
   const staggerClass = staggerIndex > 0 && staggerIndex <= 8 ? `card-stagger card-stagger-${staggerIndex}` : '';
 
   const cardStyles = size === 'small-catalog'
-    ? `relative rounded-lg sm:rounded-xl md:rounded-2xl p-2 sm:p-3 md:p-4 lg:p-5 xl:p-6 ${containerBase} flex flex-col cursor-pointer group bg-white/5 backdrop-blur-sm border border-white/10 hover:border-white/30 transition-all duration-300 hover-lift ${staggerClass}`
-    : `bg-white/5 backdrop-blur-sm rounded-lg sm:rounded-xl p-2 sm:p-3 md:p-4 lg:p-5 xl:p-6 ${containerBase} flex flex-col border border-white/10 shadow-2xl hover:shadow-white/10 hover:border-white/30 transition-all duration-300 hover:transform hover:scale-105 hover-lift ${onProductClick ? 'cursor-pointer' : ''} ${staggerClass}`;
+    ? `relative rounded-lg sm:rounded-xl p-2 sm:p-3 md:p-4 ${containerBase} flex flex-col cursor-pointer group bg-white/5 backdrop-blur-sm border border-white/10 hover:border-white/30 transition-all duration-300 hover-lift ${staggerClass}`
+    : `bg-white/5 backdrop-blur-sm rounded-lg sm:rounded-xl p-2 sm:p-3 md:p-4 ${containerBase} flex flex-col border border-white/10 shadow-2xl hover:shadow-white/10 hover:border-white/30 transition-all duration-300 hover:transform hover:scale-105 hover-lift ${onProductClick ? 'cursor-pointer' : ''} ${staggerClass}`;
 
 
   return (
@@ -163,7 +163,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
       {/* Content wrapper with relative positioning */}
       <div className="relative z-10">
         {/* Product Image - with fixed height to prevent layout shift */}
-        <div className={`${classes.image} rounded-lg sm:rounded-xl mx-auto ${classes.imageContainer} ${size === 'small-catalog' ? 'bg-white/5 p-2 sm:p-3 md:p-4 transition-all duration-500' : 'rounded-lg overflow-hidden'} group/image min-h-[200px] sm:min-h-[220px] md:min-h-[240px] lg:min-h-[260px] flex items-center justify-center`}>
+        <div className={`${classes.image} rounded-lg sm:rounded-xl mx-auto ${classes.imageContainer} ${size === 'small-catalog' ? 'bg-white/5 p-2 sm:p-3 transition-all duration-500' : 'rounded-lg overflow-hidden'} group/image flex items-center justify-center`}>
           <Img
             src={image}
             alt={title}
@@ -172,7 +172,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
         </div>
 
         {/* Product Title */}
-        <div className="min-h-[50px] sm:min-h-[60px] md:min-h-[70px] lg:min-h-[80px] xl:min-h-[90px] flex flex-col justify-between mt-1.5 sm:mt-2 md:mt-3">
+        <div className="min-h-[40px] sm:min-h-[50px] md:min-h-[60px] flex flex-col justify-between mt-1.5 sm:mt-2">
         <div className="flex-1 flex flex-col justify-start">
           <h3 className={`text-white font-manrope font-extrabold ${classes.title} leading-tight tracking-wide drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]`}>
             {title}
@@ -222,4 +222,4 @@ const ProductCard: React.FC<ProductCardProps> = ({
   );
 };
 
-export default ProductCard;
+export default React.memo(ProductCard);

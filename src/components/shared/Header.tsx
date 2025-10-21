@@ -24,13 +24,13 @@ const Header: React.FC<HeaderProps> = ({ className = '', onNavigate }) => {
   const isActive = (target: string) => (target === '/' ? path === '/' : path.startsWith(target));
 
   return (
-    <header className={`relative bg-black/40 backdrop-blur-3xl rounded-2xl px-6 sm:px-8 py-4 sm:py-5 shadow-xl shadow-black/30 ${className}`}>
-      <div className="flex items-center justify-between gap-3 sm:gap-6">
+    <header className={`relative bg-black/40 backdrop-blur-3xl rounded-xl sm:rounded-2xl px-3 sm:px-6 md:px-8 py-3 sm:py-4 md:py-5 shadow-xl shadow-black/30 ${className}`}>
+      <div className="flex items-center justify-between gap-2 sm:gap-4 md:gap-6">
         {/* Left: Logo */}
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2 sm:gap-3 md:gap-4">
           <button
             onClick={() => navigate('/')}
-            className="relative w-11 h-11 md:w-12 md:h-12 cursor-pointer transition-all hover:scale-105 focus:outline-none group"
+            className="relative w-10 h-10 sm:w-11 sm:h-11 md:w-12 md:h-12 cursor-pointer transition-all hover:scale-105 focus:outline-none group flex-shrink-0"
           >
             <Img
               src="/images/ui/logo.svg"
@@ -42,7 +42,7 @@ const Header: React.FC<HeaderProps> = ({ className = '', onNavigate }) => {
           {/* Mobile menu button */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden flex items-center justify-center w-10 h-10 rounded-lg hover:bg-white/10 transition-all focus:outline-none"
+            className="md:hidden flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-lg hover:bg-white/10 transition-all focus:outline-none flex-shrink-0"
           >
             {mobileMenuOpen ? (
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="text-white/80">
@@ -60,97 +60,81 @@ const Header: React.FC<HeaderProps> = ({ className = '', onNavigate }) => {
         </div>
 
         {/* Right: Nav items + Cart */}
-        <div className="hidden md:flex items-center gap-2">
+        <div className="hidden md:flex items-center gap-0.5 lg:gap-1">
           <button
             onClick={() => go('catalog')}
-            className={`font-manrope font-medium text-sm lg:text-base px-4 lg:px-5 py-2 transition-all duration-200 focus:outline-none whitespace-nowrap ${
+            className={`font-manrope font-bold text-xs md:text-sm lg:text-base px-2 md:px-3 lg:px-4 py-1.5 md:py-2 transition-all duration-200 focus:outline-none whitespace-nowrap ${
               isActive('/catalog')
                 ? 'text-white'
-                : 'text-white/70 hover:text-white'
+                : 'text-white/90 hover:text-white'
             }`}
           >
             Каталог
           </button>
 
+          <div className="w-1 h-1 rounded-full bg-white/40 mx-0.5 lg:mx-1" />
+
           <button
             onClick={() => go('support')}
-            className={`font-manrope font-medium text-sm lg:text-base px-4 lg:px-5 py-2 transition-all duration-200 focus:outline-none whitespace-nowrap ${
+            className={`font-manrope font-bold text-xs md:text-sm lg:text-base px-2 md:px-3 lg:px-4 py-1.5 md:py-2 transition-all duration-200 focus:outline-none whitespace-nowrap ${
               isActive('/support')
                 ? 'text-white'
-                : 'text-white/70 hover:text-white'
+                : 'text-white/90 hover:text-white'
             }`}
           >
-            Поддержка
+            Информация
           </button>
 
-          <div className="w-px h-6 bg-white/20 mx-2" />
+          <div className="w-1 h-1 rounded-full bg-white/40 mx-0.5 lg:mx-1" />
 
           <button
             onClick={() => navigate(ROUTES.ACCOUNT)}
-            className={`relative flex items-center justify-center w-9 h-9 lg:w-10 lg:h-10 rounded-full transition-all duration-200 focus:outline-none group ${
+            className={`font-manrope font-bold text-xs md:text-sm lg:text-base px-2 md:px-3 lg:px-4 py-1.5 md:py-2 transition-all duration-200 focus:outline-none whitespace-nowrap ${
               isActive('/account')
-                ? 'bg-white/20'
-                : 'bg-white/5 hover:bg-white/10'
+                ? 'text-white'
+                : 'text-white/90 hover:text-white'
             }`}
-            title="Профиль"
           >
-            <svg 
-              width="20" 
-              height="20" 
-              viewBox="0 0 24 24" 
-              fill="none" 
-              stroke="currentColor" 
-              strokeWidth="2" 
-              strokeLinecap="round" 
-              strokeLinejoin="round"
-              className={`transition-colors ${
-                isActive('/account')
-                  ? 'text-white'
-                  : 'text-white/70 group-hover:text-white'
-              }`}
-            >
-              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-              <circle cx="12" cy="7" r="4"/>
-            </svg>
+            Аккаунт
           </button>
 
-          <div className="w-px h-6 bg-white/20 mx-2" />
+          <div className="w-1 h-1 rounded-full bg-white/40 mx-0.5 lg:mx-1" />
 
           <button
             id="cart-button"
             onClick={() => navigate(ROUTES.CART)}
-            className={`font-manrope font-medium text-sm lg:text-base px-4 lg:px-5 py-2 transition-all duration-200 focus:outline-none whitespace-nowrap flex items-center gap-2 ${
+            className={`font-manrope font-bold text-xs md:text-sm lg:text-base px-2 md:px-3 lg:px-4 py-1.5 md:py-2 transition-all duration-200 focus:outline-none whitespace-nowrap flex items-center gap-1.5 md:gap-2 ${
               isActive('/cart')
                 ? 'text-white'
-                : 'text-white/70 hover:text-white'
+                : 'text-white/90 hover:text-white'
             }`}
           >
             <span>Корзина</span>
-            {getTotalItems() > 0 && (
-              <span className="min-w-[20px] h-5 px-1.5 bg-white/20 text-white text-xs font-semibold rounded-full inline-flex items-center justify-center">
-                {getTotalItems() > 99 ? '99+' : getTotalItems()}
+            {getTotalItems > 0 && (
+              <span className="min-w-[18px] md:min-w-[20px] h-4 md:h-5 px-1 md:px-1.5 bg-white/20 text-white text-[10px] md:text-xs font-semibold rounded-full inline-flex items-center justify-center">
+                {getTotalItems > 99 ? '99+' : getTotalItems}
               </span>
             )}
           </button>
         </div>
 
         {/* Mobile account & cart */}
-        <div className="md:hidden flex items-center gap-2">
+        <div className="md:hidden flex items-center gap-1.5 sm:gap-2">
           <button
             onClick={() => navigate(ROUTES.ACCOUNT)}
-            className="relative w-10 h-10 flex items-center justify-center cursor-pointer hover:scale-110 transition-all focus:outline-none rounded-lg group"
+            className="relative w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center cursor-pointer hover:scale-110 transition-all focus:outline-none rounded-lg group flex-shrink-0"
           >
             <div className="absolute inset-0 bg-white/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity" />
-            <svg 
-              width="22" 
-              height="22" 
-              viewBox="0 0 24 24" 
-              fill="none" 
-              stroke="currentColor" 
-              strokeWidth="2" 
-              strokeLinecap="round" 
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
               strokeLinejoin="round"
-              className="relative text-white/80 drop-shadow-[0_0_6px_rgba(255,255,255,0.2)]"
+              className="sm:w-[22px] sm:h-[22px] relative text-white/80 drop-shadow-[0_0_6px_rgba(255,255,255,0.2)]"
             >
               <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
               <circle cx="12" cy="7" r="4"/>
@@ -160,17 +144,17 @@ const Header: React.FC<HeaderProps> = ({ className = '', onNavigate }) => {
           <button
             id="cart-button-mobile"
             onClick={() => navigate(ROUTES.CART)}
-            className="relative w-10 h-10 flex items-center justify-center cursor-pointer hover:scale-110 transition-all focus:outline-none rounded-lg group"
+            className="relative w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center cursor-pointer hover:scale-110 transition-all focus:outline-none rounded-lg group flex-shrink-0"
           >
             <div className="absolute inset-0 bg-white/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity" />
             <Img
               src="/images/ui/shopping-cart.svg"
               alt="Shopping Cart"
-              className="relative w-6 h-6 object-contain filter invert drop-shadow-[0_0_6px_rgba(255,255,255,0.2)]"
+              className="relative w-5 h-5 sm:w-6 sm:h-6 object-contain filter invert drop-shadow-[0_0_6px_rgba(255,255,255,0.2)]"
             />
-            {getTotalItems() > 0 && (
-              <span className="absolute -top-1 -right-1 min-w-[20px] h-5 px-1.5 bg-gradient-to-br from-red-500 to-red-600 text-white text-xs font-bold rounded-full flex items-center justify-center shadow-lg shadow-red-500/50 animate-pulse border border-white/20">
-                {getTotalItems() > 99 ? '99+' : getTotalItems()}
+            {getTotalItems > 0 && (
+              <span className="absolute -top-0.5 sm:-top-1 -right-0.5 sm:-right-1 min-w-[18px] sm:min-w-[20px] h-4 sm:h-5 px-1 sm:px-1.5 bg-gradient-to-br from-red-500 to-red-600 text-white text-[10px] sm:text-xs font-bold rounded-full flex items-center justify-center shadow-lg shadow-red-500/50 animate-pulse border border-white/20">
+                {getTotalItems > 99 ? '99+' : getTotalItems}
               </span>
             )}
           </button>

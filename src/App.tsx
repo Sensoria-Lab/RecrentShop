@@ -17,6 +17,7 @@ const AccountPage = lazy(() => import('./components/pages/AccountPage'));
 const AdminPage = lazy(() => import('./components/pages/AdminPage'));
 const AdminLoginPage = lazy(() => import('./components/pages/AdminLoginPage'));
 const NotFoundPage = lazy(() => import('./components/pages/NotFoundPage'));
+const RecrentShopPage = lazy(() => import('./components/pages/RecrentShopPage'));
 
 /**
  * Main App Component
@@ -42,6 +43,7 @@ function App() {
         <Suspense fallback={<LoadingSkeleton />}>
           <Routes location={location}>
             <Route path="/" element={<MainPage />} />
+            <Route path="/recrent-shop" element={<RecrentShopPage />} />
             <Route path="/catalog" element={<CatalogPage />} />
             <Route path="/support" element={<SupportPage />} />
             <Route path="/product" element={<ProductPage />} />

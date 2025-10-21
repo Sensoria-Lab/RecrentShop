@@ -567,7 +567,7 @@ const CheckoutPage: React.FC = () => {
                   <div className="flex justify-between items-center p-4 rounded-xl bg-gradient-to-r from-white/10 to-white/5 border border-white/20">
                     <span className="text-base sm:text-lg md:text-xl font-semibold text-gray-200">Итого:</span>
                     <span className="text-xl sm:text-2xl md:text-3xl font-bold bg-gradient-to-r from-white via-gray-100 to-gray-300 bg-clip-text text-transparent">
-                      {step === 'delivery' ? getTotalPrice() + getDeliveryPrice() : getTotalPrice()} ₽
+                      {step === 'delivery' ? getTotalPrice + getDeliveryPrice() : getTotalPrice} ₽
                     </span>
                   </div>
                 </div>

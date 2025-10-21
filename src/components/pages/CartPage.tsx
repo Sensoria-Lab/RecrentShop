@@ -199,7 +199,7 @@ const CartPage: React.FC = () => {
                       <div className="flex justify-between text-white text-2xl">
                         <span className="font-manrope font-bold">Сумма:</span>
                         <span className="font-manrope font-extrabold">
-                          {getTotalPrice()} р.
+                          {getTotalPrice} р.
                         </span>
                       </div>
                     </div>

@@ -1,224 +1,148 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import PageContainer from '../shared/PageContainer';
-import ProductCard from '../ui/ProductCard';
-import ProductCarousel from '../ui/ProductCarousel';
-import SectionHeader from '../ui/SectionHeader';
-import HeroImageShowcase from '../ui/HeroImageShowcase';
-import Footer from '../shared/Footer';
-import { useProductNavigation } from '../../hooks';
+import Img from '../shared/Img';
 import { ROUTES } from '../../constants/routes';
-import { API_CONFIG } from '../../constants/config';
-import { ALL_PRODUCTS } from '../../data/products';
-import type { Product } from '../../types/product';
 
 const MainPage: React.FC = () => {
   const navigate = useNavigate();
-  const { navigateToProduct } = useProductNavigation();
-  const containerRef = React.useRef<HTMLDivElement>(null);
-  const [products, setProducts] = React.useState<Product[]>([]);
 
-  // Enable scroll snapping on main page
-  React.useEffect(() => {
-    document.documentElement.classList.add('snap-scroll');
-    return () => {
-      document.documentElement.classList.remove('snap-scroll');
-    };
-  }, []);
-
-  // Fetch products from API or use static data
-  React.useEffect(() => {
-    const fetchProducts = async () => {
-      // Use static data in production if no API URL is configured
-      if (API_CONFIG.USE_STATIC_DATA) {
-        setProducts(ALL_PRODUCTS);
-        return;
-      }
-
-      try {
-        const response = await fetch(`${API_CONFIG.BASE_URL}/products`);
-        const data = await response.json();
-        setProducts(data);
-      } catch (error) {
-        console.error('Error fetching products:', error);
-        // Fallback to static data on error
-        setProducts(ALL_PRODUCTS);
-      }
-    };
-
-    fetchProducts();
-  }, []);
-
-  const handleProductClick = (productData: any) => {
-    // Find full product data by id
-    const fullProduct = products.find(p => p.id === productData.id);
-    if (fullProduct) {
-      navigateToProduct(fullProduct);
-    }
-  };
-
-  // Helper for catalog navigation
   const navigateToCatalog = () => {
     navigate(ROUTES.CATALOG);
   };
 
-  // Sort products by rating for hero showcase
-  const sortedProducts = [...products].sort((a, b) => {
-    if (b.rating !== a.rating) {
-      return b.rating - a.rating;
-    }
-    return b.reviewCount - a.reviewCount;
-  });
-
   return (
     <PageContainer isMainPage={true}>
-      <div ref={containerRef}>
-        {/* Hero section with split layout */}
-        <section id="hero" className="min-h-screen snap-start relative overflow-hidden">
-          {/* White background panel on the right */}
-          <div className="hidden lg:block absolute top-0 right-0 bottom-0 w-[45%] bg-white"></div>
+      {/* Hero section with RECRENT SHOP design */}
+      <section className="min-h-screen relative flex items-center">
+        {/* Content */}
+        <div className="w-full px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-24 py-8 sm:py-12">
+          <div className="w-full max-w-[1400px] mx-auto">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 lg:gap-12 xl:gap-16">
 
-          {/* Content */}
-          <div className="relative h-screen flex items-center px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16">
-            <div className="w-full max-w-[1400px] mx-auto">
-              <div className="flex items-center gap-12">
-                {/* Left side - Title and Button (55% width) */}
-                <div className="w-full lg:w-[55%] flex flex-col justify-center space-y-8">
-                  <div className="scroll-fade-in">
-                    <h1 className="font-manrope font-black text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl tracking-tight leading-tight text-white blur-text
-                      drop-shadow-[0_4px_20px_rgba(0,0,0,0.9)]">
-                      RECRENT SHOP
-                    </h1>
-                    <p className="mt-4 text-white/70 font-inter font-medium text-lg md:text-xl lg:text-2xl tracking-wide">
-                      Официальный мерч
-                    </p>
+              {/* Left side - Title */}
+              <div className="lg:col-span-5 flex flex-col justify-between min-h-[400px] sm:min-h-[500px] lg:min-h-[600px]">
+                {/* Main Title at top */}
+                <div className="space-y-1 mb-8 lg:mb-0">
+                  <h1 className="font-black text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl text-white tracking-tight leading-none drop-shadow-[0_10px_30px_rgba(0,0,0,0.6)]">
+                    RECRENT
+                  </h1>
+                  <h2 className="font-normal text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl text-white/90 tracking-wide drop-shadow-[0_5px_20px_rgba(0,0,0,0.5)]">
+                    SHOP
+                  </h2>
+                </div>
+
+                {/* Bottom section: Categories and Button */}
+                <div className="space-y-6 sm:space-y-8 mt-auto">
+                  {/* Categories */}
+                  <div className="flex flex-wrap items-center gap-5 sm:gap-6 lg:gap-8">
+                    <a
+                      href="#dragons"
+                      className="group relative font-bold text-base sm:text-lg text-white/90 hover:text-white transition-all duration-200 pb-1.5 px-1"
+                    >
+                      <span className="relative z-10">dragons</span>
+                      <span className="absolute bottom-0 left-0 w-full h-[2.5px] bg-gradient-to-r from-white/60 to-white/80 group-hover:from-white group-hover:to-white transition-all duration-200 shadow-lg shadow-white/20" />
+                      <span className="absolute inset-0 bg-white/10 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 blur-sm" />
+                    </a>
+                    <a
+                      href="#serpents"
+                      className="group relative font-bold text-base sm:text-lg text-white/90 hover:text-white transition-all duration-200 pb-1.5 px-1"
+                    >
+                      <span className="relative z-10">serpents</span>
+                      <span className="absolute bottom-0 left-0 w-full h-[2.5px] bg-gradient-to-r from-white/60 to-white/80 group-hover:from-white group-hover:to-white transition-all duration-200 shadow-lg shadow-white/20" />
+                      <span className="absolute inset-0 bg-white/10 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 blur-sm" />
+                    </a>
+                    <a
+                      href="#geoid"
+                      className="group relative font-bold text-base sm:text-lg text-white/90 hover:text-white transition-all duration-200 pb-1.5 px-1"
+                    >
+                      <span className="relative z-10">geoid</span>
+                      <span className="absolute bottom-0 left-0 w-full h-[2.5px] bg-gradient-to-r from-white/60 to-white/80 group-hover:from-white group-hover:to-white transition-all duration-200 shadow-lg shadow-white/20" />
+                      <span className="absolute inset-0 bg-white/10 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 blur-sm" />
+                    </a>
                   </div>
 
                   {/* CTA Button */}
-                  <div className="scroll-fade-in scroll-fade-in-delay-1">
+                  <div>
                     <button
                       onClick={navigateToCatalog}
-                      className="group relative inline-flex items-center justify-center gap-3 px-8 py-4 bg-transparent border-2 border-white hover:bg-white hover:text-black rounded-xl transition-all duration-300 active:scale-95 ripple-button"
+                      className="group relative inline-flex items-center justify-center gap-3 px-8 sm:px-10 md:px-12 py-4 sm:py-5 bg-white/5 backdrop-blur-sm border-2 border-white/80 hover:border-white hover:bg-white rounded-xl transition-all duration-300 active:scale-95 shadow-[0_0_30px_rgba(255,255,255,0.2)] hover:shadow-[0_0_40px_rgba(255,255,255,0.4)] overflow-hidden"
                     >
-                      <span className="text-white group-hover:text-black font-manrope font-semibold text-base md:text-lg whitespace-nowrap transition-colors duration-300">
+                      {/* Animated gradient background */}
+                      <div className="absolute inset-0 bg-gradient-to-r from-white/10 via-white/20 to-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+
+                      {/* Shine effect */}
+                      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
+                      </div>
+
+                      <span className="relative z-10 font-extrabold text-lg sm:text-xl md:text-2xl text-white group-hover:text-black transition-colors duration-300 drop-shadow-lg">
                         К каталогу
                       </span>
                       <svg
-                        width="20"
-                        height="20"
+                        width="24"
+                        height="24"
                         viewBox="0 0 24 24"
                         fill="none"
                         stroke="currentColor"
-                        strokeWidth="2.5"
-                        className="text-white group-hover:text-black group-hover:translate-x-1 transition-all duration-300"
+                        strokeWidth="3"
+                        className="relative z-10 sm:w-7 sm:h-7 text-white group-hover:text-black group-hover:translate-x-1 transition-all duration-300"
                       >
                         <path d="M5 12h14M12 5l7 7-7 7"/>
                       </svg>
                     </button>
                   </div>
                 </div>
+              </div>
 
-                {/* Right side - Product image on white background (45% width) */}
-                <div className="hidden lg:flex w-[45%] items-center justify-center scroll-fade-in scroll-fade-in-delay-2">
-                  <div className="w-full max-w-[500px] aspect-square">
-                    {sortedProducts.length > 0 && sortedProducts[0].image && (
-                      <img 
-                        src={sortedProducts[0].image} 
-                        alt={sortedProducts[0].title}
-                        className="w-full h-full object-contain cursor-pointer hover:scale-105 transition-transform duration-300"
-                        onClick={() => handleProductClick(sortedProducts[0])}
-                      />
-                    )}
+              {/* Right side - Image Gallery */}
+              <div className="lg:col-span-7">
+                <div className="relative max-w-[650px] mx-auto lg:ml-auto">
+                  {/* Layout: 2 small squares on left, 1 tall vertical rectangle on right */}
+                  <div className="flex gap-3 sm:gap-4 lg:gap-5" style={{ height: '600px' }}>
+
+                    {/* Left column: 2 stacked square images */}
+                    <div className="flex-1 flex flex-col gap-3 sm:gap-4 lg:gap-5">
+                      {/* Top - White sleeve with tattoo */}
+                      <div className="relative flex-1 bg-gray-800 rounded-xl sm:rounded-2xl overflow-hidden shadow-2xl group hover:scale-[1.02] transition-transform duration-300">
+                        <Img
+                          src="/images/products/clothing/sleeves/white_sleeve/rukav_geoid_white_01.webp"
+                          alt="White sleeve with tattoo"
+                          className="w-full h-full object-cover object-center"
+                        />
+                      </div>
+
+                      {/* Bottom - White geoid pattern mousepad */}
+                      <div className="relative flex-1 bg-white rounded-xl sm:rounded-2xl overflow-hidden shadow-2xl hover:scale-[1.02] transition-transform duration-300">
+                        <Img
+                          src="/images/products/mousepads/l/l_white_geoid/011_l_white_01.webp"
+                          alt="White geoid mousepad"
+                          className="w-full h-full object-contain object-center p-4"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Right column: 1 tall vertical image */}
+                    <div className="flex-1 flex flex-col">
+                      {/* Tall vertical - Black geoid XL mousepad */}
+                      <div className="relative h-full bg-black rounded-xl sm:rounded-2xl overflow-hidden shadow-2xl group hover:scale-[1.02] transition-transform duration-300">
+                        <Img
+                          src="/images/products/mousepads/xl/xl_black_geoid/114_001.webp"
+                          alt="Black XL geoid mousepad"
+                          className="w-full h-full object-cover object-center"
+                        />
+                      </div>
+                    </div>
                   </div>
+
+                  {/* Vertical divider line (matching Figma) */}
+                  <div className="hidden xl:block absolute right-[-60px] top-1/2 -translate-y-1/2 w-px h-48 bg-white/30" />
                 </div>
               </div>
             </div>
           </div>
-        </section>
-
-        {/* New Products Section */}
-        <section id="new-products" className="snap-start px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 py-12 md:py-16">
-          <div className="w-full max-w-[1400px] mx-auto">
-            <div className="panel glass-shadow scroll-fade-in">
-              <SectionHeader
-                title="Новинки"
-                onShowAll={navigateToCatalog}
-              />
-              <div className="px-3 md:px-4 lg:px-5 pt-3 md:pt-4 lg:pt-5 pb-2 md:pb-3 lg:pb-4">
-                <ProductCarousel itemsPerView={3}>
-                  {products.slice(0, 6).map((product, index) => (
-                    <ProductCard
-                      key={product.id}
-                      id={product.id}
-                      image={product.image}
-                      images={product.images}
-                      title={product.title}
-                      subtitle={product.subtitle}
-                      productSize={product.productSize}
-                      productColor={product.productColor}
-                      price={product.price}
-                      priceNumeric={product.priceNumeric}
-                      rating={product.rating}
-                      reviewCount={product.reviewCount}
-                      color={product.color}
-                      category={product.category}
-                      clothingType={product.clothingType}
-                      size="small-catalog"
-                      staggerIndex={index + 1}
-                      onAddToCart={() => {}}
-                      onProductClick={handleProductClick}
-                    />
-                  ))}
-                </ProductCarousel>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Best Sellers Section */}
-        <section id="best-sellers" className="snap-start px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 py-12 md:py-16">
-          <div className="w-full max-w-[1400px] mx-auto">
-            <div className="panel glass-shadow scroll-fade-in">
-              <SectionHeader
-                title="Популярное"
-                onShowAll={navigateToCatalog}
-              />
-              <div className="px-3 md:px-4 lg:px-5 pt-3 md:pt-4 lg:pt-5 pb-2 md:pb-3 lg:pb-4">
-                <ProductCarousel itemsPerView={3}>
-                  {sortedProducts.slice(0, 6).map((product, index) => (
-                    <ProductCard
-                      key={product.id}
-                      id={product.id}
-                      image={product.image}
-                      images={product.images}
-                      title={product.title}
-                      subtitle={product.subtitle}
-                      productSize={product.productSize}
-                      productColor={product.productColor}
-                      price={product.price}
-                      priceNumeric={product.priceNumeric}
-                      rating={product.rating}
-                      reviewCount={product.reviewCount}
-                      color={product.color}
-                      category={product.category}
-                      clothingType={product.clothingType}
-                      size="small-catalog"
-                      staggerIndex={index + 1}
-                      onAddToCart={() => {}}
-                      onProductClick={handleProductClick}
-                    />
-                  ))}
-                </ProductCarousel>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Footer */}
-        <section className="snap-start">
-          <Footer />
-        </section>
-      </div>
+        </div>
+      </section>
     </PageContainer>
   );
 };

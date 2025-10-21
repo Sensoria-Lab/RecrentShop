@@ -131,16 +131,16 @@ const CatalogPage: React.FC = () => {
             </div>
             
             {/* Page Title */}
-              <div className="text-center mb-6 sm:mb-8 md:mb-10 pt-6 scroll-fade-in">
-              <h1 className="text-white font-manrope font-bold text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl mb-3 sm:mb-4 md:mb-6 drop-shadow-[0_4px_12px_rgba(0,0,0,0.9)]">
+              <div className="text-center mb-4 sm:mb-6 md:mb-8 lg:mb-10 pt-4 sm:pt-6 scroll-fade-in">
+              <h1 className="text-white font-manrope font-bold text-2xl sm:text-3xl md:text-4xl lg:text-5xl mb-2 sm:mb-3 md:mb-4 drop-shadow-[0_4px_12px_rgba(0,0,0,0.9)]">
                 Каталог товаров
               </h1>
-              <div className="w-20 sm:w-24 md:w-32 h-0.5 sm:h-1 bg-white/40 mx-auto"></div>
+              <div className="w-16 sm:w-20 md:w-24 lg:w-32 h-0.5 sm:h-1 bg-white/40 mx-auto"></div>
             </div>
 
             {/* Category Filter - moved here */}
-            <div className="mb-6 sm:mb-8 flex justify-center scroll-fade-in scroll-fade-in-delay-1">
-              <div className="relative inline-flex gap-2 sm:gap-3 bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-2">
+            <div className="mb-4 sm:mb-6 md:mb-8 flex justify-center scroll-fade-in scroll-fade-in-delay-1 px-2">
+              <div className="relative inline-flex flex-wrap justify-center gap-1.5 sm:gap-2 md:gap-3 bg-white/5 backdrop-blur-sm border border-white/10 rounded-lg sm:rounded-xl p-1.5 sm:p-2">
                 {/* Animated background indicator */}
                 <div
                   className="absolute bg-white rounded-lg shadow-lg transition-all duration-300 ease-out z-0"
@@ -161,7 +161,7 @@ const CatalogPage: React.FC = () => {
                     key={option.value}
                     ref={(el) => (categoryButtonRefs.current[option.value] = el)}
                     onClick={() => setCategoryFilter(option.value as CategoryFilter)}
-                    className={`relative z-10 px-4 sm:px-6 py-2 sm:py-2.5 rounded-lg font-manrope font-semibold text-sm sm:text-base transition-colors duration-300 ${
+                    className={`relative z-10 px-3 sm:px-4 md:px-6 py-1.5 sm:py-2 md:py-2.5 rounded-md sm:rounded-lg font-manrope font-semibold text-xs sm:text-sm md:text-base transition-colors duration-300 whitespace-nowrap ${
                       categoryFilter === option.value
                         ? 'text-black'
                         : 'text-white/70 hover:text-white'
@@ -194,11 +194,11 @@ const CatalogPage: React.FC = () => {
               </button>
             </div>
 
-            <div className="flex flex-col lg:flex-row gap-4 sm:gap-6 md:gap-8">
+            <div className="flex flex-col lg:flex-row gap-3 sm:gap-4 md:gap-6 lg:gap-8">
               {/* Filters Sidebar */}
-              <aside className={`lg:w-80 w-full flex-shrink-0 ${filtersOpen ? 'block' : 'hidden lg:block'}`}>
+              <aside className={`lg:w-72 xl:w-80 w-full flex-shrink-0 ${filtersOpen ? 'block' : 'hidden lg:block'}`}>
                 <div className="panel lg:sticky lg:top-28 overflow-hidden">
-                  <h2 className="text-white font-manrope font-bold text-lg sm:text-xl mb-4 sm:mb-6">Фильтры</h2>
+                  <h2 className="text-white font-manrope font-bold text-base sm:text-lg md:text-xl mb-3 sm:mb-4 md:mb-6">Фильтры</h2>
                   
                   {/* Sort By */}
                   <div className="mb-4 sm:mb-6">
@@ -336,23 +336,45 @@ const CatalogPage: React.FC = () => {
               {/* Products Grid */}
               <div className="flex-1">
                 {loading ? (
-                  <div className="panel panel-strong text-center min-h-[600px] flex items-center justify-center">
-                    <div>
-                      <div className="inline-block w-12 h-12 border-4 border-white border-t-transparent rounded-full animate-spin mb-4"></div>
-                      <p className="text-white/60 font-manrope text-sm sm:text-base md:text-lg">
-                        Загрузка товаров...
-                      </p>
-                    </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4 gap-4 sm:gap-4 md:gap-5 lg:gap-6 min-h-[600px] justify-items-center auto-rows-fr">
+                    {/* Skeleton cards */}
+                    {Array.from({ length: 9 }).map((_, index) => (
+                      <div
+                        key={index}
+                        className="bg-white/5 backdrop-blur-sm rounded-lg sm:rounded-xl p-2 sm:p-3 md:p-4 w-full max-w-[260px] sm:max-w-[300px] md:max-w-[320px] lg:max-w-[340px] flex flex-col border border-white/10 skeleton-shimmer"
+                      >
+                        {/* Image skeleton */}
+                        <div className="h-[150px] sm:h-[200px] md:h-[240px] lg:h-[280px] rounded-lg sm:rounded-xl mx-auto w-full bg-white/5 mb-3"></div>
+
+                        {/* Title skeleton */}
+                        <div className="min-h-[50px] sm:min-h-[60px] md:min-h-[70px] lg:min-h-[80px] xl:min-h-[90px] flex flex-col gap-2 mb-2">
+                          <div className="h-5 bg-white/5 rounded w-3/4"></div>
+                          <div className="h-4 bg-white/5 rounded w-1/2"></div>
+                        </div>
+
+                        {/* Rating skeleton */}
+                        <div className="h-4 bg-white/5 rounded w-24 mb-3"></div>
+
+                        {/* Divider */}
+                        <div className="w-full h-px bg-white/10 my-3"></div>
+
+                        {/* Price and button skeleton */}
+                        <div className="flex items-center justify-between gap-2">
+                          <div className="h-6 bg-white/5 rounded w-20"></div>
+                          <div className="h-9 bg-white/5 rounded w-24"></div>
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 ) : filteredProducts.length === 0 ? (
-          <div className="panel panel-strong text-center min-h-[600px] flex items-center justify-center">
+          <div className="text-center min-h-[600px] flex items-center justify-center">
             <p className="text-white/60 font-manrope text-sm sm:text-base md:text-lg">
                       Товары не найдены. Попробуйте изменить фильтры.
                     </p>
                   </div>
                 ) : (
                   <>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-3 sm:gap-3 md:gap-4 lg:gap-4 min-h-[600px] place-items-center">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4 gap-4 sm:gap-4 md:gap-5 lg:gap-6 min-h-[600px] justify-items-center auto-rows-fr">
                       {filteredProducts.slice(0, itemsToShow).map((product, index) => {
                         const delayClass = `scroll-fade-in-delay-${Math.min(index % 4, 4)}`;
                         const isVisible = visibleItems.has(index);
@@ -366,7 +388,7 @@ const CatalogPage: React.FC = () => {
                                 observerRef.current.observe(el);
                               }
                             }}
-                            className={`flex justify-center ${isVisible ? `scroll-fade-in ${delayClass}` : ''}`}
+                            className={`w-full flex justify-center ${isVisible ? `scroll-fade-in ${delayClass}` : ''}`}
                           >
                             <ProductCard
                               id={product.id}
