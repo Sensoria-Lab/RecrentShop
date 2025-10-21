@@ -3,6 +3,7 @@ import { useLocation, Routes, Route } from 'react-router-dom';
 import './index.css';
 import LoadingSkeleton from './components/shared/LoadingSkeleton';
 import ErrorBoundary from './components/shared/ErrorBoundary';
+import BottomNavigation from './components/shared/BottomNavigation';
 import { CartProvider } from './context/CartContext';
 import { ToastProvider } from './context/ToastContext';
 import BackgroundBeams from './components/shared/BackgroundBeams';
@@ -71,6 +72,9 @@ function App() {
 
             {/* Subtle noise texture */}
             <div className="noise-overlay" />
+
+            {/* Mobile Bottom Navigation */}
+            <BottomNavigation />
           </div>
         </CartProvider>
       </ToastProvider>

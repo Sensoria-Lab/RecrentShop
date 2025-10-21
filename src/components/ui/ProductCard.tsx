@@ -57,33 +57,33 @@ const ProductCard: React.FC<ProductCardProps> = ({
       container: 'w-full max-w-[260px] sm:max-w-[300px] md:max-w-[330px]',
       image: 'h-[140px] sm:h-[170px] md:h-[200px] lg:h-[240px]',
       imageContainer: 'w-full',
-      title: 'text-xs sm:text-sm md:text-base',
-      price: 'text-sm sm:text-base md:text-lg',
-      button: 'px-2 sm:px-3 md:px-4 py-1.5 sm:py-2 text-[10px] sm:text-xs'
+      title: 'text-sm sm:text-sm md:text-base',
+      price: 'text-base sm:text-base md:text-lg',
+      button: 'px-3 sm:px-3 md:px-4 py-2 sm:py-2 text-xs sm:text-xs min-h-[44px]'
     },
     medium: {
       container: 'w-full max-w-[280px] sm:max-w-[320px] md:max-w-[364px]',
       image: 'h-[160px] sm:h-[190px] md:h-[220px] lg:h-[260px]',
       imageContainer: 'w-full',
-      title: 'text-xs sm:text-sm md:text-base lg:text-lg',
-      price: 'text-sm sm:text-base md:text-lg lg:text-xl',
-      button: 'px-2 sm:px-3 md:px-4 py-1.5 sm:py-2 text-[10px] sm:text-xs md:text-sm'
+      title: 'text-sm sm:text-sm md:text-base lg:text-lg',
+      price: 'text-base sm:text-base md:text-lg lg:text-xl',
+      button: 'px-3 sm:px-3 md:px-4 py-2 sm:py-2 text-xs sm:text-xs md:text-sm min-h-[44px]'
     },
     large: {
       container: 'w-full max-w-[280px] sm:max-w-[320px] md:max-w-[360px]',
       image: 'h-[180px] sm:h-[220px] md:h-[280px] lg:h-[340px]',
       imageContainer: 'w-full',
-      title: 'text-xs sm:text-sm md:text-base lg:text-lg',
-      price: 'text-sm sm:text-base md:text-lg lg:text-xl',
-      button: 'px-2 sm:px-3 md:px-4 py-1.5 sm:py-2 text-[10px] sm:text-xs md:text-sm'
+      title: 'text-sm sm:text-sm md:text-base lg:text-lg',
+      price: 'text-base sm:text-base md:text-lg lg:text-xl',
+      button: 'px-3 sm:px-3 md:px-4 py-2 sm:py-2 text-xs sm:text-xs md:text-sm min-h-[44px]'
     },
     'small-catalog': {
       container: 'w-[260px] sm:w-[300px] md:w-[320px] lg:w-[340px]',
       image: 'h-[140px] sm:h-[180px] md:h-[220px] lg:h-[260px]',
       imageContainer: 'w-full',
-      title: 'text-xs sm:text-sm md:text-base',
-      price: 'text-sm sm:text-base md:text-lg',
-      button: 'px-2 sm:px-3 md:px-4 py-1.5 sm:py-2 text-[10px] sm:text-xs'
+      title: 'text-sm sm:text-sm md:text-base',
+      price: 'text-base sm:text-base md:text-lg',
+      button: 'px-3 sm:px-3 md:px-4 py-2 sm:py-2 text-xs sm:text-xs min-h-[44px]'
     }
   };
 

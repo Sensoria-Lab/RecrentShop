@@ -8,6 +8,38 @@
 
 html {
   scroll-behavior: smooth;
+  /* Prevent text size adjustment on orientation change in iOS */
+  -webkit-text-size-adjust: 100%;
+  /* Enable smooth scrolling with momentum on iOS */
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Mobile-optimized tap highlights and interactions */
+@media (max-width: 768px) {
+  /* Remove default tap highlight */
+  * {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+  }
+
+  /* Add custom tap feedback for interactive elements */
+  button, a, [role="button"] {
+    -webkit-tap-highlight-color: rgba(255, 255, 255, 0.1);
+    touch-action: manipulation;
+  }
+
+  /* Haptic-like feedback through scale animation */
+  button:active, a:active, [role="button"]:active {
+    transform: scale(0.97);
+    transition: transform 0.1s ease-out;
+  }
+
+  /* Improve scrolling performance on mobile */
+  .mobile-scroll {
+    overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;
+    will-change: scroll-position;
+  }
 }
 
 /* Мягкое притяжение к секциям на главной странице */

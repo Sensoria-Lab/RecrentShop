@@ -24,8 +24,8 @@ const Header: React.FC<HeaderProps> = ({ className = '', onNavigate }) => {
   const isActive = (target: string) => (target === '/' ? path === '/' : path.startsWith(target));
 
   return (
-    <header className={`relative bg-black/40 backdrop-blur-3xl rounded-xl sm:rounded-2xl px-3 sm:px-6 md:px-8 py-3 sm:py-4 md:py-5 shadow-xl shadow-black/30 ${className}`}>
-      <div className="flex items-center justify-between gap-2 sm:gap-4 md:gap-6">
+    <header className={`relative bg-black/40 backdrop-blur-3xl rounded-xl sm:rounded-2xl px-3 sm:px-4 md:px-8 py-2 sm:py-3 md:py-5 shadow-xl shadow-black/30 ${className}`}>
+      <div className="flex items-center justify-between gap-2 sm:gap-3 md:gap-6">
         {/* Left: Logo */}
         <div className="flex items-center gap-2 sm:gap-3 md:gap-4">
           <button
@@ -118,11 +118,13 @@ const Header: React.FC<HeaderProps> = ({ className = '', onNavigate }) => {
           </button>
         </div>
 
-        {/* Mobile account & cart */}
-        <div className="md:hidden flex items-center gap-1.5 sm:gap-2">
+        {/* Mobile: Cart only (removed account - now in bottom nav) */}
+        <div className="md:hidden flex items-center gap-2">
           <button
-            onClick={() => navigate(ROUTES.ACCOUNT)}
-            className="relative w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center cursor-pointer hover:scale-110 transition-all focus:outline-none rounded-lg group flex-shrink-0"
+            id="cart-button-mobile"
+            onClick={() => navigate(ROUTES.CART)}
+            className="relative w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center cursor-pointer active:scale-95 transition-all focus:outline-none rounded-lg group flex-shrink-0"
+            aria-label="Корзина"
           >
             <div className="absolute inset-0 bg-white/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity" />
             <svg
@@ -132,28 +134,16 @@ const Header: React.FC<HeaderProps> = ({ className = '', onNavigate }) => {
               fill="none"
               stroke="currentColor"
               strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
               className="sm:w-[22px] sm:h-[22px] relative text-white/80 drop-shadow-[0_0_6px_rgba(255,255,255,0.2)]"
             >
-              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-              <circle cx="12" cy="7" r="4"/>
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
+              />
             </svg>
-          </button>
-
-          <button
-            id="cart-button-mobile"
-            onClick={() => navigate(ROUTES.CART)}
-            className="relative w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center cursor-pointer hover:scale-110 transition-all focus:outline-none rounded-lg group flex-shrink-0"
-          >
-            <div className="absolute inset-0 bg-white/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity" />
-            <Img
-              src="/images/ui/shopping-cart.svg"
-              alt="Shopping Cart"
-              className="relative w-5 h-5 sm:w-6 sm:h-6 object-contain filter invert drop-shadow-[0_0_6px_rgba(255,255,255,0.2)]"
-            />
             {getTotalItems > 0 && (
-              <span className="absolute -top-0.5 sm:-top-1 -right-0.5 sm:-right-1 min-w-[18px] sm:min-w-[20px] h-4 sm:h-5 px-1 sm:px-1.5 bg-gradient-to-br from-red-500 to-red-600 text-white text-[10px] sm:text-xs font-bold rounded-full flex items-center justify-center shadow-lg shadow-red-500/50 animate-pulse border border-white/20">
+              <span className="absolute -top-0.5 sm:-top-1 -right-0.5 sm:-right-1 min-w-[18px] sm:min-w-[20px] h-4 sm:h-5 px-1 sm:px-1.5 bg-gradient-to-br from-blue-500 to-blue-600 text-white text-[10px] sm:text-xs font-bold rounded-full flex items-center justify-center shadow-lg shadow-blue-500/50 border border-white/20">
                 {getTotalItems > 99 ? '99+' : getTotalItems}
               </span>
             )}
