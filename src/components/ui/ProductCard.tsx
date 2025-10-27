@@ -3,7 +3,7 @@ import StarRating from '../shared/StarRating';
 import { useCart } from '../../context/CartContext';
 import { toast } from 'sonner';
 import Img from '../shared/Img';
-import { Button } from '../../shared/ui';
+import ProductBadge, { getProductBadges } from '../shared/ProductBadge';
 
 export interface ProductCardProps {
   id?: number;
@@ -18,14 +18,15 @@ export interface ProductCardProps {
   rating?: number;
   reviewCount?: number;
   color?: string; // Цвет для логики переключения
-  category?: 'mousepads' | 'clothing';
-  clothingType?: 'hoodie' | 'tshirt' | 'sleeve';
+  category?: 'mousepads' | 'clothing' | 'Коврики для мыши' | 'Одежда' | 'Коврик' | 'Худи' | 'Футболка' | 'Рукав';
+  clothingType?: 'hoodie' | 'tshirt' | 'sleeve' | 'худи' | 'футболка' | 'рукав';
   size?: 'small' | 'medium' | 'large' | 'small-catalog';
   onAddToCart?: () => void;
   onProductClick?: (productData: ProductCardProps) => void;
   /** Если true — карточка растягивается по высоте родителя и убирает max-width ограничения */
   stretch?: boolean;
   staggerIndex?: number; // Index for stagger animation
+  addedDate?: string; // Дата добавления товара (для бейджа NEW)
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({
@@ -47,9 +48,17 @@ const ProductCard: React.FC<ProductCardProps> = ({
   onAddToCart,
   onProductClick,
   stretch = false,
-  staggerIndex = 0
+  staggerIndex = 0,
+  addedDate
 }) => {
   const { addItem } = useCart();
+  
+  // Определяем бейджи для товара
+  const badges = getProductBadges({
+    rating: rating || 0,
+    reviewCount: reviewCount || 0,
+    addedDate
+  });
   
   const sizeClasses = {
     small: {
@@ -149,8 +158,8 @@ const ProductCard: React.FC<ProductCardProps> = ({
   const staggerClass = staggerIndex > 0 && staggerIndex <= 8 ? `card-stagger card-stagger-${staggerIndex}` : '';
 
   const cardStyles = size === 'small-catalog'
-    ? `relative rounded-lg sm:rounded-xl p-2 sm:p-3 md:p-4 ${containerBase} flex flex-col cursor-pointer group bg-black/40 border border-white/20 hover:border-white/40 transition-all duration-300 hover-lift ${staggerClass}`
-    : `bg-black/40 rounded-lg sm:rounded-xl p-2 sm:p-3 md:p-4 ${containerBase} flex flex-col border border-white/20 shadow-2xl hover:shadow-white/10 hover:border-white/40 transition-all duration-300 hover:transform hover:scale-105 hover-lift ${onProductClick ? 'cursor-pointer' : ''} ${staggerClass}`;
+    ? `relative rounded-lg sm:rounded-xl p-4 sm:p-5 md:p-6 ${containerBase} flex flex-col cursor-pointer group bg-black/40 border border-white/20 hover:border-white/40 transition-all duration-300 hover-lift ${staggerClass}`
+    : `bg-black/40 rounded-lg sm:rounded-xl p-4 sm:p-5 md:p-6 ${containerBase} flex flex-col border border-white/20 shadow-2xl hover:shadow-white/10 hover:border-white/40 transition-all duration-300 hover:transform hover:scale-105 hover-lift ${onProductClick ? 'cursor-pointer' : ''} ${staggerClass}`;
 
 
   return (
@@ -165,39 +174,66 @@ const ProductCard: React.FC<ProductCardProps> = ({
       {/* Content wrapper with relative positioning */}
       <div className="relative z-10">
         {/* Product Image - with fixed height to prevent layout shift */}
-  <div className={`${classes.image} rounded-lg sm:rounded-xl mx-auto ${classes.imageContainer} ${size === 'small-catalog' ? 'bg-white/8 p-2 sm:p-3 transition-all duration-500 overflow-hidden' : 'rounded-lg overflow-hidden'} group/image flex items-center justify-center`}>
+  <div className={`${classes.image} rounded-lg sm:rounded-xl mx-auto ${classes.imageContainer} ${size === 'small-catalog' ? 'bg-white/8 p-2 sm:p-3 transition-all duration-500 overflow-hidden' : 'rounded-lg overflow-hidden'} group/image flex items-center justify-center relative`}>
           <Img
             src={image}
             alt={title}
             className="w-full h-full object-contain object-center"
           />
+          
+          {/* Product badges - positioned in top-left corner */}
+          {badges.length > 0 && (
+            <div className="absolute top-2 left-2 flex flex-col gap-1.5 z-20">
+              {badges.map((badgeType) => (
+                <ProductBadge key={badgeType} type={badgeType} />
+              ))}
+            </div>
+          )}
         </div>
 
         {/* Product Title */}
         <div className="min-h-[40px] sm:min-h-[50px] md:min-h-[60px] flex flex-col justify-between mt-1.5 sm:mt-2">
-        <div className="flex-1 flex flex-col justify-start">
-          <h3 className={`text-white font-manrope font-extrabold ${classes.title} leading-tight tracking-wide drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]`}>
-            {title}
-          </h3>
-          {subtitle && (
-            <p className={`text-white/90 font-manrope font-bold ${classes.title} leading-tight mt-0.5 drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]`}>
+          <div className="flex-1 flex flex-col justify-start">
+            <h3 className={`text-white font-manrope font-extrabold ${classes.title} leading-tight tracking-wide drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]`}>
               {subtitle}
+            </h3>
+            <p className={`text-white/70 font-manrope font-medium ${classes.title} leading-tight mt-0.5 drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]`}>
+              {(() => {
+                // Для одежды показываем только тип товара
+                if ((category === 'clothing' || category === 'Одежда') && clothingType) {
+                  const typeMap: Record<string, string> = {
+                    'hoodie': 'Худи',
+                    'tshirt': 'Футболка',
+                    'sleeve': 'Рукав',
+                    'худи': 'Худи',
+                    'футболка': 'Футболка',
+                    'рукав': 'Рукав'
+                  };
+                  return typeMap[clothingType] || clothingType;
+                }
+
+                // Маппинг категорий на русский
+                const categoryMap: Record<string, string> = {
+                  'mousepads': 'Коврик для мыши',
+                  'clothing': 'Одежда',
+                  'Коврики для мыши': 'Коврик для мыши',
+                  'Одежда': 'Одежда',
+                  'Коврик': 'Коврик для мыши',
+                  'Худи': 'Худи',
+                  'Футболка': 'Футболка',
+                  'Рукав': 'Рукав'
+                };
+
+                return categoryMap[category || ''] || category;
+              })()}
             </p>
-          )}
-        </div>
-        <div className="min-h-[14px] sm:min-h-[16px] md:min-h-[18px] lg:min-h-[20px] xl:min-h-[22px] flex items-end gap-1 sm:gap-1.5 md:gap-2 flex-wrap text-[10px] sm:text-xs md:text-sm">
-          {productSize && category === 'mousepads' && (
+          </div>
+          <div className="min-h-[14px] sm:min-h-[16px] md:min-h-[18px] lg:min-h-[20px] xl:min-h-[22px] flex items-end gap-1 sm:gap-1.5 md:gap-2 flex-wrap text-[10px] sm:text-xs md:text-sm">
             <span className="text-white/80 font-manrope font-medium">
-              Размер: {productSize}
+              В наличии
             </span>
-          )}
-          {productColor && (
-            <span className="text-white/80 font-manrope font-medium">
-              Цвет: {productColor}
-            </span>
-          )}
+          </div>
         </div>
-      </div>
 
         {/* Rating */}
         <div className="mt-1 sm:mt-1.5 md:mt-2 lg:mt-3">
@@ -212,14 +248,6 @@ const ProductCard: React.FC<ProductCardProps> = ({
           <span className={`text-white font-manrope font-extrabold ${classes.price} tracking-wide drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]`}>
             {price}
           </span>
-          <Button
-            onClick={handleAddToCart}
-            variant="primary"
-            size={size === 'small' || size === 'small-catalog' ? 'sm' : 'md'}
-            className="add-to-cart-button whitespace-nowrap"
-          >
-            В корзину
-          </Button>
         </div>
       </div>
     </div>

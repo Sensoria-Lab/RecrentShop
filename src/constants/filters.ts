@@ -47,3 +47,10 @@ export const RATING_OPTIONS = [
   { value: 4, label: 'От 4 звезд' },
   { value: 5, label: '5 звезд' }
 ] as const;
+
+export const COLLECTION_OPTIONS = [
+  { value: 'Geoid', label: 'Geoid' },
+  { value: 'Pro Speed', label: 'Pro Speed' },
+  { value: 'Logo Blue', label: 'Logo Blue' },
+  { value: 'Seprents', label: 'Seprents' }
+] as const;

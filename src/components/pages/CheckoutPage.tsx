@@ -199,17 +199,18 @@ const CheckoutPage: React.FC = () => {
         </div>
 
         {/* Main content */}
-        <main className="flex-1 px-3 sm:px-4 md:px-6 lg:px-8 py-6 sm:py-8 md:py-12">
+        <main className="flex-1 px-4 sm:px-6 md:px-8 lg:px-12 pt-6 sm:pt-8 md:pt-10 pb-12 sm:pb-16 md:pb-20">
           <div className="max-w-7xl mx-auto">
+            {/* Page Title */}
+            <div className="text-center mb-6 sm:mb-8 md:mb-10 lg:mb-12 content-reveal content-reveal-delay-1">
+              <h1 className="text-white font-manrope font-bold text-2xl sm:text-3xl md:text-4xl lg:text-5xl mb-2 sm:mb-3 md:mb-4 drop-shadow-[0_4px_12px_rgba(0,0,0,0.9)]">
+                Оформление заказа
+              </h1>
+              <div className="w-16 sm:w-20 md:w-24 lg:w-32 h-0.5 sm:h-1 bg-white/40 mx-auto"></div>
+            </div>
+
             {/* Background container */}
-            <div className="bg-black/40 border border-white/20 rounded-lg sm:rounded-xl p-6 sm:p-8 md:p-10 scroll-fade-in">
-              {/* Page title */}
-              <div className="text-center mb-6 sm:mb-8 md:mb-10 lg:mb-12">
-                <h1 className="text-white font-manrope font-bold text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl mb-3 sm:mb-4 md:mb-6 drop-shadow-[0_4px_12px_rgba(0,0,0,0.9)]">
-                  Оформление заказа
-                </h1>
-                <div className="w-20 sm:w-24 md:w-32 h-0.5 sm:h-1 bg-white/40 mx-auto"></div>
-              </div>
+            <div className="border border-white/20 rounded-lg sm:rounded-xl p-6 sm:p-8 md:p-10 content-reveal">
 
               {/* Хлебные крошки */}
               <div className="mb-8 sm:mb-10 md:mb-12 flex items-center justify-center gap-3 sm:gap-4 md:gap-6">
@@ -287,7 +288,7 @@ const CheckoutPage: React.FC = () => {
               {step === 'contacts' ? (
                 // Шаг 1: Контактная информация
                 <form onSubmit={(e) => { e.preventDefault(); handleNextStep(); }} className="space-y-4 sm:space-y-5 md:space-y-6">
-                  <div className="bg-black/40 border border-white/20 rounded-lg sm:rounded-xl p-6 sm:p-7 md:p-8">
+                  <div className="border border-white/20 rounded-lg sm:rounded-xl p-6 sm:p-7 md:p-8">
                     <div className="flex items-center gap-3 sm:gap-4 mb-6 sm:mb-7 md:mb-8">
                       <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-br from-white/20 to-white/10 flex items-center justify-center">
                         <svg className="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -402,7 +403,7 @@ const CheckoutPage: React.FC = () => {
               ) : (
                 // Шаг 2: Способ доставки
                 <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5 md:space-y-6">
-                  <div className="bg-black/40 rounded-xl sm:rounded-2xl p-5 sm:p-6 md:p-7 lg:p-9 border border-white/10">
+                  <div className="rounded-xl sm:rounded-2xl p-5 sm:p-6 md:p-7 lg:p-9 border border-white/10">
                     <div className="flex items-center gap-3 sm:gap-4 mb-6 sm:mb-7 md:mb-8">
                       <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-br from-white/20 to-white/10 flex items-center justify-center">
                         <svg className="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -567,7 +568,7 @@ const CheckoutPage: React.FC = () => {
 
             {/* Правая колонка - Сводка заказа */}
             <div className="lg:sticky lg:top-28 h-fit">
-              <div className="bg-black/40 rounded-xl sm:rounded-2xl p-5 sm:p-6 md:p-7 border border-white/10">
+              <div className="rounded-xl sm:rounded-2xl p-5 sm:p-6 md:p-7 border border-white/10">
                 <div className="flex items-center gap-3 mb-5 sm:mb-6">
                   <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-gradient-to-br from-white/20 to-white/10 flex items-center justify-center">
                     <svg className="w-4 h-4 sm:w-5 sm:h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">

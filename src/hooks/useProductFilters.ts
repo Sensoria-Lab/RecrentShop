@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import type { Product, SortOption, CategoryFilter, ColorFilter, SizeFilter, ClothingTypeFilter } from '../types/product';
+import type { Product, SortOption, CategoryFilter, ColorFilter, SizeFilter, ClothingTypeFilter, CollectionFilter } from '../types/product';
 
 interface FilterOptions {
   sortBy: SortOption;
@@ -7,6 +7,7 @@ interface FilterOptions {
   colorFilter: ColorFilter;
   sizeFilter: SizeFilter;
   clothingTypeFilter: ClothingTypeFilter;
+  collectionFilter: CollectionFilter;
   priceRange: [number, number];
   minRating: number;
 }
@@ -24,39 +25,46 @@ export const useProductFilters = (products: Product[], filters: FilterOptions) =
       filtered = filtered.filter(p => p.category === filters.categoryFilter);
     }
 
-    // Apply color filter
-    if (filters.colorFilter !== 'all') {
-      filtered = filtered.filter(p => p.color === filters.colorFilter);
+    // Apply color filter - now supports multiple colors
+    if (filters.colorFilter.length > 0) {
+      filtered = filtered.filter(p => filters.colorFilter.includes(p.color as any));
     }
 
-    // Apply size filter
-    // Note: At this point, category filter is already applied above
-    // Filter values now have suffixes to distinguish categories:
-    // - Mousepads: 'L-pad', 'XL-pad'
-    // - Clothing: 'XS-cloth', 'S-cloth', 'M-cloth', 'L-cloth', 'XL-cloth', '2XL-cloth'
-    // Product data still uses plain sizes: "L", "XL", "XS,S,M,L,XL,2XL"
-    if (filters.sizeFilter !== 'all') {
+    // Apply size filter - now supports multiple sizes
+    if (filters.sizeFilter.length > 0) {
       filtered = filtered.filter(p => {
         if (!p.productSize) return false;
         
-        // Extract the size and category from filter value (e.g., "L-pad" -> ["L", "pad"])
-        const [selectedSize, selectedCategory] = filters.sizeFilter.includes('-') 
-          ? filters.sizeFilter.split('-') 
-          : [filters.sizeFilter, null];
-        
-        // If category is specified in filter, check product category matches
-        if (selectedCategory === 'pad' && p.category !== 'mousepads') return false;
-        if (selectedCategory === 'cloth' && p.category !== 'clothing') return false;
-        
-        // Check if productSize contains the selected size (for comma-separated or exact match)
-        const sizes = p.productSize.split(',').map(s => s.trim());
-        return sizes.includes(selectedSize);
+        // Check if any selected size matches the product
+        return filters.sizeFilter.some(selectedSize => {
+          // Extract the size and category from filter value (e.g., "L-pad" -> ["L", "pad"])
+          const [size, category] = selectedSize.includes('-') 
+            ? selectedSize.split('-') 
+            : [selectedSize, null];
+          
+          // If category is specified in filter, check product category matches
+          if (category === 'pad' && p.category !== 'mousepads') return false;
+          if (category === 'cloth' && p.category !== 'clothing') return false;
+          
+          // Check if productSize contains the selected size (for comma-separated or exact match)
+          const sizes = p.productSize!.split(',').map(s => s.trim());
+          return sizes.includes(size);
+        });
       });
     }
 
-    // Apply clothing type filter
-    if (filters.clothingTypeFilter !== 'all') {
-      filtered = filtered.filter(p => p.clothingType === filters.clothingTypeFilter);
+    // Apply clothing type filter - now supports multiple types
+    if (filters.clothingTypeFilter.length > 0) {
+      filtered = filtered.filter(p => 
+        p.clothingType && filters.clothingTypeFilter.includes(p.clothingType as any)
+      );
+    }
+
+    // Apply collection filter - supports multiple collections
+    if (filters.collectionFilter.length > 0) {
+      filtered = filtered.filter(p => 
+        p.collection && filters.collectionFilter.includes(p.collection as any)
+      );
     }
 
     // Apply price range filter
@@ -94,6 +102,7 @@ export const useProductFilters = (products: Product[], filters: FilterOptions) =
     filters.colorFilter,
     filters.sizeFilter,
     filters.clothingTypeFilter,
+    filters.collectionFilter,
     filters.priceRange,
     filters.minRating
   ]);

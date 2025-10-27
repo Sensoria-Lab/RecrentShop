@@ -32,7 +32,7 @@ const PageLayout: React.FC<PageLayoutProps> = ({ children }) => {
         {/* Spacer to prevent content jump */}
         <div className="h-24" />
 
-        <main className="flex-1 px-4 sm:px-20 py-12">
+        <main className="flex-1">
           {children}
         </main>
         <Footer />

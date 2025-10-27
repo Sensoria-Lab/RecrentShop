@@ -392,24 +392,52 @@ body {
   scroll-behavior: smooth;
 }
 
-/* Scroll reveal animation - Apple style */
-@keyframes scrollFadeIn {
+/* ============================================
+   SHADCN-STYLE ANIMATIONS - Modern & Subtle
+   ============================================ */
+
+/* Base enter/exit animations following shadcn/ui patterns */
+@keyframes enter {
   from {
     opacity: 0;
-    transform: translateY(40px);
+    transform: scale(0.96) translateY(4px);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: scale(1) translateY(0);
   }
 }
 
-.scroll-fade-in {
-  opacity: 0;
-  animation: scrollFadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+@keyframes exit {
+  from {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.96) translateY(4px);
+  }
 }
 
-/* Быстрое появление для backdrop-blur блоков */
+/* Smooth content reveal - less aggressive than before */
+.content-reveal {
+  opacity: 0;
+  animation: enter 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.content-reveal-delay-1 {
+  animation-delay: 0.1s;
+}
+
+.content-reveal-delay-2 {
+  animation-delay: 0.2s;
+}
+
+.content-reveal-delay-3 {
+  animation-delay: 0.3s;
+}
+
+/* Quick fade for overlays and backdrops */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -421,22 +449,6 @@ body {
 
 .animate-fadeIn {
   animation: fadeIn 0.2s ease-out forwards;
-}
-
-.scroll-fade-in-delay-1 {
-  animation-delay: 0.1s;
-}
-
-.scroll-fade-in-delay-2 {
-  animation-delay: 0.2s;
-}
-
-.scroll-fade-in-delay-3 {
-  animation-delay: 0.3s;
-}
-
-.scroll-fade-in-delay-4 {
-  animation-delay: 0.4s;
 }
 
 /* Header shimmer animation */
@@ -455,28 +467,30 @@ body {
 
 /* Removed shadcn text hover/blur utilities at user's request */
 
-/* Animated heading letters: fade in and slide up with stagger */
-@keyframes letterFadeUp {
-  0% { opacity: 0; transform: translateY(18px); }
-  60% { opacity: 1; transform: translateY(-6px); }
-  100% { opacity: 1; transform: translateY(0); }
+/* Subtle letter reveal - reduced from 18px to 6px for smoother effect */
+@keyframes letterReveal {
+  0% { 
+    opacity: 0; 
+    transform: translateY(6px);
+  }
+  100% { 
+    opacity: 1; 
+    transform: translateY(0);
+  }
 }
 
 .letter-appear {
   opacity: 0;
-  transform: translateY(18px);
+  transform: translateY(6px);
   display: inline-block;
-  /* ensure consistent baseline so letters don't visually shift */
   vertical-align: middle;
   line-height: 1;
-  animation: letterFadeUp 520ms cubic-bezier(0.22, 1, 0.36, 1) both;
-  /* prevent user selection of individual letters */
+  animation: letterReveal 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
   transform-origin: center;
-  /* Hint to browser about upcoming transform to reduce layout reflow/jank */
   will-change: transform, opacity;
   transform-style: preserve-3d;
 }
@@ -496,17 +510,16 @@ body {
   margin-right: 0.28rem;
 }
 
-/* CTA entrance: subtle pop with fade and lift */
-@keyframes ctaPopIn {
-  0% { opacity: 0; transform: translateY(12px) scale(0.98); }
-  60% { opacity: 1; transform: translateY(-6px) scale(1.02); }
+/* CTA entrance: subtle pop with fade - shadcn style */
+@keyframes ctaEnter {
+  0% { opacity: 0; transform: translateY(4px) scale(0.96); }
   100% { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 .cta-appear {
   opacity: 0;
-  transform: translateY(12px) scale(0.98);
-  animation: ctaPopIn 420ms cubic-bezier(0.2, 0.9, 0.25, 1) both;
+  transform: translateY(4px) scale(0.96);
+  animation: ctaEnter 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 /* Reduce motion preference: disable animations for users who asked for reduced motion */
@@ -521,14 +534,9 @@ body {
 /* New blur-text animation (inspired by reactbits.dev text blur effect) */
 @keyframes blurReveal {
   0% {
-    filter: blur(14px);
+    filter: blur(8px);
     opacity: 0;
-    transform: translateY(10px);
-  }
-  60% {
-    filter: blur(4px);
-    opacity: 1;
-    transform: translateY(-4px);
+    transform: translateY(4px);
   }
   100% {
     filter: blur(0);
@@ -539,7 +547,7 @@ body {
 
 .blur-text {
   display: inline-block;
-  animation: blurReveal 720ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: blurReveal 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
   will-change: transform, filter, opacity;
 }
 
@@ -782,10 +790,11 @@ input[type="range"].form-control {
 /* ===== КАТЕГОРИЯ A: БЫСТРЫЕ УЛУЧШЕНИЯ ===== */
 
 /* 1. Stagger animation для карточек каталога */
-@keyframes cardFadeInUp {
+/* Shadcn-style card entrance - subtle scale and fade */
+@keyframes cardEnter {
   from {
     opacity: 0;
-    transform: translateY(30px) scale(0.95);
+    transform: translateY(8px) scale(0.96);
   }
   to {
     opacity: 1;
@@ -795,7 +804,7 @@ input[type="range"].form-control {
 
 .card-stagger {
   opacity: 0;
-  animation: cardFadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: cardEnter 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 .card-stagger-1 { animation-delay: 0.05s; }
@@ -1006,6 +1015,96 @@ input[type="range"].form-control {
           drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
 }
 
+/* Fade in animation for active filters - shadcn style */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.2s ease-out;
+}
+
+/* Smooth filter button transitions */
+.filter-button-transition {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.filter-button-transition:hover {
+  transform: translateY(-1px);
+}
+
+.filter-button-transition:active {
+  transform: translateY(0);
+}
+
+/* ============================================
+   SHADCN UTILITY ANIMATIONS
+   ============================================ */
+
+/* Animate in - entering animations */
+.animate-in {
+  animation-name: enter;
+  animation-duration: 0.3s;
+  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Animate out - exiting animations */
+.animate-out {
+  animation-name: exit;
+  animation-duration: 0.2s;
+  animation-timing-function: cubic-bezier(0.4, 0, 1, 1);
+}
+
+/* Fade animations */
+.fade-in-0 {
+  animation-name: fadeIn;
+}
+
+/* Zoom animations */
+.zoom-in-95 {
+  animation-name: enter;
+}
+
+/* Slide animations */
+.slide-in-from-top-2 {
+  animation-name: slide-in-from-top;
+}
+
+.slide-in-from-bottom-2 {
+  animation-name: slide-in-from-bottom;
+}
+
+.slide-in-from-left-2 {
+  animation-name: slide-in-from-left;
+}
+
+.slide-in-from-right-2 {
+  animation-name: slide-in-from-right;
+}
+
+/* Duration utilities */
+.duration-200 {
+  animation-duration: 0.2s;
+}
+
+.duration-300 {
+  animation-duration: 0.3s;
+}
+
+.duration-400 {
+  animation-duration: 0.4s;
+}
+
+.duration-500 {
+  animation-duration: 0.5s;
+}
 
 
 

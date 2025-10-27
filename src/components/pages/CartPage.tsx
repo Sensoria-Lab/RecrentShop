@@ -19,27 +19,23 @@ const CartPage: React.FC = () => {
 
   return (
     <PageLayout>
-      <div className="min-h-screen px-4 sm:px-6 md:px-8">
+      <div className="min-h-screen px-4 sm:px-6 md:px-8 lg:px-12 pt-6 sm:pt-8 md:pt-10 pb-12 sm:pb-16 md:pb-20">
         <div className="max-w-7xl mx-auto">
+          {/* Page Title */}
+          <div className="text-center mb-6 sm:mb-8 md:mb-10 lg:mb-12 content-reveal content-reveal-delay-1">
+            <h1 className="text-white font-manrope font-bold text-2xl sm:text-3xl md:text-4xl lg:text-5xl mb-2 sm:mb-3 md:mb-4 drop-shadow-[0_4px_12px_rgba(0,0,0,0.9)]">
+              Корзина
+            </h1>
+            <div className="w-16 sm:w-20 md:w-24 lg:w-32 h-0.5 sm:h-1 bg-white/40 mx-auto"></div>
+          </div>
+
           {/* Background container */}
-          <div className="bg-black/40 border border-white/20 rounded-lg sm:rounded-xl p-6 sm:p-8 md:p-10">
-            {/* Page Title */}
-            <div className="text-center mb-8 sm:mb-12 md:mb-16 scroll-fade-in">
-              <h1 className="text-white font-manrope font-bold text-3xl sm:text-4xl md:text-5xl lg:text-6xl mb-3 sm:mb-4 drop-shadow-[0_4px_12px_rgba(0,0,0,0.9)]">
-                Корзина
-              </h1>
-              <div className="w-24 sm:w-32 h-1 bg-white/40 mx-auto"></div>
-              <p className="text-base sm:text-lg md:text-xl text-white/70 font-manrope mt-4 sm:mt-6">
-                {items.length === 0
-                  ? 'Ваша корзина пуста'
-                  : `Товаров в корзине: ${items.reduce((sum, item) => sum + item.quantity, 0)}`}
-              </p>
-            </div>
+          <div className="border border-white/20 rounded-lg sm:rounded-xl p-6 sm:px-8 md:p-10">
 
           {items.length === 0 ? (
-            /* Empty Cart State */
-            <div className="flex flex-col items-center justify-center py-10 sm:py-16 md:py-20 scroll-fade-in scroll-fade-in-delay-1">
-                <div className="bg-black/40 border border-white/20 rounded-lg sm:rounded-xl p-6 sm:p-8 md:p-10 max-w-2xl text-center w-full">
+            <div className="flex flex-col items-center justify-center py-10 sm:py-12 md:py-16 content-reveal">
+                {/* Empty Cart State */}
+                <div className="border border-white/20 rounded-lg sm:rounded-xl p-6 sm:p-8 md:p-10 max-w-2xl text-center w-full">
                 {/* Shine effect */}
                 <div className="absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-transparent pointer-events-none" />
 

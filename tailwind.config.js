@@ -35,17 +35,8 @@ module.exports = {
   			]
   		},
   		keyframes: {
-  			scrollFadeIn: {
-  				from: {
-  					opacity: '0',
-  					transform: 'translateY(40px)'
-  				},
-  				to: {
-  					opacity: '1',
-  					transform: 'translateY(0)'
-  				}
-  			},
-  			fadeIn: {
+  			// Shadcn-style animations - smooth and subtle
+  			'fade-in': {
   				from: {
   					opacity: '0'
   				},
@@ -53,24 +44,96 @@ module.exports = {
   					opacity: '1'
   				}
   			},
-  			fadeInUp: {
-  				'0%': {
-  					opacity: '0',
-  					transform: 'translateY(16px)'
+  			'fade-out': {
+  				from: {
+  					opacity: '1'
   				},
-  				'100%': {
-  					opacity: '1',
-  					transform: 'translateY(0)'
+  				to: {
+  					opacity: '0'
   				}
   			},
-  			cardFadeInUp: {
+  			'zoom-in': {
   				from: {
   					opacity: '0',
-  					transform: 'translateY(30px) scale(0.95)'
+  					transform: 'scale(0.95)'
   				},
   				to: {
   					opacity: '1',
-  					transform: 'translateY(0) scale(1)'
+  					transform: 'scale(1)'
+  				}
+  			},
+  			'zoom-out': {
+  				from: {
+  					opacity: '1',
+  					transform: 'scale(1)'
+  				},
+  				to: {
+  					opacity: '0',
+  					transform: 'scale(0.95)'
+  				}
+  			},
+  			'slide-in-from-top': {
+  				from: {
+  					transform: 'translateY(-8px)'
+  				},
+  				to: {
+  					transform: 'translateY(0)'
+  				}
+  			},
+  			'slide-in-from-bottom': {
+  				from: {
+  					transform: 'translateY(8px)'
+  				},
+  				to: {
+  					transform: 'translateY(0)'
+  				}
+  			},
+  			'slide-in-from-left': {
+  				from: {
+  					transform: 'translateX(-8px)'
+  				},
+  				to: {
+  					transform: 'translateX(0)'
+  				}
+  			},
+  			'slide-in-from-right': {
+  				from: {
+  					transform: 'translateX(8px)'
+  				},
+  				to: {
+  					transform: 'translateX(0)'
+  				}
+  			},
+  			'slide-out-to-top': {
+  				from: {
+  					transform: 'translateY(0)'
+  				},
+  				to: {
+  					transform: 'translateY(-8px)'
+  				}
+  			},
+  			'slide-out-to-bottom': {
+  				from: {
+  					transform: 'translateY(0)'
+  				},
+  				to: {
+  					transform: 'translateY(8px)'
+  				}
+  			},
+  			'slide-out-to-left': {
+  				from: {
+  					transform: 'translateX(0)'
+  				},
+  				to: {
+  					transform: 'translateX(-8px)'
+  				}
+  			},
+  			'slide-out-to-right': {
+  				from: {
+  					transform: 'translateX(0)'
+  				},
+  				to: {
+  					transform: 'translateX(8px)'
   				}
   			},
   			'gradient-shift': {
@@ -233,17 +296,26 @@ module.exports = {
   			}
   		},
   		animation: {
-  			'scroll-fade-in': 'scrollFadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards',
-  			'fade-in': 'fadeIn 0.2s ease-out forwards',
-  			'fade-in-up': 'fadeInUp 0.55s cubic-bezier(0.4,0.1,0.2,1) both',
-  			'card-fade-in-up': 'cardFadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+  			// Shadcn-style animations with proper timing
+  			'fade-in': 'fade-in 0.2s ease-out',
+  			'fade-out': 'fade-out 0.2s ease-in',
+  			'zoom-in': 'zoom-in 0.3s ease-out',
+  			'zoom-out': 'zoom-out 0.2s ease-in',
+  			'slide-in-from-top': 'slide-in-from-top 0.3s ease-out',
+  			'slide-in-from-bottom': 'slide-in-from-bottom 0.3s ease-out',
+  			'slide-in-from-left': 'slide-in-from-left 0.3s ease-out',
+  			'slide-in-from-right': 'slide-in-from-right 0.3s ease-out',
+  			'slide-out-to-top': 'slide-out-to-top 0.2s ease-in',
+  			'slide-out-to-bottom': 'slide-out-to-bottom 0.2s ease-in',
+  			'slide-out-to-left': 'slide-out-to-left 0.2s ease-in',
+  			'slide-out-to-right': 'slide-out-to-right 0.2s ease-in',
+  			// Keep existing background animations
   			'gradient-shift': 'gradient-shift 3s ease infinite',
   			'gradient-flow': 'gradientFlow 15s ease infinite',
   			'beam-slide-1': 'beam-slide-1 8s ease-in-out infinite',
   			'beam-slide-2': 'beam-slide-2 9s ease-in-out infinite',
   			shimmer: 'shimmer 2s ease-in-out',
   			'shimmer-slide': 'shimmerSlide 2s infinite',
-  			'slide-in-right': 'slide-in-right 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards',
   			float: 'float 3s ease-in-out infinite',
   			'pulse-glow': 'pulse-glow 2s ease-in-out infinite',
   			'bounce-subtle': 'bounce-subtle 2s ease-in-out infinite',

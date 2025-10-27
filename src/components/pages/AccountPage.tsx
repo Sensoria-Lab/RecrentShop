@@ -123,17 +123,18 @@ const AccountPage: React.FC = () => {
 
   return (
     <PageContainer>
-      <div className="min-h-screen px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 py-8 md:py-12 lg:py-16">
+      <div className="min-h-screen px-4 sm:px-6 md:px-8 lg:px-12 pt-6 sm:pt-8 md:pt-10 pb-12 sm:pb-16 md:pb-20">
         <div className="max-w-7xl mx-auto">
+          {/* Page Title */}
+          <div className="text-center mb-6 sm:mb-8 md:mb-10 lg:mb-12 content-reveal content-reveal-delay-1">
+            <h1 className="text-white font-manrope font-bold text-2xl sm:text-3xl md:text-4xl lg:text-5xl mb-2 sm:mb-3 md:mb-4 drop-shadow-[0_4px_12px_rgba(0,0,0,0.9)]">
+              Личный кабинет
+            </h1>
+            <div className="w-16 sm:w-20 md:w-24 lg:w-32 h-0.5 sm:h-1 bg-white/40 mx-auto"></div>
+          </div>
+
           {/* Background panel */}
-          <div className="bg-black/40 border border-white/20 rounded-lg sm:rounded-xl pt-8 sm:pt-10 md:pt-12 pb-8 sm:pb-10 md:pb-12 px-6 sm:px-8 md:px-10 lg:px-12">
-            {/* Page Header */}
-            <div className="text-center mb-8 md:mb-12 scroll-fade-in">
-              <h1 className="text-white font-manrope font-bold text-3xl sm:text-4xl md:text-5xl lg:text-6xl mb-4 drop-shadow-[0_4px_12px_rgba(0,0,0,0.9)]">
-                Личный кабинет
-              </h1>
-              <div className="w-24 sm:w-32 h-0.5 sm:h-1 bg-white/40 mx-auto"></div>
-            </div>
+          <div className="border border-white/20 rounded-lg sm:rounded-xl pt-8 sm:pt-10 md:pt-12 pb-8 sm:pb-10 md:pb-12 px-6 sm:px-8 md:px-10">
 
             {/* Main Content with Tabs */}
             <Tabs defaultValue="orders" className="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8">

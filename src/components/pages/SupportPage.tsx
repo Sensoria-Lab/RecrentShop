@@ -278,12 +278,17 @@ const SupportPage: React.FC = () => {
 
   return (
     <PageLayout>
-      <div className="max-w-6xl mx-auto">
-        <div className="bg-black/40 border border-white/20 rounded-lg sm:rounded-xl pb-8 sm:pb-10 md:pb-12 px-8 sm:px-10 md:px-12 pt-8 sm:pt-10 md:pt-12">
-          <div className="text-center mb-10 sm:mb-14 md:mb-18 lg:mb-24 scroll-fade-in">
-            <h1 className="text-white font-manrope font-bold text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl mb-3 sm:mb-4 md:mb-6 drop-shadow-[0_4px_12px_rgba(0,0,0,0.9)]">Информация</h1>
-            <div className="w-20 sm:w-24 md:w-32 h-0.5 sm:h-1 bg-white/40 mx-auto"></div>
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 md:px-8 lg:px-12 pt-6 sm:pt-8 md:pt-10 pb-12 sm:pb-16 md:pb-20">
+        <div>
+          {/* Page Title */}
+          <div className="text-center mb-6 sm:mb-8 md:mb-10 lg:mb-12 content-reveal content-reveal-delay-1">
+            <h1 className="text-white font-manrope font-bold text-2xl sm:text-3xl md:text-4xl lg:text-5xl mb-2 sm:mb-3 md:mb-4 drop-shadow-[0_4px_12px_rgba(0,0,0,0.9)]">
+              Информация
+            </h1>
+            <div className="w-16 sm:w-20 md:w-24 lg:w-32 h-0.5 sm:h-1 bg-white/40 mx-auto"></div>
           </div>
+
+        <div className="border border-white/20 rounded-lg sm:rounded-xl pb-8 sm:pb-10 md:pb-12 px-4 sm:px-6 md:px-8 lg:px-12 pt-6 sm:pt-8 md:pt-10">
 
           <Accordion type="single" collapsible className="w-full space-y-4 sm:space-y-5 md:space-y-6">
             {items.map((item, index) => (
@@ -309,6 +314,7 @@ const SupportPage: React.FC = () => {
               </AccordionItem>
             ))}
           </Accordion>
+        </div>
         </div>
       </div>
     </PageLayout>
