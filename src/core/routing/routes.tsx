@@ -53,6 +53,8 @@ export const router = createBrowserRouter([
       },
     ],
   },
-]);
+], {
+  basename: '/RecrentShop',
+});
 
 export default router;
