@@ -1,21 +1,10 @@
-import React, { useEffect, Suspense, lazy } from 'react';
-import { useLocation, Routes, Route } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { useLocation, Outlet } from 'react-router-dom';
 import './index.css';
-import LoadingSkeleton from './components/shared/LoadingSkeleton';
-import ErrorBoundary from './components/shared/ErrorBoundary';
-import BottomNavigation from './components/shared/BottomNavigation';
-import { CartProvider } from './context/CartContext';
-import { ToastProvider } from './context/ToastContext';
-import ShadcnBubble from './components/shared/ShadcnBubble';
-import { Toaster } from './shared/ui';
-
-const MainPage = lazy(() => import('./components/pages/MainPage'));
-const ProductPage = lazy(() => import('./components/pages/ProductPage'));
-const CatalogPage = lazy(() => import('./components/pages/CatalogPage'));
-const SupportPage = lazy(() => import('./components/pages/SupportPage'));
-const CartPage = lazy(() => import('./components/pages/CartPage'));
-const CheckoutPage = lazy(() => import('./components/pages/CheckoutPage'));
-const AccountPage = lazy(() => import('./components/pages/AccountPage'));
+import { ErrorBoundary, BottomNavigation, ShadcnBubble } from './shared/components';
+import { CartProvider } from './core/context/CartContext';
+import { ToastProvider } from './core/context/ToastContext';
+import { Toaster } from 'sonner';
 
 /**
  * Main App Component
@@ -39,17 +28,8 @@ function App() {
 
             {/* Routes container */}
             <div className="min-h-screen relative z-10">
-              <Suspense fallback={<LoadingSkeleton />}>
-                <Routes location={location}>
-                  <Route path="/" element={<MainPage />} />
-                  <Route path="/catalog" element={<CatalogPage />} />
-                  <Route path="/support" element={<SupportPage />} />
-                  <Route path="/product" element={<ProductPage />} />
-                  <Route path="/cart" element={<CartPage />} />
-                  <Route path="/checkout" element={<CheckoutPage />} />
-                  <Route path="/account" element={<AccountPage />} />
-                </Routes>
-              </Suspense>
+              {/* Render child routes */}
+              <Outlet />
             </div>
 
             {/* Mobile Bottom Navigation */}
