@@ -7,17 +7,15 @@ import CartSidebar from './CartSidebar';
 
 interface HeaderProps {
   className?: string;
-  onNavigate?: (page: string) => void;
 }
 
-const Header: React.FC<HeaderProps> = ({ className = '', onNavigate }) => {
+const Header: React.FC<HeaderProps> = ({ className = '' }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { isCartOpen, toggleCart, getTotalItems } = useCart();
 
   const go = (p: string) => {
-    if (onNavigate) return onNavigate(p);
     if (p === 'main') navigate('/'); else navigate(`/${p}`);
   };
 

@@ -607,7 +607,6 @@ const ProductPage: React.FC = () => {
                       category={product.category}
                       clothingType={product.clothingType}
                       size="small-catalog"
-                      onAddToCart={() => {}}
                       onProductClick={() => {
                         navigateToProduct(product);
                         window.scrollTo({ top: 0, behavior: 'smooth' });

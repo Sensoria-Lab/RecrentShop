@@ -608,7 +608,6 @@ const CatalogPage: React.FC = () => {
                               stretch={false}
                               staggerIndex={Math.min(delay, 8)}
                               addedDate={product.addedDate}
-                              onAddToCart={() => {}}
                               onProductClick={handleProductClick}
                             />
                           </div>

@@ -63,7 +63,6 @@ const HeroImageShowcase: React.FC<HeroImageShowcaseProps> = ({ products, onProdu
               category={currentProduct.category}
               clothingType={currentProduct.clothingType}
               size="small-catalog"
-              onAddToCart={() => {}}
               onProductClick={() => onProductClick(currentProduct)}
             />
           </div>
