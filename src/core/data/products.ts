@@ -1,9 +1,7 @@
 import { Product } from '../../features/products/types';
 
 // Base URL for images (GitHub Pages for production, relative for development)
-const BASE_URL = process.env.NODE_ENV === 'production'
-  ? 'https://sensoria-lab.github.io/RecrentShop'
-  : '';
+const BASE_URL = process.env.PUBLIC_URL || '';
 
 /**
  * All mousepads products

@@ -56,22 +56,6 @@ const ProductCard: React.FC<ProductCardProps> = ({
     addedDate
   });
 
-  // Проверяем, является ли изображение маленьким для mousepads
-  const isMousepadSmallImage = React.useMemo(() => {
-    if (category === 'mousepads' || category === 'Коврики для мыши' || category === 'Коврик') {
-      // Если изображение загружено, проверяем его размеры
-      if (imageDimensions) {
-        const aspectRatio = imageDimensions.width / imageDimensions.height;
-        // Считаем маленьким, если соотношение сторон больше 2 (горизонтально вытянутое)
-        // или если высота меньше ширины (обычно для маленьких изображений)
-        return aspectRatio > 2 || imageDimensions.height < imageDimensions.width * 0.8;
-      }
-      // Для определенных размеров ковриков используем object-top
-      return productSize === 'L' || productSize === 'XL' || image.includes('mousepad');
-    }
-    return false;
-  }, [category, imageDimensions, productSize, image]);
-
   // Форматирование цены
   const formatPrice = (price: string) => {
     return price.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1 ');

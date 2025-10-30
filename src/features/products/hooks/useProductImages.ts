@@ -20,9 +20,9 @@ export const useProductImages = (
       // Pro Speed poron mousepad
       if (productData.subtitle?.toLowerCase().includes('pro speed') && productData.subtitle.toLowerCase().includes('poron')) {
         return [
-          '/images/products/mousepads/pro/control.webp',
-          '/images/products/mousepads/pro/control_2.webp',
-          '/images/products/mousepads/pro/control_3.webp'
+          '/images/products/mousepads/pro/pro-speed_black_pro_01.webp',
+          '/images/products/mousepads/pro/pro-speed_black_pro_02.webp',
+          '/images/products/mousepads/pro/pro-speed_black_pro_03.webp'
         ];
       }
 
@@ -30,17 +30,17 @@ export const useProductImages = (
       if (productData.subtitle?.toLowerCase().includes('logo-blue')) {
         if (selectedSize === 'XL') {
           return [
-            '/images/products/mousepads/xl/xl_blue/lxl_01_1.webp',
-            '/images/products/mousepads/xl/xl_blue/lxl_02_1.webp',
-            '/images/products/mousepads/xl/xl_blue/xl_01_2.webp',
-            '/images/products/mousepads/xl/xl_blue/xl_02_2.webp'
+            '/images/products/mousepads/xl/xl_blue/logo-blue_blue_xl_01.webp',
+            '/images/products/mousepads/xl/xl_blue/logo-blue_blue_xl_02.webp',
+            '/images/products/mousepads/xl/xl_blue/logo-blue_blue_xl_03.webp',
+            '/images/products/mousepads/xl/xl_blue/logo-blue_blue_xl_04.webp'
           ];
         } else {
           return [
-            '/images/products/mousepads/l/l_blue/107_l_logo-blue_01.webp',
-            '/images/products/mousepads/l/l_blue/107_l_logo-blue_02.webp',
-            '/images/products/mousepads/l/l_blue/107_l_logo-blue_03.webp',
-            '/images/products/mousepads/l/l_blue/107_l_logo-blue_04.webp'
+            '/images/products/mousepads/l/l_blue/logo-blue_blue_l_01.webp',
+            '/images/products/mousepads/l/l_blue/logo-blue_blue_l_02.webp',
+            '/images/products/mousepads/l/l_blue/logo-blue_blue_l_03.webp',
+            '/images/products/mousepads/l/l_blue/logo-blue_blue_l_04.webp'
           ];
         }
       }
@@ -49,62 +49,62 @@ export const useProductImages = (
       if (selectedSize === 'XL') {
         if (selectedColor === 'red') {
           return [
-            '/images/products/mousepads/xl/xl_red/010_xl_logo-red_01.webp',
-            '/images/products/mousepads/xl/xl_red/010_xl_logo-red_02.webp',
-            '/images/products/mousepads/xl/xl_red/010_xl_logo-red_03.webp',
-            '/images/products/mousepads/xl/xl_red/010_xl_logo-red_04.webp'
+            '/images/products/mousepads/xl/xl_red/logo-red_red_xl_01.webp',
+            '/images/products/mousepads/xl/xl_red/logo-red_red_xl_02.webp',
+            '/images/products/mousepads/xl/xl_red/logo-red_red_xl_03.webp',
+            '/images/products/mousepads/xl/xl_red/logo-red_red_xl_04.webp'
           ];
         } else if (selectedColor === 'blue') {
           return [
-            '/images/products/mousepads/xl/xl_blue/lxl_01_1.webp',
-            '/images/products/mousepads/xl/xl_blue/lxl_02_1.webp',
-            '/images/products/mousepads/xl/xl_blue/xl_01_2.webp',
-            '/images/products/mousepads/xl/xl_blue/xl_02_2.webp'
+            '/images/products/mousepads/xl/xl_blue/logo-blue_blue_xl_01.webp',
+            '/images/products/mousepads/xl/xl_blue/logo-blue_blue_xl_02.webp',
+            '/images/products/mousepads/xl/xl_blue/logo-blue_blue_xl_03.webp',
+            '/images/products/mousepads/xl/xl_blue/logo-blue_blue_xl_04.webp'
           ];
         } else if (selectedColor === 'white') {
           return [
-            '/images/products/mousepads/xl/xl_white_geoid/11.webp',
-            '/images/products/mousepads/xl/xl_white_geoid/4_4.webp',
-            '/images/products/mousepads/xl/xl_white_geoid/5_4.webp'
+            '/images/products/mousepads/xl/xl_white_geoid/geoid_white_xl_01.webp',
+            '/images/products/mousepads/xl/xl_white_geoid/geoid_white_xl_02.webp',
+            '/images/products/mousepads/xl/xl_white_geoid/geoid_white_xl_03.webp'
           ];
         } else {
           // black by default
           return [
-            '/images/products/mousepads/xl/xl_black_geoid/114_001.webp',
-            '/images/products/mousepads/xl/xl_black_geoid/114_002.webp',
-            '/images/products/mousepads/xl/xl_black_geoid/114_003.webp'
+            '/images/products/mousepads/xl/xl_black_geoid/geoid_black_xl_01.webp',
+            '/images/products/mousepads/xl/xl_black_geoid/geoid_black_xl_02.webp',
+            '/images/products/mousepads/xl/xl_black_geoid/geoid_black_xl_03.webp'
           ];
         }
       } else {
         // Size L
         if (selectedColor === 'red') {
           return [
-            '/images/products/mousepads/l/l_red/109_l_logo-red_01.webp',
-            '/images/products/mousepads/l/l_red/109_l_logo-red_02.webp',
-            '/images/products/mousepads/l/l_red/109_l_logo-red_03.webp',
-            '/images/products/mousepads/l/l_red/109_l_logo-red_04.webp'
+            '/images/products/mousepads/l/l_red/logo-red_red_l_01.webp',
+            '/images/products/mousepads/l/l_red/logo-red_red_l_02.webp',
+            '/images/products/mousepads/l/l_red/logo-red_red_l_03.webp',
+            '/images/products/mousepads/l/l_red/logo-red_red_l_04.webp'
           ];
         } else if (selectedColor === 'blue') {
           return [
-            '/images/products/mousepads/l/l_blue/107_l_logo-blue_01.webp',
-            '/images/products/mousepads/l/l_blue/107_l_logo-blue_02.webp',
-            '/images/products/mousepads/l/l_blue/107_l_logo-blue_03.webp',
-            '/images/products/mousepads/l/l_blue/107_l_logo-blue_04.webp'
+            '/images/products/mousepads/l/l_blue/logo-blue_blue_l_01.webp',
+            '/images/products/mousepads/l/l_blue/logo-blue_blue_l_02.webp',
+            '/images/products/mousepads/l/l_blue/logo-blue_blue_l_03.webp',
+            '/images/products/mousepads/l/l_blue/logo-blue_blue_l_04.webp'
           ];
         } else if (selectedColor === 'white') {
           return [
-            '/images/products/mousepads/l/l_white_geoid/011_l_white_01.webp',
-            '/images/products/mousepads/l/l_white_geoid/011_l_white_02.webp',
-            '/images/products/mousepads/l/l_white_geoid/011_l_white_04.webp',
-            '/images/products/mousepads/l/l_white_geoid/011_l_white_05.webp'
+            '/images/products/mousepads/l/l_white_geoid/geoid_white_l_01.webp',
+            '/images/products/mousepads/l/l_white_geoid/geoid_white_l_02.webp',
+            '/images/products/mousepads/l/l_white_geoid/geoid_white_l_03.webp',
+            '/images/products/mousepads/l/l_white_geoid/geoid_white_l_04.webp'
           ];
         } else {
           // black by default
           return [
-            '/images/products/mousepads/l/l_black_geoid/013_l_black_01.webp',
-            '/images/products/mousepads/l/l_black_geoid/013_l_black_02.webp',
-            '/images/products/mousepads/l/l_black_geoid/013_l_black_04.webp',
-            '/images/products/mousepads/l/l_black_geoid/013_l_black_05.webp'
+            '/images/products/mousepads/l/l_black_geoid/geoid_black_l_01.webp',
+            '/images/products/mousepads/l/l_black_geoid/geoid_black_l_02.webp',
+            '/images/products/mousepads/l/l_black_geoid/geoid_black_l_03.webp',
+            '/images/products/mousepads/l/l_black_geoid/geoid_black_l_04.webp'
           ];
         }
       }
