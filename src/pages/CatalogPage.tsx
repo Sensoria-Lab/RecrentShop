@@ -547,7 +547,7 @@ const CatalogPage: React.FC = () => {
               {/* Products Grid */}
               <div className="flex-1">
                 {loading ? (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4 gap-4 sm:gap-4 md:gap-5 lg:gap-6 min-h-[600px] justify-items-center auto-rows-fr">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-4 md:gap-5 lg:gap-6 min-h-[600px] justify-items-center auto-rows-fr">
                     {/* Skeleton cards */}
                     {Array.from({ length: 9 }).map((_, index) => (
                       <div
@@ -585,7 +585,7 @@ const CatalogPage: React.FC = () => {
                   </div>
                 ) : (
                   <>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 md:gap-6 min-h-[600px] justify-items-center items-start">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5 md:gap-6 min-h-[600px] justify-items-center items-start">
                       {filteredProducts.slice(0, itemsToShow).map((product, index) => {
                         const cols = 4; // Assuming max 4 columns for animation sequence
                         const delay = Math.floor(index / cols) * cols + (index % cols) + 1;
