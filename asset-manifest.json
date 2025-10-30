@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/RecrentShop/static/css/main.9d41e530.css",
+    "main.js": "/RecrentShop/static/js/main.89767a6f.js",
+    "index.html": "/RecrentShop/index.html",
+    "main.9d41e530.css.map": "/RecrentShop/static/css/main.9d41e530.css.map",
+    "main.89767a6f.js.map": "/RecrentShop/static/js/main.89767a6f.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.9d41e530.css",
+    "static/js/main.89767a6f.js"
+  ]
+}
