@@ -1,5 +1,5 @@
 import React from 'react';
-import { Checkbox } from '../../shared/ui';
+import { Checkbox } from '../../../shared/ui';
 
 interface FilterOption<T> {
   value: T;

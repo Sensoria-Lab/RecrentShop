@@ -1,9 +1,12 @@
 import React, { useMemo, useState, useRef, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import { SelectorGroup, PageContainer, Breadcrumbs, DecryptedText, StarRating, QuantitySelector, ProductCard, ProductCarousel, Modal, ReviewCard, ImageGalleryModal, Img } from '../shared/components';
+import { PageContainer, Modal } from '../shared/components';
+import { SelectorGroup, Breadcrumbs, DecryptedText, StarRating, QuantitySelector, ProductCard, ProductCarousel, ReviewCard, ImageGalleryModal } from 'features/products/components';
+import Img from '../shared/ui/Img';
 import { ALL_PRODUCTS } from '../core/data/products';
 import { REVIEWS, hasMoreReviews } from '../core/data/reviews';
-import { useProduct, useProductImages, useAddToCart, useProductNavigation } from '../shared/hooks';
+import { useProduct, useProductImages, useProductNavigation } from 'features/products/hooks';
+import { useAddToCart } from 'features/cart/hooks';
 import { COLOR_OPTIONS, SIZE_OPTIONS, TYPE_OPTIONS, CLOTHING_SIZE_OPTIONS } from '../core/constants/selectorOptions';
 import { getClothingDescription, MOUSEPAD_DIMENSIONS, COLOR_NAMES, PRODUCT_DESCRIPTIONS } from '../core/constants/productDescriptions';
 import { isClothing, isProMousepad } from '../shared/lib/productUtils';

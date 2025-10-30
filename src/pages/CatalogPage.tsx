@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
-import { ProductCard, PageContainer, FilterSection, ActiveFilters } from '../shared/components';
-import { useProductFilters, useProductNavigation } from '../shared/hooks';
+import { PageContainer } from '../shared/components';
+import { ProductCard, FilterSection, ActiveFilters } from 'features/products/components';
+import { useProductFilters, useProductNavigation } from 'features/products/hooks';
 import { API_CONFIG } from '../core/constants/config';
 import { ALL_PRODUCTS } from '../core/data/products';
 import type {
@@ -14,7 +15,7 @@ import type {
   SizeFilterValue,
   ClothingTypeFilterValue,
   CollectionFilterValue
-} from '../shared/types/product';
+} from 'features/products/types';
 
 const CatalogPage: React.FC = () => {
   const [filtersOpen, setFiltersOpen] = useState(false);
@@ -70,6 +71,18 @@ const CatalogPage: React.FC = () => {
 
     fetchProducts();
   }, []);
+
+  // Preload critical product images for better performance
+  useEffect(() => {
+    if (products.length > 0) {
+      // Preload first 6 product images
+      const imagesToPreload = products.slice(0, 6).map(product => product.image);
+      imagesToPreload.forEach(imageSrc => {
+        const img = new Image();
+        img.src = imageSrc.startsWith('/') ? `${process.env.PUBLIC_URL || ''}${imageSrc}` : imageSrc;
+      });
+    }
+  }, [products]);
 
   // Use custom hooks for filtering and navigation
   const { navigateToProduct } = useProductNavigation();
@@ -454,7 +467,8 @@ const CatalogPage: React.FC = () => {
                       { value: 'Geoid', label: 'Geoid', count: getFilterCounts.getCountForFilter('collection', 'Geoid') },
                       { value: 'Pro Speed', label: 'Pro Speed', count: getFilterCounts.getCountForFilter('collection', 'Pro Speed') },
                       { value: 'Logo Blue', label: 'Logo Blue', count: getFilterCounts.getCountForFilter('collection', 'Logo Blue') },
-                      { value: 'Seprents', label: 'Seprents', count: getFilterCounts.getCountForFilter('collection', 'Seprents') }
+                      { value: 'Logo Red', label: 'Logo Red', count: getFilterCounts.getCountForFilter('collection', 'Logo Red') },
+                      { value: 'Serpents', label: 'Serpents', count: getFilterCounts.getCountForFilter('collection', 'Serpents') }
                     ]}
                     selectedValues={pendingCollectionFilter}
                     onChange={(value) => toggleFilterValue(value, pendingCollectionFilter, setPendingCollectionFilter)}
@@ -538,10 +552,10 @@ const CatalogPage: React.FC = () => {
                     {Array.from({ length: 9 }).map((_, index) => (
                       <div
                         key={index}
-                        className="bg-white/8 rounded-lg sm:rounded-xl p-2 sm:p-3 md:p-4 w-full max-w-[260px] sm:max-w-[300px] md:max-w-[320px] lg:max-w-[340px] flex flex-col border border-white/20 skeleton-shimmer"
+                        className="bg-white/8 rounded-lg sm:rounded-xl p-2 sm:p-3 md:p-4 w-full max-w-[280px] sm:max-w-[320px] md:max-w-[364px] flex flex-col justify-between border border-white/20 skeleton-shimmer"
                       >
                         {/* Image skeleton */}
-                        <div className="h-[150px] sm:h-[200px] md:h-[240px] lg:h-[280px] rounded-lg sm:rounded-xl mx-auto w-full bg-white/5 mb-3"></div>
+                        <div className="aspect-[4/3] rounded-lg sm:rounded-xl mx-auto w-full bg-white/5 mb-3"></div>
 
                         {/* Title skeleton */}
                         <div className="min-h-[50px] sm:min-h-[60px] md:min-h-[70px] lg:min-h-[80px] xl:min-h-[90px] flex flex-col gap-2 mb-2">
@@ -571,7 +585,7 @@ const CatalogPage: React.FC = () => {
                   </div>
                 ) : (
                   <>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4 gap-4 sm:gap-4 md:gap-5 lg:gap-6 min-h-[600px] justify-items-center auto-rows-fr">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 md:gap-6 min-h-[600px] justify-items-center items-start">
                       {filteredProducts.slice(0, itemsToShow).map((product, index) => {
                         const cols = 4; // Assuming max 4 columns for animation sequence
                         const delay = Math.floor(index / cols) * cols + (index % cols) + 1;
@@ -587,7 +601,7 @@ const CatalogPage: React.FC = () => {
                                 observerRef.current.observe(el);
                               }
                             }}
-                            className={`w-full flex justify-center ${isVisible ? `content-reveal ${delayClass}` : ''}`}
+                            className={`${isVisible ? `content-reveal ${delayClass}` : ''}`}
                           >
                             <ProductCard
                               id={product.id}
@@ -604,7 +618,7 @@ const CatalogPage: React.FC = () => {
                               color={product.color}
                               category={product.category}
                               clothingType={product.clothingType}
-                              size="small-catalog"
+                              size="medium"
                               stretch={false}
                               staggerIndex={Math.min(delay, 8)}
                               addedDate={product.addedDate}

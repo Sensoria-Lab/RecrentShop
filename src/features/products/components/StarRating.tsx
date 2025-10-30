@@ -31,7 +31,7 @@ const StarRating: React.FC<StarRatingProps> = ({
   onChange,
   ariaLabel
 }) => {
-  const active = 'var(--color-star-active, #FACC15)';
+  const active = 'var(--color-star-active, white)';
   const inactive = 'var(--color-star-inactive, rgba(255,255,255,0.35))';
   const dimension = sizeMap[size];
 

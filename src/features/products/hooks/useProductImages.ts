@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
-import type { Product } from '../types/product';
-import { ALL_PRODUCTS } from '../../core/data/products';
+import type { Product } from '../types';
+import { ALL_PRODUCTS } from '../../../core/data/products';
 
 /**
  * Hook for managing product images based on selected options

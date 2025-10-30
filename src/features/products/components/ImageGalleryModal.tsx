@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import Img from './Img';
+import Img from '../../../shared/ui/Img';
 
 interface ImageGalleryModalProps {
   images: string[];

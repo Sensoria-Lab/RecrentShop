@@ -122,7 +122,7 @@ const AccountPage: React.FC = () => {
   };
 
   // Common classes for tab triggers
-  const tabTriggerClasses = "w-full justify-start items-center data-[state=active]:bg-white/10 data-[state=active]:text-white text-white/60 hover:text-white hover:bg-white/5 font-manrope font-medium text-sm px-4 py-3 rounded-xl transition-all duration-300";
+  const tabTriggerClasses = "w-full justify-between items-center data-[state=active]:bg-white/10 data-[state=active]:text-white text-white/60 hover:text-white hover:bg-white/5 font-manrope font-medium text-sm pl-8 pr-8 py-3 rounded-xl transition-all duration-300";
 
   return (
     <PageContainer>
@@ -166,7 +166,7 @@ const AccountPage: React.FC = () => {
                     </div>
                   </div>
 
-                  <TabsList className="flex flex-col space-y-2 bg-transparent h-auto p-0">
+                  <TabsList className="flex flex-col space-y-2 bg-transparent h-auto p-0 w-full">
                     <TabsTrigger
                       value="profile"
                       className={tabTriggerClasses}
@@ -175,7 +175,7 @@ const AccountPage: React.FC = () => {
                         <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
                         <circle cx="12" cy="7" r="4"/>
                       </svg>
-                      <span className="flex-1">Профиль</span>
+                      <span className="flex-1 text-center">Профиль</span>
                     </TabsTrigger>
 
                     <TabsTrigger
@@ -186,7 +186,7 @@ const AccountPage: React.FC = () => {
                         <rect x="3" y="3" width="18" height="18" rx="2"/>
                         <path d="M9 3v18M3 9h18M3 15h18"/>
                       </svg>
-                      <span className="flex-1">Заказы</span>
+                      <span className="flex-1 text-center">Заказы</span>
                     </TabsTrigger>
 
                     <TabsTrigger
@@ -196,7 +196,7 @@ const AccountPage: React.FC = () => {
                       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="mr-3 flex-shrink-0">
                         <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
                       </svg>
-                      <span className="flex-1">Отзывы</span>
+                      <span className="flex-1 text-center">Отзывы</span>
                     </TabsTrigger>
 
                     <TabsTrigger
@@ -207,7 +207,7 @@ const AccountPage: React.FC = () => {
                         <circle cx="12" cy="12" r="3"/>
                         <path d="M12 1v6m0 6v6M5.6 5.6l4.2 4.2m4.2 4.2l4.2 4.2M1 12h6m6 0h6M5.6 18.4l4.2-4.2m4.2-4.2l4.2-4.2"/>
                       </svg>
-                      <span className="flex-1">Настройки</span>
+                      <span className="flex-1 text-center">Настройки</span>
                     </TabsTrigger>
                   </TabsList>
                 </div>
@@ -215,7 +215,7 @@ const AccountPage: React.FC = () => {
 
               {/* Main Content Area */}
               <div className="lg:col-span-9 scroll-fade-in scroll-fade-in-delay-2">
-                <div className="bg-black/40 border border-white/10 rounded-2xl p-6 md:p-8">
+                <div className="bg-black/40 border border-white/10 rounded-2xl p-4 md:p-6">
                   {/* Profile Tab Content */}
                   <TabsContent value="profile" className="mt-0">
                     <div className="space-y-6">

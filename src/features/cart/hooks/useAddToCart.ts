@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { useCart } from '../../core/context/CartContext';
+import { useCart } from '../../../core/context/CartContext';
 
 /**
  * Hook for managing add to cart animation

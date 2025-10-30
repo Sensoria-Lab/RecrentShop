@@ -1,13 +1,47 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { PageLayout } from '../shared/components';
 import { offerContent } from '../core/data/offerContent';
 import { SITE_CONFIG, SOCIAL_LINKS, TEXTS } from '../core/constants/config';
 
 const SupportPage: React.FC = () => {
   const [openItem, setOpenItem] = useState<string | null>(null);
+  const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
 
-  const toggleItem = (id: string) => {
-    setOpenItem(openItem === id ? null : id);
+  // Handle URL hash on component mount
+  useEffect(() => {
+    const hash = window.location.hash.slice(1); // Remove the '#'
+    if (hash && items.some(item => item.id === hash)) {
+      setOpenItem(hash);
+      // Scroll to the item after a short delay to allow rendering
+      setTimeout(() => {
+        const index = items.findIndex(item => item.id === hash);
+        if (itemRefs.current[index]) {
+          const block = hash === 'offer' ? 'start' : 'center';
+          itemRefs.current[index]?.scrollIntoView({ 
+            behavior: 'smooth', 
+            block,
+            inline: 'nearest' 
+          });
+        }
+      }, 100);
+    }
+  }, []);
+
+  const toggleItem = (id: string, index: number) => {
+    const newOpenItem = openItem === id ? null : id;
+    setOpenItem(newOpenItem);
+    
+    // Scroll to the opened item for better reading experience
+    if (newOpenItem === id) {
+      setTimeout(() => {
+        const block = id === 'offer' ? 'start' : 'center';
+        itemRefs.current[index]?.scrollIntoView({ 
+          behavior: 'smooth', 
+          block,
+          inline: 'nearest' 
+        });
+      }, 100); // Small delay to allow content to render
+    }
   };
 
   const items = [
@@ -298,10 +332,12 @@ const SupportPage: React.FC = () => {
             {items.map((item, index) => (
               <div
                 key={item.id}
+                id={item.id}
+                ref={(el) => (itemRefs.current[index] = el)}
                 className={`border-white/20 bg-black/20 rounded-lg sm:rounded-xl md:rounded-2xl px-3 sm:px-4 md:px-5 lg:px-6 scroll-fade-in scroll-fade-in-delay-${Math.min(index % 4 + 1, 4)}`}
               >
                 <button
-                  onClick={() => toggleItem(item.id)}
+                  onClick={() => toggleItem(item.id, index)}
                   className="text-white hover:text-white/80 py-4 sm:py-5 md:py-6 lg:py-7 hover:no-underline w-full text-left flex items-center gap-2 sm:gap-3 md:gap-5 lg:gap-6"
                 >
                   <div className="flex items-center gap-2 sm:gap-3 md:gap-5 lg:gap-6 w-full">
@@ -323,7 +359,7 @@ const SupportPage: React.FC = () => {
                   </svg>
                 </button>
                 {openItem === item.id && (
-                  <div className="text-gray-300 pb-4 sm:pb-5 md:pb-6 lg:pb-7 pt-0">
+                  <div className="text-gray-300 pb-4 sm:pb-5 md:pb-6 lg:pb-7 pt-0 animate-in fade-in slide-in-from-top-2 duration-500 ease-out">
                     {item.content}
                   </div>
                 )}

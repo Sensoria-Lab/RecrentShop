@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo, useRef } from 'react';
-import { ALL_PRODUCTS } from '../../core/data/products';
-import type { Product } from '../types/product';
+import { ALL_PRODUCTS } from '../../../core/data/products';
+import type { Product } from '../types';
 
 /**
  * Hook for managing product data and initialization

@@ -1,6 +1,8 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { PageLayout, Img, Button } from '../shared/components';
+import { PageLayout } from '../shared/components';
+import { Button } from '../shared/ui';
+import Img from '../shared/ui/Img';
 import { useCart } from '../core/context/CartContext';
 
 const CartPage: React.FC = () => {

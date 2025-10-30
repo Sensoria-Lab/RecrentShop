@@ -3,7 +3,7 @@
  * Подготовка для интеграции с бэкендом
  */
 
-import { Product } from './product';
+import { Product } from '../../features/products/types';
 
 // Главная страница
 export interface HeroContent {

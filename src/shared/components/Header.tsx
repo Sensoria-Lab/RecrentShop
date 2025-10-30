@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useCart } from '../../core/context/CartContext';
-import Img from './Img';
+import Img from '../ui/Img';
 import { ROUTES, MOBILE_NAV_ITEMS } from '../../core/constants/routes';
 import CartSidebar from './CartSidebar';
 

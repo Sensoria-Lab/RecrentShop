@@ -64,7 +64,7 @@ body {
   --bg-dot-spacing: 40; /* pattern tile size */
   --bg-dot-color: rgba(255,255,255,0.14);
   --bg-pattern-speed: 18s;
-  --color-star-active: #FACC15; /* yellow-400 */
+  --color-star-active: white; /* white */
   --color-star-inactive: rgba(255,255,255,0.35);
   --gradient-accent: linear-gradient(90deg,#3B82F6,#9333EA,#FACC15);
   /* Controls global background dark overlay strength (0 = none, 1 = full black) */

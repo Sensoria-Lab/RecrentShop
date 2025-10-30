@@ -1,7 +1,7 @@
 import React from 'react';
 import StarRating from './StarRating';
-import Img from './Img';
-import { Review } from '../../core/data/reviews';
+import Img from '../../../shared/ui/Img';
+import { Review } from '../../../core/data/reviews';
 
 interface ReviewCardProps {
   review: Review;

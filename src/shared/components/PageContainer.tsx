@@ -39,7 +39,7 @@ const PageContainer: React.FC<PageContainerProps> = ({ children, className = '',
   return (
     // Do not force the main page into a fixed-height container; prefer natural flow so
     // tall screens don't end up with excessive empty space. Use min-h-screen for baseline.
-    <div className={`relative w-full min-h-screen`}>
+    <div className={`relative w-full min-h-screen`} style={isMainPage ? { background: 'radial-gradient(circle at 20% 20%, rgba(255,255,255,0.03) 0%, transparent 30%), radial-gradient(circle at 80% 80%, rgba(255,255,255,0.02) 0%, transparent 40%), radial-gradient(circle at 50% 50%, rgba(255,255,255,0.01) 0%, transparent 50%)' } : {}}>
       {/* Header - absolute at top */}
       <div
         ref={headerRef}

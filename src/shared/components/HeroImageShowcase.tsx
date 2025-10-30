@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import ProductCard from './ProductCard';
-import type { Product } from '../types/product';
+import ProductCard from '../../features/products/components/ProductCard';
+import type { Product } from '../../features/products/types';
 
 interface HeroImageShowcaseProps {
   products: Product[];

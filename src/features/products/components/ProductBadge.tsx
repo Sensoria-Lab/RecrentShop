@@ -1,10 +1,11 @@
 import React from 'react';
 import { Sparkles, TrendingUp, Star } from 'lucide-react';
 
-export type BadgeType = 'new' | 'bestseller';
+export type BadgeType = 'new' | 'bestseller' | 'rating';
 
 interface ProductBadgeProps {
   type: BadgeType;
+  rating?: number;
   className?: string;
 }
 
@@ -12,7 +13,7 @@ interface ProductBadgeProps {
  * ProductBadge Component  
  * Displays badges on product cards (NEW, BESTSELLER, HIGH RATING)
  */
-const ProductBadge: React.FC<ProductBadgeProps> = ({ type, className = '' }) => {
+const ProductBadge: React.FC<ProductBadgeProps> = ({ type, rating, className = '' }) => {
   const badgeConfig = {
     new: {
       label: 'НОВИНКА',
@@ -29,6 +30,14 @@ const ProductBadge: React.FC<ProductBadgeProps> = ({ type, className = '' }) => 
       textClass: 'text-white',
       iconColor: 'text-white',
       borderClass: 'border-zinc-500/50'
+    },
+    rating: {
+      label: rating ? rating.toFixed(1) : '4.9',
+      icon: Star,
+      bgClass: 'bg-gradient-to-r from-amber-700 to-amber-800',
+      textClass: 'text-white',
+      iconColor: 'text-white',
+      borderClass: 'border-amber-600/50'
     }
   };
 
@@ -63,6 +72,9 @@ export const getProductBadges = (product: {
 }): BadgeType[] => {
   const badges: BadgeType[] = [];
   
+  // RATING badge - всегда показываем рейтинг для всех товаров
+  badges.push('rating');
+  
   // NEW badge - товары добавленные за последние 30 дней
   if (product.addedDate) {
     const addedDate = new Date(product.addedDate);
@@ -80,8 +92,8 @@ export const getProductBadges = (product: {
   }
 
   
-  // Возвращаем максимум 2 бейджа (NEW + один другой, или два других)
-  return badges.slice(0, 2);
+  // Возвращаем максимум 3 бейджа (RATING + другие)
+  return badges.slice(0, 3);
 };
 
 export default ProductBadge;

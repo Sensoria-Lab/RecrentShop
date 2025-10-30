@@ -1,8 +1,11 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { PageContainer, SEO, OrganizationStructuredData, WebsiteStructuredData, ProductCard, StarRating, Footer, Img } from '../shared/components';
+import { PageContainer, SEO, OrganizationStructuredData, WebsiteStructuredData, Footer } from '../shared/components';
+import { ProductCard } from 'features/products/components';
+import Img from '../shared/ui/Img';
 import { ROUTES } from '../core/constants/routes';
 import { ALL_PRODUCTS } from '../core/data/products';
+import { useProductNavigation } from 'features/products/hooks';
 
 const MainPage: React.FC = () => {
   const navigate = useNavigate();
@@ -19,6 +22,9 @@ const MainPage: React.FC = () => {
       return scoreB - scoreA;
     })
     .slice(0, 4);
+
+  // Use product navigation hook
+  const { navigateToProduct } = useProductNavigation();
 
   // Customer reviews data
   const reviews = [
@@ -66,7 +72,7 @@ const MainPage: React.FC = () => {
               <div className="lg:col-span-5 flex flex-col justify-between" style={{ minHeight: '600px' }}>
                 <div className="space-y-6 sm:space-y-8">
                   {/* Main Title */}
-                  <div className="space-y-1">
+                  <div className="space-y-1 content-reveal content-reveal-delay-1">
                     <h1 className="font-black text-6xl sm:text-7xl md:text-8xl lg:text-9xl text-white tracking-tight leading-none drop-shadow-[0_10px_30px_rgba(0,0,0,0.6)]">
                       RECRENT
                     </h1>
@@ -76,7 +82,7 @@ const MainPage: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="mt-6">
+                <div className="mt-6 content-reveal content-reveal-delay-2">
                   <button
                     onClick={navigateToCatalog}
                     className="group relative inline-flex items-center justify-center gap-3 px-8 sm:px-10 md:px-12 py-4 sm:py-5 bg-white/8 backdrop-blur-sm border-2 border-white/80 hover:border-white hover:bg-white rounded-xl transition-all duration-250 active:scale-95 shadow-[0_0_24px_rgba(255,255,255,0.15)] hover:shadow-[0_0_40px_rgba(255,255,255,0.4)] overflow-hidden"
@@ -105,46 +111,16 @@ const MainPage: React.FC = () => {
                     </svg>
                   </button>
                 </div>
-              </div>              {/* Right side - Image Gallery */}
+              </div>              {/* Right side - Single Large Image */}
               <div className="lg:col-span-7 flex items-start" style={{ transform: 'translateX(80px)' }}>
                 <div className="relative max-w-[650px] mx-auto lg:ml-auto">
-                  {/* Layout: 2 small squares on left, 1 tall vertical rectangle on right */}
-                  <div className="flex gap-3 sm:gap-4 lg:gap-5" style={{ height: '600px' }}>
-
-                    {/* Left column: 2 stacked square images */}
-                    <div className="flex-1 flex flex-col gap-3 sm:gap-4 lg:gap-5">
-                      {/* Top - White sleeve with tattoo */}
-                      <div className="relative flex-1 rounded-xl sm:rounded-2xl overflow-hidden shadow-2xl group hover:scale-[1.02] transition-transform duration-300">
-                        <Img
-                          src={`${process.env.PUBLIC_URL}/images/products/clothing/sleeves/white_sleeve/rukav_geoid_white_01.webp`}
-                          alt="White sleeve with tattoo"
-                          className="w-full h-full object-cover object-center"
-                        />
-                      </div>
-
-                      {/* Bottom - White geoid pattern mousepad */}
-                      <div className="relative flex-1 rounded-xl sm:rounded-2xl overflow-hidden shadow-2xl hover:scale-[1.02] transition-transform duration-300">
-                        <Img
-                          src={`${process.env.PUBLIC_URL}/images/products/mousepads/l/l_white_geoid/011_l_white_01.webp`}
-                          alt="White geoid mousepad"
-                          className="w-full h-full object-contain object-center scale-[1.1]"
-                        />
-                      </div>
-                    </div>
-
-                    {/* Right column: 1 tall vertical image */}
-                    <div className="flex-1 flex flex-col">
-                      {/* Tall vertical - Black geoid XL mousepad */}
-                      <div className="relative h-full rounded-xl sm:rounded-2xl overflow-hidden shadow-2xl group hover:scale-[1.02] transition-transform duration-300">
-                        <div className="w-full h-full flex items-center justify-center">
-                          <Img
-                            src={`${process.env.PUBLIC_URL}/images/products/mousepads/xl/xl_black_geoid/114_001.webp`}
-                            alt="Black XL geoid mousepad"
-                            className="w-full h-full object-contain rotate-90 scale-[1.95]"
-                            style={{ transformOrigin: 'center center' }}
-                          />
-                        </div>
-                      </div>
+                  <div className="scroll-fade-in scroll-fade-in-delay-1" style={{ height: '600px' }}>
+                    <div className="relative h-full rounded-xl sm:rounded-2xl overflow-hidden shadow-2xl group hover:scale-[1.02] transition-transform duration-300">
+                      <Img
+                        src={`${process.env.PUBLIC_URL}/images/Generated Image October 30, 2025 - 8_08PM.png`}
+                        alt="Generated showcase image"
+                        className="w-full h-full object-cover object-center"
+                      />
                     </div>
                   </div>
                 </div>
@@ -159,7 +135,7 @@ const MainPage: React.FC = () => {
         <div className="w-full px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-24">
           <div className="w-full max-w-[1400px] mx-auto">
             {/* Section Header */}
-            <div className="flex items-center justify-between mb-8 sm:mb-12">
+            <div className="flex items-center justify-between mb-8 sm:mb-12 content-reveal content-reveal-delay-1">
               <div>
                 <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-white mb-2 drop-shadow-[0_4px_20px_rgba(0,0,0,0.8)]">
                   Хиты продаж
@@ -184,7 +160,7 @@ const MainPage: React.FC = () => {
                   <ProductCard
                     {...product}
                     size="medium"
-                    onProductClick={() => navigate(ROUTES.PRODUCT)}
+                    onProductClick={() => navigateToProduct(product)}
                   />
                 </div>
               ))}
@@ -201,153 +177,6 @@ const MainPage: React.FC = () => {
                   <path d="M5 12h14M12 5l7 7-7 7"/>
                 </svg>
               </button>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Collections Section */}
-      <section id="collections" className="relative py-16 sm:py-20 md:py-24">
-        <div className="w-full px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-24">
-          <div className="w-full max-w-[1400px] mx-auto">
-            {/* Section Header */}
-            <div className="text-center mb-12 sm:mb-16">
-              <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-white mb-4 drop-shadow-[0_4px_20px_rgba(0,0,0,0.8)]">
-                Наши коллекции
-              </h2>
-              <p className="text-white/70 text-sm sm:text-base max-w-2xl mx-auto">
-                Уникальные дизайны, созданные для тех, кто ценит стиль и качество
-              </p>
-            </div>
-
-            {/* Collections Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
-              {/* Dragons Collection */}
-              <div id="dragons" className="group relative bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl overflow-hidden hover:border-white/30 transition-all duration-300 cursor-pointer hover-lift">
-                <div className="aspect-[4/5] relative overflow-hidden">
-                  <Img
-                    src={`${process.env.PUBLIC_URL}/images/products/mousepads/xl/xl_dragon_red/009_xl_logo-red_dragon_02.webp`}
-                    alt="Dragons Collection"
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
-                </div>
-                <div className="absolute bottom-0 left-0 right-0 p-6 sm:p-8">
-                  <h3 className="text-2xl sm:text-3xl font-black text-white mb-2 drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]">
-                    DRAGONS
-                  </h3>
-                  <p className="text-white/80 text-sm sm:text-base mb-4">Мощь и величие драконов</p>
-                  <button
-                    onClick={() => navigate(ROUTES.CATALOG)}
-                    className="inline-flex items-center gap-2 text-white/90 hover:text-white text-sm font-semibold group/btn"
-                  >
-                    <span>Смотреть коллекцию</span>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="group-hover/btn:translate-x-1 transition-transform duration-200">
-                      <path d="M5 12h14M12 5l7 7-7 7"/>
-                    </svg>
-                  </button>
-                </div>
-              </div>
-
-              {/* Serpents Collection */}
-              <div id="serpents" className="group relative bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl overflow-hidden hover:border-white/30 transition-all duration-300 cursor-pointer hover-lift">
-                <div className="aspect-[4/5] relative overflow-hidden">
-                  <Img
-                    src={`${process.env.PUBLIC_URL}/images/products/mousepads/l/l_black_serpent/003_l_black_serpent_01.webp`}
-                    alt="Serpents Collection"
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
-                </div>
-                <div className="absolute bottom-0 left-0 right-0 p-6 sm:p-8">
-                  <h3 className="text-2xl sm:text-3xl font-black text-white mb-2 drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]">
-                    SERPENTS
-                  </h3>
-                  <p className="text-white/80 text-sm sm:text-base mb-4">Грация и загадочность змей</p>
-                  <button
-                    onClick={() => navigate(ROUTES.CATALOG)}
-                    className="inline-flex items-center gap-2 text-white/90 hover:text-white text-sm font-semibold group/btn"
-                  >
-                    <span>Смотреть коллекцию</span>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="group-hover/btn:translate-x-1 transition-transform duration-200">
-                      <path d="M5 12h14M12 5l7 7-7 7"/>
-                    </svg>
-                  </button>
-                </div>
-              </div>
-
-              {/* Geoid Collection */}
-              <div id="geoid" className="group relative bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl overflow-hidden hover:border-white/30 transition-all duration-300 cursor-pointer hover-lift">
-                <div className="aspect-[4/5] relative overflow-hidden">
-                  <Img
-                    src={`${process.env.PUBLIC_URL}/images/products/mousepads/xl/xl_white_geoid/11.webp`}
-                    alt="Geoid Collection"
-                    className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-500 bg-white/5"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
-                </div>
-                <div className="absolute bottom-0 left-0 right-0 p-6 sm:p-8">
-                  <h3 className="text-2xl sm:text-3xl font-black text-white mb-2 drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]">
-                    GEOID
-                  </h3>
-                  <p className="text-white/80 text-sm sm:text-base mb-4">Минимализм и геометрия</p>
-                  <button
-                    onClick={() => navigate(ROUTES.CATALOG)}
-                    className="inline-flex items-center gap-2 text-white/90 hover:text-white text-sm font-semibold group/btn"
-                  >
-                    <span>Смотреть коллекцию</span>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="group-hover/btn:translate-x-1 transition-transform duration-200">
-                      <path d="M5 12h14M12 5l7 7-7 7"/>
-                    </svg>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Customer Reviews Section */}
-      <section className="relative py-16 sm:py-20 md:py-24">
-        <div className="w-full px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-24">
-          <div className="w-full max-w-[1400px] mx-auto">
-            {/* Section Header */}
-            <div className="text-center mb-12 sm:mb-16">
-              <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-white mb-4 drop-shadow-[0_4px_20px_rgba(0,0,0,0.8)]">
-                Отзывы клиентов
-              </h2>
-              <p className="text-white/70 text-sm sm:text-base">Что говорят о нас наши покупатели</p>
-            </div>
-
-            {/* Reviews Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
-              {reviews.map((review, index) => (
-                <div
-                  key={index}
-                  className={`bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-6 sm:p-8 hover:border-white/30 transition-all duration-300 hover-lift scroll-fade-in scroll-fade-in-delay-${Math.min(index + 1, 4)}`}
-                >
-                  {/* Rating */}
-                  <div className="mb-4">
-                    <StarRating rating={review.rating} size="sm" />
-                  </div>
-
-                  {/* Review Text */}
-                  <p className="text-white/90 text-sm sm:text-base mb-6 leading-relaxed">
-                    "{review.text}"
-                  </p>
-
-                  {/* Reviewer Info */}
-                  <div className="border-t border-white/10 pt-4">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <div className="text-white font-semibold text-sm">{review.name}</div>
-                        <div className="text-white/60 text-xs mt-1">{review.product}</div>
-                      </div>
-                      <div className="text-white/50 text-xs">{review.date}</div>
-                    </div>
-                  </div>
-                </div>
-              ))}
             </div>
           </div>
         </div>

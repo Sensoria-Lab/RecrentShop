@@ -80,8 +80,9 @@ const MOUSEPADS = [
   },
   {
     id: 4,
-    image: `${BASE_URL}/images/products/mousepads/l/l_black_geoid/013_l_black_01.webp`,
+    image: `${BASE_URL}/images/products/mousepads/l/l_black_geoid/Generated Image October 30, 2025 - 6_08PM.png`,
     images: [
+      `${BASE_URL}/images/products/mousepads/l/l_black_geoid/Generated Image October 30, 2025 - 6_08PM.png`,
       `${BASE_URL}/images/products/mousepads/l/l_black_geoid/013_l_black_01.webp`,
       `${BASE_URL}/images/products/mousepads/l/l_black_geoid/013_l_black_02.webp`,
       `${BASE_URL}/images/products/mousepads/l/l_black_geoid/013_l_black_04.webp`,
@@ -99,8 +100,9 @@ const MOUSEPADS = [
   },
   {
     id: 5,
-    image: `${BASE_URL}/images/products/mousepads/l/l_white_geoid/011_l_white_01.webp`,
+    image: `${BASE_URL}/images/products/mousepads/l/l_white_geoid/Generated Image October 30, 2025 - 6_11PM.png`,
     images: [
+      `${BASE_URL}/images/products/mousepads/l/l_white_geoid/Generated Image October 30, 2025 - 6_11PM.png`,
       `${BASE_URL}/images/products/mousepads/l/l_white_geoid/011_l_white_01.webp`,
       `${BASE_URL}/images/products/mousepads/l/l_white_geoid/011_l_white_02.webp`,
       `${BASE_URL}/images/products/mousepads/l/l_white_geoid/011_l_white_04.webp`,
@@ -118,8 +120,9 @@ const MOUSEPADS = [
   },
   {
     id: 6,
-    image: `${BASE_URL}/images/products/mousepads/l/l_red/109_l_logo-red_01.webp`,
+    image: `${BASE_URL}/images/products/mousepads/l/l_red/Generated Image October 30, 2025 - 6_09PM (1).png`,
     images: [
+      `${BASE_URL}/images/products/mousepads/l/l_red/Generated Image October 30, 2025 - 6_09PM (1).png`,
       `${BASE_URL}/images/products/mousepads/l/l_red/109_l_logo-red_01.webp`,
       `${BASE_URL}/images/products/mousepads/l/l_red/109_l_logo-red_02.webp`,
       `${BASE_URL}/images/products/mousepads/l/l_red/109_l_logo-red_03.webp`,
@@ -137,8 +140,9 @@ const MOUSEPADS = [
   },
   {
     id: 11,
-    image: `${BASE_URL}/images/products/mousepads/l/l_black_geoid/013_l_black_01.webp`,
+    image: `${BASE_URL}/images/products/mousepads/l/l_black_geoid/Generated Image October 30, 2025 - 6_08PM.png`,
     images: [
+      `${BASE_URL}/images/products/mousepads/l/l_black_geoid/Generated Image October 30, 2025 - 6_08PM.png`,
       `${BASE_URL}/images/products/mousepads/l/l_black_geoid/013_l_black_01.webp`,
       `${BASE_URL}/images/products/mousepads/l/l_black_geoid/013_l_black_02.webp`,
       `${BASE_URL}/images/products/mousepads/l/l_black_geoid/013_l_black_04.webp`,
@@ -174,8 +178,9 @@ const MOUSEPADS = [
   },
   {
     id: 16,
-    image: `${BASE_URL}/images/products/mousepads/l/l_blue/107_l_logo-blue_01.webp`,
+    image: `${BASE_URL}/images/products/mousepads/l/l_blue/Generated Image October 30, 2025 - 6_09PM.png`,
     images: [
+      `${BASE_URL}/images/products/mousepads/l/l_blue/Generated Image October 30, 2025 - 6_09PM.png`,
       `${BASE_URL}/images/products/mousepads/l/l_blue/107_l_logo-blue_01.webp`,
       `${BASE_URL}/images/products/mousepads/l/l_blue/107_l_logo-blue_02.webp`,
       `${BASE_URL}/images/products/mousepads/l/l_blue/107_l_logo-blue_03.webp`,

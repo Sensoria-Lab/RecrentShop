@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { SOCIAL_LINKS, SITE_CONFIG, COMPANY_INFO } from '../../core/constants/config';
 
 /**
@@ -23,9 +23,7 @@ const Footer: React.FC = () => {
                 <h3 className="text-white font-manrope font-bold text-base sm:text-lg mb-3">
                   О магазине
                 </h3>
-                <p className="text-white/60 font-manrope text-xs sm:text-sm leading-relaxed">
-                  Премиальные игровые коврики для мыши и стильная одежда от RECRENT. Высокое качество и уникальный дизайн.
-                </p>
+
                 <div className="text-white/40 text-xs pt-2">
                   © 2021-{year} RECRENT SHOP
                 </div>
@@ -64,12 +62,24 @@ const Footer: React.FC = () => {
                   Помощь
                 </h3>
                 <nav className="flex flex-col gap-1.5">
-                  <a href="#delivery" className="text-white/50 hover:text-white/80 font-manrope text-xs sm:text-sm transition-colors">
-                    Доставка и оплата
-                  </a>
-                  <a href="#return" className="text-white/50 hover:text-white/80 font-manrope text-xs sm:text-sm transition-colors">
-                    Возврат и обмен
-                  </a>
+                  <Link
+                    to="/support#delivery"
+                    className="text-white/50 hover:text-white/80 font-manrope text-xs sm:text-sm transition-colors"
+                  >
+                    Доставка
+                  </Link>
+                  <Link
+                    to="/support#support"
+                    className="text-white/50 hover:text-white/80 font-manrope text-xs sm:text-sm transition-colors"
+                  >
+                    Поддержка
+                  </Link>
+                  <Link
+                    to="/support#offer"
+                    className="text-white/50 hover:text-white/80 font-manrope text-xs sm:text-sm transition-colors"
+                  >
+                    Оферта
+                  </Link>
                 </nav>
               </div>
 
@@ -85,9 +95,6 @@ const Footer: React.FC = () => {
                   >
                     {SITE_CONFIG.email}
                   </a>
-                  <p className="text-white/40 text-xs">
-                    Пн-Пт: 10:00 - 19:00 МСК
-                  </p>
                 </div>
 
                 {/* Social Media Icons */}

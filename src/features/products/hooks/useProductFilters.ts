@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import type { Product, SortOption, CategoryFilter, ColorFilter, SizeFilter, ClothingTypeFilter, CollectionFilter } from '../types/product';
+import type { Product, SortOption, CategoryFilter, ColorFilter, SizeFilter, ClothingTypeFilter, CollectionFilter } from '../types';
 
 interface FilterOptions {
   sortBy: SortOption;

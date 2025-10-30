@@ -1,5 +1,5 @@
 import React from 'react';
-import { Product } from '../types/product';
+import { Product } from '../../features/products/types';
 
 interface ProductStructuredDataProps {
   product: Product;

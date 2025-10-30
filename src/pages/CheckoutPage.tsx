@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useCart } from '../core/context/CartContext';
-import { Header, Footer, Img, Button, RadioGroup, RadioGroupItem, Checkbox } from '../shared/components';
+import { Header, Footer } from '../shared/components';
+import { Button, RadioGroup, RadioGroupItem, Checkbox } from '../shared/ui';
+import Img from '../shared/ui/Img';
 import { z } from 'zod';
 
 type DeliveryMethod = 'russian-post' | 'cdek' | 'home-delivery';
