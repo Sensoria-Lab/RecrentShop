@@ -47,7 +47,6 @@ const ProductCard: React.FC<ProductCardProps> = ({
 }) => {
   const [imageLoaded, setImageLoaded] = React.useState(false);
   const [imageError, setImageError] = React.useState(false);
-  const [imageDimensions, setImageDimensions] = React.useState<{width: number, height: number} | null>(null);
 
   // Определяем бейджи для товара
   const badges = getProductBadges({
@@ -63,8 +62,6 @@ const ProductCard: React.FC<ProductCardProps> = ({
 
   // Обработчики для изображений
   const handleImageLoad = (e: React.SyntheticEvent<HTMLImageElement>) => {
-    const img = e.currentTarget;
-    setImageDimensions({ width: img.naturalWidth, height: img.naturalHeight });
     setImageLoaded(true);
   };
   const handleImageError = () => {
