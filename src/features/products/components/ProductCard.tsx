@@ -107,8 +107,8 @@ const ProductCard: React.FC<ProductCardProps> = ({
     : 'animate-in fade-in duration-300';
 
   const cardStyles = size === 'small-catalog'
-    ? `relative ${containerBase} flex flex-col cursor-pointer group ${staggerClass}`
-    : `${containerBase} flex flex-col ${onProductClick ? 'cursor-pointer' : ''} ${staggerClass}`;
+    ? `relative ${containerBase} flex flex-col cursor-pointer group ${staggerClass} transition-all duration-300 hover:scale-[1.02] hover:-translate-y-1 hover:shadow-2xl hover:shadow-white/10`
+    : `${containerBase} flex flex-col ${onProductClick ? 'cursor-pointer' : ''} ${staggerClass} transition-all duration-300 hover:scale-[1.02] hover:-translate-y-1 hover:shadow-2xl hover:shadow-white/10`;
 
   const handleCardClick = (e: React.MouseEvent) => {
     if ((e.target as HTMLElement).closest('.add-to-cart-button')) return;
@@ -142,7 +142,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
   return (
     <div className={cardStyles} onClick={handleCardClick}>
       <div className="relative">
-        <div className={`${classes.image} overflow-hidden group/image relative shadow-[inset_0_2px_4px_rgba(0,0,0,0.1)] rounded-lg sm:rounded-xl`}>
+        <div className={`${classes.image} overflow-hidden group/image relative shadow-[inset_0_2px_4px_rgba(0,0,0,0.1)] rounded-lg sm:rounded-xl transition-all duration-300 hover:shadow-[inset_0_4px_8px_rgba(0,0,0,0.2)]`}>
           {/* Shimmer loading effect */}
           {!imageLoaded && !imageError && (
             <div className="absolute inset-0 bg-gradient-to-r from-white/10 via-white/20 to-white/10 animate-pulse rounded-lg sm:rounded-xl" />
@@ -151,7 +151,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
           <Img
             src={image}
             alt={title}
-            className={`w-full h-full object-cover object-center transition-all duration-500 ${
+            className={`w-full h-full object-cover object-center transition-all duration-500 group-hover:scale-110 ${
               imageLoaded
                 ? 'opacity-100 filter-none scale-100'
                 : 'opacity-70 blur-sm scale-105'
@@ -185,7 +185,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
           )}
 
           {/* Text overlay on image with stronger bottom darkening */}
-          <div className="absolute bottom-0 left-0 right-0 p-2 sm:p-3 md:p-4 bg-gradient-to-t from-black/95 via-black/70 to-transparent rounded-b-lg sm:rounded-b-xl">
+          <div className="absolute bottom-0 left-0 right-0 p-2 sm:p-3 md:p-4 bg-gradient-to-t from-black/95 via-black/70 to-transparent rounded-b-lg sm:rounded-b-xl transition-all duration-300 group-hover:from-black/90 group-hover:via-black/60">
             <div className="min-h-[36px] sm:min-h-[40px] md:min-h-[44px] lg:min-h-[48px] max-h-[48px] flex flex-col justify-start gap-0 overflow-hidden">
                 <div className="flex-1 flex flex-col justify-start gap-0">
                   <h3 className={`text-white font-manrope font-extrabold ${classes.subtitle} leading-tight tracking-wide drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)] line-clamp-2 group-hover:text-white/95 transition-colors duration-300`}>
@@ -197,7 +197,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
                 </div>
               </div>
 
-              <div className="w-full h-px bg-gradient-to-r from-transparent via-white/25 to-transparent mt-1 sm:mt-1.5 md:mt-2 mb-1 sm:mb-1.5 md:mb-2 relative">
+              <div className="w-full h-px bg-gradient-to-r from-transparent via-white/25 to-transparent mt-1 sm:mt-1.5 md:mt-2 mb-1 sm:mb-1.5 md:mb-2 relative group-hover:via-white/40 transition-all duration-300">
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
               </div>
 
@@ -205,8 +205,8 @@ const ProductCard: React.FC<ProductCardProps> = ({
                 <span className={`text-white font-manrope font-extrabold ${classes.price} tracking-wide drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)] tabular-nums group-hover:text-white/95 transition-colors duration-300`}>
                   {formatPrice(price)}
                 </span>
-                <span className="text-green-400 text-xs sm:text-sm flex items-center gap-1 font-manrope font-medium shrink-0 group-hover:text-green-300 transition-colors duration-300">
-                  <span className="w-1 h-1 sm:w-1.5 sm:h-1.5 bg-green-400 rounded-full animate-pulse group-hover:animate-none group-hover:bg-green-300"></span>
+                <span className="text-green-400 text-xs sm:text-sm flex items-center gap-1 font-manrope font-medium shrink-0 group-hover:text-green-300 transition-colors duration-300 hover:text-green-200">
+                  <span className="w-1 h-1 sm:w-1.5 sm:h-1.5 bg-green-400 rounded-full animate-pulse group-hover:animate-none group-hover:bg-green-300 transition-all duration-300 hover:bg-green-200"></span>
                   в наличии
                 </span>
               </div>
