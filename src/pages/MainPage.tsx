@@ -1,14 +1,19 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { PageContainer, SEO, OrganizationStructuredData, WebsiteStructuredData, Footer } from '../shared/components';
-import { ProductCard } from 'features/products/components';
+import { ProductCard, ReviewsSection } from 'features/products/components';
 import Img from '../shared/ui/Img';
 import { ROUTES } from '../core/constants/routes';
 import { ALL_PRODUCTS } from '../core/data/products';
+import { REVIEWS } from '../core/data/reviews';
 import { useProductNavigation } from 'features/products/hooks';
+import { useMobileRedirect } from '../shared/hooks';
 
 const MainPage: React.FC = () => {
   const navigate = useNavigate();
+  
+  // Mobile-first: Auto-redirect to catalog on mobile devices
+  useMobileRedirect(navigate, true);
 
   const navigateToCatalog = () => {
     navigate(ROUTES.CATALOG);
@@ -25,31 +30,6 @@ const MainPage: React.FC = () => {
 
   // Use product navigation hook
   const { navigateToProduct } = useProductNavigation();
-
-  // Customer reviews data
-  const reviews = [
-    {
-      name: 'Александр М.',
-      rating: 5,
-      text: 'Коврик XL geoid-black просто огонь! Качество на высоте, дизайн стильный. Рекомендую!',
-      product: 'Коврик XL geoid-black',
-      date: '2 дня назад'
-    },
-    {
-      name: 'Мария К.',
-      rating: 5,
-      text: 'Заказала белый рукав с татуировкой - выглядит потрясающе! Материал приятный, сидит отлично.',
-      product: 'Рукав белый geoid',
-      date: '1 неделю назад'
-    },
-    {
-      name: 'Дмитрий П.',
-      rating: 5,
-      text: 'Быстрая доставка, качественная упаковка. Коврик соответствует описанию. Спасибо!',
-      product: 'Коврик L serpent-black',
-      date: '3 недели назад'
-    }
-  ];
 
   return (
     <PageContainer isMainPage={true}>
@@ -181,6 +161,9 @@ const MainPage: React.FC = () => {
           </div>
         </div>
       </section>
+
+      {/* Reviews Section */}
+      <ReviewsSection reviews={REVIEWS} />
 
       {/* Footer */}
       <Footer />

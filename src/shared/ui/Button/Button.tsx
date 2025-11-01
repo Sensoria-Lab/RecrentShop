@@ -1,19 +1,19 @@
-import { ButtonHTMLAttributes, forwardRef, ReactNode } from 'react';
+import { ButtonHTMLAttributes, forwardRef, ReactNode, useState } from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '../../../shared/lib/utils';
 
 const buttonVariants = cva(
-  // Base styles
-  'inline-flex items-center justify-center rounded-lg font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-black disabled:opacity-50 disabled:pointer-events-none',
+  // Base styles with enhanced interactions
+  'inline-flex items-center justify-center rounded-lg font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-black disabled:opacity-50 disabled:pointer-events-none relative overflow-hidden group',
   {
     variants: {
       variant: {
-        primary: 'bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:from-blue-600 hover:to-blue-700 shadow-lg hover:shadow-blue-500/50 focus:ring-blue-500',
-        secondary: 'bg-white/10 backdrop-blur-sm text-white hover:bg-white/20 border border-white/20 focus:ring-white/50',
-        outline: 'border-2 border-white/30 text-white hover:bg-white/10 hover:border-white/50 focus:ring-white/50',
-        ghost: 'text-white hover:bg-white/10 focus:ring-white/50',
-        danger: 'bg-red-500 text-white hover:bg-red-600 shadow-lg hover:shadow-red-500/50 focus:ring-red-500',
-        success: 'bg-green-500 text-white hover:bg-green-600 shadow-lg hover:shadow-green-500/50 focus:ring-green-500',
+        primary: 'bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:from-blue-600 hover:to-blue-700 shadow-lg hover:shadow-blue-500/50 focus:ring-blue-500 hover:scale-105 active:scale-95',
+        secondary: 'bg-white/10 backdrop-blur-sm text-white hover:bg-white/20 border border-white/20 focus:ring-white/50 hover:scale-105 active:scale-95',
+        outline: 'border-2 border-white/30 text-white hover:bg-white/10 hover:border-white/50 focus:ring-white/50 hover:scale-105 active:scale-95',
+        ghost: 'text-white hover:bg-white/10 focus:ring-white/50 hover:scale-105 active:scale-95',
+        danger: 'bg-red-500 text-white hover:bg-red-600 shadow-lg hover:shadow-red-500/50 focus:ring-red-500 hover:scale-105 active:scale-95',
+        success: 'bg-green-500 text-white hover:bg-green-600 shadow-lg hover:shadow-green-500/50 focus:ring-green-500 hover:scale-105 active:scale-95',
       },
       size: {
         sm: 'px-3 py-1.5 text-sm',
@@ -73,10 +73,32 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       rightIcon,
       children,
       disabled,
+      onClick,
       ...props
     },
     ref
   ) => {
+    const [ripples, setRipples] = useState<Array<{ id: number; x: number; y: number }>>([]);
+
+    const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+      // Create ripple effect
+      const button = event.currentTarget;
+      const rect = button.getBoundingClientRect();
+      const x = event.clientX - rect.left;
+      const y = event.clientY - rect.top;
+      const newRipple = { id: Date.now(), x, y };
+
+      setRipples(prev => [...prev, newRipple]);
+
+      // Remove ripple after animation
+      setTimeout(() => {
+        setRipples(prev => prev.filter(ripple => ripple.id !== newRipple.id));
+      }, 600);
+
+      // Call original onClick
+      onClick?.(event);
+    };
+
     return (
       <button
         ref={ref}
@@ -84,8 +106,23 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         disabled={isLoading || disabled}
         aria-busy={isLoading}
         aria-disabled={isLoading || disabled}
+        onClick={handleClick}
         {...props}
       >
+        {/* Ripple effects */}
+        {ripples.map(ripple => (
+          <span
+            key={ripple.id}
+            className="absolute bg-white/30 rounded-full animate-ripple pointer-events-none"
+            style={{
+              left: ripple.x - 10,
+              top: ripple.y - 10,
+              width: 20,
+              height: 20,
+            }}
+          />
+        ))}
+
         {isLoading && (
           <svg
             className="mr-2 h-4 w-4 animate-spin"
@@ -109,11 +146,11 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
           </svg>
         )}
 
-        {!isLoading && leftIcon && <span className="mr-2">{leftIcon}</span>}
+        {!isLoading && leftIcon && <span className="mr-2 transition-transform group-hover:scale-110">{leftIcon}</span>}
 
-        {children}
+        <span className="relative z-10">{children}</span>
 
-        {!isLoading && rightIcon && <span className="ml-2">{rightIcon}</span>}
+        {!isLoading && rightIcon && <span className="ml-2 transition-transform group-hover:scale-110">{rightIcon}</span>}
       </button>
     );
   }

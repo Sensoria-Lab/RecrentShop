@@ -228,7 +228,7 @@ export const CLOTHING: Product[] = [
     reviewCount: 19,
     color: 'white',
     category: 'clothing',
-    clothingType: 'худи',
+    clothingType: 'hoodie',
     collection: 'Serpents',
     addedDate: '2025-10-15'
   },
@@ -251,7 +251,7 @@ export const CLOTHING: Product[] = [
     reviewCount: 31,
     color: 'black',
     category: 'clothing',
-    clothingType: 'футболка',
+    clothingType: 'tshirt',
     collection: 'Serpents',
     addedDate: '2024-10-05'
   },
@@ -274,7 +274,7 @@ export const CLOTHING: Product[] = [
     reviewCount: 31,
     color: 'white',
     category: 'clothing',
-    clothingType: 'футболка',
+    clothingType: 'tshirt',
     collection: 'Serpents',
     addedDate: '2025-10-25'
   },
@@ -297,7 +297,7 @@ export const CLOTHING: Product[] = [
     reviewCount: 28,
     color: 'black',
     category: 'clothing',
-    clothingType: 'худи',
+    clothingType: 'hoodie',
     collection: 'Serpents',
     addedDate: '2025-10-20'
   },
@@ -320,7 +320,7 @@ export const CLOTHING: Product[] = [
     reviewCount: 8,
     color: 'black',
     category: 'clothing',
-    clothingType: 'футболка',
+    clothingType: 'tshirt',
     collection: 'Dragons',
     addedDate: '2024-09-15'
   },
@@ -343,7 +343,7 @@ export const CLOTHING: Product[] = [
     reviewCount: 12,
     color: 'white',
     category: 'clothing',
-    clothingType: 'футболка',
+    clothingType: 'tshirt',
     collection: 'Dragons',
     addedDate: '2024-09-20'
   }
@@ -371,7 +371,7 @@ export const SLEEVES: Product[] = [
     reviewCount: 14,
     color: 'black',
     category: 'clothing',
-    clothingType: 'рукав',
+    clothingType: 'sleeve',
     collection: 'Geoid',
     addedDate: '2024-10-01'
   },
@@ -393,7 +393,7 @@ export const SLEEVES: Product[] = [
     reviewCount: 10,
     color: 'white',
     category: 'clothing',
-    clothingType: 'рукав',
+    clothingType: 'sleeve',
     collection: 'Geoid',
     addedDate: '2025-10-28'
   }

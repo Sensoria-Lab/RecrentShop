@@ -35,8 +35,10 @@ const Img: React.FC<ImgProps> = ({ src, alt = '', loading, decoding, className, 
   const finalDecoding = decoding || 'async';
 
   // If developer provided srcSet, pass through. Also provide a webp source when appropriate.
+  // Disable webp conversion for review images (they don't have webp versions)
+  const isReviewImage = src.includes('/reviews/');
   const isRaster = /\.(jpg|jpeg|png|webp)$/i.test(src);
-  const webpSrc = isRaster ? getFixedSrc(src).replace(/\.(jpg|jpeg|png)$/i, '.webp') : null;
+  const webpSrc = (isRaster && !isReviewImage) ? getFixedSrc(src).replace(/\.(jpg|jpeg|png)$/i, '.webp') : null;
 
   const fixedSrc = getFixedSrc(src);
   const fixedWebp = webpSrc ? webpSrc : undefined;

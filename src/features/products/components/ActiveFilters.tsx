@@ -62,4 +62,4 @@ const ActiveFilters: React.FC<ActiveFiltersProps> = ({
   );
 };
 
-export default ActiveFilters;
+export default React.memo(ActiveFilters);

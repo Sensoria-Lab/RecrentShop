@@ -94,4 +94,4 @@ function FilterSection<T extends string>({
   );
 }
 
-export default FilterSection;
+export default React.memo(FilterSection);

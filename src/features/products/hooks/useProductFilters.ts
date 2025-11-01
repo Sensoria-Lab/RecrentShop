@@ -22,7 +22,15 @@ export const useProductFilters = (products: Product[], filters: FilterOptions) =
 
     // Apply category filter
     if (filters.categoryFilter !== 'all') {
-      filtered = filtered.filter(p => p.category === filters.categoryFilter);
+      if (filters.categoryFilter === 'mousepads') {
+        filtered = filtered.filter(p => p.category === 'mousepads');
+      } else if (filters.categoryFilter === 'tshirt') {
+        filtered = filtered.filter(p => p.category === 'clothing' && p.clothingType === 'tshirt');
+      } else if (filters.categoryFilter === 'hoodie') {
+        filtered = filtered.filter(p => p.category === 'clothing' && p.clothingType === 'hoodie');
+      } else if (filters.categoryFilter === 'sleeve') {
+        filtered = filtered.filter(p => p.category === 'clothing' && p.clothingType === 'sleeve');
+      }
     }
 
     // Apply color filter - now supports multiple colors

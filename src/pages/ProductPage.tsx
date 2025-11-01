@@ -1,7 +1,8 @@
 import React, { useMemo, useState, useRef, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { PageContainer, Modal } from '../shared/components';
-import { SelectorGroup, Breadcrumbs, DecryptedText, StarRating, QuantitySelector, ProductCard, ProductCarousel, ReviewCard, ImageGalleryModal } from 'features/products/components';
+import { SelectorGroup, Breadcrumbs, DecryptedText, StarRating, QuantitySelector, ProductCard, ProductCarousel, ReviewCard, ImageGalleryModal, SwipeableGallery } from 'features/products/components';
+import { useDeviceDetection } from '../shared/hooks';
 import Img from '../shared/ui/Img';
 import { ALL_PRODUCTS } from '../core/data/products';
 import { REVIEWS, hasMoreReviews } from '../core/data/reviews';
@@ -14,6 +15,7 @@ import { isClothing, isProMousepad } from '../shared/lib/productUtils';
 const ProductPage: React.FC = () => {
   const location = useLocation();
   const passedProductData = location.state?.productData;
+  const { isMobile } = useDeviceDetection();
   
   // Получаем полные данные продукта из ALL_PRODUCTS по ID
   const productData = useMemo(() => {
@@ -163,6 +165,22 @@ const ProductPage: React.FC = () => {
     setQuantity(1);
   };
 
+  // Sticky button visibility state
+  const [showStickyButton, setShowStickyButton] = useState(false);
+
+  useEffect(() => {
+    if (!isMobile) return;
+
+    const handleScroll = () => {
+      // Show sticky button when scrolled past the main add to cart button
+      const threshold = 800; // Adjust based on your layout
+      setShowStickyButton(window.scrollY > threshold);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [isMobile]);
+
   return (
     <PageContainer showBreadcrumbs={false}>
       <div className="max-w-[1400px] mx-auto w-full px-4 sm:px-6 md:px-8 lg:px-12">
@@ -179,78 +197,94 @@ const ProductPage: React.FC = () => {
               {/* Product images - top on mobile, right on desktop */}
               <div className="flex-shrink-0 w-full lg:w-[580px] lg:order-2 lg:h-full">
                 <div className="rounded-lg sm:rounded-xl p-3 sm:p-5 md:p-7 h-full flex flex-col border border-white/10">
-                  {/* Main image with navigation arrows */}
-                  <div className="mb-3 sm:mb-5 md:mb-7 relative flex items-center">
-                    {/* Left arrow - outside image */}
-                    <button
-                      onClick={() => setSelectedImage(selectedImage === 0 ? productImages.length - 1 : selectedImage - 1)}
-                      className="bg-black/50 hover:bg-black/70 text-white p-1.5 sm:p-2 md:p-3 rounded-full transition-colors mr-1.5 sm:mr-3 md:mr-4 flex-shrink-0"
-                      aria-label="Previous image"
-                    >
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="sm:w-4 sm:h-4 md:w-5 md:h-5">
-                        <path d="M15 18l-6-6 6-6"/>
-                      </svg>
-                    </button>
-
-                    {/* Image container */}
-                    <button 
-                      onClick={() => openGallery(productImages, selectedImage)}
-                      className="flex-1 cursor-pointer group relative"
-                    >
-                      <Img
-                        id="product-main-image"
-                        key={`${selectedSize}-${selectedColor}-${selectedImage}`}
-                        src={productImages[selectedImage]}
-                        alt="Product"
-                        loading="eager"
-                        className="w-full h-40 sm:h-56 md:h-72 lg:h-80 object-contain rounded-lg sm:rounded-xl transition-all duration-300"
+                  {/* Mobile: Swipeable Gallery */}
+                  {isMobile ? (
+                    <div className="h-[400px]">
+                      <SwipeableGallery
+                        images={productImages}
+                        currentIndex={selectedImage}
+                        onIndexChange={setSelectedImage}
+                        onImageClick={() => openGallery(productImages, selectedImage)}
+                        altPrefix="Product image"
                       />
-                      {/* Hover overlay with zoom icon */}
-                      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-200 rounded-lg sm:rounded-xl flex items-center justify-center">
-                        <div className="bg-white/10 backdrop-blur-sm p-3 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                          <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7" />
+                    </div>
+                  ) : (
+                    /* Desktop: Classic Gallery */
+                    <>
+                      {/* Main image with navigation arrows */}
+                      <div className="mb-3 sm:mb-5 md:mb-7 relative flex items-center">
+                        {/* Left arrow - outside image */}
+                        <button
+                          onClick={() => setSelectedImage(selectedImage === 0 ? productImages.length - 1 : selectedImage - 1)}
+                          className="bg-black/50 hover:bg-black/70 text-white p-1.5 sm:p-2 md:p-3 rounded-full transition-colors mr-1.5 sm:mr-3 md:mr-4 flex-shrink-0"
+                          aria-label="Previous image"
+                        >
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="sm:w-4 sm:h-4 md:w-5 md:h-5">
+                            <path d="M15 18l-6-6 6-6"/>
                           </svg>
-                        </div>
+                        </button>
+
+                        {/* Image container */}
+                        <button 
+                          onClick={() => openGallery(productImages, selectedImage)}
+                          className="flex-1 cursor-pointer group relative"
+                        >
+                          <Img
+                            id="product-main-image"
+                            key={`${selectedSize}-${selectedColor}-${selectedImage}`}
+                            src={productImages[selectedImage]}
+                            alt="Product"
+                            loading="eager"
+                            className="w-full h-40 sm:h-56 md:h-72 lg:h-80 object-contain rounded-lg sm:rounded-xl transition-all duration-300"
+                          />
+                          {/* Hover overlay with zoom icon */}
+                          <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-200 rounded-lg sm:rounded-xl flex items-center justify-center">
+                            <div className="bg-white/10 backdrop-blur-sm p-3 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                              <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7" />
+                              </svg>
+                            </div>
+                          </div>
+                        </button>
+
+                        {/* Right arrow - outside image */}
+                        <button
+                          onClick={() => setSelectedImage(selectedImage === productImages.length - 1 ? 0 : selectedImage + 1)}
+                          className="bg-black/50 hover:bg-black/70 text-white p-1.5 sm:p-2 md:p-3 rounded-full transition-colors ml-1.5 sm:ml-3 md:ml-4 flex-shrink-0"
+                          aria-label="Next image"
+                        >
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="sm:w-4 sm:h-4 md:w-5 md:h-5">
+                            <path d="M9 18l6-6-6-6"/>
+                          </svg>
+                        </button>
                       </div>
-                    </button>
 
-                    {/* Right arrow - outside image */}
-                    <button
-                      onClick={() => setSelectedImage(selectedImage === productImages.length - 1 ? 0 : selectedImage + 1)}
-                      className="bg-black/50 hover:bg-black/70 text-white p-1.5 sm:p-2 md:p-3 rounded-full transition-colors ml-1.5 sm:ml-3 md:ml-4 flex-shrink-0"
-                      aria-label="Next image"
-                    >
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="sm:w-4 sm:h-4 md:w-5 md:h-5">
-                        <path d="M9 18l6-6-6-6"/>
-                      </svg>
-                    </button>
-                  </div>
+                      {/* Divider */}
+                      <div className="w-full h-px bg-white/20 mb-3 sm:mb-5 md:mb-7"></div>
 
-                  {/* Divider */}
-                  <div className="w-full h-px bg-white/20 mb-3 sm:mb-5 md:mb-7"></div>
-
-                  {/* Thumbnail images */}
-                  <div className="flex gap-2 sm:gap-3 md:gap-4 justify-center flex-1 items-end">
-                    {productImages.map((image: string, index: number) => (
-                      <button
-                        key={index}
-                        onClick={() => setSelectedImage(index)}
-                        className={`w-16 h-14 sm:w-20 sm:h-16 md:w-24 md:h-20 rounded-lg sm:rounded-xl overflow-hidden border-2 transition-all ${
-                          selectedImage === index
-                            ? 'border-white shadow-lg shadow-white/20'
-                            : 'border-transparent opacity-70 hover:opacity-100 hover:border-white/30'
-                        }`}
-                        aria-label={`View image ${index + 1}`}
-                      >
-                        <Img
-                          src={image}
-                          alt={`Product view ${index + 1}`}
-                          className="w-full h-full object-cover"
-                        />
-                      </button>
-                    ))}
-                  </div>
+                      {/* Thumbnail images */}
+                      <div className="flex gap-2 sm:gap-3 md:gap-4 justify-center flex-1 items-end">
+                        {productImages.map((image: string, index: number) => (
+                          <button
+                            key={index}
+                            onClick={() => setSelectedImage(index)}
+                            className={`w-16 h-14 sm:w-20 sm:h-16 md:w-24 md:h-20 rounded-lg sm:rounded-xl overflow-hidden border-2 transition-all ${
+                              selectedImage === index
+                                ? 'border-white shadow-lg shadow-white/20'
+                                : 'border-transparent opacity-70 hover:opacity-100 hover:border-white/30'
+                            }`}
+                            aria-label={`View image ${index + 1}`}
+                          >
+                            <Img
+                              src={image}
+                              alt={`Product view ${index + 1}`}
+                              className="w-full h-full object-cover"
+                            />
+                          </button>
+                        ))}
+                      </div>
+                    </>
+                  )}
                 </div>
               </div>
 
@@ -401,11 +435,14 @@ const ProductPage: React.FC = () => {
                     <button 
                       onClick={handleAddToCartClick}
                       disabled={flyingToCart}
-                      className={`bg-blue-600 hover:bg-blue-700 text-white font-manrope font-semibold text-sm sm:text-base px-5 sm:px-6 py-2.5 rounded-lg transition-all duration-200 flex items-center justify-center whitespace-nowrap ${
-                        flyingToCart ? 'opacity-50 cursor-not-allowed' : 'hover:shadow-lg hover:shadow-blue-500/30'
+                      className={`bg-blue-600 hover:bg-blue-700 text-white font-manrope font-semibold text-sm sm:text-base px-5 sm:px-6 py-2.5 rounded-lg transition-all duration-200 flex items-center justify-center gap-2 whitespace-nowrap ${
+                        flyingToCart ? 'opacity-50 cursor-not-allowed' : 'hover:shadow-lg hover:shadow-blue-500/30 active:scale-95'
                       }`}
                     >
-                      {flyingToCart ? 'Добавление...' : 'В корзину'}
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                      </svg>
+                      <span>{flyingToCart ? 'Добавление...' : 'В корзину'}</span>
                     </button>
 
                     {/* Quantity selector - same height as button */}
@@ -685,6 +722,62 @@ const ProductPage: React.FC = () => {
           onClose={closeGallery}
           altPrefix="Изображение товара"
         />
+
+        {/* Mobile Sticky Add to Cart Button */}
+        {isMobile && showStickyButton && (
+          <div className="fixed bottom-0 left-0 right-0 z-40 bg-black/95 backdrop-blur-2xl border-t border-white/10 shadow-2xl pb-safe animate-in slide-in-from-bottom duration-300">
+            <div className="px-4 py-3 flex items-center gap-3">
+              {/* Product info - compact */}
+              <div className="flex-1 min-w-0">
+                <h3 className="text-white font-semibold text-sm truncate">
+                  {productData?.title}
+                </h3>
+                <p className="text-white/70 text-xs truncate">
+                  {productData?.price}
+                </p>
+              </div>
+
+              {/* Quantity selector - compact */}
+              <div className="flex items-center gap-2 bg-white/5 rounded-lg border border-white/10 px-2">
+                <button
+                  onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                  className="w-8 h-8 flex items-center justify-center text-white/70 active:text-white transition-colors"
+                  aria-label="Decrease quantity"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
+                  </svg>
+                </button>
+                <span className="text-white font-semibold text-sm min-w-[20px] text-center">
+                  {quantity}
+                </span>
+                <button
+                  onClick={() => setQuantity(quantity + 1)}
+                  className="w-8 h-8 flex items-center justify-center text-white/70 active:text-white transition-colors"
+                  aria-label="Increase quantity"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                  </svg>
+                </button>
+              </div>
+
+              {/* Add to cart button */}
+              <button
+                onClick={handleAddToCartClick}
+                disabled={flyingToCart}
+                className="min-h-[48px] px-6 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold rounded-xl transition-all duration-200 active:scale-95 shadow-lg flex items-center gap-2"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                </svg>
+                <span className="hidden xs:inline">
+                  {flyingToCart ? 'Добавление...' : 'В корзину'}
+                </span>
+              </button>
+            </div>
+          </div>
+        )}
         </div>
       </div>
     </PageContainer>

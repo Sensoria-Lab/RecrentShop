@@ -237,7 +237,7 @@ const CLOTHING = [
     reviewCount: 19,
     color: 'white',
     category: 'clothing',
-    clothingType: 'hoodie'
+    clothingType: '????'
   },
   {
     id: 8,
@@ -258,7 +258,7 @@ const CLOTHING = [
     reviewCount: 19,
     color: 'white',
     category: 'clothing',
-    clothingType: 'hoodie'
+    clothingType: '????'
   },
   {
     id: 9,
@@ -278,7 +278,7 @@ const CLOTHING = [
     reviewCount: 31,
     color: 'black',
     category: 'clothing',
-    clothingType: 'tshirt'
+    clothingType: '????????'
   },
   {
     id: 18,
@@ -298,7 +298,7 @@ const CLOTHING = [
     reviewCount: 31,
     color: 'white',
     category: 'clothing',
-    clothingType: 'tshirt'
+    clothingType: '????????'
   },
   {
     id: 12,
@@ -318,7 +318,7 @@ const CLOTHING = [
     reviewCount: 28,
     color: 'black',
     category: 'clothing',
-    clothingType: 'hoodie'
+    clothingType: '????'
   }
 ];
 
@@ -341,7 +341,7 @@ const SLEEVES = [
     reviewCount: 14,
     color: 'black',
     category: 'clothing',
-    clothingType: 'sleeve'
+    clothingType: '?????'
   },
   {
     id: 14,
@@ -361,7 +361,7 @@ const SLEEVES = [
     reviewCount: 10,
     color: 'white',
     category: 'clothing',
-    clothingType: 'sleeve'
+    clothingType: '?????'
   }
 ];
 

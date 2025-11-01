@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useCart } from '../../core/context/CartContext';
 import { ROUTES } from '../../core/constants/routes';
+import { hapticSelection } from '../utils/haptic';
 
 /**
  * Mobile Bottom Navigation Bar
@@ -135,41 +136,44 @@ const BottomNavigation: React.FC = () => {
               return (
                 <button
                   key={item.id}
-                  onClick={() => navigate(item.path)}
-                  className={`relative flex flex-col items-center justify-center gap-1 py-2 px-1 rounded-xl transition-all duration-200 active:scale-95 ${
+                  onClick={() => {
+                    hapticSelection();
+                    navigate(item.path);
+                  }}
+                  className={`relative flex flex-col items-center justify-center gap-1 py-2 px-1 min-h-[56px] rounded-xl transition-all duration-200 active:scale-95 ${
                     active
                       ? 'bg-white/10 text-white'
-                      : 'text-white/70 hover:text-white/90 hover:bg-white/5'
+                      : 'text-white/70 active:text-white/90 active:bg-white/5'
                   }`}
                   aria-label={item.label}
                   aria-current={active ? 'page' : undefined}
                 >
-                  {/* Icon with badge */}
-                  <div className="relative">
+                  {/* Icon with badge - larger for better touch */}
+                  <div className="relative min-w-[32px] min-h-[32px] flex items-center justify-center">
                     {item.icon(active)}
 
-                    {/* Cart badge */}
+                    {/* Cart badge - enhanced */}
                     {item.badge && item.badge > 0 && (
-                      <div className="absolute -top-1 -right-1 min-w-[18px] h-[18px] bg-gradient-to-r from-blue-500 to-blue-600 rounded-full flex items-center justify-center shadow-lg shadow-blue-500/50 animate-in zoom-in duration-200">
-                        <span className="text-[10px] font-bold text-white px-1">
+                      <div className="absolute -top-1.5 -right-1.5 min-w-[20px] h-[20px] bg-gradient-to-r from-blue-500 to-blue-600 rounded-full flex items-center justify-center shadow-lg shadow-blue-500/60 animate-in zoom-in duration-200 border border-white/20">
+                        <span className="text-[11px] font-bold text-white px-1">
                           {item.badge > 99 ? '99+' : item.badge}
                         </span>
                       </div>
                     )}
                   </div>
 
-                  {/* Label */}
+                  {/* Label - slightly larger */}
                   <span
-                    className={`text-[10px] font-medium transition-all duration-200 ${
+                    className={`text-[11px] font-medium transition-all duration-200 ${
                       active ? 'font-semibold' : ''
                     }`}
                   >
                     {item.label}
                   </span>
 
-                  {/* Active indicator */}
+                  {/* Active indicator - more prominent */}
                   {active && (
-                    <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-8 h-0.5 bg-gradient-to-r from-white/60 to-white/80 rounded-full shadow-lg shadow-white/20" />
+                    <div className="absolute bottom-1 left-1/2 -translate-x-1/2 w-10 h-1 bg-gradient-to-r from-white/50 via-white/80 to-white/50 rounded-full shadow-lg shadow-white/30 animate-in zoom-in duration-200" />
                   )}
                 </button>
               );

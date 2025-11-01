@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { PageLayout } from '../shared/components';
+import { PageContainer } from '../shared/components';
 import { Button } from '../shared/ui';
 import Img from '../shared/ui/Img';
 import { useCart } from '../core/context/CartContext';
@@ -18,7 +18,7 @@ const CartPage: React.FC = () => {
   };
 
   return (
-    <PageLayout>
+    <PageContainer>
       <div className="min-h-screen px-4 sm:px-6 md:px-8 lg:px-12 pt-6 sm:pt-8 md:pt-10 pb-12 sm:pb-16 md:pb-20">
         <div className="max-w-7xl mx-auto">
           {/* Page Title */}
@@ -237,7 +237,7 @@ const CartPage: React.FC = () => {
           </div>
         </div>
       </div>
-    </PageLayout>
+    </PageContainer>
   );
 };
 

@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { PageLayout } from '../shared/components';
+import { motion } from 'motion/react';
+import { PageContainer } from '../shared/components';
 import { offerContent } from '../core/data/offerContent';
 import { SITE_CONFIG, SOCIAL_LINKS, TEXTS } from '../core/constants/config';
 
@@ -25,6 +26,7 @@ const SupportPage: React.FC = () => {
         }
       }, 100);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const toggleItem = (id: string, index: number) => {
@@ -315,7 +317,7 @@ const SupportPage: React.FC = () => {
   ];
 
   return (
-    <PageLayout>
+    <PageContainer>
       <div className="max-w-6xl mx-auto px-4 sm:px-6 md:px-8 lg:px-12 pt-6 sm:pt-8 md:pt-10 pb-12 sm:pb-16 md:pb-20">
         <div>
           {/* Page Title */}
@@ -330,46 +332,100 @@ const SupportPage: React.FC = () => {
 
           <div className="w-full space-y-4 sm:space-y-5 md:space-y-6">
             {items.map((item, index) => (
-              <div
+              <motion.div
                 key={item.id}
                 id={item.id}
-                ref={(el) => (itemRefs.current[index] = el)}
-                className={`border-white/20 bg-black/20 rounded-lg sm:rounded-xl md:rounded-2xl px-3 sm:px-4 md:px-5 lg:px-6 scroll-fade-in scroll-fade-in-delay-${Math.min(index % 4 + 1, 4)}`}
+                ref={(el: HTMLDivElement | null) => (itemRefs.current[index] = el)}
+                className="border-white/20 bg-black/20 rounded-lg sm:rounded-xl md:rounded-2xl overflow-hidden"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{
+                  duration: 0.4,
+                  delay: index * 0.08,
+                  ease: [0.16, 1, 0.3, 1],
+                }}
+                style={{
+                  width: '100%',
+                  minWidth: 0,
+                }}
               >
-                <button
+                <motion.button
                   onClick={() => toggleItem(item.id, index)}
-                  className="text-white hover:text-white/80 py-4 sm:py-5 md:py-6 lg:py-7 hover:no-underline w-full text-left flex items-center gap-2 sm:gap-3 md:gap-5 lg:gap-6"
+                  className="text-white hover:text-white/80 py-4 sm:py-5 md:py-6 lg:py-7 hover:no-underline w-full text-left flex items-center gap-2 sm:gap-3 md:gap-5 lg:gap-6 px-3 sm:px-4 md:px-5 lg:px-6"
+                  whileHover={{ backgroundColor: 'rgba(255, 255, 255, 0.03)' }}
+                  transition={{ duration: 0.2 }}
                 >
-                  <div className="flex items-center gap-2 sm:gap-3 md:gap-5 lg:gap-6 w-full">
-                    <div className="flex-shrink-0 w-9 h-9 sm:w-10 sm:h-10 md:w-12 md:h-12 lg:w-14 lg:h-14 rounded-md sm:rounded-lg md:rounded-xl bg-gradient-to-br from-white/10 to-white/5 flex items-center justify-center border border-white/10">
+                  <div className="flex items-center gap-2 sm:gap-3 md:gap-5 lg:gap-6 w-full min-w-0">
+                    <motion.div 
+                      className="flex-shrink-0 w-9 h-9 sm:w-10 sm:h-10 md:w-12 md:h-12 lg:w-14 lg:h-14 rounded-md sm:rounded-lg md:rounded-xl bg-gradient-to-br from-white/10 to-white/5 flex items-center justify-center border border-white/10"
+                      whileHover={{ scale: 1.05 }}
+                      transition={{ type: 'spring', stiffness: 400, damping: 17 }}
+                    >
                       <div className="text-white/90 scale-75 sm:scale-90 md:scale-100">{item.icon}</div>
-                    </div>
+                    </motion.div>
                     <div className="text-left flex-1 min-w-0">
                       <h3 className="font-manrope font-semibold text-sm sm:text-base md:text-lg lg:text-xl truncate">{item.title}</h3>
                       {item.preview && <p className="text-white/60 text-[10px] sm:text-xs md:text-sm mt-0.5 sm:mt-1 truncate">{item.preview}</p>}
                     </div>
                   </div>
-                  <svg
-                    className={`w-5 h-5 transition-transform ${openItem === item.id ? 'rotate-180' : ''}`}
+                  <motion.svg
+                    className="w-5 h-5 flex-shrink-0"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
+                    animate={{ rotate: openItem === item.id ? 180 : 0 }}
+                    transition={{ 
+                      type: 'spring',
+                      stiffness: 260,
+                      damping: 20,
+                    }}
                   >
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                  </svg>
-                </button>
-                {openItem === item.id && (
-                  <div className="text-gray-300 pb-4 sm:pb-5 md:pb-6 lg:pb-7 pt-0 animate-in fade-in slide-in-from-top-2 duration-500 ease-out">
+                  </motion.svg>
+                </motion.button>
+                <motion.div
+                  initial={false}
+                  animate={{
+                    height: openItem === item.id ? 'auto' : 0,
+                    opacity: openItem === item.id ? 1 : 0,
+                  }}
+                  transition={{
+                    height: {
+                      type: 'spring',
+                      stiffness: 300,
+                      damping: 30,
+                      mass: 0.8,
+                    },
+                    opacity: {
+                      duration: 0.25,
+                      ease: [0.16, 1, 0.3, 1],
+                    },
+                  }}
+                  style={{
+                    overflow: 'hidden',
+                    width: '100%',
+                  }}
+                >
+                  <motion.div 
+                    className="text-gray-300 pb-4 sm:pb-5 md:pb-6 lg:pb-7 px-3 sm:px-4 md:px-5 lg:px-6"
+                    initial={{ y: -10 }}
+                    animate={{ y: 0 }}
+                    transition={{
+                      type: 'spring',
+                      stiffness: 260,
+                      damping: 20,
+                    }}
+                  >
                     {item.content}
-                  </div>
-                )}
-              </div>
+                  </motion.div>
+                </motion.div>
+              </motion.div>
             ))}
           </div>
         </div>
         </div>
       </div>
-    </PageLayout>
+    </PageContainer>
   );
 };
 

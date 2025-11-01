@@ -1,6 +1,7 @@
 import React, { Suspense } from 'react';
 import ReactDOM from 'react-dom/client';
 import { RouterProvider } from 'react-router-dom';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import App from './App';
 import router from './core/routing';
 import './index.css';

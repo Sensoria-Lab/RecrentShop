@@ -1,25 +1,22 @@
 /**
  * Design System UI Components
- * Centralized export for all reusable UI components
+ * Unified UI system - shadcn-ui as foundation with custom enhancements
  */
 
-// Original Design System Components (используем как основные)
-export { Button, type ButtonProps } from './Button';
-export { Input, type InputProps } from './Input';
+// ===== PRIMARY COMPONENTS (Use These) =====
+export { Button, buttonVariants, type ButtonProps } from './ui/button';
 export { Card, type CardProps } from './Card';
 
-// Custom UI Components
+// ===== CUSTOM UI COMPONENTS =====
 export { RadioGroup, RadioGroupItem } from './RadioGroup';
 export { Checkbox } from './Checkbox';
 export { default as Img } from './Img';
 
-// shadcn-ui Components
+// ===== SHADCN-UI COMPONENTS =====
 export * from './ui/dialog';
 export * from './ui/sonner';
-export { Input as ShadcnInput } from './ui/input';
 export * from './ui/label';
 export * from './ui/textarea';
-export { Button as ShadcnButton, buttonVariants } from './ui/button';
 export * from './ui/accordion';
 export * from './ui/tabs';
 export * from './ui/checkbox';

@@ -1,2 +1,3 @@
 // Central export file for all custom hooks
-export { useIntersectionObserver, useIsVisible } from './useIntersectionObserver';
+export { useIntersectionObserver } from './useIntersectionObserver';
+export { useDeviceDetection, useMobileRedirect } from './useDeviceDetection';

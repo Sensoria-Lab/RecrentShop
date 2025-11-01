@@ -40,6 +40,54 @@ html {
     -webkit-overflow-scrolling: touch;
     will-change: scroll-position;
   }
+
+  /* Enhanced touch targets - minimum 44x44px */
+  button, a, input, select, textarea, [role="button"], [role="link"] {
+    min-height: 44px;
+  }
+
+  /* Increase base font size for better readability on mobile */
+  body {
+    font-size: 16px;
+    line-height: 1.6;
+  }
+
+  /* Larger tap targets for navigation items */
+  nav button, nav a {
+    min-height: 48px;
+    padding: 12px 16px;
+  }
+
+  /* Prevent text size adjustment */
+  body {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
+  /* Optimize input fields for mobile */
+  input, textarea, select {
+    font-size: 16px; /* Prevents zoom on focus in iOS */
+  }
+
+  /* Better spacing for mobile content */
+  h1 { font-size: clamp(1.75rem, 5vw, 2.5rem); }
+  h2 { font-size: clamp(1.5rem, 4vw, 2rem); }
+  h3 { font-size: clamp(1.25rem, 3.5vw, 1.75rem); }
+  
+  /* Mobile-optimized spacing */
+  .mobile-spacing {
+    padding: 16px;
+  }
+
+  /* Smoother animations on mobile */
+  * {
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+  }
 }
 
 /* Мягкое притяжение к секциям на главной странице */
@@ -70,6 +118,37 @@ body {
   /* Controls global background dark overlay strength (0 = none, 1 = full black) */
   --bg-darkness: 0;
   --bg-lighten: 0;
+
+  /* Theme variables - Dark theme only */
+  --bg-primary: #000000;
+  --bg-secondary: rgba(0,0,0,0.55);
+  --bg-tertiary: rgba(0,0,0,0.40);
+  --bg-glass: rgba(0,0,0,0.55);
+  --bg-glass-backdrop: blur(18px);
+  --bg-panel: rgba(0,0,0,0.40);
+  --bg-panel-backdrop: blur(12px);
+  --bg-form: rgba(255,255,255,0.03);
+  --bg-form-select: rgba(255,255,255,0.02);
+  --bg-skeleton: rgba(255,255,255,0.05);
+  --bg-shimmer: rgba(255,255,255,0.1);
+
+  --text-primary: white;
+  --text-secondary: rgba(255,255,255,0.8);
+  --text-muted: rgba(255,255,255,0.6);
+  --text-accent: #3B82F6;
+
+  --border-primary: rgba(255,255,255,0.15);
+  --border-secondary: rgba(255,255,255,0.08);
+  --border-accent: rgba(59,130,246,0.06);
+
+  --shadow-primary: rgba(0,0,0,0.6);
+  --shadow-secondary: rgba(0,0,0,0.4);
+  --shadow-glass: rgba(0,0,0,0.3);
+  --shadow-enhanced: rgba(0,0,0,0.4);
+
+  --scrollbar-thumb: rgba(255,255,255,0.7);
+  --scrollbar-thumb-hover: rgba(255,255,255,0.9);
+  --scrollbar-track: transparent;
 }
 
 .app-bg {
@@ -110,10 +189,10 @@ body {
 /* Glass panel with white gradient border */
 .panel-gradient {
   position: relative;
-  background: rgba(0,0,0,0.55);
-  backdrop-filter: blur(18px) saturate(1.05);
-  -webkit-backdrop-filter: blur(18px) saturate(1.05);
-  border: 1px solid rgba(255,255,255,0.15);
+  background: var(--bg-glass);
+  backdrop-filter: var(--bg-glass-backdrop);
+  -webkit-backdrop-filter: var(--bg-glass-backdrop);
+  border: 1px solid var(--border-primary);
 }
 
 
@@ -136,7 +215,7 @@ body {
 .panel-gradient:hover:before { opacity: 0.95; }
 
 .panel-gradient-shadow {
-  box-shadow: 0 8px 24px -6px rgba(0,0,0,0.6), 0 2px 4px -1px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.04);
+  box-shadow: 0 8px 24px var(--shadow-primary), 0 2px 4px var(--shadow-secondary), 0 0 0 1px var(--border-secondary);
 }
 
 @keyframes gradient-shift {
@@ -558,9 +637,9 @@ body {
 
 /* Design tokens: standardized panels, buttons and form controls */
 .panel {
-  background: rgba(0,0,0,0.40);
-  -webkit-backdrop-filter: blur(12px);
-  backdrop-filter: blur(12px);
+  background: var(--bg-panel);
+  -webkit-backdrop-filter: var(--bg-panel-backdrop);
+  backdrop-filter: var(--bg-panel-backdrop);
   border-radius: 0.75rem; /* rounded-xl */
   padding: 1rem;
 }
@@ -578,7 +657,7 @@ body {
   inset: 0;
   z-index: 0;
   pointer-events: none;
-  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.08));
+  background: linear-gradient(180deg, var(--bg-shimmer), var(--shadow-primary));
   -webkit-backdrop-filter: blur(8px);
   backdrop-filter: blur(8px);
   opacity: 1;
@@ -598,13 +677,13 @@ body {
 
 /* Optional utility class to explicitly add the effect to non-panel blocks */
 .gradual-blur { position: relative; overflow: hidden; }
-.gradual-blur::before { content: ''; position:absolute; inset:0; z-index:0; pointer-events:none; background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.08)); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); opacity:1; transform:scale(1); transition: opacity 580ms ease, backdrop-filter 580ms ease, transform 580ms ease; }
+.gradual-blur::before { content: ''; position:absolute; inset:0; z-index:0; pointer-events:none; background: linear-gradient(180deg, var(--bg-shimmer), var(--shadow-primary)); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); opacity:1; transform:scale(1); transition: opacity 580ms ease, backdrop-filter 580ms ease, transform 580ms ease; }
 .gradual-blur > * { position: relative; z-index:1; }
 .gradual-blur:hover::before, .gradual-blur:focus-within::before { -webkit-backdrop-filter: blur(0); backdrop-filter: blur(0); opacity:0; transform: scale(1.02); }
 
 .panel-strong {
-  box-shadow: 0 12px 40px rgba(0,0,0,0.6);
-  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow: 0 12px 40px var(--shadow-primary);
+  border: 1px solid var(--border-secondary);
 }
 
 .btn-primary {
@@ -620,26 +699,26 @@ body {
 }
 
 .btn-secondary {
-  background: rgba(255,255,255,0.04);
-  color: white;
+  background: var(--bg-form);
+  color: var(--text-primary);
   padding: 0.5rem 1rem;
   border-radius: 0.5rem;
-  border: 1px solid rgba(255,255,255,0.08);
+  border: 1px solid var(--border-secondary);
 }
 
 .form-control {
-  background: rgba(255,255,255,0.03);
-  border: 1px solid rgba(255,255,255,0.08);
+  background: var(--bg-form);
+  border: 1px solid var(--border-secondary);
   padding: 0.5rem 0.75rem;
   border-radius: 0.5rem;
-  color: white;
+  color: var(--text-primary);
 }
 
 /* Focus state for accessibility */
 .form-control:focus {
   outline: none;
-  border-color: rgba(255,255,255,0.18);
-  box-shadow: 0 6px 20px rgba(0,0,0,0.6), 0 0 0 4px rgba(59,130,246,0.06);
+  border-color: var(--border-accent);
+  box-shadow: 0 6px 20px var(--shadow-primary), 0 0 0 4px var(--border-accent);
 }
 
 /* Select-specific tweaks to avoid native ugly rendering on dark backgrounds */
@@ -647,7 +726,7 @@ body {
 select.form-control {
   -webkit-appearance: none;
   appearance: none;
-  background-color: rgba(255,255,255,0.02);
+  background-color: var(--bg-form-select);
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='white' stroke-width='1.2' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 0.75rem center;
@@ -673,7 +752,7 @@ input[type="range"].form-control {
 /* Custom white scrollbar - narrower */
 * {
   scrollbar-width: thin; /* Firefox - thin scrollbar */
-  scrollbar-color: rgba(255, 255, 255, 0.7) transparent; /* Firefox - white thumb, transparent track */
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track); /* Firefox - white thumb, transparent track */
 }
 
 /* Webkit browsers (Chrome, Safari, Edge) */
@@ -683,16 +762,16 @@ input[type="range"].form-control {
 }
 
 *::-webkit-scrollbar-track {
-  background: transparent; /* Transparent track */
+  background: var(--scrollbar-track); /* Transparent track */
 }
 
 *::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.7); /* White thumb with slight transparency */
+  background: var(--scrollbar-thumb); /* White thumb with slight transparency */
   border-radius: 3px; /* Rounded edges */
 }
 
 *::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.9); /* Brighter on hover */
+  background: var(--scrollbar-thumb-hover); /* Brighter on hover */
 }
 
 /* Toast animations */
@@ -776,7 +855,7 @@ input[type="range"].form-control {
 
 .hover-lift:hover {
   transform: translateY(-8px);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), 0 0 30px rgba(255, 255, 255, 0.1);
+  box-shadow: 0 20px 40px var(--shadow-glass), 0 0 30px var(--bg-shimmer);
 }
 
 .hover-glow:hover {
@@ -828,7 +907,7 @@ input[type="range"].form-control {
 
 .gradient-border {
   position: relative;
-  background: rgba(0, 0, 0, 0.6);
+  background: var(--bg-glass);
   border-radius: 1rem;
   overflow: hidden;
 }
@@ -850,7 +929,7 @@ input[type="range"].form-control {
   content: '';
   position: absolute;
   inset: 2px;
-  background: rgba(0, 0, 0, 0.95);
+  background: var(--bg-primary);
   border-radius: calc(1rem - 2px);
   z-index: -1;
 }
@@ -894,7 +973,7 @@ input[type="range"].form-control {
 .skeleton-shimmer {
   position: relative;
   overflow: hidden;
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--bg-skeleton);
 }
 
 .skeleton-shimmer::after {
@@ -904,7 +983,7 @@ input[type="range"].form-control {
   background: linear-gradient(
     90deg,
     transparent 0%,
-    rgba(255, 255, 255, 0.1) 50%,
+    var(--bg-shimmer) 50%,
     transparent 100%
   );
   animation: shimmerSlide 2s infinite;
@@ -1004,15 +1083,15 @@ input[type="range"].form-control {
 /* Soft shadow for glass elements */
 .glass-shadow {
   box-shadow: 
-    0 8px 32px rgba(0, 0, 0, 0.3),
-    0 2px 8px rgba(0, 0, 0, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    0 8px 32px var(--shadow-glass),
+    0 2px 8px var(--shadow-secondary),
+    inset 0 1px 0 var(--bg-shimmer);
 }
 
 /* Improved drop shadows */
 .enhanced-shadow {
-  filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.4))
-          drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+  filter: drop-shadow(0 10px 30px var(--shadow-enhanced))
+          drop-shadow(0 4px 8px var(--shadow-primary));
 }
 
 /* Fade in animation for active filters - shadcn style */
@@ -1111,14 +1190,308 @@ input[type="range"].form-control {
   width: 6px;
 }
 .custom-scrollbar::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--scrollbar-track);
 }
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.2);
+  background: var(--scrollbar-thumb);
   border-radius: 3px;
 }
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.4);
+  background: var(--scrollbar-thumb-hover);
+}
+
+/* ============================================
+   CART SIDEBAR ENHANCED ANIMATIONS
+   ============================================ */
+
+/* Cart item entrance stagger animation */
+@keyframes cartItemSlideIn {
+  0% {
+    opacity: 0;
+    transform: translateX(20px) scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+.cart-item-enter {
+  animation: cartItemSlideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Cart item removal animation */
+@keyframes cartItemRemove {
+  0% {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+    max-height: 200px;
+  }
+  50% {
+    opacity: 0.5;
+    transform: translateX(100px) scale(0.9);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(150px) scale(0.8);
+    max-height: 0;
+    margin: 0;
+    padding: 0;
+  }
+}
+
+.cart-item-removing {
+  animation: cartItemRemove 0.3s cubic-bezier(0.4, 0, 1, 1) forwards;
+}
+
+/* Quantity button pulse on interaction */
+@keyframes quantityPulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.quantity-pulse {
+  animation: quantityPulse 0.2s ease-out;
+}
+
+/* Cart badge pulse when items are added */
+@keyframes cartBadgeBounce {
+  0%, 100% {
+    transform: scale(1);
+  }
+  25% {
+    transform: scale(1.2) rotate(-5deg);
+  }
+  50% {
+    transform: scale(1.3) rotate(5deg);
+  }
+  75% {
+    transform: scale(1.1) rotate(-3deg);
+  }
+}
+
+.cart-badge-bounce {
+  animation: cartBadgeBounce 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Checkout button shimmer effect */
+@keyframes checkoutShimmer {
+  0% {
+    background-position: -200% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
+}
+
+.checkout-shimmer {
+  background-size: 200% 100%;
+  animation: checkoutShimmer 2s ease-in-out infinite;
+}
+
+/* Price update animation */
+@keyframes priceUpdate {
+  0%, 100% {
+    transform: scale(1);
+    color: currentColor;
+  }
+  50% {
+    transform: scale(1.1);
+    color: rgb(96, 165, 250); /* blue-400 */
+  }
+}
+
+.price-update {
+  animation: priceUpdate 0.4s ease-out;
+}
+
+/* Empty cart illustration float */
+@keyframes emptyCartFloat {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.empty-cart-float {
+  animation: emptyCartFloat 3s ease-in-out infinite;
+}
+
+/* Subtle glow effect for cart items on hover */
+@keyframes itemGlow {
+  0%, 100% {
+    box-shadow: 0 0 0 rgba(59, 130, 246, 0);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+  }
+}
+
+.cart-item-glow:hover {
+  animation: itemGlow 2s ease-in-out infinite;
+}
+
+/* Success checkmark animation when adding to cart */
+@keyframes successCheck {
+  0% {
+    stroke-dashoffset: 100;
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+}
+
+.success-check {
+  stroke-dasharray: 100;
+  animation: successCheck 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Discount badge entrance */
+@keyframes discountBadgeEnter {
+  0% {
+    opacity: 0;
+    transform: scale(0) rotate(-180deg);
+  }
+  50% {
+    transform: scale(1.2) rotate(10deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(0);
+  }
+}
+
+.discount-badge-enter {
+  animation: discountBadgeEnter 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Cart overlay backdrop fade */
+@keyframes backdropFadeIn {
+  0% {
+    opacity: 0;
+    backdrop-filter: blur(0);
+  }
+  100% {
+    opacity: 1;
+    backdrop-filter: blur(12px);
+  }
+}
+
+.backdrop-fade-in {
+  animation: backdropFadeIn 0.3s ease-out forwards;
+}
+
+/* Mobile: Cart slide up from bottom */
+@keyframes mobileCartSlideUp {
+  0% {
+    transform: translateY(100%);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 640px) {
+  .mobile-cart-enter {
+    animation: mobileCartSlideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+}
+
+/* Promotional banner slide in cart */
+@keyframes promoBannerSlide {
+  0% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.promo-banner-enter {
+  animation: promoBannerSlide 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Progress bar fill animation for free shipping threshold */
+@keyframes progressFill {
+  0% {
+    transform: scaleX(0);
+    transform-origin: left;
+  }
+  100% {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+}
+
+.progress-fill {
+  animation: progressFill 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Subtle border pulse for featured items */
+@keyframes borderPulse {
+  0%, 100% {
+    border-color: rgba(59, 130, 246, 0.2);
+  }
+  50% {
+    border-color: rgba(59, 130, 246, 0.5);
+  }
+}
+
+.border-pulse {
+  animation: borderPulse 2s ease-in-out infinite;
+}
+
+/* Icon bounce for actions */
+@keyframes iconBounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+.icon-bounce {
+  animation: iconBounce 0.3s ease-out;
+}
+
+/* Reduce motion preference for cart animations */
+@media (prefers-reduced-motion: reduce) {
+  .cart-item-enter,
+  .cart-item-removing,
+  .quantity-pulse,
+  .cart-badge-bounce,
+  .checkout-shimmer,
+  .price-update,
+  .empty-cart-float,
+  .cart-item-glow,
+  .success-check,
+  .discount-badge-enter,
+  .backdrop-fade-in,
+  .mobile-cart-enter,
+  .promo-banner-enter,
+  .progress-fill,
+  .border-pulse,
+  .icon-bounce {
+    animation: none !important;
+    transition: none !important;
+  }
 }
 
 

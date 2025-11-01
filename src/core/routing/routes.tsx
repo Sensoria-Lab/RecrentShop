@@ -10,6 +10,7 @@ import CartPage from '../../pages/CartPage';
 import CheckoutPage from '../../pages/CheckoutPage';
 import SupportPage from '../../pages/SupportPage';
 import AccountPage from '../../pages/AccountPage';
+import TestImagesPage from '../../pages/TestImagesPage';
 
 // App Layout
 import App from '../../App';
@@ -46,6 +47,10 @@ export const router = createBrowserRouter([
       {
         path: ROUTES.ACCOUNT,
         element: <AccountPage />,
+      },
+      {
+        path: 'test-images',
+        element: <TestImagesPage />,
       },
       {
         path: ROUTES.NOT_FOUND,

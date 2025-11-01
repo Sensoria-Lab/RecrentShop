@@ -41,18 +41,20 @@ const Header: React.FC<HeaderProps> = ({ className = '' }) => {
               <div className="absolute inset-0 bg-white/0 group-hover:bg-white/5 rounded-full blur-xl transition-all duration-300" />
             </button>
 
-            {/* Mobile menu button */}
+            {/* Mobile menu button - 44px touch target */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden flex items-center justify-center responsive-icon-btn rounded-lg hover:bg-white/10 transition-all focus:outline-none flex-shrink-0"
+              className="md:hidden min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg hover:bg-white/10 active:bg-white/15 transition-all focus:outline-none flex-shrink-0"
+              aria-label={mobileMenuOpen ? "Закрыть меню" : "Открыть меню"}
+              aria-expanded={mobileMenuOpen}
             >
               {mobileMenuOpen ? (
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="text-white/80">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="text-white/80 transition-transform duration-200">
                   <line x1="18" y1="6" x2="6" y2="18"/>
                   <line x1="6" y1="6" x2="18" y2="18"/>
                 </svg>
               ) : (
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="text-white/80">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="text-white/80 transition-transform duration-200">
                   <line x1="3" y1="12" x2="21" y2="12"/>
                   <line x1="3" y1="6" x2="21" y2="6"/>
                   <line x1="3" y1="18" x2="21" y2="18"/>
@@ -109,8 +111,6 @@ const Header: React.FC<HeaderProps> = ({ className = '' }) => {
               )}
             </button>
 
-            <div className="w-1 h-1 rounded-full bg-white/40 mx-0.5 lg:mx-1" />
-
             <button
               id="cart-button"
               onClick={toggleCart}
@@ -122,30 +122,30 @@ const Header: React.FC<HeaderProps> = ({ className = '' }) => {
             >
               <span className="relative z-10">Корзина</span>
               {getTotalItems > 0 && (
-                <span className="min-w-[18px] md:min-w-[20px] h-4 md:h-5 px-1 md:px-1.5 bg-gradient-to-br from-blue-500 to-blue-600 text-white text-[10px] md:text-xs font-semibold rounded-full inline-flex items-center justify-center shadow-lg shadow-blue-500/30 border border-white/20 animate-pulse">
+                <span className="min-w-[18px] md:min-w-[20px] h-4 md:h-5 px-1 md:px-1.5 bg-gradient-to-br from-blue-500 to-blue-600 text-white text-[10px] md:text-xs font-semibold rounded-full inline-flex items-center justify-center shadow-lg shadow-blue-500/30 border border-white/20">
                   {getTotalItems > 99 ? '99+' : getTotalItems}
                 </span>
               )}
             </button>
           </div>
 
-          {/* Mobile: Cart only (removed account - now in bottom nav) */}
+          {/* Mobile: Cart only (larger touch target - 44px minimum) */}
           <div className="md:hidden flex items-center gap-2">
             <button
               id="cart-button-mobile"
               onClick={() => navigate(ROUTES.CART)}
-              className="relative w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center cursor-pointer active:scale-95 transition-all focus:outline-none rounded-lg group flex-shrink-0"
+              className="relative min-w-[44px] min-h-[44px] flex items-center justify-center cursor-pointer active:scale-95 transition-all focus:outline-none rounded-lg group flex-shrink-0"
               aria-label="Корзина"
             >
-              <div className="absolute inset-0 bg-white/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity" />
+              <div className="absolute inset-0 bg-white/10 rounded-lg opacity-0 group-active:opacity-100 transition-opacity" />
               <svg
-                width="20"
-                height="20"
+                width="24"
+                height="24"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
                 strokeWidth="2"
-                className="sm:w-[22px] sm:h-[22px] relative text-white/80 drop-shadow-[0_0_6px_rgba(255,255,255,0.2)]"
+                className="relative text-white/80 drop-shadow-[0_0_6px_rgba(255,255,255,0.2)]"
               >
                 <path
                   strokeLinecap="round"
@@ -154,7 +154,7 @@ const Header: React.FC<HeaderProps> = ({ className = '' }) => {
                 />
               </svg>
               {getTotalItems > 0 && (
-                <span className="absolute -top-0.5 sm:-top-1 -right-0.5 sm:-right-1 min-w-[18px] sm:min-w-[20px] h-4 sm:h-5 px-1 sm:px-1.5 bg-gradient-to-br from-blue-500 to-blue-600 text-white text-[10px] sm:text-xs font-bold rounded-full flex items-center justify-center shadow-lg shadow-blue-500/50 border border-white/20">
+                <span className="absolute -top-1 -right-1 min-w-[20px] h-5 px-1.5 bg-gradient-to-br from-blue-500 to-blue-600 text-white text-xs font-bold rounded-full flex items-center justify-center shadow-lg shadow-blue-500/50 border border-white/20 animate-in zoom-in duration-200">
                   {getTotalItems > 99 ? '99+' : getTotalItems}
                 </span>
               )}
@@ -162,10 +162,10 @@ const Header: React.FC<HeaderProps> = ({ className = '' }) => {
           </div>
         </div>
 
-        {/* Mobile Navigation Menu */}
+        {/* Mobile Navigation Menu - Enhanced with animations */}
         {mobileMenuOpen && (
-          <nav className="relative md:hidden mt-4 pt-4 border-t border-white/10 space-y-2 px-4 sm:px-8 md:px-12 lg:px-16 xl:px-20">
-            {MOBILE_NAV_ITEMS.map(({ path: targetPath, label }) => {
+          <nav className="relative md:hidden mt-4 pt-4 border-t border-white/10 space-y-2 px-4 sm:px-8 md:px-12 lg:px-16 xl:px-20 animate-in slide-in-from-top duration-200">
+            {MOBILE_NAV_ITEMS.map(({ path: targetPath, label }, index) => {
               const active = isActive(targetPath);
               return (
                 <button
@@ -174,11 +174,15 @@ const Header: React.FC<HeaderProps> = ({ className = '' }) => {
                     go(targetPath.slice(1));
                     setMobileMenuOpen(false);
                   }}
-                  className={`w-full text-left font-manrope font-semibold text-base px-4 py-3 rounded-xl transition-all duration-300 focus:outline-none ${
+                  className={`w-full text-left font-manrope font-semibold text-base min-h-[48px] px-4 py-3 rounded-xl transition-all duration-200 focus:outline-none active:scale-98 ${
                     active
-                      ? 'text-white bg-white/10'
-                      : 'text-white/60 hover:text-white hover:bg-white/5'
+                      ? 'text-white bg-white/10 shadow-lg'
+                      : 'text-white/70 hover:text-white active:bg-white/10'
                   }`}
+                  style={{ 
+                    animationDelay: `${index * 50}ms`,
+                    animationFillMode: 'backwards'
+                  }}
                 >
                   {label}
                 </button>

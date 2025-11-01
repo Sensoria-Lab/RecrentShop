@@ -15,19 +15,20 @@ export interface Product {
   rating: number;
   reviewCount: number;
   color: string;
-  category: 'mousepads' | 'clothing' | 'Коврики для мыши' | 'Одежда' | 'Коврик' | 'Худи' | 'Футболка' | 'Рукав';
-  clothingType?: 'худи' | 'футболка' | 'рукав' | 'hoodie' | 'tshirt' | 'sleeve';
+  category: 'mousepads' | 'clothing';
+  clothingType?: 'hoodie' | 'tshirt' | 'sleeve';
   collection?: string; // Коллекция/дизайн товара (geoid, Seprents, Pro Speed и т.д.)
   addedDate?: string; // Дата добавления для бейджа "Новинка"
 }
 
+// Filter types
 export type SortOption = 'popularity' | 'price-asc' | 'price-desc' | 'rating';
 export type ColorFilterValue = 'black' | 'white' | 'red';
 export type ColorFilter = ColorFilterValue[];
 export type SizeFilterValue = 'L-pad' | 'XL-pad' | 'XS-cloth' | 'S-cloth' | 'M-cloth' | 'L-cloth' | 'XL-cloth' | '2XL-cloth';
 export type SizeFilter = SizeFilterValue[];
-export type CategoryFilter = 'all' | 'mousepads' | 'clothing';
-export type ClothingTypeFilterValue = 'худи' | 'футболка' | 'рукав' | 'hoodie' | 'tshirt' | 'sleeve';
+export type CategoryFilter = 'all' | 'mousepads' | 'tshirt' | 'hoodie' | 'sleeve';
+export type ClothingTypeFilterValue = 'hoodie' | 'tshirt' | 'sleeve';
 export type ClothingTypeFilter = ClothingTypeFilterValue[];
 export type CollectionFilterValue = string; // Динамический список коллекций
 export type CollectionFilter = CollectionFilterValue[];

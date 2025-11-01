@@ -1,5 +1,7 @@
 import React from 'react';
+import { motion } from 'motion/react';
 import { Sparkles, TrendingUp, Star } from 'lucide-react';
+import { badgePulseVariants, badgeShimmerVariants, iconVariants } from '../animations';
 
 export type BadgeType = 'new' | 'bestseller' | 'rating';
 
@@ -44,8 +46,12 @@ const ProductBadge: React.FC<ProductBadgeProps> = ({ type, rating, className = '
   const config = badgeConfig[type];
   const Icon = config.icon;
 
+  // Анимация зависит от типа бейджа
+  const shouldPulse = type === 'rating'; // Пульсация для рейтинга
+  const shouldShimmer = type === 'new' || type === 'bestseller'; // Shimmer для новинок/хитов
+
   return (
-    <div
+    <motion.div
       className={`
         inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md
         ${config.bgClass} ${config.textClass}
@@ -54,11 +60,50 @@ const ProductBadge: React.FC<ProductBadgeProps> = ({ type, rating, className = '
         font-manrope font-bold text-[10px] sm:text-xs
         uppercase tracking-wide
         ${className}
+        relative overflow-hidden
       `}
+      variants={shouldPulse ? badgePulseVariants : undefined}
+      initial="initial"
+      animate={shouldPulse ? "pulse" : "initial"}
+      whileHover={{
+        scale: 1.05,
+        transition: {
+          type: 'spring',
+          stiffness: 400,
+          damping: 10,
+        },
+      }}
+      style={{
+        willChange: 'transform',
+      }}
     >
-      <Icon className={`w-3 h-3 ${config.iconColor}`} />
-      <span>{config.label}</span>
-    </div>
+      {/* Shimmer overlay для NEW и BESTSELLER */}
+      {shouldShimmer && (
+        <motion.div
+          className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
+          style={{
+            width: '200%',
+            left: '-100%',
+          }}
+          variants={badgeShimmerVariants}
+          initial="initial"
+          animate="animate"
+        />
+      )}
+      
+      <motion.div
+        variants={iconVariants}
+        initial="initial"
+        whileHover="hover"
+        style={{
+          display: 'inline-flex',
+          willChange: 'transform',
+        }}
+      >
+        <Icon className={`w-3 h-3 ${config.iconColor}`} />
+      </motion.div>
+      <span className="relative z-10">{config.label}</span>
+    </motion.div>
   );
 };
 

@@ -15,10 +15,52 @@ import {
   ProductUpdateRequest
 } from '../../shared/types/content';
 import {
-  SITE_CONTENT,
-  getAllProducts,
-  getProductById as getProductByIdFromContent
-} from '../data/siteContent';
+  ALL_PRODUCTS,
+  getSortedMousepads
+} from '../data/products';
+
+// Локальные функции для замены удаленных из siteContent.ts
+const getAllProducts = () => ALL_PRODUCTS;
+
+const getProductById = (id: number | string) => {
+  return ALL_PRODUCTS.find(product => product.id === id || product.id === Number(id));
+};
+
+// Минимальный контент сайта
+const SITE_CONTENT = {
+  hero: {
+    title: "Коврики и одежда для геймеров",
+    ctaButton: "Смотреть товары"
+  },
+  products: ALL_PRODUCTS,
+  info: [
+    {
+      id: "about",
+      title: "О нас",
+      content: "Магазин качественных игровых аксессуаров"
+    }
+  ],
+  contacts: [
+    {
+      id: "email",
+      title: "Email",
+      url: "mailto:info@recrentshop.ru",
+      description: "Связаться с нами"
+    }
+  ],
+  navigation: {
+    main: [
+      { path: "/", label: "Главная" },
+      { path: "/catalog", label: "Каталог" },
+      { path: "/support", label: "Поддержка" }
+    ],
+    mobile: [
+      { path: "/", label: "Главная" },
+      { path: "/catalog", label: "Каталог" },
+      { path: "/support", label: "Поддержка" }
+    ]
+  }
+};
 
 // Конфигурация API
 const API_CONFIG = {
@@ -157,7 +199,7 @@ export const ProductsApi = {
   async getById(id: number | string): Promise<ProductApiResponse> {
     return new Promise((resolve) => {
       setTimeout(() => {
-        const product = getProductByIdFromContent(id);
+        const product = getProductById(id);
         if (product) {
           resolve({ success: true, data: product });
         } else {
