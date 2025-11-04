@@ -52,6 +52,9 @@ const ProductPage: React.FC = () => {
   const descriptionRef = useRef<HTMLDivElement>(null);
   const [isDescriptionOverflowing, setIsDescriptionOverflowing] = useState(false);
   
+  // UX Enhancement: Visual feedback when user tries to add incomplete product
+  const [showValidationError, setShowValidationError] = useState(false);
+  
   // Состояние для отзывов
   const [displayedReviewsCount, setDisplayedReviewsCount] = useState(2);
   const displayedReviews = REVIEWS.slice(0, displayedReviewsCount);
@@ -158,11 +161,41 @@ const ProductPage: React.FC = () => {
   // Используем хук для добавления в корзину с анимацией
   const { handleAddToCart: addToCart, flyingToCart } = useAddToCart();
   
+  // Validate if all required parameters are selected
+  // UX Critical: Prevents users from adding incomplete products to cart
+  const isAddToCartEnabled = useMemo(() => {
+    if (isClothingProduct) {
+      // Clothing requires: color AND size
+      return selectedColor !== '' && selectedClothingSize !== '';
+    } else if (isProMousepadProduct) {
+      // Pro mousepad only requires: type (no color/size selection)
+      return selectedType !== '';
+    } else {
+      // Regular mousepad requires: color, size AND type
+      return selectedColor !== '' && selectedSize !== '' && selectedType !== '';
+    }
+  }, [isClothingProduct, isProMousepadProduct, selectedColor, selectedClothingSize, selectedSize, selectedType]);
+
   // Wrapper для handleAddToCart с правильными параметрами
   const handleAddToCartClick = () => {
+    // UX: Show visual feedback if validation fails
+    if (!isAddToCartEnabled) {
+      setShowValidationError(true);
+      // Auto-hide error after 3 seconds
+      setTimeout(() => setShowValidationError(false), 3000);
+      
+      // Scroll to product options to help user understand what's missing
+      const optionsElement = document.getElementById('product-options');
+      if (optionsElement) {
+        optionsElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+      return;
+    }
+    
     const sizeToAdd = isClothingProduct ? selectedClothingSize : selectedSize;
     addToCart(productData, quantity, sizeToAdd, selectedColor, selectedType);
     setQuantity(1);
+    setShowValidationError(false);
   };
 
   // Sticky button visibility state
@@ -193,13 +226,16 @@ const ProductPage: React.FC = () => {
             </div>
 
             <div className="px-6 sm:px-8 md:px-10 pb-6 sm:pb-8 md:pb-10">
-              <div className="flex flex-col lg:flex-row gap-4 sm:gap-6 md:gap-10 lg:gap-14 items-start justify-between">
+              <div className="flex flex-col lg:flex-row gap-6 sm:gap-8 md:gap-10 items-start">
               {/* Product images - top on mobile, right on desktop */}
-              <div className="flex-shrink-0 w-full lg:w-[580px] lg:order-2 lg:h-full">
-                <div className="rounded-lg sm:rounded-xl p-3 sm:p-5 md:p-7 h-full flex flex-col border border-white/10">
+              {/* UX Enhancement: Balanced layout with larger, high-quality product images */}
+              {/* Design Strategy: flex-1 allows natural sizing while min-w ensures minimum visibility */}
+              <div className="w-full lg:flex-1 lg:min-w-[520px] lg:max-w-[700px] lg:order-2">
+                <div className="rounded-lg sm:rounded-xl p-4 sm:p-5 md:p-6 lg:p-7 border border-white/10 bg-white/[0.02]">
                   {/* Mobile: Swipeable Gallery */}
+                  {/* UX: Mobile users get larger touch-friendly swipeable gallery */}
                   {isMobile ? (
-                    <div className="h-[400px]">
+                    <div className="h-[400px] sm:h-[450px]">
                       <SwipeableGallery
                         images={productImages}
                         currentIndex={selectedImage}
@@ -209,69 +245,71 @@ const ProductPage: React.FC = () => {
                       />
                     </div>
                   ) : (
-                    /* Desktop: Classic Gallery */
+                    /* Desktop: Optimized Gallery Layout */
+                    /* UX: Maintains aspect ratio and visual hierarchy without breaking structure */
                     <>
                       {/* Main image with navigation arrows */}
-                      <div className="mb-3 sm:mb-5 md:mb-7 relative flex items-center">
-                        {/* Left arrow - outside image */}
-                        <button
-                          onClick={() => setSelectedImage(selectedImage === 0 ? productImages.length - 1 : selectedImage - 1)}
-                          className="bg-black/50 hover:bg-black/70 text-white p-1.5 sm:p-2 md:p-3 rounded-full transition-colors mr-1.5 sm:mr-3 md:mr-4 flex-shrink-0"
-                          aria-label="Previous image"
-                        >
-                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="sm:w-4 sm:h-4 md:w-5 md:h-5">
-                            <path d="M15 18l-6-6 6-6"/>
-                          </svg>
-                        </button>
-
-                        {/* Image container */}
-                        <button 
-                          onClick={() => openGallery(productImages, selectedImage)}
-                          className="flex-1 cursor-pointer group relative"
-                        >
-                          <Img
-                            id="product-main-image"
-                            key={`${selectedSize}-${selectedColor}-${selectedImage}`}
-                            src={productImages[selectedImage]}
-                            alt="Product"
-                            loading="eager"
-                            className="w-full h-40 sm:h-56 md:h-72 lg:h-80 object-contain rounded-lg sm:rounded-xl transition-all duration-300"
-                          />
-                          {/* Hover overlay with zoom icon */}
-                          <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-200 rounded-lg sm:rounded-xl flex items-center justify-center">
-                            <div className="bg-white/10 backdrop-blur-sm p-3 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                              <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7" />
-                              </svg>
+                      <div className="mb-4 sm:mb-5 md:mb-6 relative group">
+                        {/* Image container with aspect ratio preservation */}
+                        <div className="relative w-full aspect-[4/3] bg-black/20 rounded-lg sm:rounded-xl overflow-hidden">
+                          <button 
+                            onClick={() => openGallery(productImages, selectedImage)}
+                            className="absolute inset-0 cursor-pointer"
+                          >
+                            <Img
+                              id="product-main-image"
+                              key={`${selectedSize}-${selectedColor}-${selectedImage}`}
+                              src={productImages[selectedImage]}
+                              alt="Product"
+                              loading="eager"
+                              className="w-full h-full object-contain transition-all duration-300"
+                            />
+                            {/* Hover overlay with zoom icon */}
+                            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-200 flex items-center justify-center">
+                              <div className="bg-white/10 backdrop-blur-sm p-3 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200 scale-90 group-hover:scale-100">
+                                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7" />
+                                </svg>
+                              </div>
                             </div>
-                          </div>
-                        </button>
-
-                        {/* Right arrow - outside image */}
-                        <button
-                          onClick={() => setSelectedImage(selectedImage === productImages.length - 1 ? 0 : selectedImage + 1)}
-                          className="bg-black/50 hover:bg-black/70 text-white p-1.5 sm:p-2 md:p-3 rounded-full transition-colors ml-1.5 sm:ml-3 md:ml-4 flex-shrink-0"
-                          aria-label="Next image"
-                        >
-                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="sm:w-4 sm:h-4 md:w-5 md:h-5">
-                            <path d="M9 18l6-6-6-6"/>
-                          </svg>
-                        </button>
+                          </button>
+                          
+                          {/* Navigation arrows - positioned over image */}
+                          <button
+                            onClick={() => setSelectedImage(selectedImage === 0 ? productImages.length - 1 : selectedImage - 1)}
+                            className="absolute left-3 top-1/2 -translate-y-1/2 bg-black/60 hover:bg-black/80 backdrop-blur-sm text-white p-2 sm:p-2.5 rounded-full transition-all opacity-0 group-hover:opacity-100 z-10"
+                            aria-label="Previous image"
+                          >
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="sm:w-5 sm:h-5">
+                              <path d="M15 18l-6-6 6-6"/>
+                            </svg>
+                          </button>
+                          
+                          <button
+                            onClick={() => setSelectedImage(selectedImage === productImages.length - 1 ? 0 : selectedImage + 1)}
+                            className="absolute right-3 top-1/2 -translate-y-1/2 bg-black/60 hover:bg-black/80 backdrop-blur-sm text-white p-2 sm:p-2.5 rounded-full transition-all opacity-0 group-hover:opacity-100 z-10"
+                            aria-label="Next image"
+                          >
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="sm:w-5 sm:h-5">
+                              <path d="M9 18l6-6-6-6"/>
+                            </svg>
+                          </button>
+                        </div>
                       </div>
 
                       {/* Divider */}
-                      <div className="w-full h-px bg-white/20 mb-3 sm:mb-5 md:mb-7"></div>
+                      <div className="w-full h-px bg-gradient-to-r from-transparent via-white/20 to-transparent mb-4 sm:mb-5 md:mb-6"></div>
 
-                      {/* Thumbnail images */}
-                      <div className="flex gap-2 sm:gap-3 md:gap-4 justify-center flex-1 items-end">
+                      {/* Thumbnail images - compact and responsive */}
+                      <div className="flex gap-2 sm:gap-2.5 md:gap-3 justify-center overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-white/20 scrollbar-track-transparent">
                         {productImages.map((image: string, index: number) => (
                           <button
                             key={index}
                             onClick={() => setSelectedImage(index)}
-                            className={`w-16 h-14 sm:w-20 sm:h-16 md:w-24 md:h-20 rounded-lg sm:rounded-xl overflow-hidden border-2 transition-all ${
+                            className={`flex-shrink-0 w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-lg overflow-hidden border-2 transition-all ${
                               selectedImage === index
-                                ? 'border-white shadow-lg shadow-white/20'
-                                : 'border-transparent opacity-70 hover:opacity-100 hover:border-white/30'
+                                ? 'border-white shadow-lg shadow-white/20 scale-105'
+                                : 'border-white/10 opacity-60 hover:opacity-100 hover:border-white/30 hover:scale-105'
                             }`}
                             aria-label={`View image ${index + 1}`}
                           >
@@ -320,11 +358,37 @@ const ProductPage: React.FC = () => {
                 </div>
 
                 {/* Product options using pre-made selectors */}
-                <div className="space-y-4 mb-5 sm:mb-6">
+                {/* UX: ID for smooth scroll when validation fails */}
+                <div id="product-options" className="space-y-4 mb-5 sm:mb-6">
+                  {/* Validation Error Message */}
+                  {showValidationError && (
+                    <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-3 sm:p-4 animate-in fade-in slide-in-from-top duration-300">
+                      <div className="flex items-start gap-2 sm:gap-3">
+                        <svg className="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <div>
+                          <p className="text-red-400 font-manrope font-semibold text-sm sm:text-base">
+                            Выберите все параметры товара
+                          </p>
+                          <p className="text-red-300/80 font-manrope text-xs sm:text-sm mt-1">
+                            {isClothingProduct 
+                              ? 'Необходимо выбрать цвет и размер'
+                              : isProMousepadProduct
+                              ? 'Необходимо выбрать тип поверхности'
+                              : 'Необходимо выбрать цвет, размер и тип поверхности'}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
                   {/* Colors - не показываем для Pro коврика */}
                   {!isProMousepadProduct && (
-                    <div className="space-y-2 sm:space-y-2.5">
-                      <p className="text-white/60 font-manrope font-medium text-xs sm:text-sm mb-1.5">Цвет</p>
+                    <div className={`space-y-2 sm:space-y-2.5 transition-all duration-300 ${showValidationError && selectedColor === '' ? 'ring-2 ring-red-500/50 rounded-lg p-2' : ''}`}>
+                      <p className={`font-manrope font-medium text-xs sm:text-sm mb-1.5 ${showValidationError && selectedColor === '' ? 'text-red-400' : 'text-white/60'}`}>
+                        Цвет {showValidationError && selectedColor === '' && <span className="text-red-400">*</span>}
+                      </p>
                       <div className="flex gap-2 sm:gap-2.5 md:gap-3">
                         {isClothingProduct ? (
                           // Для одежды только черный и белый
@@ -372,10 +436,10 @@ const ProductPage: React.FC = () => {
 
                   {/* Sizes - не показываем для Pro коврика */}
                   {isClothingProduct ? (
-                    <div className="space-y-3">
+                    <div className={`space-y-3 transition-all duration-300 ${showValidationError && selectedClothingSize === '' ? 'ring-2 ring-red-500/50 rounded-lg p-2' : ''}`}>
                       {/* Для одежды размеры XS-2XL */}
                       <SelectorGroup
-                        title="Размер"
+                        title={showValidationError && selectedClothingSize === '' ? "Размер *" : "Размер"}
                         options={CLOTHING_SIZE_OPTIONS}
                         selectedValue={selectedClothingSize}
                         onChange={setSelectedClothingSize}
@@ -393,26 +457,30 @@ const ProductPage: React.FC = () => {
                     </div>
                   ) : !isProMousepadProduct && (
                     // Для обычных ковриков размеры XL/L
-                    <SelectorGroup
-                      title="Размер"
-                      options={SIZE_OPTIONS}
-                      selectedValue={selectedSize}
-                      onChange={setSelectedSize}
-                      size="md"
-                      allowDeselect={false}
-                    />
+                    <div className={`transition-all duration-300 ${showValidationError && selectedSize === '' ? 'ring-2 ring-red-500/50 rounded-lg p-2' : ''}`}>
+                      <SelectorGroup
+                        title={showValidationError && selectedSize === '' ? "Размер *" : "Размер"}
+                        options={SIZE_OPTIONS}
+                        selectedValue={selectedSize}
+                        onChange={setSelectedSize}
+                        size="md"
+                        allowDeselect={false}
+                      />
+                    </div>
                   )}
 
                   {/* Types - только для ковриков (и Pro, и обычных) */}
                   {!isClothingProduct && (
-                    <SelectorGroup
-                      title="Тип поверхности"
-                      options={TYPE_OPTIONS}
-                      selectedValue={selectedType}
-                      onChange={setSelectedType}
-                      size="md"
-                      allowDeselect={false}
-                    />
+                    <div className={`transition-all duration-300 ${showValidationError && selectedType === '' ? 'ring-2 ring-red-500/50 rounded-lg p-2' : ''}`}>
+                      <SelectorGroup
+                        title={showValidationError && selectedType === '' ? "Тип поверхности *" : "Тип поверхности"}
+                        options={TYPE_OPTIONS}
+                        selectedValue={selectedType}
+                        onChange={setSelectedType}
+                        size="md"
+                        allowDeselect={false}
+                      />
+                    </div>
                   )}
                 </div>
 
@@ -431,17 +499,17 @@ const ProductPage: React.FC = () => {
 
                   {/* Actions row */}
                   <div className="flex items-center gap-3">
-                    {/* Add to cart button - compact width */}
+                    {/* Add to cart button - compact width with validation */}
                     <button 
                       onClick={handleAddToCartClick}
-                      disabled={flyingToCart}
-                      className={`bg-blue-600 hover:bg-blue-700 text-white font-manrope font-semibold text-sm sm:text-base px-5 sm:px-6 py-2.5 rounded-lg transition-all duration-200 flex items-center justify-center gap-2 whitespace-nowrap ${
-                        flyingToCart ? 'opacity-50 cursor-not-allowed' : 'hover:shadow-lg hover:shadow-blue-500/30 active:scale-95'
+                      disabled={flyingToCart || !isAddToCartEnabled}
+                      className={`bg-blue-600 text-white font-manrope font-semibold text-sm sm:text-base px-5 sm:px-6 py-2.5 rounded-lg transition-all duration-200 flex items-center justify-center whitespace-nowrap ${
+                        flyingToCart || !isAddToCartEnabled
+                          ? 'opacity-50 cursor-not-allowed'
+                          : 'hover:bg-blue-700 hover:shadow-lg hover:shadow-blue-500/30 active:scale-95'
                       }`}
+                      title={!isAddToCartEnabled ? 'Выберите все параметры товара' : ''}
                     >
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-                      </svg>
                       <span>{flyingToCart ? 'Добавление...' : 'В корзину'}</span>
                     </button>
 
@@ -762,16 +830,14 @@ const ProductPage: React.FC = () => {
                 </button>
               </div>
 
-              {/* Add to cart button */}
+              {/* Add to cart button with validation */}
               <button
                 onClick={handleAddToCartClick}
-                disabled={flyingToCart}
-                className="min-h-[48px] px-6 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold rounded-xl transition-all duration-200 active:scale-95 shadow-lg flex items-center gap-2"
+                disabled={flyingToCart || !isAddToCartEnabled}
+                className="min-h-[48px] px-6 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold rounded-xl transition-all duration-200 active:scale-95 shadow-lg flex items-center justify-center"
+                title={!isAddToCartEnabled ? 'Выберите все параметры товара' : ''}
               >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-                </svg>
-                <span className="hidden xs:inline">
+                <span>
                   {flyingToCart ? 'Добавление...' : 'В корзину'}
                 </span>
               </button>

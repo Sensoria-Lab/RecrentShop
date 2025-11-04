@@ -16,11 +16,18 @@ const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ items, className = '' }) => {
   const location = useLocation();
 
   // Auto-generate breadcrumbs from URL if not provided
+  // UX Logic: Product pages should show Catalog in breadcrumbs, not Home
+  // This provides logical navigation and matches user expectations
   const getBreadcrumbs = (): BreadcrumbItem[] => {
     if (items) return items;
 
     const paths = location.pathname.split('/').filter(Boolean);
-    const breadcrumbs: BreadcrumbItem[] = [{ label: 'Главная', path: '/' }];
+    
+    // Special handling for product page - link to catalog instead of home
+    const isProductPage = paths.includes('product');
+    const breadcrumbs: BreadcrumbItem[] = isProductPage 
+      ? [{ label: 'Каталог', path: '/catalog' }]  // Product pages start from catalog
+      : [{ label: 'Главная', path: '/' }];         // Other pages start from home
 
     const pathMap: { [key: string]: string } = {
       catalog: 'Каталог',

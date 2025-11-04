@@ -111,6 +111,8 @@ const Header: React.FC<HeaderProps> = ({ className = '' }) => {
               )}
             </button>
 
+            <div className="w-1 h-1 rounded-full bg-white/40 mx-0.5 lg:mx-1" />
+
             <button
               id="cart-button"
               onClick={toggleCart}
