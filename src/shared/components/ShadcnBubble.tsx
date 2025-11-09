@@ -86,6 +86,25 @@ const ShadcnBubble: React.FC<BubbleConfig> = ({ className, colors, parallaxStren
 
   return (
     <div className={`fixed inset-0 pointer-events-none z-0 bg-black ${className ?? ''}`}>
+      {/* Gaming-style mesh gradient background */}
+      <div className="app-bg-dots absolute inset-0" />
+      
+      {/* Subtle square pattern overlay with radial fade */}
+      <div 
+        className="absolute inset-0" 
+        style={{
+          backgroundImage: `
+            linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px)
+          `,
+          backgroundSize: '40px 40px',
+          maskImage: 'radial-gradient(circle at center, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.8) 50%, rgba(0, 0, 0, 1) 100%)',
+          WebkitMaskImage: 'radial-gradient(circle at center, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.8) 50%, rgba(0, 0, 0, 1) 100%)',
+          opacity: 1
+        }}
+      />
+      
+      {/* Parallax bubbles overlay */}
       <div className="bg-bubbles" ref={containerRef} aria-hidden="true">
         <div className="bg-bubble bubble-1" />
         <div className="bg-bubble bubble-2" />

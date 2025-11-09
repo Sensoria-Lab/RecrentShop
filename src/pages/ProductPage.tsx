@@ -86,6 +86,32 @@ const ProductPage: React.FC = () => {
   const isClothingProduct = isClothing(productData);
   const isProMousepadProduct = isProMousepad(productData);
   
+  // Получаем путь к таблице размеров для одежды
+  const getSizeChartPath = () => {
+    const baseUrl = process.env.PUBLIC_URL || '';
+    
+    if (!isClothingProduct || !productData?.clothingType) {
+      console.log('Size chart: Not clothing or no clothingType', { isClothingProduct, clothingType: productData?.clothingType });
+      return `${baseUrl}/images/size-chart.png`;
+    }
+    
+    const clothingTypeMap: Record<string, { folder: string; filename: string }> = {
+      'hoodie': { folder: 'hoodies', filename: 'size.png' },
+      'tshirt': { folder: 'tshirts', filename: 'size.png' },
+      'sleeve': { folder: 'sleeves', filename: 'size.webp' }
+    };
+    
+    const config = clothingTypeMap[productData.clothingType];
+    if (config) {
+      const path = `${baseUrl}/images/products/clothing/${config.folder}/${config.filename}`;
+      console.log('Size chart path:', path, { clothingType: productData.clothingType, config });
+      return path;
+    }
+    
+    console.log('Size chart: No config for clothingType', productData.clothingType);
+    return `${baseUrl}/images/size-chart.png`;
+  };
+  
   useEffect(() => {
     const checkOverflow = () => {
       if (descriptionRef.current) {
@@ -226,12 +252,12 @@ const ProductPage: React.FC = () => {
             </div>
 
             <div className="px-6 sm:px-8 md:px-10 pb-6 sm:pb-8 md:pb-10">
-              <div className="flex flex-col lg:flex-row gap-6 sm:gap-8 md:gap-10 items-start">
+              <div className="flex flex-col lg:flex-row gap-6 sm:gap-8 md:gap-10 lg:items-stretch">
               {/* Product images - top on mobile, right on desktop */}
               {/* UX Enhancement: Balanced layout with larger, high-quality product images */}
               {/* Design Strategy: flex-1 allows natural sizing while min-w ensures minimum visibility */}
-              <div className="w-full lg:flex-1 lg:min-w-[520px] lg:max-w-[700px] lg:order-2">
-                <div className="rounded-lg sm:rounded-xl p-4 sm:p-5 md:p-6 lg:p-7 border border-white/10 bg-white/[0.02]">
+              <div className="w-full lg:flex-1 lg:min-w-[520px] lg:max-w-[700px] lg:order-2 flex flex-col">
+                <div className="rounded-lg sm:rounded-xl p-4 sm:p-5 md:p-6 lg:p-7 border border-white/10 bg-white/[0.02] h-full flex flex-col">
                   {/* Mobile: Swipeable Gallery */}
                   {/* UX: Mobile users get larger touch-friendly swipeable gallery */}
                   {isMobile ? (
@@ -327,7 +353,9 @@ const ProductPage: React.FC = () => {
               </div>
 
               {/* Product info - left side on desktop, below images on mobile */}
-              <div className="flex-1 max-w-3xl w-full lg:w-auto lg:order-1">
+              <div className="flex-1 max-w-3xl w-full lg:w-auto lg:order-1 flex flex-col h-full">
+                {/* Upper content - title, rating, options */}
+                <div className="flex-1">
                 {/* Title and rating */}
                 <div className="mb-5 sm:mb-6">
                   <h1 className="text-white font-manrope font-bold text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl mb-3 leading-tight drop-shadow-[0_4px_12px_rgba(0,0,0,0.9)]">
@@ -483,7 +511,10 @@ const ProductPage: React.FC = () => {
                     </div>
                   )}
                 </div>
+                </div>
 
+                {/* Bottom section - Price and Actions (pinned to bottom) */}
+                <div className="mt-auto">
                 {/* Divider */}
                 <div className="w-full h-px bg-gradient-to-r from-white/10 to-transparent my-6"></div>
 
@@ -517,6 +548,8 @@ const ProductPage: React.FC = () => {
                     <QuantitySelector quantity={quantity} onChange={setQuantity} />
                   </div>
                 </div>
+                </div>
+                {/* End of bottom section */}
               </div>
             </div>
             </div>
@@ -735,12 +768,13 @@ const ProductPage: React.FC = () => {
             
             {/* Size Chart Image */}
             <div className="bg-black/40 rounded-xl overflow-hidden border border-white/10">
-              <Img
-                src="/images/size-chart.png"
+              <img
+                src={getSizeChartPath()}
                 alt="Таблица размеров одежды"
                 className="w-full h-auto"
                 onError={(e) => {
                   // Если изображение не загрузилось, показываем заглушку
+                  console.error('Failed to load size chart image:', getSizeChartPath(), e);
                   const target = e.target as HTMLImageElement;
                   target.style.display = 'none';
                   if (target.parentElement) {
@@ -756,13 +790,6 @@ const ProductPage: React.FC = () => {
                   }
                 }}
               />
-            </div>
-
-            {/* Size Guide Tips */}
-            <div className="mt-4 space-y-2 text-white/70 text-xs sm:text-sm font-manrope">
-              <p>• Замеряйте свою одежду в расправленном виде</p>
-              <p>• При промежуточных значениях выбирайте больший размер</p>
-              <p>• Не уверены в размере? Напишите нам, мы поможем!</p>
             </div>
           </div>
         </Modal>

@@ -28,14 +28,14 @@ const AccountPage: React.FC = () => {
       date: '2 октября 2025',
       status: 'delivered',
       statusText: 'Доставлен',
-      total: '3 990 ₽',
+      total: '5 500 ₽',
       items: 2,
       deliveryService: 'СДЭК',
       trackNumber: 'SDEK1234567890',
       trackUrl: 'https://www.cdek.ru/track.html?order_id=SDEK1234567890',
       products: [
-        { name: 'Коврик "Pixel Art"', quantity: 1, price: '1 990 ₽' },
-        { name: 'Худи Black Edition', quantity: 1, price: '2 000 ₽' }
+        { name: 'Коврик Geoid-Black (XL)', quantity: 1, price: '3 000 ₽' },
+        { name: 'Худи White Edition', quantity: 1, price: '2 500 ₽' }
       ]
     },
     {
@@ -43,14 +43,14 @@ const AccountPage: React.FC = () => {
       date: '15 сентября 2025',
       status: 'in-transit',
       statusText: 'В пути',
-      total: '5 490 ₽',
-      items: 3,
+      total: '5 500 ₽',
+      items: 2,
       deliveryService: 'Почта России',
       trackNumber: '12345678901234',
       trackUrl: 'https://www.pochta.ru/tracking#12345678901234',
       products: [
-        { name: 'Коврик "Neon Wave"', quantity: 2, price: '3 980 ₽' },
-        { name: 'Футболка White', quantity: 1, price: '1 510 ₽' }
+        { name: 'Коврик Geoid-White (L)', quantity: 1, price: '2 500 ₽' },
+        { name: 'Коврик Geoid-Red (XL)', quantity: 1, price: '3 000 ₽' }
       ]
     },
     {
@@ -58,13 +58,14 @@ const AccountPage: React.FC = () => {
       date: '5 августа 2025',
       status: 'processing',
       statusText: 'Обрабатывается',
-      total: '1 990 ₽',
-      items: 1,
+      total: '3 500 ₽',
+      items: 2,
       deliveryService: null,
       trackNumber: null,
       trackUrl: null,
       products: [
-        { name: 'Коврик "Galaxy"', quantity: 1, price: '1 990 ₽' }
+        { name: 'Футболка Geoid Black', quantity: 1, price: '1 500 ₽' },
+        { name: 'Футболка Geoid White', quantity: 1, price: '2 000 ₽' }
       ]
     }
   ];
@@ -183,8 +184,9 @@ const AccountPage: React.FC = () => {
                       className={tabTriggerClasses}
                     >
                       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="mr-3 flex-shrink-0">
-                        <rect x="3" y="3" width="18" height="18" rx="2"/>
-                        <path d="M9 3v18M3 9h18M3 15h18"/>
+                        <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+                        <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
+                        <line x1="12" y1="22.08" x2="12" y2="12"/>
                       </svg>
                       <span className="flex-1 text-center">Заказы</span>
                     </TabsTrigger>

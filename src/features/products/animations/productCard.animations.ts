@@ -158,7 +158,7 @@ export const priceVariants: Variants = {
 
 /**
  * Text overlay animation for product info
- * Slides up smoothly on hover
+ * Enhanced opacity on hover without vertical shift to prevent gaps
  */
 export const overlayVariants: Variants = {
   initial: {
@@ -167,7 +167,7 @@ export const overlayVariants: Variants = {
   },
   hover: {
     opacity: 1,
-    y: -2,
+    y: 0,
     transition: {
       duration: 0.3,
       ease: [0.16, 1, 0.3, 1],

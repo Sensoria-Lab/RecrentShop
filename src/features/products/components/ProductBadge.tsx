@@ -20,26 +20,26 @@ const ProductBadge: React.FC<ProductBadgeProps> = ({ type, rating, className = '
     new: {
       label: 'НОВИНКА',
       icon: Sparkles,
-      bgClass: 'bg-gradient-to-r from-slate-600 to-slate-700',
+      bgClass: 'bg-gradient-to-r from-cyan-600 to-blue-600',
       textClass: 'text-white',
-      iconColor: 'text-white',
-      borderClass: 'border-slate-500/50'
+      iconColor: 'text-cyan-100',
+      borderClass: 'border-cyan-400/40'
     },
     bestseller: {
       label: 'ХИТ',
       icon: TrendingUp,
-      bgClass: 'bg-gradient-to-r from-zinc-600 to-zinc-700',
+      bgClass: 'bg-gradient-to-r from-purple-600 to-indigo-600',
       textClass: 'text-white',
-      iconColor: 'text-white',
-      borderClass: 'border-zinc-500/50'
+      iconColor: 'text-purple-100',
+      borderClass: 'border-purple-400/40'
     },
     rating: {
       label: rating ? rating.toFixed(1) : '4.9',
       icon: Star,
-      bgClass: 'bg-gradient-to-r from-amber-700 to-amber-800',
+      bgClass: 'bg-gradient-to-r from-orange-600 to-red-600',
       textClass: 'text-white',
-      iconColor: 'text-white',
-      borderClass: 'border-amber-600/50'
+      iconColor: 'text-orange-100',
+      borderClass: 'border-orange-400/40'
     }
   };
 
@@ -48,7 +48,7 @@ const ProductBadge: React.FC<ProductBadgeProps> = ({ type, rating, className = '
 
   // Анимация зависит от типа бейджа
   const shouldPulse = type === 'rating'; // Пульсация для рейтинга
-  const shouldShimmer = type === 'new' || type === 'bestseller'; // Shimmer для новинок/хитов
+  const shouldShimmer = type === 'new'; // Shimmer только для новинок
 
   return (
     <motion.div

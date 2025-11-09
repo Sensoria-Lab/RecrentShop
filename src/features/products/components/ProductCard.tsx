@@ -203,7 +203,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
         }}
       >
         <motion.div 
-          className={`${classes.image} overflow-hidden group/image relative shadow-[inset_0_2px_4px_rgba(0,0,0,0.1)] rounded-lg sm:rounded-xl`}
+          className={`${classes.image} overflow-hidden group/image relative shadow-[inset_0_2px_4px_rgba(0,0,0,0.1)] rounded-lg sm:rounded-xl ring-1 ring-black/20`}
           animate={{
             boxShadow: isHovered 
               ? 'inset 0 3px 6px rgba(0,0,0,0.15), 0 0 24px rgba(255,255,255,0.12), 0 12px 32px rgba(0,0,0,0.2)'
@@ -264,17 +264,15 @@ const ProductCard: React.FC<ProductCardProps> = ({
             </div>
           )}
 
-          {/* Text overlay on image with stronger bottom darkening */}
+          {/* Text overlay on image with consistent gradient - no hover flash */}
           <motion.div 
-            className="absolute bottom-0 left-0 right-0 p-2 sm:p-3 md:p-4 bg-gradient-to-t from-black/95 via-black/70 to-transparent rounded-b-lg sm:rounded-b-xl"
+            className="absolute bottom-0 left-0 right-0 p-2 sm:p-3 md:p-4 rounded-b-lg sm:rounded-b-xl"
             variants={overlayVariants}
             initial="initial"
             animate={isHovered ? "hover" : "initial"}
             style={{
-              background: isHovered 
-                ? 'linear-gradient(to top, rgba(0,0,0,0.88), rgba(0,0,0,0.55), transparent)'
-                : 'linear-gradient(to top, rgba(0,0,0,0.95), rgba(0,0,0,0.7), transparent)',
-              transition: 'background 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
+              background: 'linear-gradient(to top, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.85) 40%, rgba(0,0,0,0.65) 60%, transparent 100%)',
+              paddingBottom: '0.5rem',
             }}
           >
             <div className="min-h-[36px] sm:min-h-[40px] md:min-h-[44px] lg:min-h-[48px] max-h-[48px] flex flex-col justify-start gap-0 overflow-hidden">
