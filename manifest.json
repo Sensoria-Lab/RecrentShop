@@ -1,0 +1,57 @@
+{
+  "short_name": "RECRENT",
+  "name": "RECRENT SHOP - Premium Gaming & Apparel",
+  "description": "Премиальные игровые коврики для мыши и стильная одежда. Высокое качество, уникальный дизайн.",
+  "icons": [
+    {
+      "src": "/images/ui/logo.svg",
+      "type": "image/svg+xml",
+      "sizes": "any"
+    },
+    {
+      "src": "/favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    }
+  ],
+  "start_url": "/",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#000000",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "lang": "ru",
+  "dir": "ltr",
+  "categories": ["shopping", "lifestyle", "gaming"],
+  "prefer_related_applications": false,
+  "screenshots": [
+    {
+      "src": "/images/screenshots/mobile-catalog.png",
+      "type": "image/png",
+      "sizes": "540x720",
+      "form_factor": "narrow"
+    },
+    {
+      "src": "/images/screenshots/desktop-catalog.png",
+      "type": "image/png",
+      "sizes": "1280x720",
+      "form_factor": "wide"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Каталог",
+      "short_name": "Каталог",
+      "description": "Посмотреть все товары",
+      "url": "/catalog",
+      "icons": [{ "src": "/images/ui/logo.svg", "sizes": "96x96" }]
+    },
+    {
+      "name": "Корзина",
+      "short_name": "Корзина",
+      "description": "Моя корзина покупок",
+      "url": "/cart",
+      "icons": [{ "src": "/images/ui/logo.svg", "sizes": "96x96" }]
+    }
+  ]
+}
