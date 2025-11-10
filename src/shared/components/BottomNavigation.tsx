@@ -24,6 +24,9 @@ const BottomNavigation: React.FC = () => {
   const { getTotalItems } = useCart();
   const cartItemCount = getTotalItems;
 
+  // DEBUG
+  console.log('🔵 BottomNavigation RENDERED!', { pathname: location.pathname });
+
   const isActive = (path: string) => {
     if (path === '/') return location.pathname === '/';
     return location.pathname.startsWith(path);
@@ -113,19 +116,37 @@ const BottomNavigation: React.FC = () => {
     },
   ];
 
+  // Render as fixed element
   return (
-    <>
-      {/* Spacer to prevent content from being hidden under nav */}
-      <div className="h-20 md:hidden" aria-hidden="true" />
+    <nav
+      className="fixed bottom-0 left-0 right-0 z-[9999] block"
+      role="navigation"
+      aria-label="Мобильная навигация"
+      style={{
+        position: 'fixed',
+        bottom: '0px',
+        left: '0px',
+        right: '0px',
+        zIndex: 9999,
+        display: 'block',
+        width: '100vw',
+        maxWidth: '100vw',
+      }}
+    >
+        {/* DEBUG - видимый элемент */}
+        <div style={{
+          background: 'red',
+          color: 'white',
+          padding: '20px',
+          textAlign: 'center',
+          fontSize: '24px',
+          fontWeight: 'bold'
+        }}>
+          DEBUG: NAVIGATION IS HERE!
+        </div>
 
-      {/* Bottom Navigation */}
-      <nav
-        className="md:hidden fixed bottom-0 left-0 right-0 z-50 pb-safe"
-        role="navigation"
-        aria-label="Мобильная навигация"
-      >
         {/* Glass morphism container */}
-        <div className="relative bg-black/60 backdrop-blur-2xl border-t border-white/10 shadow-2xl">
+        <div className="relative bg-black backdrop-blur-2xl border-t border-white/10 shadow-2xl" style={{ backgroundColor: 'rgba(0, 0, 0, 0.95)' }}>
           {/* Gradient overlay for depth */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none" />
 
@@ -184,7 +205,6 @@ const BottomNavigation: React.FC = () => {
         {/* Safe area for notched phones (iOS) */}
         <div className="bg-black h-[env(safe-area-inset-bottom)]" />
       </nav>
-    </>
   );
 };
 

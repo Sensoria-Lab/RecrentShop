@@ -146,9 +146,9 @@ const BottomSheet: React.FC<BottomSheetProps> = ({
               {children}
             </div>
 
-            {/* Footer */}
+            {/* Footer - с отступом для BottomNavigation */}
             {footer && (
-              <div className="border-t border-white/10 bg-black/50 px-6 py-4">
+              <div className="border-t border-white/10 bg-black/50 px-6 py-4 pb-20 md:pb-4">
                 {footer}
               </div>
             )}

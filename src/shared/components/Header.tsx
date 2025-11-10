@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useCart } from '../../core/context/CartContext';
 import Img from '../ui/Img';
-import { ROUTES, MOBILE_NAV_ITEMS } from '../../core/constants/routes';
+import { ROUTES } from '../../core/constants/routes';
 import CartSidebar from './CartSidebar';
 
 interface HeaderProps {
@@ -12,7 +12,6 @@ interface HeaderProps {
 const Header: React.FC<HeaderProps> = ({ className = '' }) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { isCartOpen, toggleCart, getTotalItems } = useCart();
 
   const go = (p: string) => {
@@ -24,9 +23,10 @@ const Header: React.FC<HeaderProps> = ({ className = '' }) => {
 
   return (
     <>
-      <header className={`relative responsive-header ${className}`}>
+      {/* Header скрыт на мобильных (<768px), видим только на desktop */}
+      <header className={`hidden md:block relative responsive-header ${className}`}>
         <div className="relative flex items-center justify-between gap-2 sm:gap-3 md:gap-6 px-4 sm:px-8 md:px-12 lg:px-16 xl:px-20 py-0.5">
-          {/* Left: Logo */}
+          {/* Left: Logo (только для desktop) */}
           <div className="flex items-center gap-2 sm:gap-3 md:gap-4">
             <button
               onClick={() => navigate('/')}
@@ -40,31 +40,10 @@ const Header: React.FC<HeaderProps> = ({ className = '' }) => {
               {/* Glow effect on hover */}
               <div className="absolute inset-0 bg-white/0 group-hover:bg-white/5 rounded-full blur-xl transition-all duration-300" />
             </button>
-
-            {/* Mobile menu button - 44px touch target */}
-            <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg hover:bg-white/10 active:bg-white/15 transition-all focus:outline-none flex-shrink-0"
-              aria-label={mobileMenuOpen ? "Закрыть меню" : "Открыть меню"}
-              aria-expanded={mobileMenuOpen}
-            >
-              {mobileMenuOpen ? (
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="text-white/80 transition-transform duration-200">
-                  <line x1="18" y1="6" x2="6" y2="18"/>
-                  <line x1="6" y1="6" x2="18" y2="18"/>
-                </svg>
-              ) : (
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="text-white/80 transition-transform duration-200">
-                  <line x1="3" y1="12" x2="21" y2="12"/>
-                  <line x1="3" y1="6" x2="21" y2="6"/>
-                  <line x1="3" y1="18" x2="21" y2="18"/>
-                </svg>
-              )}
-            </button>
           </div>
 
-          {/* Right: Nav items + Cart */}
-          <div className="hidden md:flex items-center gap-0.5 lg:gap-1">
+          {/* Right: Nav items + Cart (только desktop) */}
+          <div className="flex items-center gap-0.5 lg:gap-1">
             <button
               onClick={() => go('catalog')}
               className={`relative font-manrope font-bold text-xs md:text-sm lg:text-base px-2 md:px-3 lg:px-4 py-1.5 md:py-2 rounded-lg transition-all duration-300 focus:outline-none whitespace-nowrap group ${
@@ -163,36 +142,12 @@ const Header: React.FC<HeaderProps> = ({ className = '' }) => {
             </button>
           </div>
         </div>
-
-        {/* Mobile Navigation Menu - Enhanced with animations */}
-        {mobileMenuOpen && (
-          <nav className="relative md:hidden mt-4 pt-4 border-t border-white/10 space-y-2 px-4 sm:px-8 md:px-12 lg:px-16 xl:px-20 animate-in slide-in-from-top duration-200">
-            {MOBILE_NAV_ITEMS.map(({ path: targetPath, label }, index) => {
-              const active = isActive(targetPath);
-              return (
-                <button
-                  key={targetPath}
-                  onClick={() => {
-                    go(targetPath.slice(1));
-                    setMobileMenuOpen(false);
-                  }}
-                  className={`w-full text-left font-manrope font-semibold text-base min-h-[48px] px-4 py-3 rounded-xl transition-all duration-200 focus:outline-none active:scale-98 ${
-                    active
-                      ? 'text-white bg-white/10 shadow-lg'
-                      : 'text-white/70 hover:text-white active:bg-white/10'
-                  }`}
-                  style={{ 
-                    animationDelay: `${index * 50}ms`,
-                    animationFillMode: 'backwards'
-                  }}
-                >
-                  {label}
-                </button>
-              );
-            })}
-          </nav>
-        )}
       </header>
+
+      {/* Mobile Menu Drawer */}
+      {/* MobileMenu больше не используется - навигация через BottomNavigation */}
+
+      {/* Cart Sidebar */}
       <CartSidebar isCartOpen={isCartOpen} toggleCart={toggleCart} />
     </>
   );

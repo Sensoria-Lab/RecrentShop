@@ -114,32 +114,32 @@ const ProductCard: React.FC<ProductCardProps> = ({
 
   const sizeClasses = {
     small: {
-      container: 'w-full max-w-[400px] sm:max-w-[450px] md:max-w-[500px]',
+      container: 'w-full max-w-[180px] sm:max-w-[220px] md:max-w-[260px]',
       image: 'aspect-[4/5] rounded-lg sm:rounded-xl',
-      title: 'text-xs sm:text-xs md:text-sm',
-      subtitle: 'text-sm sm:text-sm md:text-base',
-      price: 'text-base sm:text-base md:text-lg'
+      title: 'text-xs sm:text-sm',
+      subtitle: 'text-xs sm:text-sm',
+      price: 'text-sm sm:text-base'
     },
     medium: {
-      container: 'w-full',
+      container: 'w-full max-w-[200px] sm:max-w-[280px] md:max-w-[320px]',
       image: 'aspect-[4/5] rounded-lg sm:rounded-xl',
-      title: 'text-xs sm:text-xs md:text-sm',
-      subtitle: 'text-sm sm:text-sm md:text-base',
-      price: 'text-lg sm:text-lg md:text-xl'
+      title: 'text-xs sm:text-sm',
+      subtitle: 'text-sm sm:text-base',
+      price: 'text-base sm:text-lg'
     },
     large: {
-      container: 'w-full max-w-[440px] sm:max-w-[490px] md:max-w-[540px]',
+      container: 'w-full max-w-[240px] sm:max-w-[320px] md:max-w-[380px]',
       image: 'aspect-[4/5] rounded-lg sm:rounded-xl',
-      title: 'text-xs sm:text-xs md:text-sm lg:text-base',
-      subtitle: 'text-sm sm:text-sm md:text-base lg:text-lg',
-      price: 'text-base sm:text-base md:text-lg lg:text-xl'
+      title: 'text-sm sm:text-base',
+      subtitle: 'text-sm sm:text-base md:text-lg',
+      price: 'text-base sm:text-lg md:text-xl'
     },
     'small-catalog': {
-      container: 'w-full',
+      container: 'w-full max-w-[180px] sm:max-w-[220px] md:max-w-[260px]',
       image: 'aspect-[4/5] rounded-lg sm:rounded-xl',
-      title: 'text-xs sm:text-xs md:text-sm',
-      subtitle: 'text-sm sm:text-sm md:text-base',
-      price: 'text-lg sm:text-xl md:text-2xl'
+      title: 'text-xs sm:text-sm',
+      subtitle: 'text-xs sm:text-sm',
+      price: 'text-base sm:text-lg'
     }
   };
 
@@ -253,7 +253,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
 
           {/* Badges positioned over image */}
           {badges.length > 0 && (
-            <div className="absolute top-2 left-2 flex flex-row gap-1">
+            <div className="absolute top-1.5 left-1.5 sm:top-2 sm:left-2 flex flex-row gap-0.5 sm:gap-1">
               {badges.map((badgeType) => (
                 <ProductBadge 
                   key={badgeType} 

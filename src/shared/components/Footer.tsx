@@ -11,7 +11,7 @@ const Footer: React.FC = () => {
   const navigate = useNavigate();
 
   return (
-    <footer className="relative z-10 mt-16 sm:mt-20 lg:mt-24">
+    <footer className="relative z-0 mt-16 sm:mt-20 lg:mt-24 pb-20 md:pb-0">
       <div className="w-full">
         {/* Main Footer Content */}
         <div className="bg-gradient-to-b from-transparent via-black/20 to-black/40 border-t border-white/5 w-full">

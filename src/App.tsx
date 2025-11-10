@@ -22,7 +22,7 @@ function App() {
     <ErrorBoundary>
       <ToastProvider>
         <CartProvider>
-          <div className="relative min-h-screen">
+          <div className="min-h-screen">
             {/* Shadcn Bubble Background */}
             <ShadcnBubble />
 
@@ -32,11 +32,11 @@ function App() {
               <Outlet />
             </div>
 
-            {/* Mobile Bottom Navigation */}
-            <BottomNavigation />
-
             {/* Sonner Toaster */}
             <Toaster />
+            
+            {/* Mobile Bottom Navigation - будет fixed относительно viewport */}
+            <BottomNavigation />
           </div>
         </CartProvider>
       </ToastProvider>

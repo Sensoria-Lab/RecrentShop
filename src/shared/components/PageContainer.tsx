@@ -17,12 +17,14 @@ interface PageContainerProps {
 const PageContainer: React.FC<PageContainerProps> = ({ children, className = '', isMainPage = false, showBreadcrumbs = true }) => {
   const headerRef = useRef<HTMLDivElement | null>(null);
   const [headerHeight, setHeaderHeight] = useState<number>(0);
+  const [isMobile, setIsMobile] = useState<boolean>(window.innerWidth < 768);
 
   // Measure header height and keep it in state so we can add top padding to main
   useLayoutEffect(() => {
     const measure = () => {
       const h = headerRef.current ? headerRef.current.getBoundingClientRect().height : 0;
       setHeaderHeight(Math.ceil(h));
+      setIsMobile(window.innerWidth < 768);
     };
 
     // Measure now
@@ -55,10 +57,10 @@ const PageContainer: React.FC<PageContainerProps> = ({ children, className = '',
         </div>
       </div>
 
-      {/* Main content */}
+      {/* Main content - отступ сверху только для desktop (md+), на мобильных Header скрыт */}
       <main
         className={`relative z-10 min-h-screen flex flex-col ${className}`}
-        style={{ paddingTop: headerHeight + 16 }}
+        style={{ paddingTop: isMobile ? 0 : headerHeight + 16 }}
       >
         {children}
         {!isMainPage && (

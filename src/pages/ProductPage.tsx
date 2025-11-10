@@ -1,7 +1,7 @@
 import React, { useMemo, useState, useRef, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { PageContainer, Modal } from '../shared/components';
-import { SelectorGroup, Breadcrumbs, DecryptedText, StarRating, QuantitySelector, ProductCard, ProductCarousel, ReviewCard, ImageGalleryModal, SwipeableGallery } from 'features/products/components';
+import { SelectorGroup, Breadcrumbs, DecryptedText, StarRating, QuantitySelector, ProductCard, ProductCarousel, ReviewCard, SwipeableGallery } from 'features/products/components';
 import { useDeviceDetection } from '../shared/hooks';
 import Img from '../shared/ui/Img';
 import { ALL_PRODUCTS } from '../core/data/products';
@@ -50,7 +50,9 @@ const ProductPage: React.FC = () => {
   
   // Проверка переполнения описания
   const descriptionRef = useRef<HTMLDivElement>(null);
+  const specificationsRef = useRef<HTMLDivElement>(null);
   const [isDescriptionOverflowing, setIsDescriptionOverflowing] = useState(false);
+  const [specificationsHeight, setSpecificationsHeight] = useState<number | null>(null);
   
   // UX Enhancement: Visual feedback when user tries to add incomplete product
   const [showValidationError, setShowValidationError] = useState(false);
@@ -62,21 +64,6 @@ const ProductPage: React.FC = () => {
   
   const handleLoadMoreReviews = () => {
     setDisplayedReviewsCount(prev => Math.min(prev + 2, REVIEWS.length));
-  };
-
-  // Состояние для галереи изображений
-  const [galleryImages, setGalleryImages] = useState<string[]>([]);
-  const [galleryInitialIndex, setGalleryInitialIndex] = useState(0);
-  const [isGalleryOpen, setIsGalleryOpen] = useState(false);
-
-  const openGallery = (images: string[], index: number = 0) => {
-    setGalleryImages(images);
-    setGalleryInitialIndex(index);
-    setIsGalleryOpen(true);
-  };
-
-  const closeGallery = () => {
-    setIsGalleryOpen(false);
   };
 
   // Используем хук для получения правильных изображений
@@ -91,7 +78,6 @@ const ProductPage: React.FC = () => {
     const baseUrl = process.env.PUBLIC_URL || '';
     
     if (!isClothingProduct || !productData?.clothingType) {
-      console.log('Size chart: Not clothing or no clothingType', { isClothingProduct, clothingType: productData?.clothingType });
       return `${baseUrl}/images/size-chart.png`;
     }
     
@@ -103,19 +89,16 @@ const ProductPage: React.FC = () => {
     
     const config = clothingTypeMap[productData.clothingType];
     if (config) {
-      const path = `${baseUrl}/images/products/clothing/${config.folder}/${config.filename}`;
-      console.log('Size chart path:', path, { clothingType: productData.clothingType, config });
-      return path;
+      return `${baseUrl}/images/products/clothing/${config.folder}/${config.filename}`;
     }
     
-    console.log('Size chart: No config for clothingType', productData.clothingType);
     return `${baseUrl}/images/size-chart.png`;
   };
   
   useEffect(() => {
     const checkOverflow = () => {
-      if (descriptionRef.current) {
-        const isOverflow = descriptionRef.current.scrollHeight > descriptionRef.current.clientHeight;
+      if (descriptionRef.current && specificationsHeight !== null) {
+        const isOverflow = descriptionRef.current.scrollHeight > specificationsHeight;
         setIsDescriptionOverflowing(isOverflow);
       }
     };
@@ -132,7 +115,26 @@ const ProductPage: React.FC = () => {
     return () => {
       resizeObserver.disconnect();
     };
-  }, [selectedType, selectedColor, isClothingProduct, isProMousepadProduct]);
+  }, [selectedType, selectedColor, isClothingProduct, isProMousepadProduct, specificationsHeight]);
+
+  // Отслеживаем изменение высоты блока характеристик
+  useEffect(() => {
+    const measureSpecifications = () => {
+      if (specificationsRef.current) {
+        const height = specificationsRef.current.getBoundingClientRect().height;
+        setSpecificationsHeight(height);
+      }
+    };
+
+    measureSpecifications();
+
+    const resizeObserver = new ResizeObserver(measureSpecifications);
+    if (specificationsRef.current) {
+      resizeObserver.observe(specificationsRef.current);
+    }
+
+    return () => resizeObserver.disconnect();
+  }, [selectedType, selectedColor, selectedSize, selectedClothingSize, isClothingProduct, isProMousepadProduct]);
 
   // Получаем описание для одежды
   const clothingDescription = getClothingDescription(selectedColor);
@@ -243,7 +245,7 @@ const ProductPage: React.FC = () => {
   return (
     <PageContainer showBreadcrumbs={false}>
       <div className="max-w-[1400px] mx-auto w-full px-4 sm:px-6 md:px-8 lg:px-12">
-        <div className="pt-6 sm:pt-8 md:pt-10 pb-12 sm:pb-16 md:pb-20">
+        <div className="pt-6 sm:pt-8 md:pt-10 pb-24 sm:pb-16 md:pb-20">
           {/* Product section */}
           <div className="border border-white/20 rounded-lg sm:rounded-xl mb-6 sm:mb-8 md:mb-10 content-reveal">
             {/* Breadcrumbs */}
@@ -266,7 +268,6 @@ const ProductPage: React.FC = () => {
                         images={productImages}
                         currentIndex={selectedImage}
                         onIndexChange={setSelectedImage}
-                        onImageClick={() => openGallery(productImages, selectedImage)}
                         altPrefix="Product image"
                       />
                     </div>
@@ -274,31 +275,29 @@ const ProductPage: React.FC = () => {
                     /* Desktop: Optimized Gallery Layout */
                     /* UX: Maintains aspect ratio and visual hierarchy without breaking structure */
                     <>
-                      {/* Main image with navigation arrows */}
+                      {/* Main image with zoom on hover */}
                       <div className="mb-4 sm:mb-5 md:mb-6 relative group">
-                        {/* Image container with aspect ratio preservation */}
-                        <div className="relative w-full aspect-[4/3] bg-black/20 rounded-lg sm:rounded-xl overflow-hidden">
-                          <button 
-                            onClick={() => openGallery(productImages, selectedImage)}
-                            className="absolute inset-0 cursor-pointer"
-                          >
-                            <Img
-                              id="product-main-image"
-                              key={`${selectedSize}-${selectedColor}-${selectedImage}`}
-                              src={productImages[selectedImage]}
-                              alt="Product"
-                              loading="eager"
-                              className="w-full h-full object-contain transition-all duration-300"
-                            />
-                            {/* Hover overlay with zoom icon */}
-                            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-200 flex items-center justify-center">
-                              <div className="bg-white/10 backdrop-blur-sm p-3 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200 scale-90 group-hover:scale-100">
-                                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7" />
-                                </svg>
-                              </div>
-                            </div>
-                          </button>
+                        {/* Image container with aspect ratio preservation and zoom effect */}
+                        <div 
+                          className="relative w-full aspect-[4/3] bg-black/20 rounded-lg sm:rounded-xl overflow-hidden cursor-crosshair"
+                          onMouseMove={(e) => {
+                            const rect = e.currentTarget.getBoundingClientRect();
+                            const x = ((e.clientX - rect.left) / rect.width) * 100;
+                            const y = ((e.clientY - rect.top) / rect.height) * 100;
+                            const img = e.currentTarget.querySelector('img');
+                            if (img) {
+                              img.style.transformOrigin = `${x}% ${y}%`;
+                            }
+                          }}
+                        >
+                          <Img
+                            id="product-main-image"
+                            key={`${selectedSize}-${selectedColor}-${selectedImage}`}
+                            src={productImages[selectedImage]}
+                            alt="Product"
+                            loading="eager"
+                            className="w-full h-full object-contain transition-transform duration-300 group-hover:scale-150"
+                          />
                           
                           {/* Navigation arrows - positioned over image */}
                           <button
@@ -332,7 +331,7 @@ const ProductPage: React.FC = () => {
                           <button
                             key={index}
                             onClick={() => setSelectedImage(index)}
-                            className={`flex-shrink-0 w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-lg overflow-hidden border-2 transition-all ${
+                            className={`flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-lg overflow-hidden border-2 transition-all ${
                               selectedImage === index
                                 ? 'border-white shadow-lg shadow-white/20 scale-105'
                                 : 'border-white/10 opacity-60 hover:opacity-100 hover:border-white/30 hover:scale-105'
@@ -556,14 +555,24 @@ const ProductPage: React.FC = () => {
           </div>
 
           {/* Specifications */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-5 md:gap-7 mb-3 sm:mb-5 md:mb-7 lg:items-stretch">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-5 md:gap-7 mb-3 sm:mb-5 md:mb-7 lg:items-start">
             {/* Description */}
-            <div className="border border-white/20 rounded-lg sm:rounded-xl flex flex-col p-6 sm:p-7 md:p-8 lg:h-[320px]">
+            <div 
+              className="border border-white/20 rounded-lg sm:rounded-xl flex flex-col p-6 sm:p-7 md:p-8"
+              style={{ 
+                height: specificationsHeight ? `${specificationsHeight}px` : 'auto'
+              }}
+            >
               <h3 className="text-white font-manrope font-semibold text-base sm:text-lg md:text-xl mb-2 sm:mb-3">Описание</h3>
               <div className="w-16 sm:w-20 md:w-24 h-px bg-gradient-to-r from-white/10 to-transparent mb-3 sm:mb-4"></div>
               <div 
                 ref={descriptionRef}
                 className="text-white/90 font-manrope font-normal text-xs sm:text-sm leading-relaxed space-y-2 flex-1 overflow-hidden"
+                style={{
+                  maxHeight: isDescriptionOverflowing && specificationsHeight 
+                    ? `${specificationsHeight - 140}px` // Вычитаем отступы, заголовок и кнопку
+                    : 'none'
+                }}
               >
                 {isClothingProduct ? (
                   // Описание для одежды
@@ -600,13 +609,16 @@ const ProductPage: React.FC = () => {
             </div>
 
             {/* Specifications & Dimensions Combined */}
-            <div className="border border-white/20 rounded-lg sm:rounded-xl p-6 sm:p-7 md:p-8 lg:h-[320px] flex flex-col">
+            <div 
+              ref={specificationsRef}
+              className="border border-white/20 rounded-lg sm:rounded-xl p-6 sm:p-7 md:p-8"
+            >
               <h3 className="text-white font-manrope font-semibold text-base sm:text-lg md:text-xl mb-2 sm:mb-3">
                 Характеристики {!isClothingProduct && '& Размеры'}
               </h3>
               <div className="w-16 sm:w-20 md:w-24 h-px bg-gradient-to-r from-white/10 to-transparent mb-3 sm:mb-4"></div>
               
-              <div className="space-y-4 flex-1 overflow-y-auto">
+              <div className="space-y-4">
                 {/* Characteristics Section */}
                 <div className="space-y-2 sm:space-y-2.5">
                   {isClothingProduct ? (
@@ -697,7 +709,6 @@ const ProductPage: React.FC = () => {
                 <ReviewCard 
                   key={review.id} 
                   review={review}
-                  onPhotoClick={(photos, index) => openGallery(photos, index)}
                 />
               ))}
             </div>
@@ -774,7 +785,6 @@ const ProductPage: React.FC = () => {
                 className="w-full h-auto"
                 onError={(e) => {
                   // Если изображение не загрузилось, показываем заглушку
-                  console.error('Failed to load size chart image:', getSizeChartPath(), e);
                   const target = e.target as HTMLImageElement;
                   target.style.display = 'none';
                   if (target.parentElement) {
@@ -808,15 +818,6 @@ const ProductPage: React.FC = () => {
             </div>
           </div>
         </Modal>
-
-        {/* Image Gallery Modal */}
-        <ImageGalleryModal
-          images={galleryImages}
-          initialIndex={galleryInitialIndex}
-          isOpen={isGalleryOpen}
-          onClose={closeGallery}
-          altPrefix="Изображение товара"
-        />
 
         {/* Mobile Sticky Add to Cart Button */}
         {isMobile && showStickyButton && (

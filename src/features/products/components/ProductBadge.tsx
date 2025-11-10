@@ -53,11 +53,11 @@ const ProductBadge: React.FC<ProductBadgeProps> = ({ type, rating, className = '
   return (
     <motion.div
       className={`
-        inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md
+        inline-flex items-center gap-1 px-1.5 py-0.5 sm:px-2 sm:py-1 rounded-md
         ${config.bgClass} ${config.textClass}
         border ${config.borderClass}
         shadow-lg
-        font-manrope font-bold text-[10px] sm:text-xs
+        font-manrope font-bold text-[8px] sm:text-[10px]
         uppercase tracking-wide
         ${className}
         relative overflow-hidden
@@ -100,7 +100,7 @@ const ProductBadge: React.FC<ProductBadgeProps> = ({ type, rating, className = '
           willChange: 'transform',
         }}
       >
-        <Icon className={`w-3 h-3 ${config.iconColor}`} />
+        <Icon className={`w-2.5 h-2.5 sm:w-3 sm:h-3 ${config.iconColor}`} />
       </motion.div>
       <span className="relative z-10">{config.label}</span>
     </motion.div>

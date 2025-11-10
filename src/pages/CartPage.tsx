@@ -19,7 +19,7 @@ const CartPage: React.FC = () => {
 
   return (
     <PageContainer>
-      <div className="min-h-screen px-4 sm:px-6 md:px-8 lg:px-12 pt-6 sm:pt-8 md:pt-10 pb-12 sm:pb-16 md:pb-20">
+      <div className="min-h-screen px-4 sm:px-6 md:px-8 lg:px-12 pt-6 sm:pt-8 md:pt-10 pb-24 sm:pb-16 md:pb-20">
         <div className="max-w-7xl mx-auto">
           {/* Page Title */}
           <div className="text-center mb-6 sm:mb-8 md:mb-10 lg:mb-12 content-reveal content-reveal-delay-1">

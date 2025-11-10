@@ -146,15 +146,15 @@ const CatalogPage: React.FC = () => {
 
   return (
     <PageContainer>
-          <div className="max-w-[1800px] mx-auto px-4 sm:px-6 md:px-8 lg:px-12 pt-6 sm:pt-8 md:pt-10 pb-12 sm:pb-16 md:pb-20">
+          <div className="max-w-[1800px] mx-auto px-3 sm:px-4 md:px-6 lg:px-8 pt-4 sm:pt-6 md:pt-8 pb-24 sm:pb-12 md:pb-16">
             {/* Content container */}
             <div>
-            {/* Page Title - centered */}
-            <div className="text-center mb-6 sm:mb-8 md:mb-10 lg:mb-12 content-reveal content-reveal-delay-1">
-              <h1 className="text-white font-manrope font-bold text-2xl sm:text-3xl md:text-4xl lg:text-5xl mb-2 sm:mb-3 md:mb-4 drop-shadow-[0_4px_12px_rgba(0,0,0,0.9)]">
+            {/* Page Title - SIMPLIFIED for mobile */}
+            <div className="text-center mb-4 sm:mb-6 md:mb-8 content-reveal content-reveal-delay-1">
+              <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-2 sm:mb-3 drop-shadow-[0_4px_12px_rgba(0,0,0,0.9)]">
                 Каталог товаров
               </h1>
-              <div className="w-16 sm:w-20 md:w-24 lg:w-32 h-0.5 sm:h-1 bg-white/40 mx-auto"></div>
+              <div className="w-12 sm:w-16 md:w-20 h-0.5 bg-white/40 mx-auto"></div>
             </div>
 
             {/* Category Filter - moved here */}
@@ -164,28 +164,28 @@ const CatalogPage: React.FC = () => {
             />
 
             {/* Mobile filter button - Enhanced with badges */}
-            <div className="lg:hidden mb-3 sm:mb-4">
+            <div className="lg:hidden mb-3">
               <button
                 onClick={() => setFiltersOpen(!filtersOpen)}
-                className="w-full min-h-[52px] bg-black/40 text-white font-manrope font-semibold px-4 sm:px-6 py-3 rounded-xl border border-white/20 hover:bg-black/50 active:bg-black/60 transition-all flex items-center justify-between text-base gap-3"
+                className="w-full min-h-[48px] bg-black/40 text-white font-semibold px-4 py-2.5 rounded-xl border border-white/20 hover:bg-black/50 active:bg-black/60 transition-all flex items-center justify-between text-sm gap-2"
                 aria-expanded={filtersOpen}
                 aria-controls="filters-panel"
                 aria-label={filtersOpen ? "Скрыть фильтры" : "Показать фильтры"}
               >
                 <div className="flex items-center gap-2">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="flex-shrink-0">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
                   </svg>
-                  <span>Фильтры и сортировка</span>
+                  <span>Фильтры</span>
                   {activeFilters.length > 0 && (
-                    <span className="bg-blue-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">
+                    <span className="bg-blue-500 text-white text-xs font-bold px-1.5 py-0.5 rounded-full min-w-[18px] text-center">
                       {activeFilters.length}
                     </span>
                   )}
                 </div>
                 <svg 
-                  width="20" 
-                  height="20" 
+                  width="18" 
+                  height="18" 
                   viewBox="0 0 24 24" 
                   fill="none" 
                   stroke="currentColor" 
@@ -199,7 +199,7 @@ const CatalogPage: React.FC = () => {
             </div>
 
             {/* Active Filters Display */}
-            <div className="mb-4">
+            <div className="mb-3">
               <ActiveFilters
                 filters={activeFilters}
                 onRemove={removeActiveFilter}
@@ -208,9 +208,9 @@ const CatalogPage: React.FC = () => {
               />
             </div>
 
-            <div className="flex flex-col lg:flex-row gap-3 sm:gap-4 md:gap-6 lg:gap-8">
+            <div className="flex flex-col lg:flex-row gap-3 sm:gap-4 md:gap-5 lg:gap-6">
               {/* Filters Sidebar - Desktop */}
-              <aside className="hidden lg:block lg:w-72 xl:w-80 w-full flex-shrink-0" id="filters-panel">
+              <aside className="hidden lg:block lg:w-64 xl:w-72 w-full flex-shrink-0" id="filters-panel">
                 <FiltersPanel
                   sortBy={sortBy}
                   onSortChange={(sort) => dispatch({ type: 'SET_SORT_BY', payload: sort })}
