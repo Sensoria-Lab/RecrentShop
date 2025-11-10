@@ -135,11 +135,11 @@ const ProductCard: React.FC<ProductCardProps> = ({
       price: 'text-base sm:text-lg md:text-xl'
     },
     'small-catalog': {
-      container: 'w-full max-w-[180px] sm:max-w-[220px] md:max-w-[260px]',
+      container: 'w-full max-w-[180px] sm:max-w-[220px] md:max-w-[280px] lg:max-w-[320px]',
       image: 'aspect-[4/5] rounded-lg sm:rounded-xl',
-      title: 'text-xs sm:text-sm',
+      title: 'text-xs sm:text-sm md:text-base',
       subtitle: 'text-xs sm:text-sm',
-      price: 'text-base sm:text-lg'
+      price: 'text-base sm:text-lg md:text-xl'
     }
   };
 

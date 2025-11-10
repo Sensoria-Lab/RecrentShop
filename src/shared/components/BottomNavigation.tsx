@@ -23,9 +23,18 @@ const BottomNavigation: React.FC = () => {
   const location = useLocation();
   const { getTotalItems } = useCart();
   const cartItemCount = getTotalItems;
+  
+  // Hide on desktop (≥768px)
+  const [isMobile, setIsMobile] = React.useState(window.innerWidth < 768);
 
-  // DEBUG
-  console.log('🔵 BottomNavigation RENDERED!', { pathname: location.pathname });
+  React.useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const isActive = (path: string) => {
     if (path === '/') return location.pathname === '/';
@@ -116,6 +125,9 @@ const BottomNavigation: React.FC = () => {
     },
   ];
 
+  // Don't render on desktop
+  if (!isMobile) return null;
+
   // Render as fixed element
   return (
     <nav
@@ -133,20 +145,8 @@ const BottomNavigation: React.FC = () => {
         maxWidth: '100vw',
       }}
     >
-        {/* DEBUG - видимый элемент */}
-        <div style={{
-          background: 'red',
-          color: 'white',
-          padding: '20px',
-          textAlign: 'center',
-          fontSize: '24px',
-          fontWeight: 'bold'
-        }}>
-          DEBUG: NAVIGATION IS HERE!
-        </div>
-
         {/* Glass morphism container */}
-        <div className="relative bg-black backdrop-blur-2xl border-t border-white/10 shadow-2xl" style={{ backgroundColor: 'rgba(0, 0, 0, 0.95)' }}>
+        <div className="relative bg-black/60 backdrop-blur-2xl border-t border-white/10 shadow-2xl">
           {/* Gradient overlay for depth */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none" />
 
