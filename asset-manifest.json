@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/RecrentShop/static/css/main.47ff5b30.css",
-    "main.js": "/RecrentShop/static/js/main.cb9d62ee.js",
+    "main.css": "/RecrentShop/static/css/main.4d704c0e.css",
+    "main.js": "/RecrentShop/static/js/main.a91e0bbe.js",
     "index.html": "/RecrentShop/index.html",
-    "main.47ff5b30.css.map": "/RecrentShop/static/css/main.47ff5b30.css.map",
-    "main.cb9d62ee.js.map": "/RecrentShop/static/js/main.cb9d62ee.js.map"
+    "main.4d704c0e.css.map": "/RecrentShop/static/css/main.4d704c0e.css.map",
+    "main.a91e0bbe.js.map": "/RecrentShop/static/js/main.a91e0bbe.js.map"
   },
   "entrypoints": [
-    "static/css/main.47ff5b30.css",
-    "static/js/main.cb9d62ee.js"
+    "static/css/main.4d704c0e.css",
+    "static/js/main.a91e0bbe.js"
   ]
 }
