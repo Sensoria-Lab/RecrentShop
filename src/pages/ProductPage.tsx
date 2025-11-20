@@ -1,7 +1,8 @@
 import React, { useMemo, useState, useRef, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
+import { createPortal } from 'react-dom';
 import { PageContainer, Modal } from '../shared/components';
-import { SelectorGroup, Breadcrumbs, DecryptedText, StarRating, QuantitySelector, ProductCard, ProductCarousel, ReviewCard, SwipeableGallery } from 'features/products/components';
+import { SelectorGroup, Breadcrumbs, DecryptedText, StarRating, QuantitySelector, ProductCard, ProductCarousel, ReviewCard, SwipeableGallery, ImageGalleryModal } from 'features/products/components';
 import { useDeviceDetection } from '../shared/hooks';
 import Img from '../shared/ui/Img';
 import { ALL_PRODUCTS } from '../core/data/products';
@@ -64,6 +65,17 @@ const ProductPage: React.FC = () => {
   
   const handleLoadMoreReviews = () => {
     setDisplayedReviewsCount(prev => Math.min(prev + 2, REVIEWS.length));
+  };
+
+  // Состояние галереи фотографий отзывов
+  const [reviewGalleryOpen, setReviewGalleryOpen] = useState(false);
+  const [reviewGalleryImages, setReviewGalleryImages] = useState<string[]>([]);
+  const [reviewPhotoIndex, setReviewPhotoIndex] = useState(0);
+
+  const openReviewGallery = (images: string[], index: number) => {
+    setReviewGalleryImages(images);
+    setReviewPhotoIndex(index);
+    setReviewGalleryOpen(true);
   };
 
   // Используем хук для получения правильных изображений
@@ -709,6 +721,7 @@ const ProductPage: React.FC = () => {
                 <ReviewCard 
                   key={review.id} 
                   review={review}
+                  onPhotoClick={openReviewGallery}
                 />
               ))}
             </div>
@@ -874,6 +887,17 @@ const ProductPage: React.FC = () => {
         )}
         </div>
       </div>
+      
+      {/* Portal для галереи фотографий из отзывов */}
+      {reviewGalleryOpen && createPortal(
+        <ImageGalleryModal
+          images={reviewGalleryImages}
+          initialIndex={reviewPhotoIndex}
+          isOpen={reviewGalleryOpen}
+          onClose={() => setReviewGalleryOpen(false)}
+        />,
+        document.body
+      )}
     </PageContainer>
   );
 };

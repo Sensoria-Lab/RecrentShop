@@ -1,8 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import StarRating from './StarRating';
 import Img from '../../../shared/ui/Img';
 import { Review } from '../../../core/data/reviews';
+import ImageGalleryModal from './ImageGalleryModal';
 
 interface ReviewsSectionProps {
   reviews: Review[];
@@ -21,6 +23,18 @@ export const ReviewsSection: React.FC<ReviewsSectionProps> = ({
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const autoPlayRef = useRef<NodeJS.Timeout | null>(null);
+  
+  // Состояние галереи на уровне ReviewsSection, чтобы не закрывалась при смене отзыва
+  const [galleryOpen, setGalleryOpen] = useState(false);
+  const [galleryImages, setGalleryImages] = useState<string[]>([]);
+  const [selectedPhotoIndex, setSelectedPhotoIndex] = useState(0);
+
+  const openGallery = (images: string[], index: number) => {
+    setGalleryImages(images);
+    setSelectedPhotoIndex(index);
+    setGalleryOpen(true);
+    setIsAutoPlaying(false); // Останавливаем автопрокрутку когда галерея открыта
+  };
 
   // Auto-play slider
   useEffect(() => {
@@ -107,7 +121,7 @@ export const ReviewsSection: React.FC<ReviewsSectionProps> = ({
                   exit={{ opacity: 0, x: -100 }}
                   transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
                 >
-                  <ReviewCard review={reviews[currentIndex]} />
+                  <ReviewCard review={reviews[currentIndex]} onOpenGallery={openGallery} />
                 </motion.div>
               </AnimatePresence>
             </div>
@@ -225,12 +239,29 @@ export const ReviewsSection: React.FC<ReviewsSectionProps> = ({
           </div>
         </div>
       </div>
+
+      {/* Image Gallery Modal - рендерится в body через Portal */}
+      {galleryOpen && createPortal(
+        <ImageGalleryModal
+          images={galleryImages}
+          isOpen={galleryOpen}
+          onClose={() => {
+            setGalleryOpen(false);
+            setIsAutoPlaying(true); // Возобновляем автопрокрутку после закрытия
+          }}
+          initialIndex={selectedPhotoIndex}
+        />,
+        document.body
+      )}
     </section>
   );
 };
 
 // Review Card Component
-const ReviewCard: React.FC<{ review: Review }> = ({ review }) => {
+const ReviewCard: React.FC<{ 
+  review: Review; 
+  onOpenGallery: (images: string[], index: number) => void;
+}> = ({ review, onOpenGallery }) => {
   const [showAllPhotos, setShowAllPhotos] = useState(false);
   const visiblePhotos = showAllPhotos ? review.photos : review.photos?.slice(0, 3);
 
@@ -292,6 +323,7 @@ const ReviewCard: React.FC<{ review: Review }> = ({ review }) => {
                 {visiblePhotos?.map((photo, index) => (
                   <div
                     key={index}
+                    onClick={() => onOpenGallery(review.photos || [], index)}
                     className="relative aspect-square rounded-lg overflow-hidden bg-white/5 border border-white/10 hover:border-white/30 transition-all duration-200 group cursor-pointer"
                   >
                     <Img

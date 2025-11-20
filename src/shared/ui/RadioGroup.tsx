@@ -6,6 +6,7 @@ interface RadioGroupProps {
   onValueChange?: (value: string) => void;
   children: React.ReactNode;
   className?: string;
+  name?: string;
 }
 
 export const RadioGroup: React.FC<RadioGroupProps> = ({
@@ -13,12 +14,17 @@ export const RadioGroup: React.FC<RadioGroupProps> = ({
   onValueChange,
   children,
   className,
+  name,
 }) => {
+  // Generate unique name if not provided
+  const groupName = name || React.useId();
+  
   return (
     <div className={cn('space-y-2', className)} role="radiogroup">
       {React.Children.map(children, (child) =>
         React.isValidElement(child)
           ? React.cloneElement(child, {
+              name: groupName,
               checked: child.props.value === value,
               onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
                 if (e.target.checked && onValueChange) {

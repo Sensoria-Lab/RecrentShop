@@ -18,8 +18,7 @@ export const REVIEWS: Review[] = [
     date: '28.10.2025',
     photos: [
       '/images/reviews/1/review-1-1.jpg',
-      '/images/reviews/1/review-1-2.jpg',
-      '/images/reviews/1/review-1-3.jpg'
+      '/images/reviews/1/review-1-2.jpg'
     ]
   },
   {

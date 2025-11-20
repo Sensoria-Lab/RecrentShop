@@ -175,6 +175,7 @@ const CheckoutPage: React.FC = () => {
       'home-delivery': { withInsurance: 633, withoutInsurance: 581 },
     };
     const methodPrices = prices[deliveryForm.method];
+    if (!methodPrices) return 0;
     return deliveryForm.withInsurance ? methodPrices.withInsurance : methodPrices.withoutInsurance;
   };
 

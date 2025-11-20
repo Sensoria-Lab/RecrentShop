@@ -35,6 +35,16 @@ const ImageGalleryModal: React.FC<ImageGalleryModalProps> = ({
     setIsZoomed(false);
   }, [images.length]);
 
+  const handlePreviousClick = useCallback((e: React.MouseEvent) => {
+    e.stopPropagation(); // Предотвращаем закрытие модалки
+    goToPrevious();
+  }, [goToPrevious]);
+
+  const handleNextClick = useCallback((e: React.MouseEvent) => {
+    e.stopPropagation(); // Предотвращаем закрытие модалки
+    goToNext();
+  }, [goToNext]);
+
   const handleClose = useCallback(() => {
     setIsZoomed(false);
     onClose();
@@ -92,7 +102,7 @@ const ImageGalleryModal: React.FC<ImageGalleryModalProps> = ({
           {/* Previous button - outside image */}
           {images.length > 1 && (
             <button
-              onClick={goToPrevious}
+              onClick={handlePreviousClick}
               className="absolute left-0 z-[10000] bg-black/50 hover:bg-black/70 text-white p-3 sm:p-4 rounded-full transition-all duration-200 hover:scale-110"
               aria-label="Предыдущее изображение"
             >
@@ -129,7 +139,7 @@ const ImageGalleryModal: React.FC<ImageGalleryModalProps> = ({
           {/* Next button - outside image */}
           {images.length > 1 && (
             <button
-              onClick={goToNext}
+              onClick={handleNextClick}
               className="absolute right-0 z-[10000] bg-black/50 hover:bg-black/70 text-white p-3 sm:p-4 rounded-full transition-all duration-200 hover:scale-110"
               aria-label="Следующее изображение"
             >
@@ -148,17 +158,17 @@ const ImageGalleryModal: React.FC<ImageGalleryModalProps> = ({
         )}
       </div>
 
-      {/* Close button - максимальный z-index и отдельный от всего */}
+      {/* Close button - минималистичный */}
       <button
         type="button"
         onClick={handleClose}
         onMouseDown={(e) => e.stopPropagation()}
         onTouchStart={(e) => e.stopPropagation()}
-        className="fixed top-4 right-4 z-[99999] text-white hover:text-white/80 transition-all p-3 bg-red-600/80 rounded-full hover:bg-red-700 hover:scale-110 shadow-2xl cursor-pointer"
+        className="fixed top-4 right-4 z-[99999] text-white/70 hover:text-white transition-all p-2 hover:bg-white/10 rounded-full hover:scale-110 backdrop-blur-sm cursor-pointer"
         style={{ pointerEvents: 'auto' }}
         aria-label="Закрыть"
       >
-        <svg className="w-6 h-6 sm:w-8 sm:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={3}>
+        <svg className="w-6 h-6 sm:w-8 sm:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
           <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
         </svg>
       </button>
