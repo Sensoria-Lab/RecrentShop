@@ -16,8 +16,9 @@ export const RadioGroup: React.FC<RadioGroupProps> = ({
   className,
   name,
 }) => {
-  // Generate unique name if not provided
-  const groupName = name || React.useId();
+  // Generate unique name if not provided (useId must be called unconditionally)
+  const generatedId = React.useId();
+  const groupName = name || generatedId;
   
   return (
     <div className={cn('space-y-2', className)} role="radiogroup">
