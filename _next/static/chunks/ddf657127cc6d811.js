@@ -1,0 +1,1 @@
+(globalThis.TURBOPACK||(globalThis.TURBOPACK=[])).push(["object"==typeof document?document.currentScript:void 0,67026,t=>{"use strict";var o=t.i(58234);t.s(["Footer",()=>o.default])}]);

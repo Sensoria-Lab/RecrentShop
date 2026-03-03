@@ -1,0 +1,6 @@
+1:"$Sreact.fragment"
+2:I[22016,["/RecrentShop/_next/static/chunks/4ab1ef6c202ec51f.js","/RecrentShop/_next/static/chunks/a6756653f6e45da7.js","/RecrentShop/_next/static/chunks/7738b2b176cf8288.js"],""]
+3:I[97367,["/RecrentShop/_next/static/chunks/4ab1ef6c202ec51f.js","/RecrentShop/_next/static/chunks/a6756653f6e45da7.js","/RecrentShop/_next/static/chunks/7738b2b176cf8288.js"],"OutletBoundary"]
+4:"$Sreact.suspense"
+0:{"buildId":"KA2RNabZPUJE1Nuo5nQOr","rsc":["$","$1","c",{"children":[["$","div",null,{"className":"min-h-screen flex items-center justify-center","children":["$","div",null,{"className":"text-center","children":[["$","h1",null,{"className":"text-6xl font-bold text-[#EAE2E6] mb-4","children":"404"}],["$","p",null,{"className":"text-white/70 text-xl mb-8","children":"Страница не найдена"}],["$","$L2",null,{"href":"/","className":"inline-flex items-center gap-2 bg-[#EAE2E6] hover:bg-[#EAE2E6]/90 text-[#191516] font-jetbrains text-[11px] tracking-[0.15em] uppercase px-6 py-3 transition-colors","children":"На главную"}]]}]}],null,["$","$L3",null,{"children":["$","$4",null,{"name":"Next.MetadataOutlet","children":"$@5"}]}]]}],"loading":null,"isPartial":false}
+5:null
