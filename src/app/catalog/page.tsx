@@ -79,7 +79,7 @@ const CatalogPage: React.FC = () => {
       const imagesToPreload = products.slice(0, 6).map(product => product.image);
       imagesToPreload.forEach(imageSrc => {
         const img = new Image();
-        img.src = imageSrc.startsWith('/') ? `${process.env.PUBLIC_URL || ''}${imageSrc}` : imageSrc;
+        img.src = imageSrc.startsWith('/') ? `${process.env.NEXT_PUBLIC_BASE_PATH || ''}${imageSrc}` : imageSrc;
       });
     }
   }, [products]);

@@ -1,7 +1,7 @@
 import type { Product } from '@/src/types';
 
-// Base URL for images (GitHub Pages for production, relative for development)
-const BASE_URL = process.env.PUBLIC_URL || '';
+// Base URL for images (GitHub Pages sub-path in production)
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_PATH || '';
 
 /**
  * All mousepads products

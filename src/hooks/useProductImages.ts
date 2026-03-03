@@ -14,7 +14,7 @@ export const useProductImages = (
     if (!productData) return [];
 
     const mainImage = productData.image;
-    const baseUrl = process.env.PUBLIC_URL || '';
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_PATH || '';
 
     // Helper function to get dynamic main image for geoid mousepads
     const getGeoidMainImage = (size: string, color: string): string => {

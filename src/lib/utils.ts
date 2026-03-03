@@ -8,7 +8,7 @@ export const getPublicUrl = (path: string): string => {
   
   // In development, PUBLIC_URL is usually empty or '/'
   // In production (GitHub Pages), it's '/RecrentShop'
-  const publicUrl = process.env.PUBLIC_URL || '';
+  const publicUrl = process.env.NEXT_PUBLIC_BASE_PATH || '';
   
   // If publicUrl is empty or just '/', return path as is
   if (!publicUrl || publicUrl === '/') {
@@ -32,8 +32,8 @@ export const getImageUrl = (imagePath: string): string => {
 export const fixImagePath = (path: string): string => {
   if (!path) return path;
 
-  // If path already includes PUBLIC_URL, return as is
-  if (path.includes(process.env.PUBLIC_URL || '')) {
+  // If path already includes base path, return as is
+  if (path.includes(process.env.NEXT_PUBLIC_BASE_PATH || '')) {
     return path;
   }
 

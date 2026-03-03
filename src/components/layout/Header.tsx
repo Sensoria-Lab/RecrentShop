@@ -1,10 +1,10 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import Image from 'next/image';
 import { useRouter, usePathname } from 'next/navigation';
 import { useCart } from '@/src/context/CartContext';
 import { ROUTES } from '@/src/constants/routes';
 import CartSidebar from './CartSidebar';
+import Img from '@/src/components/ui/Img';
 
 interface HeaderProps {
   className?: string;
@@ -38,12 +38,10 @@ const Header: React.FC<HeaderProps> = ({ className = '' }) => {
             className="flex items-center gap-3 cursor-pointer focus:outline-none group flex-shrink-0"
           >
             <span className="flex items-center justify-center w-[26px] h-[26px] flex-shrink-0">
-              <Image
+              <Img
                 src="/images/ui/logo.svg"
                 alt="Recrent"
-                width={26}
-                height={24}
-                className="opacity-70 group-hover:opacity-100 transition-opacity duration-200"
+                className="w-full h-full object-contain opacity-70 group-hover:opacity-100 transition-opacity duration-200"
                 style={{ display: 'block' }}
               />
             </span>
