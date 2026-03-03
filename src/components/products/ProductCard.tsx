@@ -1,6 +1,7 @@
 'use client';
 import React, { useState } from 'react';
 import ProductBadge, { getProductBadges } from '@/src/components/products/ProductBadge';
+import Img from '@/src/components/ui/Img';
 
 export interface ProductCardProps {
   id?: number;
@@ -207,7 +208,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
             <div className="absolute inset-0 bg-gradient-to-r from-[#EAE2E6]/[0.05] via-[#EAE2E6]/[0.10] to-[#EAE2E6]/[0.05] animate-pulse" />
           )}
 
-          <img
+          <Img
             src={image}
             alt={title}
             className={`w-full h-full object-cover object-center ${imageLoaded ? 'opacity-100 filter-none' : 'opacity-70 blur-sm'}`}
