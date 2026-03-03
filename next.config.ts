@@ -1,21 +1,20 @@
 import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
-    // Output standalone for optimal deployment
-    // output: 'standalone',
+    // Static export for GitHub Pages
+    output: 'export',
 
-    // Allow images from external domains if needed
+    // Sub-path on GitHub Pages: sensoria-lab.github.io/RecrentShop
+    basePath: '/RecrentShop',
+    assetPrefix: '/RecrentShop',
+
+    // next/image doesn't work with static export — use unoptimized
     images: {
-        remotePatterns: [
-            {
-                protocol: 'https',
-                hostname: '**',
-            },
-        ],
+        unoptimized: true,
     },
 
-    // Trailing slash to match previous gh-pages behaviour
-    // trailingSlash: true,
+    // Trailing slash so index.html files resolve correctly on GH Pages
+    trailingSlash: true,
 
     // TypeScript errors handled by type-check script
     typescript: {
