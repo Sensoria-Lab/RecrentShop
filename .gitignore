@@ -6,6 +6,10 @@ node_modules/
 # Testing
 /coverage
 
+# Next.js
+/.next
+/out
+
 # Production
 /build
 
@@ -38,6 +42,7 @@ yarn-error.log*
 .claude/
 .cursor/
 *.local.json
+.agents/
 
 # OS Files
 Thumbs.db
@@ -55,8 +60,21 @@ Desktop.ini
 *.temp
 .cache/
 
-# Debug
+# TypeScript build info
 *.tsbuildinfo
+
+# Build & error logs
+build-errors.txt
+build.log
+tsc-errors*.txt
+knip-report.txt
+
+# Analysis tool configs (not project code)
+knip.json
+
+# Lock files from other package managers (project uses npm)
+pnpm-lock.yaml
+yarn.lock
 
 # Игнорируем файл nul
 nul

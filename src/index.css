@@ -7,7 +7,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap');
 
 html {
-  scroll-behavior: smooth;
+  /* scroll-behavior is intentionally NOT set here — Lenis handles smooth scroll via JS.
+     Setting CSS scroll-behavior: smooth conflicts with Lenis and causes double-smoothing
+     autoscroll bugs on every page. */
+  scroll-behavior: auto;
   /* Prevent text size adjustment on orientation change in iOS */
   -webkit-text-size-adjust: 100%;
   /* Enable smooth scrolling with momentum on iOS */
@@ -546,10 +549,9 @@ body {
   animation: beam-slide-2 9s ease-in-out infinite;
 }
 
-/* Smooth scrolling for all pages */
-* {
-  scroll-behavior: smooth;
-}
+/* scroll-behavior on * is intentionally removed — Lenis handles page scroll.
+   For sub-scrollable containers that don't use Lenis, use scroll-behavior: smooth
+   only on those specific elements, not globally. */
 
 /* ============================================
    SHADCN-STYLE ANIMATIONS - Modern & Subtle
