@@ -15,19 +15,18 @@ interface ImgProps extends React.ImgHTMLAttributes<HTMLImageElement> {
 const Img: React.FC<ImgProps> = ({ src, alt = '', loading, decoding, className, srcSet, ...props }) => {
   const getFixedSrc = (path: string): string => {
     if (!path) return path;
-    
-    // If path already includes PUBLIC_URL, return as is
-    const publicUrl = process.env.PUBLIC_URL || '';
-    if (path.includes(publicUrl) && publicUrl) {
-      return path;
-    }
-    
-    // If path starts with /, prepend PUBLIC_URL
+
+    // Use Next.js NEXT_PUBLIC_BASE_PATH (set in .env.production for GH Pages)
+    const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
+
+    // Already prefixed — avoid double-prepending
+    if (basePath && path.startsWith(basePath)) return path;
+
+    // Prefix absolute public paths with basePath
     if (path.startsWith('/')) {
-      const cleanPath = path.slice(1);
-      return publicUrl ? `${publicUrl}/${cleanPath}` : `/${cleanPath}`;
+      return basePath ? `${basePath}${path}` : path;
     }
-    
+
     return path;
   };
 

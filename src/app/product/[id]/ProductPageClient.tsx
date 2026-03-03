@@ -227,7 +227,7 @@ export default function ProductPageClient() {
                 {/* Main image */}
                 <img
                   key={activeImage}
-                  src={productImages[activeImage]}
+                  src={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}${productImages[activeImage]}`}
                   alt={`${product.subtitle} — фото ${activeImage + 1}`}
                   className="w-full h-full object-contain"
                   style={{ opacity: imgLoaded ? 1 : 0, transition: 'opacity 0.3s ease' }}
@@ -318,7 +318,7 @@ export default function ProductPageClient() {
                         transition: 'border-color 0.2s, opacity 0.2s, transform 0.2s',
                       }}
                     >
-                      <img src={img} alt={`${product.subtitle} ${i + 1}`} className="w-full h-full object-cover object-center" />
+                      <img src={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}${img}`} alt={`${product.subtitle} ${i + 1}`} className="w-full h-full object-cover object-center" />
                     </button>
                   ))}
                 </div>
