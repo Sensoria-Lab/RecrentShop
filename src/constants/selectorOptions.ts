@@ -1,6 +1,6 @@
 // Selector options for product page
 
-export const COLOR_OPTIONS = [
+const COLOR_OPTIONS = [
   { id: 'black', label: 'Черный', color: '#000000' },
   { id: 'white', label: 'Белый', color: '#FFFFFF' },
   { id: 'red', label: 'Красный', color: '#DC2626' },
@@ -12,7 +12,7 @@ export const SIZE_OPTIONS = [
   { id: 'L', label: 'L' }
 ];
 
-export const TYPE_OPTIONS = [
+const TYPE_OPTIONS = [
   { id: 'speed', label: 'Speed' },
   { id: 'balance', label: 'Balance' }
 ];

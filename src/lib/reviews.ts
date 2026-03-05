@@ -49,20 +49,5 @@ export const REVIEWS: Review[] = [
   }
 ];
 
-// Функция для получения отзывов с пагинацией
-export const getReviews = (page: number = 1, perPage: number = 2): Review[] => {
-  const start = (page - 1) * perPage;
-  const end = start + perPage;
-  return REVIEWS.slice(start, end);
-};
 
-// Функция для получения общего количества отзывов
-export const getTotalReviews = (): number => {
-  return REVIEWS.length;
-};
-
-// Функция для проверки наличия еще отзывов
-export const hasMoreReviews = (currentCount: number): boolean => {
-  return currentCount < REVIEWS.length;
-};
 

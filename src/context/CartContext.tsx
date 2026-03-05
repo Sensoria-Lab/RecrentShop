@@ -22,8 +22,6 @@ interface CartContextType {
   clearCart: () => void;
   getTotalItems: number;
   getTotalPrice: number;
-  isCartOpen: boolean;
-  toggleCart: () => void;
 }
 
 // Create context
@@ -44,8 +42,6 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       }
     }
   }, []);
-
-  const [isCartOpen, setCartOpen] = useState(false);
 
   // Save to localStorage whenever cart changes
   useEffect(() => {
@@ -80,10 +76,6 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     setItems([]);
   }, []);
 
-  const toggleCart = useCallback(() => {
-    setCartOpen((prev) => !prev);
-  }, []);
-
   const getTotalItems = useMemo(() => {
     return items.reduce((total, item) => total + item.quantity, 0);
   }, [items]);
@@ -105,23 +97,9 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       clearCart,
       getTotalItems,
       getTotalPrice,
-      isCartOpen,
-      toggleCart,
     }),
-    [items, addItem, removeItem, updateQuantity, clearCart, getTotalItems, getTotalPrice, isCartOpen, toggleCart]
+    [items, addItem, removeItem, updateQuantity, clearCart, getTotalItems, getTotalPrice]
   );
-
-  useEffect(() => {
-    if (isCartOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
-    }
-
-    return () => {
-      document.body.style.overflow = '';
-    };
-  }, [isCartOpen]);
 
   return (
     <CartContext.Provider value={contextValue}>

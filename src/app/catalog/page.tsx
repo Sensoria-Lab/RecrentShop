@@ -1,14 +1,27 @@
 'use client';
-import React, { useState, useEffect, useCallback } from 'react';
-import { PageContainer, BottomSheet } from '@/src/components/layout';
-import { CategorySelector, FiltersPanel, ProductGrid, ActiveFilters } from '@/src/components/products';
-import { useProductFilters, useProductNavigation, useCatalogFilters, useFilterCounts, useActiveFilters } from '@/src/hooks';
-import { useDeviceDetection } from '@/src/hooks';
+import React, { useState, useEffect, useCallback, useRef, Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
+import gsap from '@/src/lib/gsap';
+import PageContainer from '@/src/components/layout/PageContainer';
+import { CatalogPageSkeleton } from '@/src/components/layout/Skeletons';
+import BottomSheet from '@/src/components/layout/BottomSheet';
+import CategorySelector from '@/src/components/products/CategorySelector';
+import FiltersPanel from '@/src/components/products/FiltersPanel';
+import ProductGrid from '@/src/components/products/ProductGrid';
+import ActiveFilters from '@/src/components/products/ActiveFilters';
+import { useProductFilters } from '@/src/hooks/useProductFilters';
+import { useProductNavigation } from '@/src/hooks/useProductNavigation';
+import { useCatalogFilters } from '@/src/hooks/useCatalogFilters';
+import { useFilterCounts } from '@/src/hooks/useFilterCounts';
+import { useActiveFilters } from '@/src/hooks/useActiveFilters';
+import { useDeviceDetection } from '@/src/hooks/useDeviceDetection';
 import { API_CONFIG } from '@/src/constants/config';
 import { ALL_PRODUCTS } from '@/src/lib/products';
-import type { Product } from '@/src/types';
+import type { Product } from '@/src/types/product';
 import type { ProductCardProps } from '@/src/components/products/ProductCard';
-import { Button } from '@/src/components/ui';
+import type { CategoryFilter } from '@/src/types/product';
+import { Button } from '@/src/components/ui/Button';
+import { shouldReduceMotion, EASE_EDITORIAL } from '@/src/components/animations';
 
 /**
  * Catalog Page Component
@@ -21,7 +34,26 @@ const CatalogPage: React.FC = () => {
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isTransitioning, setIsTransitioning] = useState(false);
   const { isMobile } = useDeviceDetection();
+  const headerRef = useRef<HTMLDivElement>(null);
+  const gridRef = useRef<HTMLDivElement>(null);
+  const searchParams = useSearchParams();
+
+  /* ── Entrance animation — Refined per Design System ─── */
+  useEffect(() => {
+    if (headerRef.current) {
+      const reduceMotion = shouldReduceMotion();
+      if (!reduceMotion) {
+        gsap.fromTo(headerRef.current,
+          { opacity: 0, y: 16 },
+          { opacity: 1, y: 0, duration: 0.5, ease: EASE_EDITORIAL }
+        );
+      } else {
+        gsap.set(headerRef.current, { opacity: 1, y: 0 });
+      }
+    }
+  }, []);
 
   // Use custom hook for filter management
   const {
@@ -44,6 +76,17 @@ const CatalogPage: React.FC = () => {
     removeActiveFilter,
     clearAllActiveFilters,
   } = useCatalogFilters();
+
+  // Read category from URL parameters and set initial filter
+  useEffect(() => {
+    const categoryFromUrl = searchParams.get('category');
+    if (categoryFromUrl) {
+      const validCategories: CategoryFilter[] = ['all', 'mousepads', 'clothing', 'tshirt', 'hoodie', 'sleeve'];
+      if (validCategories.includes(categoryFromUrl as CategoryFilter)) {
+        dispatch({ type: 'SET_CATEGORY_FILTER', payload: categoryFromUrl as CategoryFilter });
+      }
+    }
+  }, [searchParams, dispatch]);
 
   // Fetch products from API or use static data
   useEffect(() => {
@@ -109,11 +152,11 @@ const CatalogPage: React.FC = () => {
   // Reset size filter when category changes to avoid conflicts between mousepad/clothing sizes
   useEffect(() => {
     // Reset size filter when switching to/from mousepads category
-    const clothingCategories = ['tshirt', 'hoodie', 'sleeve'];
+    const clothingCategories = ['clothing', 'tshirt', 'hoodie', 'sleeve'];
     const isSwitchingToMousepads = categoryFilter === 'mousepads';
-    const isSwitchingFromMousepads = clothingCategories.includes(categoryFilter);
+    const isSwitchingToClothing = clothingCategories.includes(categoryFilter);
 
-    if (isSwitchingToMousepads || isSwitchingFromMousepads) {
+    if (isSwitchingToMousepads || isSwitchingToClothing) {
       dispatch({ type: 'SET_SIZE_FILTER', payload: [] });
       dispatch({ type: 'SET_PENDING_SIZE_FILTER', payload: [] });
     }
@@ -146,35 +189,65 @@ const CatalogPage: React.FC = () => {
   // Use custom hook for active filters
   const activeFilters = useActiveFilters(colorFilter, sizeFilter, clothingTypeFilter, collectionFilter);
 
+  // Smooth category change handler
+  const handleCategoryChange = useCallback((category: CategoryFilter) => {
+    if (category === categoryFilter) return;
+
+    setIsTransitioning(true);
+
+    // Small delay to allow exit animation
+    setTimeout(() => {
+      dispatch({ type: 'SET_CATEGORY_FILTER', payload: category });
+      // Reset transition after products update
+      requestAnimationFrame(() => {
+        setIsTransitioning(false);
+      });
+    }, 50);
+  }, [categoryFilter, dispatch]);
+
+  if (loading) {
+    return (
+      <PageContainer>
+        <CatalogPageSkeleton />
+      </PageContainer>
+    );
+  }
+
   return (
     <PageContainer>
-      <div className="max-w-[1800px] mx-auto px-3 sm:px-4 md:px-6 lg:px-8 pt-4 sm:pt-6 md:pt-8 pb-24 sm:pb-12 md:pb-16">
-        {/* Content container */}
+      <div className="max-w-[1800px] mx-auto px-3 sm:px-4 md:px-6 lg:px-8 pt-8 md:pt-12 pb-24 sm:pb-12 md:pb-16">
         <div>
 
-
-          {/* Editorial catalog header: section label + category tabs */}
-          <div className="flex items-stretch mb-6">
-            {/* Section label */}
-            <div className="hidden sm:flex items-center gap-3 px-4 border-b border-r border-[#EAE2E6]/[0.07] flex-shrink-0">
-              <span className="font-jetbrains text-[8px] tracking-[0.35em] uppercase text-[#EAE2E6]/20 select-none">───</span>
-              <span className="font-jetbrains text-[9px] tracking-[0.3em] uppercase text-[#EAE2E6]/35">Каталог</span>
-              <span className="font-jetbrains text-[8px] tracking-[0.15em] text-[#EAE2E6]/20">{filteredProducts.length}</span>
-            </div>
-            {/* Category tabs */}
-            <div className="flex-1 overflow-x-auto">
-              <CategorySelector
-                categoryFilter={categoryFilter}
-                onCategoryChange={(category) => dispatch({ type: 'SET_CATEGORY_FILTER', payload: category })}
-              />
-            </div>
+          {/* ─── Section Header ─────────────────────────────────────────── */}
+          <div
+            ref={headerRef}
+            className="mb-8 md:mb-10 border-b border-[var(--rc-border)] pb-6 flex items-end justify-between gap-4"
+          >
+            <h1
+              className="font-manrope font-black tracking-tight text-[var(--rc-fg)] leading-[0.9]"
+              style={{ fontSize: 'clamp(2rem, 4.5vw, 4rem)' }}
+            >
+              Каталог
+            </h1>
+            <span className="font-jetbrains text-[11px] tracking-[0.2em] uppercase text-[var(--rc-fg-muted)] pb-1 select-none">
+              {filteredProducts.length} товаров
+            </span>
           </div>
 
-          {/* Mobile filter button - Enhanced with badges */}
-          <div className="lg:hidden mb-3">
+          {/* Mobile: category tabs + filter button stacked */}
+          <div className="lg:hidden mb-4 flex flex-col gap-3">
+            {/* Category tabs — scrollable */}
+            <div className="overflow-x-auto -mx-3 px-3">
+              <CategorySelector
+                categoryFilter={categoryFilter}
+                onCategoryChange={handleCategoryChange}
+              />
+            </div>
+
+            {/* Filter button */}
             <Button
               onClick={() => setFiltersOpen(!filtersOpen)}
-              className="w-full min-h-[48px] bg-[#EAE2E6]/[0.05] text-[#EAE2E6]/70 font-jetbrains text-[11px] tracking-[0.12em] uppercase px-4 py-2.5 border border-[#EAE2E6]/[0.08] hover:bg-[#EAE2E6]/10 active:bg-[#EAE2E6]/[0.12] transition-all flex items-center justify-between gap-2"
+              className="w-full min-h-[48px] bg-[var(--rc-fg-ghost)] text-[var(--rc-fg-secondary)] font-jetbrains text-[11px] tracking-[0.12em] uppercase px-4 py-2.5 border border-[var(--rc-border)] hover:bg-[var(--rc-fg-subtle)] active:bg-[var(--rc-fg-ghost)] transition-all flex items-center justify-between gap-2"
               variant="secondary"
               size="md"
               fullWidth
@@ -188,28 +261,19 @@ const CatalogPage: React.FC = () => {
                 </svg>
                 <span>Фильтры</span>
                 {activeFilters.length > 0 && (
-                  <span className="bg-[#EAE2E6] text-[#191516] font-jetbrains text-[9px] tracking-[0.1em] px-1.5 py-0.5 min-w-[18px] text-center">
+                  <span className="bg-[var(--rc-bg-invert)] text-[var(--rc-bg)] font-jetbrains text-[9px] tracking-[0.1em] px-1.5 py-0.5 min-w-[18px] text-center">
                     {activeFilters.length}
                   </span>
                 )}
               </div>
-              <svg
-                width="18"
-                height="18"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                className="transition-transform flex-shrink-0"
-                aria-hidden="true"
-              >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="transition-transform flex-shrink-0" aria-hidden="true">
                 <path d="M9 5l7 7-7 7" />
               </svg>
             </Button>
           </div>
 
           {/* Active Filters Display */}
-          <div className="mb-3">
+          <div className="mb-4">
             <ActiveFilters
               filters={activeFilters}
               onRemove={removeActiveFilter}
@@ -218,28 +282,53 @@ const CatalogPage: React.FC = () => {
             />
           </div>
 
-          <div className="flex flex-col lg:flex-row gap-3 sm:gap-4 md:gap-5 lg:gap-6">
-            {/* Filters Sidebar - Desktop */}
-            <aside className="hidden lg:block lg:w-64 xl:w-72 w-full flex-shrink-0" id="filters-panel">
-              <FiltersPanel
-                sortBy={sortBy}
-                onSortChange={(sort) => dispatch({ type: 'SET_SORT_BY', payload: sort })}
-                categoryFilter={categoryFilter}
-                pendingCollectionFilter={pendingCollectionFilter}
-                pendingSizeFilter={pendingSizeFilter}
-                pendingClothingTypeFilter={pendingClothingTypeFilter}
-                priceRange={priceRange}
-                onPriceRangeChange={(range) => dispatch({ type: 'SET_PRICE_RANGE', payload: range })}
-                onToggleFilter={toggleFilterValue}
-                onApplyFilters={handleApplyFilters}
-                onResetFilters={handleResetFilters}
-                hasPendingChanges={hasPendingChanges}
-                getFilterCounts={{ getCountForFilter }}
-              />
+          <div className="flex flex-col lg:flex-row gap-6 md:gap-10 lg:gap-16">
+            {/* Sidebar - Desktop: category tabs at top, then filters */}
+            <aside className="hidden lg:block lg:w-[20rem] xl:w-[22rem] flex-shrink-0" id="filters-panel">
+              <div className="sticky top-28 flex flex-col gap-0">
+                {/* Category selector — vertical sidebar variant */}
+                <div className="mb-6">
+                  <div className="flex items-center gap-2 mb-3">
+                    <span className="font-jetbrains text-[9px] tracking-[0.28em] uppercase text-[var(--rc-fg-muted)] select-none">/</span>
+                    <span className="font-jetbrains text-[9px] tracking-[0.28em] uppercase text-[var(--rc-fg-muted)]">Категория</span>
+                  </div>
+                  <CategorySelector
+                    categoryFilter={categoryFilter}
+                    onCategoryChange={handleCategoryChange}
+                    variant="sidebar"
+                  />
+                </div>
+
+                {/* Divider + Фильтры label */}
+                <div className="border-t border-[var(--rc-border)] mb-6" />
+                <div className="flex items-center gap-2 mb-4">
+                  <span className="font-jetbrains text-[9px] tracking-[0.28em] uppercase text-[var(--rc-fg-muted)] select-none">/</span>
+                  <span className="font-jetbrains text-[9px] tracking-[0.28em] uppercase text-[var(--rc-fg-muted)]">Фильтры</span>
+                </div>
+
+                <FiltersPanel
+                  sortBy={sortBy}
+                  onSortChange={(sort) => dispatch({ type: 'SET_SORT_BY', payload: sort })}
+                  categoryFilter={categoryFilter}
+                  pendingCollectionFilter={pendingCollectionFilter}
+                  pendingSizeFilter={pendingSizeFilter}
+                  pendingClothingTypeFilter={pendingClothingTypeFilter}
+                  priceRange={priceRange}
+                  onPriceRangeChange={(range) => dispatch({ type: 'SET_PRICE_RANGE', payload: range })}
+                  onToggleFilter={toggleFilterValue}
+                  onApplyFilters={handleApplyFilters}
+                  onResetFilters={handleResetFilters}
+                  hasPendingChanges={hasPendingChanges}
+                  getFilterCounts={{ getCountForFilter }}
+                />
+              </div>
             </aside>
 
             {/* Products Grid */}
-            <div className="flex-1">
+            <div
+              ref={gridRef}
+              className={`flex-1 transition-opacity duration-200 ease-out ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}
+            >
               <ProductGrid
                 products={filteredProducts}
                 loading={loading}
@@ -301,6 +390,15 @@ const CatalogPage: React.FC = () => {
   );
 };
 
-export default CatalogPage;
-
+export default function Catalog() {
+  return (
+    <Suspense fallback={
+      <PageContainer>
+        <CatalogPageSkeleton />
+      </PageContainer>
+    }>
+      <CatalogPage />
+    </Suspense>
+  );
+}
 

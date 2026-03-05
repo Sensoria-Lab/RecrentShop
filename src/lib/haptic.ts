@@ -9,7 +9,7 @@
  * - Taptic Engine hint via pattern (iOS may support basic patterns)
  */
 
-export type HapticType = 
+type HapticType =
   | 'light'      // Subtle feedback (10ms)
   | 'medium'     // Standard feedback (20ms)
   | 'heavy'      // Strong feedback (40ms)
@@ -44,7 +44,7 @@ const HAPTIC_PATTERNS: Record<HapticType, number | number[]> = {
  * // Error feedback on validation failure
  * triggerHaptic('error');
  */
-export const triggerHaptic = (type: HapticType = 'light'): boolean => {
+const triggerHaptic = (type: HapticType = 'light'): boolean => {
   // Check if Vibration API is available
   if (!navigator.vibrate) {
     return false;
@@ -63,7 +63,7 @@ export const triggerHaptic = (type: HapticType = 'light'): boolean => {
 /**
  * Cancel any ongoing vibration
  */
-export const cancelHaptic = (): void => {
+const cancelHaptic = (): void => {
   if (navigator.vibrate) {
     navigator.vibrate(0);
   }
@@ -72,51 +72,15 @@ export const cancelHaptic = (): void => {
 /**
  * Check if device supports haptic feedback
  */
-export const isHapticSupported = (): boolean => {
+const isHapticSupported = (): boolean => {
   return 'vibrate' in navigator;
 };
 
-/**
- * React Hook for haptic feedback
- * 
- * @example
- * const handleClick = useHaptic('medium', () => {
- *   // Your click handler logic
- * });
- */
-export const useHapticFeedback = () => {
-  const trigger = (type: HapticType = 'light') => {
-    return triggerHaptic(type);
-  };
 
-  return {
-    trigger,
-    isSupported: isHapticSupported(),
-    cancel: cancelHaptic
-  };
-};
 
 // Specific haptic helper functions
 export const hapticLight = () => triggerHaptic('light');
-export const hapticMedium = () => triggerHaptic('medium');
-export const hapticHeavy = () => triggerHaptic('heavy');
 export const hapticSuccess = () => triggerHaptic('success');
 export const hapticWarning = () => triggerHaptic('warning');
-export const hapticError = () => triggerHaptic('error');
 export const hapticSelection = () => triggerHaptic('selection');
-
-const haptic = {
-  trigger: triggerHaptic,
-  cancel: cancelHaptic,
-  isSupported: isHapticSupported,
-  light: hapticLight,
-  medium: hapticMedium,
-  heavy: hapticHeavy,
-  success: hapticSuccess,
-  warning: hapticWarning,
-  error: hapticError,
-  selection: hapticSelection,
-};
-
-export default haptic;
 

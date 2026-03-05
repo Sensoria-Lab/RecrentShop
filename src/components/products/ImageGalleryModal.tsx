@@ -86,7 +86,7 @@ const ImageGalleryModal: React.FC<ImageGalleryModalProps> = ({
 
   return (
     <div
-      className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/95 backdrop-blur-sm"
+      className="fixed inset-0 z-[9999] flex items-center justify-center bg-[var(--rc-bg)]/95 backdrop-blur-sm"
       onClick={handleClose}
     >
       {/* Main content */}
@@ -99,7 +99,7 @@ const ImageGalleryModal: React.FC<ImageGalleryModalProps> = ({
           {images.length > 1 && (
             <button
               onClick={handlePreviousClick}
-              className="absolute left-0 z-[10000] bg-[#EAE2E6]/[0.07] hover:bg-[#EAE2E6]/15 border border-[#EAE2E6]/10 text-[#EAE2E6]/70 hover:text-[#EAE2E6] p-3 sm:p-4 transition-all duration-200"
+              className="absolute left-0 z-[10000] bg-[var(--rc-fg-ghost)] hover:bg-[var(--rc-fg-subtle)] border border-[var(--rc-border)] text-[var(--rc-fg)] hover:text-[var(--rc-fg)] p-3 sm:p-4 transition-all duration-200"
               aria-label="Предыдущее изображение"
             >
               <svg className="w-6 h-6 sm:w-8 sm:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -136,7 +136,7 @@ const ImageGalleryModal: React.FC<ImageGalleryModalProps> = ({
           {images.length > 1 && (
             <button
               onClick={handleNextClick}
-              className="absolute right-0 z-[10000] bg-[#EAE2E6]/[0.07] hover:bg-[#EAE2E6]/15 border border-[#EAE2E6]/10 text-[#EAE2E6]/70 hover:text-[#EAE2E6] p-3 sm:p-4 transition-all duration-200"
+              className="absolute right-0 z-[10000] bg-[var(--rc-fg-ghost)] hover:bg-[var(--rc-fg-subtle)] border border-[var(--rc-border)] text-[var(--rc-fg)] hover:text-[var(--rc-fg)] p-3 sm:p-4 transition-all duration-200"
               aria-label="Следующее изображение"
             >
               <svg className="w-6 h-6 sm:w-8 sm:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -148,7 +148,7 @@ const ImageGalleryModal: React.FC<ImageGalleryModalProps> = ({
 
         {/* Counter */}
         {images.length > 1 && (
-          <div className="mt-6 text-[#EAE2E6]/40 font-jetbrains text-[11px] tracking-[0.2em] pointer-events-none">
+          <div className="mt-6 text-[var(--rc-fg-muted)] font-jetbrains text-[11px] tracking-[0.2em] pointer-events-none">
             {currentIndex + 1} / {images.length}
           </div>
         )}
@@ -160,7 +160,7 @@ const ImageGalleryModal: React.FC<ImageGalleryModalProps> = ({
         onClick={handleClose}
         onMouseDown={(e) => e.stopPropagation()}
         onTouchStart={(e) => e.stopPropagation()}
-        className="fixed top-4 right-4 z-[99999] text-[#EAE2E6]/50 hover:text-[#EAE2E6] transition-all p-2 hover:bg-[#EAE2E6]/[0.08] cursor-pointer border border-[#EAE2E6]/10"
+        className="fixed top-4 right-4 z-[99999] text-[var(--rc-fg-secondary)] hover:text-[var(--rc-fg)] transition-all p-2 hover:bg-[var(--rc-fg-ghost)] cursor-pointer border border-[var(--rc-border)]"
         style={{ pointerEvents: 'auto' }}
         aria-label="Закрыть"
       >

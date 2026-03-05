@@ -35,7 +35,7 @@ const SelectorButton: React.FC<SelectorButtonProps> = ({
 
   const borderClasses = selected
     ? 'border-[var(--color-accent)] border-2 sm:border-[2.5px] md:border-[3px] shadow-[0_0_0_1px_rgba(255,255,255,0.15)]'
-    : 'border-white/20 border sm:border-[1.5px] md:border-2';
+    : 'border-[var(--rc-border)] border sm:border-[1.5px] md:border-2';
 
   const hoverClasses = !selected && !disabled
     ? 'hover:border-[var(--color-accent)] hover:border-opacity-80 transition-all duration-200'
@@ -75,10 +75,10 @@ const SelectorButton: React.FC<SelectorButtonProps> = ({
           rounded-none
           ${borderClasses}
           ${hoverClasses}
-          ${selected ? 'bg-[var(--color-accent-rgba,rgba(250,204,21,0.08))]' : 'bg-[#EAE2E6]/[0.05]'}
+          ${selected ? 'bg-[var(--color-accent-rgba,rgba(250,204,21,0.08))]' : 'bg-[var(--rc-fg-ghost)]'}
         `.trim()}
       />
-      <div className="flex flex-col font-manrope font-semibold justify-center leading-none relative shrink-0 text-nowrap text-[#EAE2E6]">
+      <div className="flex flex-col font-manrope font-semibold justify-center leading-none relative shrink-0 text-nowrap text-[var(--rc-fg)]">
         <p className="leading-normal whitespace-pre">{label}</p>
       </div>
     </button>

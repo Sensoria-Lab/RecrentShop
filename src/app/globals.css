@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap');
 
 @import "tailwindcss";
 
@@ -7,21 +8,32 @@
    TAILWIND v4 THEME TOKENS
    ============================================ */
 @theme {
-  /* Colors */
-  --color-primary-50: #f0f9ff;
-  --color-primary-500: #3b82f6;
-  --color-primary-600: #2563eb;
-  --color-primary-700: #1d4ed8;
-  --color-secondary-50: #f8fafc;
-  --color-secondary-100: #f1f5f9;
-  --color-secondary-500: #64748b;
-  --color-secondary-600: #475569;
-  --color-secondary-700: #334155;
+  /* Colors - Recrent Brand Palette */
+  --color-primary-50: #f5f5f5;
+  --color-primary-100: #ebebeb;
+  --color-primary-200: #d4d4d4;
+  --color-primary-300: #b3b3b3;
+  --color-primary-400: #8a8a8a;
+  --color-primary-500: #6b6b6b;
+  --color-primary-600: #191516;
+  --color-primary-700: #0f0d0e;
+  --color-primary-800: #0a0909;
+  --color-primary-900: #050505;
+  --color-secondary-50: #fafafa;
+  --color-secondary-100: #f5f5f5;
+  --color-secondary-200: #e5e5e5;
+  --color-secondary-300: #d4d4d4;
+  --color-secondary-400: #a3a3a3;
+  --color-secondary-500: #737373;
+  --color-secondary-600: #525252;
+  --color-secondary-700: #404040;
+  --color-secondary-800: #262626;
+  --color-secondary-900: #171717;
 
   /* Font families */
-  --font-family-sans: var(--font-inter, "Inter"), "system-ui", "sans-serif";
+  --font-family-sans: var(--font-manrope, "Manrope"), "system-ui", "sans-serif";
   --font-family-manrope: var(--font-manrope, "Manrope"), "system-ui", "sans-serif";
-  --font-family-jetbrains: var(--font-jetbrains, "monospace"), "Courier New", monospace;
+  --font-family-jetbrains: var(--font-jetbrains, "JetBrains Mono"), "Courier New", monospace;
 
   /* Animations */
   --animate-fade-in: fade-in 0.2s ease-out;
@@ -50,6 +62,7 @@
   --animate-micro-pulse: microPulse 2s ease-in-out infinite;
   --animate-accordion-down: accordion-down 0.2s ease-out;
   --animate-accordion-up: accordion-up 0.2s ease-out;
+  --animate-text-shimmer: text-shimmer 3s ease-in-out infinite;
 
   /* Keyframes */
   @keyframes fade-in {
@@ -290,11 +303,11 @@
 
     0%,
     100% {
-      box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+      box-shadow: 0 0 20px rgba(25, 21, 22, 0.15);
     }
 
     50% {
-      box-shadow: 0 0 40px rgba(59, 130, 246, 0.6);
+      box-shadow: 0 0 40px rgba(25, 21, 22, 0.30);
     }
   }
 
@@ -350,6 +363,18 @@
     }
   }
 
+  @keyframes text-shimmer {
+
+    0%,
+    100% {
+      opacity: 0.5;
+    }
+
+    50% {
+      opacity: 1;
+    }
+  }
+
   @keyframes accordion-down {
     from {
       height: 0;
@@ -367,6 +392,19 @@
 
     to {
       height: 0;
+    }
+  }
+
+  /* Ticker animation for homepage */
+  --animate-ticker: ticker 28s linear infinite;
+
+  @keyframes ticker {
+    0% {
+      transform: translateX(0);
+    }
+
+    100% {
+      transform: translateX(-50%);
     }
   }
 }
@@ -387,36 +425,45 @@ body {
   font-family: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #191516;
-  color: #EAE2E6;
+  background-color: var(--rc-bg);
+  color: var(--rc-fg);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* scroll-behavior on * removed — conflicts with Lenis smooth scroll provider. */
 
 /* ============================================
-   CSS DESIGN TOKENS (Dark theme)
+   CSS DESIGN TOKENS
    ============================================ */
-:root {
-  /* ── RECRENT DESIGN SYSTEM ────────────────── */
-  --rc-bg:            #191516;
-  --rc-bg-elevated:   #1E1A1B;
-  --rc-bg-deep:       #141112;
-  --rc-bg-invert:     #EAE2E6;
 
-  --rc-fg:            #EAE2E6;
-  --rc-fg-secondary:  rgba(234, 226, 230, 0.55);
-  --rc-fg-muted:      rgba(234, 226, 230, 0.30);
-  --rc-fg-subtle:     rgba(234, 226, 230, 0.12);
-  --rc-fg-ghost:      rgba(234, 226, 230, 0.06);
+/* ── DARK THEME (Default) ──────────────────── */
+:root,
+:root.dark,
+.dark {
+  /* Recrent Design System Tokens */
+  --rc-bg: #191516;
+  --rc-bg-elevated: #1E1A1B;
+  --rc-bg-deep: #141112;
+  --rc-bg-invert: #EAE2E6;
 
-  --rc-border:        rgba(234, 226, 230, 0.07);
-  --rc-border-hover:  rgba(234, 226, 230, 0.25);
+  --rc-fg: #EAE2E6;
+  --rc-fg-secondary: rgba(234, 226, 230, 0.75);
+  --rc-fg-muted: rgba(234, 226, 230, 0.50);
+  --rc-fg-subtle: rgba(234, 226, 230, 0.20);
+  --rc-fg-ghost: rgba(234, 226, 230, 0.06);
+  --rc-fg-invert: #191516;
+
+  --rc-border: rgba(234, 226, 230, 0.07);
+  --rc-border-hover: rgba(234, 226, 230, 0.25);
   --rc-border-strong: rgba(234, 226, 230, 0.15);
 
-  --rc-overlay:       rgba(25, 21, 22, 0.85);
-  --rc-overlay-light: rgba(25, 21, 22, 0.45);
+  --rc-overlay: rgba(25, 21, 22, 0.85);
+  --rc-overlay-light: rgba(25, 21, 22, 0.60);
 
-  /* ── LEGACY TOKENS (kept for compatibility) ── */
+  /* Logo filter for dark theme (no filter needed) */
+  --rc-logo-filter: none;
+
+  /* Legacy Tokens (kept for compatibility) */
   --color-accent: #EAE2E6;
   --color-accent-rgba: rgba(234, 226, 230, 0.10);
   --bg-dot-size: 1.6;
@@ -425,7 +472,7 @@ body {
   --bg-pattern-speed: 18s;
   --color-star-active: #EAE2E6;
   --color-star-inactive: rgba(234, 226, 230, 0.25);
-  --gradient-accent: linear-gradient(90deg, #EAE2E6, rgba(234,226,230,0.4));
+  --gradient-accent: linear-gradient(90deg, #EAE2E6, rgba(234, 226, 230, 0.4));
   --bg-darkness: 0;
   --bg-lighten: 0;
   --bg-primary: #191516;
@@ -452,6 +499,74 @@ body {
   --shadow-enhanced: rgba(0, 0, 0, 0.4);
   --scrollbar-thumb: rgba(234, 226, 230, 0.5);
   --scrollbar-thumb-hover: rgba(234, 226, 230, 0.8);
+  --scrollbar-track: transparent;
+}
+
+/* ── LIGHT THEME ───────────────────────────── */
+:root.light,
+.light {
+  /* Recrent Design System Tokens - Clean Light Theme */
+  /* Using pure white base with subtle warm accents instead of muddy greys */
+  --rc-bg: #FFFFFF;
+  /* Clean white background */
+  --rc-bg-elevated: #FAFAFA;
+  /* Slightly warm white for cards/elevated surfaces */
+  --rc-bg-deep: #F5F5F5;
+  /* Light grey for deep backgrounds, overlays */
+  --rc-bg-invert: #191516;
+  /* Inverted (dark brand color) */
+
+  /* Logo filter for light theme (invert dark logo to light) */
+  --rc-logo-filter: invert(1);
+
+  --rc-fg: #191516;
+  /* Dark brand color for text */
+  --rc-fg-secondary: rgba(25, 21, 22, 0.75);
+  --rc-fg-muted: rgba(25, 21, 22, 0.55);
+  --rc-fg-subtle: rgba(25, 21, 22, 0.25);
+  --rc-fg-ghost: rgba(25, 21, 22, 0.08);
+  --rc-fg-invert: #FFFFFF;
+
+  --rc-border: rgba(25, 21, 22, 0.08);
+  --rc-border-hover: rgba(25, 21, 22, 0.20);
+  --rc-border-strong: rgba(25, 21, 22, 0.15);
+
+  --rc-overlay: rgba(255, 255, 255, 0.95);
+  --rc-overlay-light: rgba(255, 255, 255, 0.70);
+
+  /* Legacy Tokens - Light Theme */
+  --color-accent: #191516;
+  --color-accent-rgba: rgba(25, 21, 22, 0.06);
+  --bg-dot-color: rgba(25, 21, 22, 0.03);
+  --color-star-active: #191516;
+  --color-star-inactive: rgba(25, 21, 22, 0.20);
+  --gradient-accent: linear-gradient(90deg, #191516, rgba(25, 21, 22, 0.3));
+  --bg-darkness: 0;
+  --bg-lighten: 1;
+  --bg-primary: #FFFFFF;
+  --bg-secondary: rgba(250, 250, 250, 0.95);
+  --bg-tertiary: rgba(245, 245, 245, 0.90);
+  --bg-glass: rgba(255, 255, 255, 0.85);
+  --bg-glass-backdrop: blur(18px);
+  --bg-panel: rgba(250, 250, 250, 0.90);
+  --bg-panel-backdrop: blur(12px);
+  --bg-form: rgba(25, 21, 22, 0.03);
+  --bg-form-select: rgba(25, 21, 22, 0.02);
+  --bg-skeleton: rgba(25, 21, 22, 0.06);
+  --bg-shimmer: rgba(25, 21, 22, 0.08);
+  --text-primary: #191516;
+  --text-secondary: rgba(25, 21, 22, 0.70);
+  --text-muted: rgba(25, 21, 22, 0.45);
+  --text-accent: #191516;
+  --border-primary: rgba(25, 21, 22, 0.15);
+  --border-secondary: rgba(25, 21, 22, 0.08);
+  --border-accent: rgba(25, 21, 22, 0.05);
+  --shadow-primary: rgba(0, 0, 0, 0.10);
+  --shadow-secondary: rgba(0, 0, 0, 0.05);
+  --shadow-glass: rgba(0, 0, 0, 0.08);
+  --shadow-enhanced: rgba(0, 0, 0, 0.10);
+  --scrollbar-thumb: rgba(25, 21, 22, 0.25);
+  --scrollbar-thumb-hover: rgba(25, 21, 22, 0.45);
   --scrollbar-track: transparent;
 }
 
@@ -699,6 +814,38 @@ html.snap-scroll {
   pointer-events: none;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='0.65' stitchTiles='stitch' type='fractalNoise'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.08'/%3E%3C/svg%3E");
   mix-blend-mode: soft-light;
+}
+
+/* ============================================
+   PRODUCT CARD ANIMATIONS
+   ============================================ */
+
+/* Entrance animation for cards */
+.product-card-hidden {
+  opacity: 0;
+  transform: translateY(16px);
+}
+
+.product-card-animate {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1) var(--stagger-delay, 0ms),
+    transform 0.5s cubic-bezier(0.22, 1, 0.36, 1) var(--stagger-delay, 0ms);
+}
+
+/* Focus states for accessibility */
+.product-card-focus:focus-visible {
+  outline: 1px solid rgba(234, 226, 230, 0.4);
+  outline-offset: 2px;
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .product-card-animate {
+    transition: none;
+    opacity: 1;
+    transform: none;
+  }
 }
 
 .panel-gradient {
@@ -2017,5 +2164,190 @@ input[type="range"].form-control {
   select,
   textarea {
     font-size: 16px !important;
+  }
+}
+
+/* ============================================
+   REFINED ANIMATIONS — Design System v2
+   Minimal, smooth, editorial feel
+   ============================================ */
+
+/** Content Reveal — Refined per Design System */
+@keyframes contentReveal {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.content-reveal-smooth {
+  opacity: 0;
+  animation: contentReveal 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.content-reveal-delay-1 {
+  animation-delay: 0.08s;
+}
+
+.content-reveal-delay-2 {
+  animation-delay: 0.16s;
+}
+
+.content-reveal-delay-3 {
+  animation-delay: 0.24s;
+}
+
+.content-reveal-delay-4 {
+  animation-delay: 0.32s;
+}
+
+.content-reveal-delay-5 {
+  animation-delay: 0.40s;
+}
+
+.content-reveal-delay-6 {
+  animation-delay: 0.48s;
+}
+
+.content-reveal-delay-7 {
+  animation-delay: 0.56s;
+}
+
+.content-reveal-delay-8 {
+  animation-delay: 0.64s;
+}
+
+/* ============================================
+   OPTIMIZED PRODUCT CARD ANIMATIONS
+   ============================================ */
+
+/** Product Card Entrance — GPU accelerated, smooth */
+@keyframes productCardEnter {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/** Hidden state before animation */
+.product-card-hidden {
+  opacity: 0;
+  transform: translateY(12px) scale(0.98);
+}
+
+/** Animated state — uses CSS variable for stagger delay */
+.product-card-animate {
+  opacity: 0;
+  animation: productCardEnter 0.4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation-delay: var(--stagger-delay, 0ms);
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/** Grid item container — isolates animations */
+.product-grid-item {
+  contain: layout style paint;
+  content-visibility: auto;
+  contain-intrinsic-size: 0 400px;
+}
+
+/** Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+
+  .product-card-hidden,
+  .product-card-animate {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+
+  .product-grid-item {
+    content-visibility: visible;
+  }
+}
+
+/** Header Entrance — Quick, minimal */
+@keyframes headerEntrance {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.header-entrance {
+  opacity: 0;
+  animation: headerEntrance 0.55s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/** Skeleton Shimmer — Subtle */
+@keyframes skeletonShimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.skeleton-pulse {
+  position: relative;
+  overflow: hidden;
+  background: rgba(234, 226, 230, 0.06);
+}
+
+.skeleton-pulse::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg,
+      transparent 0%,
+      rgba(234, 226, 230, 0.04) 50%,
+      transparent 100%);
+  animation: skeletonShimmer 2s ease-in-out infinite;
+}
+
+/** Reduced Motion — Accessibility */
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .content-reveal-smooth,
+  .header-entrance,
+  .card-stagger,
+  .skeleton-pulse::after,
+  .product-card-hidden,
+  .product-card-animate {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .skeleton-pulse::after {
+    display: none !important;
   }
 }

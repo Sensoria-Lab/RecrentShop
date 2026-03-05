@@ -1,7 +1,7 @@
 'use client';
 import React from 'react';
 
-export interface StarRatingProps {
+interface StarRatingProps {
   rating?: number;              // Текущее значение рейтинга (0-5, допускает дробные 0.5)
   reviewCount?: number;         // Количество отзывов (опционально)
   size?: 'xs' | 'sm' | 'md' | 'lg'; // Размер иконок
@@ -96,7 +96,7 @@ const StarRating: React.FC<StarRatingProps> = ({
         );
       })}
       {showCount && reviewCount != null && (
-        <span className="text-[#EAE2E6] font-manrope font-medium text-xs sm:text-sm ml-1 opacity-80">({reviewCount})</span>
+        <span className="text-[var(--rc-fg)] font-manrope font-medium text-xs sm:text-sm ml-1 opacity-80">({reviewCount})</span>
       )}
     </div>
   );

@@ -11,12 +11,12 @@ interface ToastProps {
   onClose: (id: string) => void;
 }
 
-const Toast: React.FC<ToastProps> = ({ 
-  id, 
-  message, 
-  type = 'info', 
+const Toast: React.FC<ToastProps> = ({
+  id,
+  message,
+  type = 'info',
   duration = 3000,
-  onClose 
+  onClose
 }) => {
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -50,14 +50,14 @@ const Toast: React.FC<ToastProps> = ({
   };
 
   const colors = {
-    success: 'bg-[#1E1A1B] border-[#EAE2E6]/25',
-    error: 'bg-[#1E1A1B] border-[#EAE2E6]/25',
-    info: 'bg-[#1E1A1B] border-[#EAE2E6]/25',
-    warning: 'bg-[#1E1A1B] border-[#EAE2E6]/25'
+    success: 'bg-[var(--rc-bg-elevated)] border-[var(--rc-border)]',
+    error: 'bg-[var(--rc-bg-elevated)] border-[var(--rc-border)]',
+    info: 'bg-[var(--rc-bg-elevated)] border-[var(--rc-border)]',
+    warning: 'bg-[var(--rc-bg-elevated)] border-[var(--rc-border)]'
   };
 
   return (
-    <div 
+    <div
       className={`
         ${colors[type]}
         border
@@ -72,19 +72,19 @@ const Toast: React.FC<ToastProps> = ({
       `}
     >
       {/* Icon */}
-      <div className="flex-shrink-0 text-[#EAE2E6]/60">
+      <div className="flex-shrink-0 text-[var(--rc-fg-secondary)]">
         {icons[type]}
       </div>
 
       {/* Message */}
-      <p className="flex-1 text-[#EAE2E6]/80 font-jetbrains text-[11px] tracking-[0.05em]">
+      <p className="flex-1 text-[var(--rc-fg)] font-jetbrains text-[11px] tracking-[0.05em]">
         {message}
       </p>
 
       {/* Close button */}
       <button
         onClick={() => onClose(id)}
-        className="flex-shrink-0 text-[#EAE2E6]/50 hover:text-[#EAE2E6] transition-colors p-1 hover:bg-[#EAE2E6]/[0.07]"
+        className="flex-shrink-0 text-[var(--rc-fg-muted)] hover:text-[var(--rc-fg)] transition-colors p-1 hover:bg-[var(--rc-fg-ghost)]"
         aria-label="Закрыть"
       >
         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -93,8 +93,8 @@ const Toast: React.FC<ToastProps> = ({
       </button>
 
       {/* Progress bar */}
-      <div 
-        className="absolute bottom-0 left-0 h-[2px] bg-[#EAE2E6]/20"
+      <div
+        className="absolute bottom-0 left-0 h-[2px] bg-[var(--rc-fg-subtle)]"
         style={{
           animation: `shrink ${duration}ms linear forwards`
         }}

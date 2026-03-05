@@ -7,7 +7,6 @@ interface PageContainerProps {
   children: React.ReactNode;
   className?: string;
   isMainPage?: boolean;
-  showBreadcrumbs?: boolean;
 }
 
 /**
@@ -15,8 +14,7 @@ interface PageContainerProps {
  * Provides consistent layout for all pages
  * Header appears on mouse hover at top of screen
  */
-const PageContainer: React.FC<PageContainerProps> = ({ children, className = '', isMainPage = false, showBreadcrumbs = true }) => {
-  void showBreadcrumbs;
+const PageContainer: React.FC<PageContainerProps> = ({ children, className = '', isMainPage = false }) => {
   const headerRef = useRef<HTMLDivElement | null>(null);
   const [headerHeight, setHeaderHeight] = useState<number>(0);
   const [isMobile, setIsMobile] = useState<boolean>(false);
@@ -43,15 +41,15 @@ const PageContainer: React.FC<PageContainerProps> = ({ children, className = '',
   return (
     // Do not force the main page into a fixed-height container; prefer natural flow so
     // tall screens don't end up with excessive empty space. Use min-h-screen for baseline.
-    <div className={`relative w-full min-h-screen`} style={isMainPage ? { background: 'radial-gradient(circle at 20% 20%, rgba(255,255,255,0.03) 0%, transparent 30%), radial-gradient(circle at 80% 80%, rgba(255,255,255,0.02) 0%, transparent 40%), radial-gradient(circle at 50% 50%, rgba(255,255,255,0.01) 0%, transparent 50%)' } : {}}>
+    <div className={`relative w-full min-h-screen bg-[var(--rc-bg)] transition-colors duration-300`} style={isMainPage ? { background: 'var(--rc-bg)' } : {}}>
       {/* Header - absolute at top */}
       <div
         ref={headerRef}
         className="absolute top-0 left-0 right-0 z-[9999]"
       >
         <div className="relative">
-          {/* Glow effect behind header */}
-          <div className="absolute inset-0 bg-gradient-to-b from-white/10 via-purple-500/5 to-transparent blur-3xl" />
+          {/* Glow effect behind header - theme aware */}
+          <div className="absolute inset-0 bg-gradient-to-b from-[var(--rc-fg)]/10 via-[var(--rc-fg)]/5 to-transparent blur-3xl" />
 
           <div className="relative">
             <Header />

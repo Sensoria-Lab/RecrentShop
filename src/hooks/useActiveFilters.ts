@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import type { ColorFilter, SizeFilter, ClothingTypeFilter, CollectionFilter } from '@/src/types';
+import type { ColorFilter, SizeFilter, ClothingTypeFilter, CollectionFilter } from '@/src/types/product';
 
 /**
  * Hook for managing active filter badges

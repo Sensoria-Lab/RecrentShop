@@ -2,29 +2,57 @@
 module.exports = {
     darkMode: ["class"],
     content: [
-    "./src/**/*.{js,jsx,ts,tsx}",
-    "./public/index.html"
+    "./src/**/*.{js,jsx,ts,tsx}"
   ],
   theme: {
   	extend: {
   		colors: {
   			primary: {
-  				'50': '#f0f9ff',
-  				'500': '#3b82f6',
-  				'600': '#2563eb',
-  				'700': '#1d4ed8'
+  				'50': '#f5f5f5',
+  				'100': '#ebebeb',
+  				'200': '#d4d4d4',
+  				'300': '#b3b3b3',
+  				'400': '#8a8a8a',
+  				'500': '#6b6b6b',
+  				'600': '#191516',
+  				'700': '#0f0d0e',
+  				'800': '#0a0909',
+  				'900': '#050505',
+  				DEFAULT: '#191516'
   			},
   			secondary: {
-  				'50': '#f8fafc',
-  				'100': '#f1f5f9',
-  				'500': '#64748b',
-  				'600': '#475569',
-  				'700': '#334155'
+  				'50': '#fafafa',
+  				'100': '#f5f5f5',
+  				'200': '#e5e5e5',
+  				'300': '#d4d4d4',
+  				'400': '#a3a3a3',
+  				'500': '#737373',
+  				'600': '#525252',
+  				'700': '#404040',
+  				'800': '#262626',
+  				'900': '#171717',
+  				DEFAULT: '#737373'
+  			},
+  			background: {
+  				DEFAULT: 'var(--rc-bg)',
+  				elevated: 'var(--rc-bg-elevated)',
+  				deep: 'var(--rc-bg-deep)'
+  			},
+  			foreground: {
+  				DEFAULT: 'var(--rc-fg)',
+  				secondary: 'var(--rc-fg-secondary)',
+  				muted: 'var(--rc-fg-muted)',
+  				subtle: 'var(--rc-fg-subtle)'
+  			},
+  			border: {
+  				DEFAULT: 'var(--rc-border)',
+  				hover: 'var(--rc-border-hover)',
+  				strong: 'var(--rc-border-strong)'
   			}
   		},
   		fontFamily: {
   			sans: [
-  				'Inter',
+  				'Manrope',
   				'system-ui',
   				'sans-serif'
   			],
@@ -32,6 +60,11 @@ module.exports = {
   				'Manrope',
   				'system-ui',
   				'sans-serif'
+  			],
+  			jetbrains: [
+  				'JetBrains Mono',
+  				'Courier New',
+  				'monospace'
   			]
   		},
   		keyframes: {
@@ -234,10 +267,10 @@ module.exports = {
   			},
   			'pulse-glow': {
   				'0%, 100%': {
-  					boxShadow: '0 0 20px rgba(59, 130, 246, 0.3)'
+  					boxShadow: '0 0 20px rgba(234, 226, 230, 0.3)'
   				},
   				'50%': {
-  					boxShadow: '0 0 40px rgba(59, 130, 246, 0.6)'
+  					boxShadow: '0 0 40px rgba(234, 226, 230, 0.6)'
   				}
   			},
   			'bounce-subtle': {

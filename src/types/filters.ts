@@ -10,10 +10,10 @@ import type {
   SizeFilter,
   ClothingTypeFilter,
   CollectionFilter,
-} from '../types';
+} from './product';
 
 // ===== FILTER STATE =====
-export interface FilterState {
+interface FilterState {
   sortBy: SortOption;
   categoryFilter: CategoryFilter;
   colorFilter: ColorFilter;
@@ -71,40 +71,40 @@ export const filterReducer = (state: FilterState, action: FilterAction): FilterS
   switch (action.type) {
     case 'SET_SORT_BY':
       return { ...state, sortBy: action.payload };
-    
+
     case 'SET_CATEGORY_FILTER':
       return { ...state, categoryFilter: action.payload };
-    
+
     case 'SET_COLOR_FILTER':
       return { ...state, colorFilter: action.payload };
-    
+
     case 'SET_SIZE_FILTER':
       return { ...state, sizeFilter: action.payload };
-    
+
     case 'SET_CLOTHING_TYPE_FILTER':
       return { ...state, clothingTypeFilter: action.payload };
-    
+
     case 'SET_COLLECTION_FILTER':
       return { ...state, collectionFilter: action.payload };
-    
+
     case 'SET_PENDING_COLOR_FILTER':
       return { ...state, pendingColorFilter: action.payload };
-    
+
     case 'SET_PENDING_SIZE_FILTER':
       return { ...state, pendingSizeFilter: action.payload };
-    
+
     case 'SET_PENDING_CLOTHING_TYPE_FILTER':
       return { ...state, pendingClothingTypeFilter: action.payload };
-    
+
     case 'SET_PENDING_COLLECTION_FILTER':
       return { ...state, pendingCollectionFilter: action.payload };
-    
+
     case 'SET_PRICE_RANGE':
       return { ...state, priceRange: action.payload };
-    
+
     case 'SET_MIN_RATING':
       return { ...state, minRating: action.payload };
-    
+
     case 'APPLY_FILTERS':
       return {
         ...state,
@@ -113,10 +113,10 @@ export const filterReducer = (state: FilterState, action: FilterAction): FilterS
         clothingTypeFilter: state.pendingClothingTypeFilter,
         collectionFilter: state.pendingCollectionFilter,
       };
-    
+
     case 'RESET_FILTERS':
       return initialFilterState;
-    
+
     case 'REMOVE_ACTIVE_FILTER': {
       const { type, value } = action.payload;
       if (type === 'color') {
@@ -134,7 +134,7 @@ export const filterReducer = (state: FilterState, action: FilterAction): FilterS
       }
       return state;
     }
-    
+
     default:
       return state;
   }

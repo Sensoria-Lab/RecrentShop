@@ -2,7 +2,7 @@
 import React from 'react';
 import SelectorButton, { SelectorButtonProps } from './SelectorButton';
 
-export interface SelectorOption {
+interface SelectorOption {
   /** Уникальный идентификатор */
   id: string;
   /** Текст для отображения */
@@ -11,7 +11,7 @@ export interface SelectorOption {
   disabled?: boolean;
 }
 
-export interface SelectorGroupProps {
+interface SelectorGroupProps {
   /** Массив опций для выбора */
   options: SelectorOption[];
   /** Выбранное значение */
@@ -54,7 +54,7 @@ const SelectorGroup: React.FC<SelectorGroupProps> = ({
   return (
     <div className={`space-y-2 sm:space-y-2.5 ${className}`}>
       {title && (
-        <p className="text-[#EAE2E6]/45 font-manrope font-medium text-xs sm:text-sm mb-1.5">
+        <p className="text-[var(--rc-fg-muted)] font-manrope font-medium text-xs sm:text-sm mb-1.5">
           {title}
         </p>
       )}

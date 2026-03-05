@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import type { Product, CategoryFilter, ColorFilter, SizeFilter, ClothingTypeFilter, CollectionFilter } from '@/src/types';
+import type { Product, CategoryFilter, ColorFilter, SizeFilter, ClothingTypeFilter, CollectionFilter } from '@/src/types/product';
 
 const isColorFilterValue = (color: string): color is ColorFilter[number] => {
   return color === 'black' || color === 'white' || color === 'red';
@@ -35,6 +35,7 @@ export const useFilterCounts = ({
     const baseProducts = products.filter(p => {
       if (categoryFilter === 'all') return true;
       if (categoryFilter === 'mousepads') return p.category === 'mousepads';
+      if (categoryFilter === 'clothing') return p.category === 'clothing';
       if (categoryFilter === 'tshirt') return p.category === 'clothing' && p.clothingType === 'tshirt';
       if (categoryFilter === 'hoodie') return p.category === 'clothing' && p.clothingType === 'hoodie';
       if (categoryFilter === 'sleeve') return p.category === 'clothing' && p.clothingType === 'sleeve';

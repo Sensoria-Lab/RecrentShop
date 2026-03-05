@@ -1,6 +1,6 @@
 'use client';
 import React, { Component, ReactNode } from 'react';
-import { Button } from '../ui';
+import { Button } from '../ui/Button';
 
 interface Props {
   children: ReactNode;
@@ -83,16 +83,16 @@ class ErrorBoundary extends Component<Props, State> {
       return (
         <div className="min-h-screen w-full flex items-center justify-center p-4 sm:p-6 md:p-8">
           <div className="max-w-2xl w-full">
-            <div className="relative bg-[#1E1A1B] border border-[#EAE2E6]/[0.08] p-6 sm:p-8 md:p-12">
+            <div className="relative bg-[var(--rc-bg-elevated)] border border-[var(--rc-border)] p-6 sm:p-8 md:p-12">
               {/* Shine effect */}
               <div className="absolute inset-0 pointer-events-none" />
 
               <div className="relative z-10">
                 {/* Error Icon */}
                 <div className="flex justify-center mb-6">
-                  <div className="w-20 h-20 sm:w-24 sm:h-24 bg-[#EAE2E6]/[0.05] border border-[#EAE2E6]/10 flex items-center justify-center">
+                  <div className="w-20 h-20 sm:w-24 sm:h-24 bg-[var(--rc-fg-ghost)] border border-[var(--rc-border)] flex items-center justify-center">
                     <svg
-                      className="w-10 h-10 sm:w-12 sm:h-12 text-[#EAE2E6]/40"
+                      className="w-10 h-10 sm:w-12 sm:h-12 text-[var(--rc-fg-muted)]"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -108,27 +108,27 @@ class ErrorBoundary extends Component<Props, State> {
                 </div>
 
                 {/* Error Title */}
-                <h1 className="text-2xl sm:text-3xl md:text-4xl font-manrope font-bold text-[#EAE2E6] text-center mb-4">
+                <h1 className="text-2xl sm:text-3xl md:text-4xl font-manrope font-bold text-[var(--rc-fg)] text-center mb-4">
                   Упс! Что-то пошло не так
                 </h1>
 
                 {/* Error Description */}
-                <p className="text-base sm:text-lg text-white/70 text-center mb-8">
+                <p className="text-base sm:text-lg text-[var(--rc-fg-secondary)] text-center mb-8">
                   Произошла непредвиденная ошибка. Мы уже работаем над её исправлением.
                 </p>
 
                 {/* Error Details (Development only) */}
                 {process.env.NODE_ENV === 'development' && this.state.error && (
-                  <div className="mb-8 p-4 bg-[#EAE2E6]/[0.03] border border-[#EAE2E6]/10">
-                    <p className="text-sm font-jetbrains text-[#EAE2E6]/50 mb-2">
+                  <div className="mb-8 p-4 bg-[var(--rc-fg-ghost)] border border-[var(--rc-border)]">
+                    <p className="text-sm font-jetbrains text-[var(--rc-fg-secondary)] mb-2">
                       <strong>Error:</strong> {this.state.error.toString()}
                     </p>
                     {this.state.errorInfo && (
                       <details className="mt-2">
-                        <summary className="text-xs text-white/60 cursor-pointer hover:text-white/80">
+                        <summary className="text-xs text-[var(--rc-fg-secondary)] cursor-pointer hover:text-[var(--rc-fg)]">
                           Stack Trace
                         </summary>
-                        <pre className="text-xs text-white/50 mt-2 overflow-x-auto">
+                        <pre className="text-xs text-[var(--rc-fg-muted)] mt-2 overflow-x-auto">
                           {this.state.errorInfo.componentStack}
                         </pre>
                       </details>
@@ -165,8 +165,8 @@ class ErrorBoundary extends Component<Props, State> {
                 </div>
 
                 {/* Support Info */}
-                <div className="mt-8 pt-6 border-t border-white/10">
-                  <p className="text-sm text-white/50 text-center">
+                <div className="mt-8 pt-6 border-t border-[var(--rc-border)]">
+                  <p className="text-sm text-[var(--rc-fg-secondary)] text-center">
                     Если проблема повторяется, пожалуйста, свяжитесь с нами
                   </p>
                 </div>

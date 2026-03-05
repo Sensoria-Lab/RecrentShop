@@ -13,6 +13,6 @@ export const ROUTES = {
   NOT_FOUND: '*'
 } as const;
 
-export type RouteKey = keyof typeof ROUTES;
-export type RoutePath = typeof ROUTES[RouteKey];
+type RouteKey = keyof typeof ROUTES;
+type RoutePath = typeof ROUTES[RouteKey];
 

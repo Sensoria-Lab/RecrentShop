@@ -12,44 +12,35 @@ interface ImgProps extends React.ImgHTMLAttributes<HTMLImageElement> {
  * Image component that automatically handles PUBLIC_URL for GitHub Pages
  * Use this instead of regular <img> tags to ensure images work on GitHub Pages
  */
-const Img: React.FC<ImgProps> = ({ src, alt = '', loading, decoding, className, srcSet, ...props }) => {
+const Img: React.FC<ImgProps & { priority?: boolean }> = ({ src, alt = '', loading, decoding, className, srcSet, priority = false, ...props }) => {
   const getFixedSrc = (path: string): string => {
     if (!path) return path;
-
-    // Use Next.js NEXT_PUBLIC_BASE_PATH (set in .env.production for GH Pages)
     const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
-
-    // Already prefixed — avoid double-prepending
     if (basePath && path.startsWith(basePath)) return path;
-
-    // Prefix absolute public paths with basePath
     if (path.startsWith('/')) {
       return basePath ? `${basePath}${path}` : path;
     }
-
     return path;
   };
 
-  // Default to lazy loading for non-critical images and async decoding to improve performance
-  const finalLoading = loading || 'lazy';
-  const finalDecoding = decoding || 'async';
+  const finalLoading = priority ? 'eager' : (loading || 'lazy');
+  const finalDecoding = priority ? 'sync' : (decoding || 'async');
 
-  // If developer provided srcSet, pass through. Also provide a webp source when appropriate.
-  // Disable webp conversion for review images (they don't have webp versions)
   const isReviewImage = src.includes('/reviews/');
+  const isPreviewImage = src.includes('/preview.');
   const isRaster = /\.(jpg|jpeg|png|webp)$/i.test(src);
-  const webpSrc = (isRaster && !isReviewImage) ? getFixedSrc(src).replace(/\.(jpg|jpeg|png)$/i, '.webp') : null;
+  const webpSrc = (isRaster && !isReviewImage && !isPreviewImage) ? getFixedSrc(src).replace(/\.(jpg|jpeg|png)$/i, '.webp') : null;
 
   const fixedSrc = getFixedSrc(src);
   const fixedWebp = webpSrc ? webpSrc : undefined;
 
-  // Prefer object-fit: cover in parent container; allow consumer to control via className
-  const imgProps: React.ImgHTMLAttributes<HTMLImageElement> = {
+  const imgProps: React.ImgHTMLAttributes<HTMLImageElement> & { fetchPriority?: 'high' | 'low' | 'auto' } = {
     src: fixedSrc,
     alt: alt || '',
     loading: finalLoading,
     decoding: finalDecoding,
     className: className ? className : 'w-full h-full block',
+    fetchPriority: priority ? 'high' : undefined,
     ...props
   };
 
@@ -58,16 +49,16 @@ const Img: React.FC<ImgProps> = ({ src, alt = '', loading, decoding, className, 
   }
 
   if (fixedWebp) {
-    const { alt: _alt, ...imgSpread } = imgProps;
+    const { alt: _alt, fetchPriority: _fp, ...imgSpread } = imgProps;
     return (
       <picture className="block w-full h-full">
         <source srcSet={fixedWebp} type="image/webp" />
-        <img alt={_alt} {...imgSpread} />
+        <img alt={_alt} fetchPriority={_fp} {...imgSpread} />
       </picture>
     );
   }
-  const { alt: _alt2, ...imgSpread2 } = imgProps;
-  return <img alt={_alt2} {...imgSpread2} />;
+  const { alt: _alt2, fetchPriority: _fp2, ...imgSpread2 } = imgProps;
+  return <img alt={_alt2} fetchPriority={_fp2} {...imgSpread2} />;
 };
 
 export default Img;

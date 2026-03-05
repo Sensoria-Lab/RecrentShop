@@ -38,11 +38,13 @@ yarn-error.log*
 .idea/
 *.iml
 
-# IDE - Claude/Cursor
+# IDE - Claude/Cursor/Gemini
 .claude/
 .cursor/
+.gemini/
 *.local.json
 .agents/
+.kilocode/
 
 # OS Files
 Thumbs.db

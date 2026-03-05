@@ -1,11 +1,17 @@
 'use client';
 import React, { useState, useRef, useEffect } from 'react';
 import gsap from '@/src/lib/gsap';
-import { PageContainer } from '@/src/components/layout';
+import PageContainer from '@/src/components/layout/PageContainer';
+import { AccountPageSkeleton } from '@/src/components/layout/Skeletons';
 import { useRouter } from 'next/navigation';
 import { ROUTES } from '@/src/constants/routes';
 import type { Review } from '@/src/lib/reviews';
-import { Tabs, TabsContent, TabsList, TabsTrigger, Button, Input, Textarea, Checkbox } from '@/src/components/ui';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/src/components/ui/Tabs';
+import { Button } from '@/src/components/ui/Button';
+import { Input } from '@/src/components/ui/Input';
+import { Textarea } from '@/src/components/ui/Textarea';
+import { Checkbox } from '@/src/components/ui/Checkbox';
+import { shouldReduceMotion, EASE_EDITORIAL } from '@/src/components/animations';
 
 /* ─── Types ──────────────────────────────────────────────────────────────── */
 type TabId = 'profile' | 'orders' | 'reviews' | 'settings';
@@ -27,8 +33,8 @@ const StarRating: React.FC<{ rating: number; interactive?: boolean; onChange?: (
       >
         <svg
           width="14" height="14" viewBox="0 0 24 24"
-          fill={s <= rating ? '#EAE2E6' : 'none'}
-          stroke={s <= rating ? '#EAE2E6' : 'rgba(234,226,230,0.2)'}
+          fill={s <= rating ? 'var(--rc-fg)' : 'none'}
+          stroke={s <= rating ? 'var(--rc-fg)' : 'var(--rc-border)'}
           strokeWidth="2"
         >
           <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
@@ -44,6 +50,7 @@ const AccountPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<TabId>('orders');
   const [editingReview, setEditingReview] = useState<string | null>(null);
   const [editRatings, setEditRatings] = useState<Record<string, number>>({});
+  const [userReviews, setUserReviews] = useState<Review[]>([]);
 
   const [mounted, setMounted] = useState(false);
   const headerRef = useRef<HTMLDivElement>(null);
@@ -52,14 +59,47 @@ const AccountPage: React.FC = () => {
 
   useEffect(() => { setMounted(true); }, []);
 
+  // Initialize user reviews after mount to avoid hydration mismatch
   useEffect(() => {
     if (!mounted) return;
-    const els = [headerRef.current, sidebarRef.current, contentRef.current].filter(Boolean);
-    gsap.fromTo(els,
-      { opacity: 0, y: 16 },
-      { opacity: 1, y: 0, stagger: 0.05, duration: 0.55, ease: 'expo.out' }
-    );
+    setUserReviews([
+      {
+        id: 'review-user-1', author: 'Пользователь', rating: 5,
+        text: 'Коврик превзошел все ожидания! Качество печати на высоте, цвета яркие и насыщенные. Материал приятный на ощупь, не скользит по столу. Доставка была быстрой, упаковка надёжная.',
+        date: '5 окт. 2025', photos: [],
+      },
+      {
+        id: 'review-user-2', author: 'Пользователь', rating: 4,
+        text: 'Отличный коврик за свою цену. Качество хорошее, но первые пару дней был специфический запах. В остальном всё отлично!',
+        date: '20 сент. 2025', photos: [],
+      },
+    ]);
   }, [mounted]);
+
+  /* ── Entrance animation — Refined per Design System ─── */
+  useEffect(() => {
+    if (!mounted) return;
+    const reduceMotion = shouldReduceMotion();
+    const els = [headerRef.current, sidebarRef.current, contentRef.current].filter(Boolean);
+
+    if (!reduceMotion) {
+      gsap.fromTo(els,
+        { opacity: 0, y: 16 },
+        { opacity: 1, y: 0, stagger: 0.08, duration: 0.5, ease: EASE_EDITORIAL }
+      );
+    } else {
+      gsap.set(els, { opacity: 1, y: 0 });
+    }
+  }, [mounted]);
+
+  /* ── Loading — Skeleton per Design System ───────────── */
+  if (!mounted) {
+    return (
+      <PageContainer>
+        <AccountPageSkeleton />
+      </PageContainer>
+    );
+  }
 
   const user = {
     name: 'Пользователь',
@@ -97,35 +137,22 @@ const AccountPage: React.FC = () => {
     },
   ];
 
-  const [userReviews, setUserReviews] = useState<Review[]>([
-    {
-      id: 'review-user-1', author: user.name, rating: 5,
-      text: 'Коврик превзошел все ожидания! Качество печати на высоте, цвета яркие и насыщенные. Материал приятный на ощупь, не скользит по столу. Доставка была быстрой, упаковка надёжная.',
-      date: '5 окт. 2025', photos: [],
-    },
-    {
-      id: 'review-user-2', author: user.name, rating: 4,
-      text: 'Отличный коврик за свою цену. Качество хорошее, но первые пару дней был специфический запах. В остальном всё отлично!',
-      date: '20 сент. 2025', photos: [],
-    },
-  ]);
-
   const navItems: NavItem[] = [
     {
       value: 'profile', label: 'Профиль',
-      icon: <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>,
+      icon: <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" /></svg>,
     },
     {
       value: 'orders', label: 'Заказы',
-      icon: <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>,
+      icon: <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" /></svg>,
     },
     {
       value: 'reviews', label: 'Отзывы',
-      icon: <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>,
+      icon: <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" /></svg>,
     },
     {
       value: 'settings', label: 'Настройки',
-      icon: <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v6m0 6v6M5.6 5.6l4.2 4.2m4.2 4.2l4.2 4.2M1 12h6m6 0h6M5.6 18.4l4.2-4.2m4.2-4.2l4.2-4.2"/></svg>,
+      icon: <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="3" /><path d="M12 1v6m0 6v6M5.6 5.6l4.2 4.2m4.2 4.2l4.2 4.2M1 12h6m6 0h6M5.6 18.4l4.2-4.2m4.2-4.2l4.2-4.2" /></svg>,
     },
   ];
 
@@ -146,9 +173,9 @@ const AccountPage: React.FC = () => {
       badge: 'bg-[#60a5fa]/10 border-[#60a5fa]/25',
     };
     return {
-      dot: 'bg-[#EAE2E6]/20',
-      text: 'text-[#EAE2E6]/40',
-      badge: 'bg-[#EAE2E6]/[0.04] border-[#EAE2E6]/10',
+      dot: 'bg-[var(--rc-fg-subtle)]',
+      text: 'text-[var(--rc-fg-muted)]',
+      badge: 'bg-[var(--rc-fg-ghost)] border-[var(--rc-border)]',
     };
   };
 
@@ -162,8 +189,6 @@ const AccountPage: React.FC = () => {
     setEditingReview(null);
   };
 
-  if (!mounted) return null;
-
   return (
     <PageContainer>
       <div className="min-h-screen px-4 sm:px-6 md:px-8 lg:px-12 xl:px-20 pt-8 md:pt-12 pb-28 sm:pb-20">
@@ -172,11 +197,11 @@ const AccountPage: React.FC = () => {
           {/* ─── Section Header ─────────────────────────────────────────── */}
           <div
             ref={headerRef}
-            className="mb-8 md:mb-12 border-b border-[#EAE2E6]/[0.07] pb-6"
+            className="mb-8 md:mb-12 border-b border-[var(--rc-border)] pb-6"
             style={{ opacity: 0 }}
           >
             <h1
-              className="font-manrope font-black tracking-tight text-[#EAE2E6] leading-[0.9]"
+              className="font-manrope font-black tracking-tight text-[var(--rc-fg)] leading-[0.9]"
               style={{ fontSize: 'clamp(2rem, 4.5vw, 4rem)' }}
             >
               Личный кабинет
@@ -192,19 +217,19 @@ const AccountPage: React.FC = () => {
             {/* ── Sidebar Nav ─── */}
             <aside
               ref={sidebarRef}
-              className="border border-[#EAE2E6]/[0.07]"
+              className="border border-[var(--rc-border)]"
               style={{ opacity: 0 }}
             >
               {/* User identity */}
-              <div className="px-5 py-5 border-b border-[#EAE2E6]/[0.07] flex items-center gap-3">
-                <div className="w-10 h-10 border border-[#EAE2E6]/[0.12] bg-[#EAE2E6]/[0.04] flex items-center justify-center flex-shrink-0">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(234,226,230,0.50)" strokeWidth="2">
-                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+              <div className="px-5 py-5 border-b border-[var(--rc-border)] flex items-center gap-3">
+                <div className="w-10 h-10 border border-[var(--rc-fg)]/[0.12] bg-[var(--rc-fg-ghost)] flex items-center justify-center flex-shrink-0">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--rc-border)" strokeWidth="2">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" />
                   </svg>
                 </div>
                 <div className="min-w-0">
-                  <p className="font-manrope font-bold text-[#EAE2E6] text-sm truncate">{user.name}</p>
-                  <p className="font-jetbrains text-[9px] tracking-[0.1em] text-[#EAE2E6]/30 truncate">{user.email}</p>
+                  <p className="font-manrope font-bold text-[var(--rc-fg)] text-sm truncate">{user.name}</p>
+                  <p className="font-jetbrains text-[9px] tracking-[0.1em] text-[var(--rc-fg-muted)] truncate">{user.email}</p>
                 </div>
               </div>
 
@@ -216,12 +241,12 @@ const AccountPage: React.FC = () => {
                     value={item.value}
                     className="relative flex items-center gap-3 px-5 py-3.5 w-full text-left justify-start
                       font-jetbrains text-[10px] tracking-[0.15em] uppercase
-                      text-[#EAE2E6]/35 hover:text-[#EAE2E6]/70 hover:bg-[#EAE2E6]/[0.03]
-                      data-[state=active]:text-[#EAE2E6] data-[state=active]:bg-[#EAE2E6]/[0.05]
-                      transition-all duration-200 border-b border-[#EAE2E6]/[0.05] last:border-b-0"
+                      text-[var(--rc-fg-muted)] hover:text-[var(--rc-fg)] hover:bg-[var(--rc-fg-ghost)]
+                      data-[state=active]:text-[var(--rc-fg)] data-[state=active]:bg-[var(--rc-fg-ghost)]
+                      transition-all duration-200 border-b border-[var(--rc-border)] last:border-b-0"
                   >
                     {/* Active left accent */}
-                    <span className="absolute left-0 top-0 bottom-0 w-[2px] bg-[#EAE2E6]/0 data-[state=active]:bg-[#EAE2E6]/50 transition-all duration-200 hidden data-[state=active]:block" />
+                    <span className="absolute left-0 top-0 bottom-0 w-[2px] bg-[var(--rc-fg-subtle)] data-[state=active]:bg-[var(--rc-fg-subtle)] transition-all duration-200 hidden data-[state=active]:block" />
                     <span className="text-current opacity-70">{item.icon}</span>
                     {item.label}
                   </TabsTrigger>
@@ -232,14 +257,14 @@ const AccountPage: React.FC = () => {
             {/* ── Main Content ─── */}
             <div
               ref={contentRef}
-              className="border border-[#EAE2E6]/[0.07]"
+              className="border border-[var(--rc-border)]"
               style={{ opacity: 0 }}
             >
 
               {/* ── Profile ── */}
               <TabsContent value="profile" className="mt-0 p-6 md:p-8">
-                <p className="font-jetbrains text-[9px] tracking-[0.3em] uppercase text-[#EAE2E6]/25 mb-3">─── Профиль</p>
-                <h2 className="font-manrope font-black text-[#EAE2E6] text-2xl md:text-3xl leading-[0.9] tracking-tight mb-8">
+                <p className="font-jetbrains text-[9px] tracking-[0.3em] uppercase text-[var(--rc-fg-subtle)] mb-3">/ Профиль</p>
+                <h2 className="font-manrope font-black text-[var(--rc-fg)] text-2xl md:text-3xl leading-[0.9] tracking-tight mb-8">
                   Личные данные
                 </h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
@@ -250,7 +275,7 @@ const AccountPage: React.FC = () => {
                     { label: 'Дата регистрации', type: 'text', value: user.registered, disabled: true },
                   ].map((field) => (
                     <div key={field.label}>
-                      <label className="block font-jetbrains text-[9px] tracking-[0.2em] uppercase text-[#EAE2E6]/30 mb-2">
+                      <label className="block font-jetbrains text-[9px] tracking-[0.2em] uppercase text-[var(--rc-fg-muted)] mb-2">
                         {field.label}
                       </label>
                       <Input
@@ -271,22 +296,22 @@ const AccountPage: React.FC = () => {
 
               {/* ── Orders ── */}
               <TabsContent value="orders" className="mt-0 p-6 md:p-8">
-                <p className="font-jetbrains text-[9px] tracking-[0.3em] uppercase text-[#EAE2E6]/25 mb-3">─── Заказы</p>
-                <h2 className="font-manrope font-black text-[#EAE2E6] text-2xl md:text-3xl leading-[0.9] tracking-tight mb-8">
+                <p className="font-jetbrains text-[9px] tracking-[0.3em] uppercase text-[var(--rc-fg-subtle)] mb-3">/ Заказы</p>
+                <h2 className="font-manrope font-black text-[var(--rc-fg)] text-2xl md:text-3xl leading-[0.9] tracking-tight mb-8">
                   Мои заказы
                 </h2>
 
                 {orders.length > 0 ? (
-                  <div className="space-y-0 border border-[#EAE2E6]/[0.07]">
+                  <div className="space-y-0 border border-[var(--rc-border)]">
                     {orders.map((order) => (
                       <div
                         key={order.id}
-                        className="border-b border-[#EAE2E6]/[0.07] last:border-b-0"
+                        className="border-b border-[var(--rc-border)] last:border-b-0"
                       >
                         {/* Header row */}
-                        <div className="px-5 py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#EAE2E6]/[0.05] bg-[#EAE2E6]/[0.02]">
+                        <div className="px-5 py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[var(--rc-border)] bg-[var(--rc-fg-ghost)]">
                           <div className="flex items-center gap-3 flex-wrap">
-                            <span className="font-manrope font-bold text-[#EAE2E6] text-base">
+                            <span className="font-manrope font-bold text-[var(--rc-fg)] text-base">
                               Заказ&nbsp;#{order.id}
                             </span>
                             <span className={`flex items-center gap-1.5 px-2 py-0.5 border ${statusConfig(order.status).badge}`}>
@@ -295,11 +320,11 @@ const AccountPage: React.FC = () => {
                                 {order.statusText}
                               </span>
                             </span>
-                            <span className="font-jetbrains text-[9px] tracking-[0.1em] text-[#EAE2E6]/25">
+                            <span className="font-jetbrains text-[9px] tracking-[0.1em] text-[var(--rc-fg-subtle)]">
                               {order.date}
                             </span>
                           </div>
-                          <span className="font-manrope font-black text-[#EAE2E6] text-lg">{order.total}</span>
+                          <span className="font-manrope font-black text-[var(--rc-fg)] text-lg">{order.total}</span>
                         </div>
 
                         {/* Products + tracking */}
@@ -307,23 +332,23 @@ const AccountPage: React.FC = () => {
                           <div className="space-y-1.5 mb-4">
                             {order.products.map((p, pi) => (
                               <div key={pi} className="flex items-center justify-between text-sm">
-                                <span className="font-manrope text-[#EAE2E6]/65">
+                                <span className="font-manrope text-[var(--rc-fg)]">
                                   {p.name}
-                                  <span className="text-[#EAE2E6]/30 ml-1.5">× {p.quantity}</span>
+                                  <span className="text-[var(--rc-fg-muted)] ml-1.5">× {p.quantity}</span>
                                 </span>
-                                <span className="font-manrope text-[#EAE2E6]/55">{p.price}</span>
+                                <span className="font-manrope text-[var(--rc-fg-secondary)]">{p.price}</span>
                               </div>
                             ))}
                           </div>
 
                           {order.deliveryService && (
-                            <div className="flex flex-wrap items-center gap-x-4 gap-y-1 pt-3 border-t border-[#EAE2E6]/[0.05]">
-                              <span className="font-jetbrains text-[9px] tracking-[0.15em] uppercase text-[#EAE2E6]/30">
+                            <div className="flex flex-wrap items-center gap-x-4 gap-y-1 pt-3 border-t border-[var(--rc-border)]">
+                              <span className="font-jetbrains text-[9px] tracking-[0.15em] uppercase text-[var(--rc-fg-muted)]">
                                 {order.deliveryService}
                               </span>
                               {order.trackNumber && (
                                 <span className="flex items-center gap-2">
-                                  <code className="font-jetbrains text-[9px] tracking-[0.05em] text-[#EAE2E6]/40 bg-[#EAE2E6]/[0.05] px-2 py-0.5">
+                                  <code className="font-jetbrains text-[9px] tracking-[0.05em] text-[var(--rc-fg-muted)] bg-[var(--rc-fg-ghost)] px-2 py-0.5">
                                     {order.trackNumber}
                                   </code>
                                   {order.trackUrl && (
@@ -331,7 +356,7 @@ const AccountPage: React.FC = () => {
                                       href={order.trackUrl}
                                       target="_blank"
                                       rel="noopener noreferrer"
-                                      className="font-jetbrains text-[9px] tracking-[0.15em] uppercase text-[#EAE2E6]/30 hover:text-[#EAE2E6]/65 border-b border-[#EAE2E6]/[0.1] hover:border-[#EAE2E6]/30 pb-px transition-colors duration-200"
+                                      className="font-jetbrains text-[9px] tracking-[0.15em] uppercase text-[var(--rc-fg-muted)] hover:text-[var(--rc-fg)] border-b border-[var(--rc-fg)]/[0.1] hover:border-[var(--rc-border)] pb-px transition-colors duration-200"
                                     >
                                       Отследить
                                     </a>
@@ -345,11 +370,11 @@ const AccountPage: React.FC = () => {
                     ))}
                   </div>
                 ) : (
-                  <div className="py-16 flex flex-col items-center border border-[#EAE2E6]/[0.07]">
-                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="rgba(234,226,230,0.15)" strokeWidth="1.5" className="mb-5">
-                      <rect x="3" y="3" width="18" height="18"/><path d="M9 3v18M3 9h18M3 15h18"/>
+                  <div className="py-16 flex flex-col items-center border border-[var(--rc-border)]">
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--rc-border)" strokeWidth="1.5" className="mb-5">
+                      <rect x="3" y="3" width="18" height="18" /><path d="M9 3v18M3 9h18M3 15h18" />
                     </svg>
-                    <p className="font-manrope text-[#EAE2E6]/40 text-base mb-6">У вас пока нет заказов</p>
+                    <p className="font-manrope text-[var(--rc-fg-muted)] text-base mb-6">У вас пока нет заказов</p>
                     <Button onClick={() => router.push(ROUTES.CATALOG)} variant="primary" size="md">
                       Перейти в каталог
                     </Button>
@@ -359,17 +384,17 @@ const AccountPage: React.FC = () => {
 
               {/* ── Reviews ── */}
               <TabsContent value="reviews" className="mt-0 p-6 md:p-8">
-                <p className="font-jetbrains text-[9px] tracking-[0.3em] uppercase text-[#EAE2E6]/25 mb-3">─── Отзывы</p>
-                <h2 className="font-manrope font-black text-[#EAE2E6] text-2xl md:text-3xl leading-[0.9] tracking-tight mb-8">
+                <p className="font-jetbrains text-[9px] tracking-[0.3em] uppercase text-[var(--rc-fg-subtle)] mb-3">/ Отзывы</p>
+                <h2 className="font-manrope font-black text-[var(--rc-fg)] text-2xl md:text-3xl leading-[0.9] tracking-tight mb-8">
                   Мои отзывы
                 </h2>
 
                 {userReviews.length > 0 ? (
-                  <div className="space-y-0 border border-[#EAE2E6]/[0.07]">
+                  <div className="space-y-0 border border-[var(--rc-border)]">
                     {userReviews.map((review) => (
                       <div
                         key={review.id}
-                        className="px-5 py-5 border-b border-[#EAE2E6]/[0.07] last:border-b-0"
+                        className="px-5 py-5 border-b border-[var(--rc-border)] last:border-b-0"
                       >
                         <div className="flex items-start justify-between mb-3 gap-4">
                           <div className="flex items-center gap-3">
@@ -378,7 +403,7 @@ const AccountPage: React.FC = () => {
                               interactive={editingReview === review.id}
                               onChange={(r) => setEditRatings(prev => ({ ...prev, [review.id]: r }))}
                             />
-                            <span className="font-jetbrains text-[9px] tracking-[0.1em] text-[#EAE2E6]/25">
+                            <span className="font-jetbrains text-[9px] tracking-[0.1em] text-[var(--rc-fg-subtle)]">
                               {review.date}
                             </span>
                           </div>
@@ -388,22 +413,22 @@ const AccountPage: React.FC = () => {
                                 setEditingReview(review.id);
                                 setEditRatings(prev => ({ ...prev, [review.id]: review.rating }));
                               }}
-                              className="w-8 h-8 flex items-center justify-center text-[#EAE2E6]/20 hover:text-[#EAE2E6]/55 transition-colors duration-200"
+                              className="w-8 h-8 flex items-center justify-center text-[var(--rc-fg-subtle)] hover:text-[var(--rc-fg-secondary)] transition-colors duration-200"
                               title="Редактировать"
                             >
                               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
-                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
                               </svg>
                             </button>
                             <button
                               onClick={() => handleDeleteReview(review.id)}
-                              className="w-8 h-8 flex items-center justify-center text-[#EAE2E6]/20 hover:text-[#EAE2E6]/50 transition-colors duration-200"
+                              className="w-8 h-8 flex items-center justify-center text-[var(--rc-fg-subtle)] hover:text-[var(--rc-fg-secondary)] transition-colors duration-200"
                               title="Удалить"
                             >
                               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                <polyline points="3 6 5 6 21 6"/>
-                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                                <polyline points="3 6 5 6 21 6" />
+                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
                               </svg>
                             </button>
                           </div>
@@ -433,32 +458,32 @@ const AccountPage: React.FC = () => {
                             </div>
                           </div>
                         ) : (
-                          <p className="font-manrope text-[#EAE2E6]/60 text-sm leading-[1.75]">{review.text}</p>
+                          <p className="font-manrope text-[var(--rc-fg)] text-sm leading-[1.75]">{review.text}</p>
                         )}
                       </div>
                     ))}
                   </div>
                 ) : (
-                  <div className="py-16 flex flex-col items-center border border-[#EAE2E6]/[0.07]">
-                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="rgba(234,226,230,0.15)" strokeWidth="1.5" className="mb-5">
-                      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                  <div className="py-16 flex flex-col items-center border border-[var(--rc-border)]">
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--rc-border)" strokeWidth="1.5" className="mb-5">
+                      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
                     </svg>
-                    <p className="font-manrope text-[#EAE2E6]/40 text-base">У вас пока нет отзывов</p>
+                    <p className="font-manrope text-[var(--rc-fg-muted)] text-base">У вас пока нет отзывов</p>
                   </div>
                 )}
               </TabsContent>
 
               {/* ── Settings ── */}
               <TabsContent value="settings" className="mt-0 p-6 md:p-8">
-                <p className="font-jetbrains text-[9px] tracking-[0.3em] uppercase text-[#EAE2E6]/25 mb-3">─── Настройки</p>
-                <h2 className="font-manrope font-black text-[#EAE2E6] text-2xl md:text-3xl leading-[0.9] tracking-tight mb-8">
+                <p className="font-jetbrains text-[9px] tracking-[0.3em] uppercase text-[var(--rc-fg-subtle)] mb-3">/ Настройки</p>
+                <h2 className="font-manrope font-black text-[var(--rc-fg)] text-2xl md:text-3xl leading-[0.9] tracking-tight mb-8">
                   Настройки
                 </h2>
 
                 <div className="space-y-5">
                   {/* Notifications */}
-                  <div className="border border-[#EAE2E6]/[0.07] p-5 md:p-6">
-                    <p className="font-jetbrains text-[9px] tracking-[0.25em] uppercase text-[#EAE2E6]/25 mb-4">Уведомления</p>
+                  <div className="border border-[var(--rc-border)] p-5 md:p-6">
+                    <p className="font-jetbrains text-[9px] tracking-[0.25em] uppercase text-[var(--rc-fg-subtle)] mb-4">Уведомления</p>
                     <div className="space-y-3">
                       {[
                         { id: 'notif-email', label: 'Email уведомления о заказах', defaultChecked: true },
@@ -466,7 +491,7 @@ const AccountPage: React.FC = () => {
                         { id: 'notif-promo', label: 'Акции и скидки', defaultChecked: true },
                       ].map((item) => (
                         <label key={item.id} htmlFor={item.id} className="flex items-center justify-between cursor-pointer group">
-                          <span className="font-manrope text-[#EAE2E6]/55 group-hover:text-[#EAE2E6]/80 text-sm transition-colors duration-200">
+                          <span className="font-manrope text-[var(--rc-fg-secondary)] group-hover:text-[var(--rc-fg)] text-sm transition-colors duration-200">
                             {item.label}
                           </span>
                           <Checkbox id={item.id} defaultChecked={item.defaultChecked} className="w-4 h-4" />
@@ -476,8 +501,8 @@ const AccountPage: React.FC = () => {
                   </div>
 
                   {/* Security */}
-                  <div className="border border-[#EAE2E6]/[0.07] p-5 md:p-6">
-                    <p className="font-jetbrains text-[9px] tracking-[0.25em] uppercase text-[#EAE2E6]/25 mb-4">Безопасность</p>
+                  <div className="border border-[var(--rc-border)] p-5 md:p-6">
+                    <p className="font-jetbrains text-[9px] tracking-[0.25em] uppercase text-[var(--rc-fg-subtle)] mb-4">Безопасность</p>
                     <div className="flex flex-col sm:flex-row gap-3">
                       <Button variant="outline" size="md">Изменить пароль</Button>
                       <Button variant="outline" size="md">Двухфакторная аутентификация</Button>
@@ -485,9 +510,9 @@ const AccountPage: React.FC = () => {
                   </div>
 
                   {/* Danger Zone */}
-                  <div className="border border-[#EAE2E6]/[0.05] p-5 md:p-6">
-                    <p className="font-jetbrains text-[9px] tracking-[0.25em] uppercase text-[#EAE2E6]/15 mb-2">Опасная зона</p>
-                    <p className="font-manrope text-[#EAE2E6]/30 text-sm mb-4 leading-[1.6]">
+                  <div className="border border-[var(--rc-border)] p-5 md:p-6">
+                    <p className="font-jetbrains text-[9px] tracking-[0.25em] uppercase text-[var(--rc-fg-subtle)] mb-2">Опасная зона</p>
+                    <p className="font-manrope text-[var(--rc-fg-muted)] text-sm mb-4 leading-[1.6]">
                       Удаление аккаунта приведёт к безвозвратной потере всех данных
                     </p>
                     <Button variant="danger" size="md">Удалить аккаунт</Button>

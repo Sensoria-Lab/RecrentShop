@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import type { Product, SortOption, CategoryFilter, ColorFilter, SizeFilter, ClothingTypeFilter, CollectionFilter } from '@/src/types';
+import type { Product, SortOption, CategoryFilter, ColorFilter, SizeFilter, ClothingTypeFilter, CollectionFilter } from '@/src/types/product';
 
 const isColorFilterValue = (color: string): color is ColorFilter[number] => {
   return color === 'black' || color === 'white' || color === 'red';
@@ -28,6 +28,9 @@ export const useProductFilters = (products: Product[], filters: FilterOptions) =
     if (filters.categoryFilter !== 'all') {
       if (filters.categoryFilter === 'mousepads') {
         filtered = filtered.filter(p => p.category === 'mousepads');
+      } else if (filters.categoryFilter === 'clothing') {
+        // Show all clothing items (tshirt, hoodie, sleeve)
+        filtered = filtered.filter(p => p.category === 'clothing');
       } else if (filters.categoryFilter === 'tshirt') {
         filtered = filtered.filter(p => p.category === 'clothing' && p.clothingType === 'tshirt');
       } else if (filters.categoryFilter === 'hoodie') {

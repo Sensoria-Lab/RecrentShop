@@ -3,7 +3,7 @@ import { useState, useCallback } from 'react';
 import { useCart } from '@/src/context/CartContext';
 import { useToast } from '@/src/context/ToastContext';
 import { hapticSuccess } from '@/src/lib/haptic';
-import type { Product } from '@/src/types';
+import type { Product } from '@/src/types/product';
 
 type CartProductInput = Pick<Product, 'id' | 'title' | 'subtitle' | 'price' | 'image'>;
 

@@ -1,7 +1,7 @@
 'use client';
 import { useRouter } from 'next/navigation';
 import { useCallback } from 'react';
-import type { Product } from '@/src/types';
+import type { Product } from '@/src/types/product';
 
 /**
  * Hook for navigating to product page

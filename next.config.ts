@@ -1,12 +1,17 @@
 import type { NextConfig } from 'next';
 
+// Detect if we're building for GitHub Pages (production) or running locally
+const isGithubPages = process.env.NODE_ENV === 'production';
+const basePath = isGithubPages ? '/RecrentShop' : '';
+
 const nextConfig: NextConfig = {
     // Static export for GitHub Pages
     output: 'export',
 
     // Sub-path on GitHub Pages: sensoria-lab.github.io/RecrentShop
-    basePath: '/RecrentShop',
-    assetPrefix: '/RecrentShop',
+    // Empty for local development
+    basePath,
+    assetPrefix: basePath,
 
     // next/image doesn't work with static export — use unoptimized
     images: {

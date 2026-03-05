@@ -9,5 +9,5 @@ if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger);
 }
 
-export { gsap, ScrollTrigger };
+export { ScrollTrigger };
 export default gsap;

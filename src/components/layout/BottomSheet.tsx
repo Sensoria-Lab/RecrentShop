@@ -122,10 +122,9 @@ const BottomSheet: React.FC<BottomSheetProps> = ({
 
   return (
     <>
-      {/* Backdrop – always mounted */}
       <div
         ref={backdropRef}
-        className="fixed inset-0 z-40 bg-black/70 backdrop-blur-sm"
+        className="fixed inset-0 z-40 bg-[var(--rc-overlay)]/70 backdrop-blur-sm"
         onClick={onClose}
         style={{ visibility: 'hidden', opacity: 0, pointerEvents: 'none' }}
       />
@@ -133,7 +132,7 @@ const BottomSheet: React.FC<BottomSheetProps> = ({
       {/* Bottom Sheet – always mounted */}
       <div
         ref={sheetRef}
-        className={`fixed bottom-0 left-0 right-0 z-50 ${heightClasses[height]} bg-[#191516] border-t border-[#EAE2E6]/[0.07] shadow-2xl flex flex-col`}
+        className={`fixed bottom-0 left-0 right-0 z-50 ${heightClasses[height]} bg-[var(--rc-bg)] border-t border-[var(--rc-border)] shadow-2xl flex flex-col`}
         role="dialog"
         aria-labelledby="bottom-sheet-title"
         aria-modal="true"
@@ -146,40 +145,39 @@ const BottomSheet: React.FC<BottomSheetProps> = ({
           onPointerMove={handlePointerMove}
           onPointerUp={handlePointerUp}
         >
-          <div className="w-12 h-[3px] bg-[#EAE2E6]/20" />
+          <div className="w-12 h-[3px] bg-[var(--rc-fg-subtle)]" />
         </div>
 
-            {/* Header */}
-            <div className="flex items-center justify-between px-6 pb-4 border-b border-white/10">
-              <h2 id="bottom-sheet-title" className="text-xl font-bold text-[#EAE2E6]">
-                {title}
-              </h2>
-              <button
-                onClick={onClose}
-                className="min-w-[44px] min-h-[44px] flex items-center justify-center bg-[#EAE2E6]/[0.05] hover:bg-[#EAE2E6]/10 active:bg-[#EAE2E6]/15 text-[#EAE2E6]/50 hover:text-[#EAE2E6] transition-all"
-                aria-label="Закрыть"
-              >
-                <svg className="w-5 h-5 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
-            </div>
+        {/* Header */}
+        <div className="flex items-center justify-between px-6 pb-4 border-b border-[var(--rc-border)]">
+          <h2 id="bottom-sheet-title" className="text-xl font-bold text-[var(--rc-fg)]">
+            {title}
+          </h2>
+          <button
+            onClick={onClose}
+            className="min-w-[44px] min-h-[44px] flex items-center justify-center bg-[var(--rc-fg-ghost)] hover:bg-[var(--rc-fg-subtle)] active:bg-[var(--rc-fg-subtle)] text-[var(--rc-fg-muted)] hover:text-[var(--rc-fg)] transition-all"
+            aria-label="Закрыть"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
 
-            {/* Content */}
-            <div className="flex-1 overflow-y-auto px-6 py-4 custom-scrollbar">
-              {children}
-            </div>
+        {/* Content */}
+        <div className="flex-1 overflow-y-auto px-6 py-4 custom-scrollbar">
+          {children}
+        </div>
 
-            {/* Footer - с отступом для BottomNavigation */}
-            {footer && (
-              <div className="border-t border-white/10 bg-black/50 px-6 py-4 pb-20 md:pb-4">
-                {footer}
-              </div>
-            )}
+        {/* Footer - с отступом для BottomNavigation */}
+        {footer && (
+          <div className="border-t border-[var(--rc-border)] bg-[var(--rc-bg-elevated)] px-6 py-4 pb-20 md:pb-4">
+            {footer}
+          </div>
+        )}
       </div>
     </>
   );
 };
 
 export default BottomSheet;
-

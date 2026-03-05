@@ -107,5 +107,4 @@ export const useMobileRedirect = (
   }, [isMobile, isHomePage, router]);
 };
 
-export default useDeviceDetection;
 

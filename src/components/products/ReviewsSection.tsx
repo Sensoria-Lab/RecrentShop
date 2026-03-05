@@ -25,17 +25,17 @@ const ReviewCard: React.FC<{
   const hiddenCount = photos.length - 3;
 
   return (
-    <div className="bg-[#191516] p-6 sm:p-7 flex flex-col gap-5">
+    <div className="bg-[var(--rc-bg-elevated)] p-6 sm:p-7 flex flex-col gap-5">
       <div className="flex items-start gap-4">
-        <div className="w-10 h-10 bg-[#EAE2E6]/[0.07] border border-[#EAE2E6]/[0.12] flex-shrink-0 flex items-center justify-center font-manrope font-black text-[#EAE2E6]/50 text-base select-none">
+        <div className="w-10 h-10 bg-[var(--rc-fg-ghost)] border border-[var(--rc-border)] flex-shrink-0 flex items-center justify-center font-manrope font-black text-[var(--rc-fg-muted)] text-base select-none">
           {review.author.charAt(0)}
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex items-start justify-between gap-2 mb-1">
-            <h3 className="font-manrope font-bold text-[#EAE2E6] text-sm leading-tight truncate">
+            <h3 className="font-manrope font-bold text-[var(--rc-fg)] text-sm leading-tight truncate">
               {review.author}
             </h3>
-            <span className="font-jetbrains text-[9px] tracking-[0.15em] uppercase text-[#EAE2E6]/25 flex-shrink-0 pt-px">
+            <span className="font-jetbrains text-[11px] tracking-[0.15em] uppercase text-[var(--rc-fg-muted)] flex-shrink-0 pt-px">
               {review.date}
             </span>
           </div>
@@ -43,7 +43,7 @@ const ReviewCard: React.FC<{
         </div>
       </div>
 
-      <p className="font-manrope text-[#EAE2E6]/65 text-[13px] leading-[1.8] flex-1">
+      <p className="font-manrope text-[var(--rc-fg-secondary)] text-sm leading-[1.8] flex-1">
         {review.text}
       </p>
 
@@ -53,7 +53,7 @@ const ReviewCard: React.FC<{
             <button
               key={i}
               onClick={() => onOpenGallery(photos, i)}
-              className="aspect-square overflow-hidden border border-[#EAE2E6]/[0.08] hover:border-[#EAE2E6]/25 transition-all duration-200 group cursor-pointer"
+              className="aspect-square overflow-hidden border border-[var(--rc-border)] hover:border-[var(--rc-border-hover)] transition-all duration-200 group cursor-pointer"
             >
               <Img
                 src={photo}
@@ -66,7 +66,7 @@ const ReviewCard: React.FC<{
           {hiddenCount > 0 && !showAll && (
             <button
               onClick={() => setShowAll(true)}
-              className="aspect-square border border-[#EAE2E6]/[0.08] hover:border-[#EAE2E6]/20 flex items-center justify-center transition-all duration-200 font-jetbrains text-[10px] tracking-[0.12em] text-[#EAE2E6]/30 hover:text-[#EAE2E6]/60"
+              className="aspect-square border border-[var(--rc-border)] hover:border-[var(--rc-border-hover)] flex items-center justify-center transition-all duration-200 font-jetbrains text-xs tracking-[0.12em] text-[var(--rc-fg-muted)] hover:text-[var(--rc-fg-secondary)]"
             >
               +{hiddenCount}
             </button>
@@ -74,11 +74,11 @@ const ReviewCard: React.FC<{
         </div>
       )}
 
-      <div className="flex items-center gap-2 pt-4 border-t border-[#EAE2E6]/[0.07]">
-        <svg className="w-3 h-3 text-[#EAE2E6]/35 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+      <div className="flex items-center gap-2 pt-4 border-t border-[var(--rc-border)]">
+        <svg className="w-3 h-3 text-[var(--rc-fg-muted)] flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
           <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
         </svg>
-        <span className="font-jetbrains text-[9px] tracking-[0.15em] uppercase text-[#EAE2E6]/30">
+        <span className="font-jetbrains text-[11px] tracking-[0.15em] uppercase text-[var(--rc-fg-muted)]">
           Подтверждённая покупка
         </span>
       </div>
@@ -88,10 +88,10 @@ const ReviewCard: React.FC<{
 
 /* --- TrustStat ---- */
 const TrustStat: React.FC<{ icon: React.ReactNode; value: string; label: string }> = ({ icon, value, label }) => (
-  <div className="flex flex-col p-4 sm:p-5 border border-[#EAE2E6]/[0.07] hover:border-[#EAE2E6]/15 transition-all duration-200">
-    <div className="text-[#EAE2E6]/25 mb-3">{icon}</div>
-    <div className="font-manrope font-black text-[#EAE2E6] text-2xl sm:text-3xl leading-none mb-1.5 tabular-nums">{value}</div>
-    <div className="font-jetbrains text-[9px] tracking-[0.2em] uppercase text-[#EAE2E6]/30">{label}</div>
+  <div className="flex flex-col p-4 sm:p-5 border border-[var(--rc-border)] hover:border-[var(--rc-border-hover)] transition-all duration-200">
+    <div className="text-[var(--rc-fg-muted)] mb-3">{icon}</div>
+    <div className="font-manrope font-black text-[var(--rc-fg)] text-2xl sm:text-3xl leading-none mb-1.5 tabular-nums">{value}</div>
+    <div className="font-jetbrains text-[11px] tracking-[0.2em] uppercase text-[var(--rc-fg-muted)]">{label}</div>
   </div>
 );
 
@@ -120,7 +120,7 @@ export const ReviewsSection: React.FC<ReviewsSectionProps> = ({
   const positivePercent = Math.round((positiveCount / reviews.length) * 100);
 
   return (
-    <section className={compact ? '' : 'relative py-14 md:py-20 lg:py-24 border-b border-[#EAE2E6]/[0.07]'}>
+    <section className={compact ? '' : 'relative py-14 md:py-20 lg:py-24 border-b border-[var(--rc-border)]'}>
       <div className={compact ? '' : 'px-6 sm:px-8 md:px-12 lg:px-16 xl:px-20'}>
         <div className={compact ? '' : 'max-w-[1400px] mx-auto'}>
 
@@ -129,7 +129,7 @@ export const ReviewsSection: React.FC<ReviewsSectionProps> = ({
             <div className="flex items-end justify-between mb-10 md:mb-14">
               <div>
                 <h2
-                  className="font-manrope font-black text-[#EAE2E6] leading-[0.9] tracking-tight"
+                  className="font-manrope font-black text-[var(--rc-fg)] leading-[0.9] tracking-tight"
                   style={{ fontSize: 'clamp(2rem, 4.5vw, 4rem)' }}
                 >
                   {title}
@@ -138,7 +138,7 @@ export const ReviewsSection: React.FC<ReviewsSectionProps> = ({
               {showViewAll && (
                 <button
                   onClick={onViewAll}
-                  className="hidden sm:flex items-center gap-2 font-jetbrains text-[10px] tracking-[0.2em] uppercase text-[#EAE2E6]/35 hover:text-[#EAE2E6] transition-colors duration-200 pb-1 border-b border-[#EAE2E6]/10 hover:border-[#EAE2E6]/40 focus:outline-none"
+                  className="hidden sm:flex items-center gap-2 font-jetbrains text-xs tracking-[0.2em] uppercase text-[var(--rc-fg-muted)] hover:text-[var(--rc-fg)] transition-colors duration-200 pb-1 border-b border-[var(--rc-border)] hover:border-[var(--rc-border-hover)] focus:outline-none"
                 >
                   Все отзывы
                   <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
@@ -150,16 +150,16 @@ export const ReviewsSection: React.FC<ReviewsSectionProps> = ({
           )}
 
           {/* Rating summary */}
-          <div className="flex items-start gap-8 mb-8 pb-8 border-b border-[#EAE2E6]/[0.07]">
+          <div className="flex items-start gap-8 mb-8 pb-8 border-b border-[var(--rc-border)]">
             <div className="flex-shrink-0">
               <div
-                className="font-manrope font-black text-[#EAE2E6] tabular-nums leading-none mb-2"
+                className="font-manrope font-black text-[var(--rc-fg)] tabular-nums leading-none mb-2"
                 style={{ fontSize: 'clamp(2.5rem, 5vw, 3.5rem)' }}
               >
                 {avgRating.toFixed(1)}
               </div>
               <StarRating rating={avgRating} size="sm" showCount={false} />
-              <p className="font-jetbrains text-[9px] tracking-[0.2em] uppercase text-[#EAE2E6]/25 mt-2">
+              <p className="font-jetbrains text-[11px] tracking-[0.2em] uppercase text-[var(--rc-fg-muted)] mt-2">
                 {reviews.length}&nbsp;{reviews.length === 1 ? 'отзыв' : reviews.length < 5 ? 'отзыва' : 'отзывов'}
               </p>
             </div>
@@ -169,11 +169,11 @@ export const ReviewsSection: React.FC<ReviewsSectionProps> = ({
                 const pct = reviews.length ? (count / reviews.length) * 100 : 0;
                 return (
                   <div key={star} className="flex items-center gap-3">
-                    <span className="font-jetbrains text-[9px] text-[#EAE2E6]/30 w-2 flex-shrink-0">{star}</span>
-                    <div className="flex-1 h-[2px] bg-[#EAE2E6]/[0.08]">
-                      <div className="h-full bg-[#EAE2E6]/45 transition-all duration-500" style={{ width: `${pct}%` }} />
+                    <span className="font-jetbrains text-[11px] text-[var(--rc-fg-muted)] w-2 flex-shrink-0">{star}</span>
+                    <div className="flex-1 h-[2px] bg-[var(--rc-border)]">
+                      <div className="h-full bg-[var(--rc-fg-secondary)] transition-all duration-500" style={{ width: `${pct}%` }} />
                     </div>
-                    <span className="font-jetbrains text-[9px] text-[#EAE2E6]/20 w-3 text-right flex-shrink-0 tabular-nums">{count}</span>
+                    <span className="font-jetbrains text-[11px] text-[var(--rc-fg-muted)] w-3 text-right flex-shrink-0 tabular-nums">{count}</span>
                   </div>
                 );
               })}
@@ -181,34 +181,10 @@ export const ReviewsSection: React.FC<ReviewsSectionProps> = ({
           </div>
 
           {/* Reviews grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-[#EAE2E6]/[0.07]">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-[var(--rc-border)]">
             {reviews.map(review => (
               <ReviewCard key={review.id} review={review} onOpenGallery={openGallery} />
             ))}
-          </div>
-
-          {/* Trust strip */}
-          <div className="mt-8 grid grid-cols-2 md:grid-cols-4 gap-3 border-t border-[#EAE2E6]/[0.07] pt-8">
-            <TrustStat
-              icon={<svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" /></svg>}
-              value={`${avgRating.toFixed(1)}/5`}
-              label="Средний рейтинг"
-            />
-            <TrustStat
-              icon={<svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" /></svg>}
-              value="150+"
-              label="Клиентов"
-            />
-            <TrustStat
-              icon={<svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>}
-              value={`${positivePercent}%`}
-              label="Положительных"
-            />
-            <TrustStat
-              icon={<svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>}
-              value="2–4 дня"
-              label="Доставка"
-            />
           </div>
         </div>
       </div>

@@ -4,22 +4,22 @@ import * as React from 'react';
 import { cn } from '@/src/lib/utils';
 
 const variantMap = {
-  primary: 'bg-[#EAE2E6] text-[#191516] hover:bg-[#EAE2E6]/85 font-jetbrains tracking-[0.12em] uppercase',
-  secondary: 'bg-[#EAE2E6]/[0.08] text-[#EAE2E6] hover:bg-[#EAE2E6]/[0.13] border border-[#EAE2E6]/15',
-  tertiary: 'bg-transparent text-[#EAE2E6]/60 hover:text-[#EAE2E6] hover:bg-[#EAE2E6]/[0.05]',
-  outline: 'border border-[#EAE2E6]/20 bg-transparent text-[#EAE2E6]/70 hover:border-[#EAE2E6]/40 hover:text-[#EAE2E6]',
-  ghost: 'bg-transparent text-[#EAE2E6]/60 hover:text-[#EAE2E6] hover:bg-[#EAE2E6]/[0.05]',
-  danger: 'bg-[#EAE2E6]/[0.07] text-[#EAE2E6]/70 hover:bg-[#EAE2E6]/[0.12] border border-[#EAE2E6]/20',
-  success: 'bg-[#EAE2E6]/[0.07] text-[#EAE2E6]/70 hover:bg-[#EAE2E6]/[0.12] border border-[#EAE2E6]/20',
-  default: 'bg-[#EAE2E6] text-[#191516] hover:bg-[#EAE2E6]/85 font-jetbrains tracking-[0.12em] uppercase',
-  destructive: 'bg-[#EAE2E6]/[0.07] text-[#EAE2E6]/70 hover:bg-[#EAE2E6]/[0.12] border border-[#EAE2E6]/20',
-  link: 'bg-transparent text-[#EAE2E6]/50 hover:text-[#EAE2E6] underline underline-offset-4 p-0 h-auto',
+  primary: 'bg-[var(--rc-bg-invert)] text-[var(--rc-fg-invert)] hover:opacity-85 font-jetbrains tracking-[0.12em] uppercase',
+  secondary: 'bg-[var(--rc-fg-ghost)] text-[var(--rc-fg)] hover:bg-[var(--rc-fg-subtle)] border border-[var(--rc-border)]',
+  tertiary: 'bg-transparent text-[var(--rc-fg-secondary)] hover:text-[var(--rc-fg)] hover:bg-[var(--rc-fg-ghost)]',
+  outline: 'border border-[var(--rc-border)] bg-transparent text-[var(--rc-fg-secondary)] hover:border-[var(--rc-border-hover)] hover:text-[var(--rc-fg)]',
+  ghost: 'bg-transparent text-[var(--rc-fg-secondary)] hover:text-[var(--rc-fg)] hover:bg-[var(--rc-fg-ghost)]',
+  danger: 'bg-[var(--rc-fg-ghost)] text-[var(--rc-fg-secondary)] hover:bg-[var(--rc-fg-subtle)] border border-[var(--rc-border)]',
+  success: 'bg-[var(--rc-fg-ghost)] text-[var(--rc-fg-secondary)] hover:bg-[var(--rc-fg-subtle)] border border-[var(--rc-border)]',
+  default: 'bg-[var(--rc-bg-invert)] text-[var(--rc-fg-invert)] hover:opacity-85 font-jetbrains tracking-[0.12em] uppercase',
+  destructive: 'bg-[var(--rc-fg-ghost)] text-[var(--rc-fg-secondary)] hover:bg-[var(--rc-fg-subtle)] border border-[var(--rc-border)]',
+  link: 'bg-transparent text-[var(--rc-fg-muted)] hover:text-[var(--rc-fg)] underline underline-offset-4 p-0 h-auto',
 } as const;
 
 type ButtonVariant = keyof typeof variantMap;
 type ButtonSize = 'sm' | 'md' | 'lg' | 'xl' | 'default' | 'icon';
 
-export interface ButtonProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'children'> {
+interface ButtonProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'children'> {
   variant?: ButtonVariant;
   size?: ButtonSize;
   fullWidth?: boolean;
@@ -38,9 +38,9 @@ const sizeClassMap: Record<ButtonSize, string> = {
   icon: 'h-10 w-10 p-0',
 };
 
-export const buttonVariants = ({ variant = 'primary', size = 'default', fullWidth = false, className = '' }: { variant?: ButtonVariant; size?: ButtonSize; fullWidth?: boolean; className?: string }) =>
+const buttonVariants = ({ variant = 'primary', size = 'default', fullWidth = false, className = '' }: { variant?: ButtonVariant; size?: ButtonSize; fullWidth?: boolean; className?: string }) =>
   cn(
-    'inline-flex items-center justify-center gap-2 font-medium transition-colors disabled:pointer-events-none disabled:opacity-50',
+    'inline-flex items-center justify-center gap-2 font-medium transition-colors duration-200 disabled:pointer-events-none disabled:opacity-50 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[var(--rc-fg)] focus-visible:ring-offset-1 focus-visible:ring-offset-[var(--rc-bg)]',
     variantMap[variant],
     sizeClassMap[size],
     fullWidth ? 'w-full' : '',

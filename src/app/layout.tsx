@@ -2,7 +2,9 @@ import type { Metadata } from 'next';
 import { Inter, Manrope, JetBrains_Mono } from 'next/font/google';
 import './globals.css';
 import { Providers } from './providers';
-import { BottomNavigation, OnceBackground } from '@/src/components/layout';
+import BottomNavigation from '@/src/components/layout/BottomNavigation';
+import OnceBackground from '@/src/components/layout/OnceBackground';
+import ScrollToTop from '@/src/components/layout/ScrollToTop';
 
 const inter = Inter({
     subsets: ['latin', 'cyrillic'],
@@ -44,15 +46,17 @@ export default function RootLayout({
 }) {
     return (
         <html lang="ru" suppressHydrationWarning className={`${inter.variable} ${manrope.variable} ${jetbrainsMono.variable}`}>
-            <body className="min-h-screen">
+            <body className="min-h-screen bg-[var(--rc-bg)] transition-colors duration-300">
                 <Providers>
                     <OnceBackground />
+                    <div className="noise-overlay z-50 pointer-events-none fixed inset-0 opacity-[0.03] mix-blend-soft-light" />
 
-                    <div className="min-h-screen relative z-10">
+                    <div className="min-h-screen relative z-10 bg-[var(--rc-bg)]">
                         {children}
                     </div>
 
                     <BottomNavigation />
+                    <ScrollToTop />
                 </Providers>
             </body>
         </html>

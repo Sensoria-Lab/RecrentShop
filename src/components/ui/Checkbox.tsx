@@ -20,8 +20,8 @@ export const Checkbox: React.FC<CheckboxProps> = ({
       className={cn(
         'relative flex-shrink-0 w-[14px] h-[14px] border transition-all duration-150',
         checked
-          ? 'bg-[#EAE2E6] border-[#EAE2E6]'
-          : 'bg-transparent border-[#EAE2E6]/25 hover:border-[#EAE2E6]/50',
+          ? 'bg-[var(--rc-bg-invert)] border-[var(--rc-bg-invert)]'
+          : 'bg-transparent border-[var(--rc-border)] hover:border-[var(--rc-border-hover)]',
         disabled && 'opacity-40 cursor-not-allowed',
         className,
       )}
@@ -44,7 +44,7 @@ export const Checkbox: React.FC<CheckboxProps> = ({
         >
           <polyline
             points="1.5,5 4,7.5 8.5,2"
-            stroke="#191516"
+            stroke="var(--rc-fg-invert)"
             strokeWidth="1.8"
             strokeLinecap="square"
             strokeLinejoin="miter"

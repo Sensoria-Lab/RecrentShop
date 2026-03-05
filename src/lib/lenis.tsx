@@ -15,7 +15,7 @@ interface LenisContextValue {
 
 const LenisContext = createContext<LenisContextValue>({ lenis: null });
 
-export const useLenis = () => useContext(LenisContext);
+const useLenis = () => useContext(LenisContext);
 
 interface LenisProviderProps {
   children: React.ReactNode;

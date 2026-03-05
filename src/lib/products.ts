@@ -1,4 +1,4 @@
-import type { Product } from '@/src/types';
+import type { Product } from '@/src/types/product';
 
 // Base URL for images (GitHub Pages sub-path in production)
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_PATH || '';
@@ -7,10 +7,10 @@ const BASE_URL = process.env.NEXT_PUBLIC_BASE_PATH || '';
  * All mousepads products
  * Combined and sorted by rating/reviews
  */
-export const MOUSEPADS: Product[] = [
+const MOUSEPADS: Product[] = [
   {
     id: 1,
-    image: `${BASE_URL}/images/products/mousepads/xl/xl_black_geoid/Generated Image October 30, 2025 - 6_24PM.png`,
+    image: `${BASE_URL}/images/products/mousepads/xl/xl_black_geoid/preview.png`,
     images: [
       `${BASE_URL}/images/products/mousepads/xl/xl_black_geoid/geoid_black_xl_01.webp`,
       `${BASE_URL}/images/products/mousepads/xl/xl_black_geoid/geoid_black_xl_02.webp`,
@@ -30,7 +30,7 @@ export const MOUSEPADS: Product[] = [
   },
   {
     id: 2,
-    image: `${BASE_URL}/images/products/mousepads/xl/xl_white_geoid/Generated Image October 30, 2025 - 6_26PM.png`,
+    image: `${BASE_URL}/images/products/mousepads/xl/xl_white_geoid/preview.png`,
     images: [
       `${BASE_URL}/images/products/mousepads/xl/xl_white_geoid/geoid_white_xl_01.webp`,
       `${BASE_URL}/images/products/mousepads/xl/xl_white_geoid/geoid_white_xl_02.webp`,
@@ -50,7 +50,7 @@ export const MOUSEPADS: Product[] = [
   },
   {
     id: 3,
-    image: `${BASE_URL}/images/products/mousepads/xl/xl_red/Generated Image October 30, 2025 - 6_25PM (1).png`,
+    image: `${BASE_URL}/images/products/mousepads/xl/xl_red/preview.png`,
     images: [
       `${BASE_URL}/images/products/mousepads/xl/xl_red/logo-red_red_xl_01.webp`,
       `${BASE_URL}/images/products/mousepads/xl/xl_red/logo-red_red_xl_02.webp`,
@@ -71,7 +71,7 @@ export const MOUSEPADS: Product[] = [
   },
   {
     id: 4,
-    image: `${BASE_URL}/images/products/mousepads/l/l_black_geoid/Generated Image October 30, 2025 - 6_08PM.png`,
+    image: `${BASE_URL}/images/products/mousepads/l/l_black_geoid/preview.png`,
     images: [
       `${BASE_URL}/images/products/mousepads/l/l_black_geoid/geoid_black_l_01.webp`,
       `${BASE_URL}/images/products/mousepads/l/l_black_geoid/geoid_black_l_02.webp`,
@@ -92,7 +92,7 @@ export const MOUSEPADS: Product[] = [
   },
   {
     id: 5,
-    image: `${BASE_URL}/images/products/mousepads/l/l_white_geoid/Generated Image October 30, 2025 - 6_11PM.png`,
+    image: `${BASE_URL}/images/products/mousepads/l/l_white_geoid/preview.png`,
     images: [
       `${BASE_URL}/images/products/mousepads/l/l_white_geoid/geoid_white_l_01.webp`,
       `${BASE_URL}/images/products/mousepads/l/l_white_geoid/geoid_white_l_02.webp`,
@@ -113,7 +113,7 @@ export const MOUSEPADS: Product[] = [
   },
   {
     id: 6,
-    image: `${BASE_URL}/images/products/mousepads/l/l_red/Generated Image October 30, 2025 - 6_09PM (1).png`,
+    image: `${BASE_URL}/images/products/mousepads/l/l_red/preview.png`,
     images: [
       `${BASE_URL}/images/products/mousepads/l/l_red/logo-red_red_l_01.webp`,
       `${BASE_URL}/images/products/mousepads/l/l_red/logo-red_red_l_02.webp`,
@@ -153,7 +153,7 @@ export const MOUSEPADS: Product[] = [
   },
   {
     id: 16,
-    image: `${BASE_URL}/images/products/mousepads/l/l_blue/Generated Image October 30, 2025 - 6_09PM.png`,
+    image: `${BASE_URL}/images/products/mousepads/l/l_blue/preview.png`,
     images: [
       `${BASE_URL}/images/products/mousepads/l/l_blue/logo-blue_blue_l_01.webp`,
       `${BASE_URL}/images/products/mousepads/l/l_blue/logo-blue_blue_l_02.webp`,
@@ -174,7 +174,7 @@ export const MOUSEPADS: Product[] = [
   },
   {
     id: 17,
-    image: `${BASE_URL}/images/products/mousepads/xl/xl_blue/Generated Image October 30, 2025 - 6_25PM.png`,
+    image: `${BASE_URL}/images/products/mousepads/xl/xl_blue/preview.png`,
     images: [
       `${BASE_URL}/images/products/mousepads/xl/xl_blue/logo-blue_blue_xl_01.webp`,
       `${BASE_URL}/images/products/mousepads/xl/xl_blue/logo-blue_blue_xl_02.webp`,
@@ -198,7 +198,7 @@ export const MOUSEPADS: Product[] = [
 /**
  * All clothing products
  */
-export const CLOTHING: Product[] = [
+const CLOTHING: Product[] = [
   {
     id: 7,
     image: `${BASE_URL}/images/products/clothing/hoodies/seprents_white/serpents_hoodie_white_01.webp`,
@@ -330,7 +330,7 @@ export const CLOTHING: Product[] = [
 /**
  * Gaming sleeves
  */
-export const SLEEVES: Product[] = [
+const SLEEVES: Product[] = [
   {
     id: 13,
     image: `${BASE_URL}/images/products/clothing/sleeves/black_sleeve/geoid_sleeve_black_01.webp`,
@@ -378,15 +378,5 @@ export const SLEEVES: Product[] = [
  */
 export const ALL_PRODUCTS: Product[] = [...MOUSEPADS, ...CLOTHING, ...SLEEVES];
 
-/**
- * Get sorted mousepads by rating and review count
- */
-export const getSortedMousepads = (): Product[] => {
-  return [...MOUSEPADS].sort((a, b) => {
-    if (b.rating !== a.rating) {
-      return b.rating - a.rating;
-    }
-    return b.reviewCount - a.reviewCount;
-  });
-};
+
 
