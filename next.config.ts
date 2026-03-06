@@ -13,6 +13,10 @@ const nextConfig: NextConfig = {
     basePath,
     assetPrefix: basePath,
 
+    env: {
+        NEXT_PUBLIC_BASE_PATH: basePath,
+    },
+
     // next/image doesn't work with static export — use unoptimized
     images: {
         unoptimized: true,
