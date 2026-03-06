@@ -209,13 +209,39 @@ const MainPage: React.FC = () => {
       gsap.set(Array.from(heroContentRef.current.children), { opacity: 1, y: 0 });
     }
 
-    // Logo animation
+    // Logo animation: SVG path drawing
     if (heroImgRef.current && !reduceMotion) {
-      gsap.fromTo(heroImgRef.current,
-        { opacity: 0, scale: 0.95 },
-        { opacity: 1, scale: 1, duration: 1, ease: EASE_EDITORIAL }
-      );
+      const path: SVGPathElement | null = heroImgRef.current.querySelector('.logo-path');
+      if (path) {
+        // Calculate exact length of the path
+        const length = path.getTotalLength();
+
+        // Setup initial drawn state (invisible fill, dashed outline matching length)
+        gsap.set(heroImgRef.current, { opacity: 1, scale: 1 });
+        gsap.set(path, {
+          strokeDasharray: length,
+          strokeDashoffset: length,
+          fillOpacity: 0
+        });
+
+        // 1) Draw the outline
+        // 2) Fade in the fill right after
+        const tl = gsap.timeline();
+        tl.to(path, {
+          strokeDashoffset: 0,
+          duration: 1.6,
+          ease: "power2.inOut",
+        }).to(path, {
+          fillOpacity: 1,
+          duration: 0.6,
+          ease: "power1.out"
+        }, "-=0.4");
+      }
     } else if (heroImgRef.current) {
+      const path: SVGPathElement | null = heroImgRef.current.querySelector('.logo-path');
+      if (path) {
+        gsap.set(path, { fillOpacity: 1, strokeDashoffset: 0 });
+      }
       gsap.set(heroImgRef.current, { opacity: 1, scale: 1 });
     }
 
@@ -297,7 +323,6 @@ const MainPage: React.FC = () => {
             <div
               ref={heroImgRef}
               className="relative mb-4 md:mb-6"
-              style={{ opacity: 0 }}
             >
 
               {/* SVG Logo */}
@@ -315,8 +340,11 @@ const MainPage: React.FC = () => {
                   </linearGradient>
                 </defs>
                 <path
+                  className="logo-path"
                   d="M552.73 246.385H509.635L552.621 320.768L553.332 321.999H429.509L429.271 321.589L385.812 246.385H330.722V442.603H385.885L438.028 376.025L438.274 375.711H571.646L570.655 377.025L445.907 542.494L445.661 542.82H224.772V398.24H0.179688V298.492H224.772V246.385H0.179688V148.28H224.772V102.51H0.179688V0.179688H552.73V246.385ZM329.702 99.7637V150.238H447.25V99.7637H329.702Z"
                   fill="url(#logoGradient)"
+                  stroke="url(#logoGradient)"
+                  strokeWidth="2"
                 />
               </svg>
             </div>
