@@ -27,7 +27,7 @@
     "eslint": "^9.38.0",
     "eslint-config-next": "^16.1.6",
     "postcss": "^8.4.0",
-    "sharp": "^0.34.4",
+    "sharp": "^0.33.5",
     "tailwindcss": "^4.2.1",
     "typescript": "^5.9.3"
   },
